@@ -1,0 +1,151 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }};
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|ucfirst }}RepositoryInterface;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }} as {{ entity.getData('name_singular')|ucfirst }}ResourceModel;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+{% if entity.hasAttributeType('date') %}
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\DateFilter;
+{% endif %}
+
+/**
+ * Class InlineEdit
+ */
+class InlineEdit extends Action
+{
+    /**
+     * {{ entity.getData('label_singular')|ucfirst }} repository
+     * @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+     */
+    protected ${{ entity.getData('name_singular')|snake }}Repository;
+    /**
+     * Data object processor
+     * @var DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+    /**
+     * Data object helper
+     * @var DataObjectHelper
+     */
+    protected $dataObjectHelper;
+    /**
+     * JSON Factory
+     * @var JsonFactory
+     */
+    protected $jsonFactory;
+{% if entity.hasAttributeType('date') %}
+    /**
+     * Date inputs filter
+     * @var DateFilter
+     */
+    protected $dateFilter;
+{% endif %}
+    /**
+     * {{ entity.getData('label_singular')|ucfirst }} resource model
+     * @var {{ entity.getData('name_singular')|ucfirst }}ResourceModel
+     */
+    protected ${{ entity.getData('name_singular')|camel }}ResourceModel;
+
+    /**
+     * constructor
+     * @param Context $context
+     * @param {{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectHelper $dataObjectHelper
+     * @param JsonFactory $jsonFactory
+     * @param {{ entity.getData('name_singular')|camel|ucfirst }}ResourceModel ${{ entity.getData('name_singular')|camel }}ResourceModel
+     */
+    public function __construct(
+        Context $context,
+        {{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository,
+        DataObjectProcessor $dataObjectProcessor,
+        DataObjectHelper $dataObjectHelper,
+        JsonFactory $jsonFactory,
+{% if entity.hasAttributeType('date') %}
+        DateFilter $dateFilter,
+{% endif %}
+        {{ entity.getData('name_singular')|camel|ucfirst }}ResourceModel ${{ entity.getData('name_singular')|camel }}ResourceModel
+    ) {
+        $this->{{ entity.getData('name_singular')|snake }}Repository = ${{ entity.getData('name_singular')|snake }}Repository;
+        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->jsonFactory = $jsonFactory;
+{% if entity.hasAttributeType('date')%}
+        $this->dateFilter = $dateFilter;
+{% endif %}
+        $this->{{ entity.getData('name_singular')|camel }}ResourceModel = ${{ entity.getData('name_singular')|camel }}ResourceModel;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    public function execute()
+    {
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->jsonFactory->create();
+        $error = false;
+        $messages = [];
+
+        $postItems = $this->getRequest()->getParam('items', []);
+        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ]);
+        }
+
+        foreach (array_keys($postItems) as ${{ entity.getData('name_singular')|camel }}Id) {
+            /** @var \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}|\{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }} */
+            try {
+                ${{ entity.getData('name_singular')|camel }} = $this->{{ entity.getData('name_singular')|camel }}Repository->get((int)${{ entity.getData('name_singular')|camel }}Id);
+                ${{ entity.getData('name_singular')|camel }}Data = $postItems[${{ entity.getData('name_singular')|camel }}Id];
+{% if entity.hasAttributeType('date') %}
+                ${{ entity.getData('name_singular')|camel }}Data = $this->dateFilter->filterDates(
+                    ${{ entity.getData('name_singular')|camel }}Data,
+                    [
+{{ entity.getDateFieldsString(6)|raw }}
+                    ]
+                );
+{% endif %}
+                $this->dataObjectHelper->populateWithArray(${{ entity.getData('name_singular')|camel }}, ${{ entity.getData('name_singular')|camel }}Data, {{ entity.getData('name_singular')|camel|ucfirst }}Interface::class);
+                $this->{{ entity.getData('name_singular')|camel }}ResourceModel->saveAttribute(${{ entity.getData('name_singular')|camel }}, array_keys(${{ entity.getData('name_singular')|camel }}Data));
+            } catch (LocalizedException $e) {
+                $messages[] = $this->getErrorWith{{ entity.getData('name_singular')|camel|ucfirst }}Id(${{ entity.getData('name_singular')|camel }}, $e->getMessage());
+                $error = true;
+            } catch (\RuntimeException $e) {
+                $messages[] = $this->getErrorWith{{ entity.getData('name_singular')|camel|ucfirst }}Id(${{ entity.getData('name_singular')|camel }}, $e->getMessage());
+                $error = true;
+            } catch (\Exception $e) {
+                $messages[] = $this->getErrorWith{{ entity.getData('name_singular')|camel|ucfirst }}Id(
+                    ${{ entity.getData('name_singular')|camel }},
+                    __('Something went wrong while saving the {{ entity.getData('label_singular')|ucfirst }}.')
+                );
+                $error = true;
+            }
+        }
+
+        return $resultJson->setData([
+            'messages' => $messages,
+            'error' => $error
+        ]);
+    }
+
+    /**
+     * Add {{ entity.getData('label_singular')|ucfirst }} id to error message
+     *
+     * @param \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }}
+     * @param string $errorText
+     * @return string
+     */
+    protected function getErrorWith{{ entity.getData('name_singular')|camel|ucfirst }}Id({{ entity.getData('name_singular')|camel|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }}, $errorText)
+    {
+        return '[{{ entity.getData('label_singular')|ucfirst }} ID: ' . ${{ entity.getData('name_singular')|camel }}->getId() . '] ' . $errorText;
+    }
+}

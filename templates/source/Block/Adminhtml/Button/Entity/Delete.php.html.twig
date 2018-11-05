@@ -1,0 +1,80 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }};
+
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+
+class Delete implements ButtonProviderInterface
+{
+    /**
+     * @var Registry
+     */
+    private $registry;
+    /**
+     * @var UrlInterface
+     */
+    private $url;
+
+    /**
+     * Delete constructor.
+     * @param Registry $registry
+     * @param UrlInterface $url
+     */
+    public function __construct(Registry $registry, UrlInterface $url)
+    {
+        $this->registry = $registry;
+        $this->url = $url;
+    }
+
+    /**
+     * get button data
+     *
+     * @return array
+     */
+    public function getButtonData()
+    {
+        $data = [];
+        if ($this->get{{ entity.getData('name_singular')|ucfirst }}Id()) {
+            $data = [
+                'label' => __('Delete {{ entity.getData('label_singular') }}'),
+                'class' => 'delete',
+                'on_click' => 'deleteConfirm(\'' . __(
+                    'Are you sure you want to do this?'
+                ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                'sort_order' => 20,
+            ];
+        }
+        return $data;
+    }
+
+    /**
+     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface | null
+     */
+    private function get{{ entity.getData('name_singular')|ucfirst }}()
+    {
+        return $this->registry->registry('current_{{ entity.getData('name_singular')|snake }}');
+    }
+
+    /**
+     * @return int|null
+     */
+    private function get{{ entity.getData('name_singular')|ucfirst }}Id()
+    {
+        ${{ entity.getData('name_singular')|camel }} = $this->get{{ entity.getData('name_singular')|ucfirst }}();
+        return (${{ entity.getData('name_singular')|camel }}) ? ${{ entity.getData('name_singular')|camel }}->getId() : null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeleteUrl()
+    {
+        return $this->url->getUrl(
+            '*/*/delete',
+            [
+                '{{ entity.getData('name_singular')|snake }}_id' => $this->get{{ entity.getData('name_singular')|camel }}Id()
+            ]
+        );
+    }
+}

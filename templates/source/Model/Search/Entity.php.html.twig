@@ -1,0 +1,79 @@
+{% if (entity.getData('search')) %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\Search;
+
+use Magento\Framework\DataObject;
+use Magento\Backend\Helper\Data;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|camel|ucfirst }}\CollectionFactory;
+
+/**
+ * @api
+ */
+class {{ entity.getData('name_singular')|camel|ucfirst }} extends DataObject
+{
+    /**
+     * Adminhtml data
+     *
+     * @var Data
+     */
+    protected $adminhtmlData = null;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param CollectionFactory $collectionFactory
+     * @param Data $adminhtmlData
+     */
+    public function __construct(
+        CollectionFactory $collectionFactory,
+        Data $adminhtmlData
+    ) {
+        $this->collectionFactory = $collectionFactory;
+        $this->adminhtmlData = $adminhtmlData;
+    }
+
+    /**
+     * Load search results
+     *
+     * @return $this
+     */
+    public function load()
+    {
+        $result = [];
+        if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
+            $this->setResults($result);
+            return $this;
+        }
+
+        $query = $this->getQuery();
+        $collection = $this->collectionFactory->create()->addFieldToFilter(
+            '{{ entity.getNameAttribute().getData('code') }}',
+            ['like' => '%' . $query . '%']
+        )->setCurPage(
+            $this->getStart()
+        )->setPageSize(
+            $this->getLimit()
+        )->load();
+
+        foreach ($collection as $item) {
+            $result[] = [
+                'id' => '{{ entity.getData('name_singular')|snake }}' . $item->getId(),
+                'type' => __('{{ entity.getData('label_singular') }}'),
+                'name' => __('{{ entity.getData('label_singular') }} %1', $item->get{{ entity.getNameAttribute().getData('code')|camel|ucfirst }}()),
+                'description' => __('{{ entity.getData('label_singular') }} %1', $item->get{{ entity.getNameAttribute().getData('code')|camel|ucfirst }}()),
+                'url' => $this->adminhtmlData->getUrl(
+                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular')|snake }}/edit',
+                    ['{{ entity.getData('name_singular')|snake }}_id' => $item->getId()]
+                ),
+            ];
+        }
+
+        $this->setResults($result);
+
+        return $this;
+    }
+}
+{% endif %}

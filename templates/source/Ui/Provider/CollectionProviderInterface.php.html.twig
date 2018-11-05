@@ -1,0 +1,10 @@
+<?php
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Ui\Provider;
+
+interface CollectionProviderInterface
+{
+    /**
+     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\AbstractCollection
+     */
+    public function getCollection();
+}

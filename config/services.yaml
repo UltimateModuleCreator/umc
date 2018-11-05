@@ -1,0 +1,320 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+  form_config_path: '%kernel.root_dir%/../config/form'
+  module_list_path: '%kernel.root_dir%/../var/umc'
+  attribute_type_config:
+    text:
+      label: Text
+      grid_filter_type: text
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/text.html.twig
+      class: App\Model\Attribute\Text
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 'null'
+      type_hint: string
+    country:
+      label: Country
+      source_model: Magento\Config\Model\Config\Source\Locale\Country
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      multiple_text: 'false'
+      class: \App\Model\Attribute\Country
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 3
+      type_hint: string
+      grid_filter_type: select
+    country_multiselect:
+      label: Country Multiselect
+      source_model: Magento\Config\Model\Config\Source\Locale\Country
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      multiple_text: 'true'
+      class: \App\Model\Attribute\CountryMultiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+    date:
+      label: Date
+      grid_template: attribute/grid/date.html.twig
+      form_template: attribute/form/date.html.twig
+      class: \App\Model\Attribute\Date
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_DATETIME
+      sql_size: 'null'
+      type_hint: string
+      grid_filter_type: dateRange
+    decimal:
+      label: Decimal
+      grid_filter_type: textRange
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/text.html.twig
+      class: \App\Model\Attribute\Decimal
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_DECIMAL
+      sql_size: "'12,4'"
+      type_hint: float
+    dropdown:
+      label: Dropdown
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      multiple_text: 'false'
+      class: \App\Model\Attribute\Dropdown
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: true
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_INTEGER
+      sql_size: 'null'
+      type_hint: int
+      grid_filter_type: select
+    file:
+      label: File
+      grid_template: false
+      form_template: attribute/form/file.html.twig
+      class: \App\Model\Attribute\File
+      upload_type: file
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 255
+      type_hint: string
+    image:
+      label: Image
+      grid_template: false
+      form_template: attribute/form/file.html.twig
+      class: \App\Model\Attribute\Image
+      upload_type: image
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 255
+      type_hint: string
+    integer:
+      label: Integer
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/text.html.twig
+      class: \App\Model\Attribute\Integer
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_INTEGER
+      sql_size: 'null'
+      type_hint: int
+      grid_filter_type: textRange
+    multiselect:
+      label: Multiselect
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      multiple_text: 'true'
+      class: \App\Model\Attribute\Multiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: true
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+    textarea:
+      label: Textarea (no editor)
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/textarea.html.twig
+      class: \App\Model\Attribute\Textarea
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      grid_filter_type: 'false'
+    wysisyg:
+      label: Wysiwyg
+      grid_template: false
+      form_template: attribute/form/wysiwyg.html.twig
+      class: \App\Model\Attribute\Wysiwyg
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      grid_filter_type: 'false'
+    yesno:
+      label: Yes/No
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/yesno.html.twig
+      source_model: Magento\Config\Model\Config\Source\Yesno
+      class: \App\Model\Attribute\Yesno
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: false
+      full_text: false
+      sql_type_constant: TYPE_INTEGER
+      sql_size: 1
+      type_hint: int
+      grid_filter_type: select
+
+  form_type_map:
+    text:
+      type: \Symfony\Component\Form\Extension\Core\Type\TextType
+    textarea:
+      type: \Symfony\Component\Form\Extension\Core\Type\TextareaType
+    number:
+      type: \Symfony\Component\Form\Extension\Core\Type\NumberType
+    choice:
+      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
+    radio:
+      type: \Symfony\Component\Form\Extension\Core\Type\RadioType
+    attribute_type:
+      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
+      choice_config: '%attribute_type_config%'
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Controller\Index:
+      arguments:
+        $template: 'index.html.twig'
+    App\Controller\Edit:
+      arguments:
+        $template: 'edit.html.twig'
+        $basePath: '%module_list_path%/'
+        $attributeConfig: '%attribute_type_config%'
+    App\Controller\Files:
+      arguments:
+        $template: 'files.html.twig'
+
+    App\Service\ModuleList:
+      arguments:
+        $basePath: '%module_list_path%/'
+
+    App\Form\BaseType:
+      arguments:
+        $type: ''
+        $typeMap: '%form_type_map%'
+    App\Form\ModuleType:
+      arguments:
+        $type: '%form_config_path%/module.yml'
+        $typeMap: '%form_type_map%'
+    App\Form\EntityType:
+      arguments:
+        $type: '%form_config_path%/entity.yml'
+        $typeMap: '%form_type_map%'
+    App\Form\AttributeType:
+      arguments:
+        $type: '%form_config_path%/attribute.yml'
+        $typeMap: '%form_type_map%'
+    App\Service\Source\Reader:
+      arguments:
+        $files:
+          - '%kernel.root_dir%/../config/source/module.yml'
+          - '%kernel.root_dir%/../config/source/entity.yml'
+          - '%kernel.root_dir%/../config/source/attribute.yml'
+          - '%kernel.root_dir%/../config/source/entity-unit-test.yml'
+
+    App\Service\Builder:
+      arguments:
+        $basePath: '%kernel.root_dir%/../var/umc/'
+        $configFilePath: '%module_list_path%/'
+    App\Service\Writer:
+      autowire: false
+    App\Service\Archiver:
+      autowire: false
+
+    App\Service\Generator:
+      arguments:
+        $contentGenerators:
+          module: '@App\Service\Generator\ModuleGenerator'
+          entity: '@App\Service\Generator\EntityGenerator'
+          attribute: '@App\Service\Generator\AttributeGenerator'
+
+    App\Util\CodingStandardsFactory:
+      arguments:
+        $standards: [PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
+        $phpcsPath: '%kernel.root_dir%/../vendor/squizlabs/php_codesniffer/bin/phpcs'
+
+    App\Service\ModuleLoader:
+      arguments:
+        $factories:
+          module : '@App\Model\ModuleFactory'
+          entity : '@App\Model\EntityFactory'
+          attribute : '@App\Model\AttributeFactory'
+    App\Model\Attribute\TypeFactory:
+      arguments:
+        $map: '%attribute_type_config%'
+
+    App\Twig\SnakeCase:
+      tags: ['twig.extension']
+    App\Twig\Ucfirst:
+      tags: ['twig.extension']
+    App\Twig\CamelCase:
+      tags: ['twig.extension']
+    App\Twig\Hyphen:
+      tags: ['twig.extension']
+    App\Twig\Version:
+      tags: ['twig.extension']

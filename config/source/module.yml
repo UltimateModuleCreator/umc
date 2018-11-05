@@ -1,0 +1,150 @@
+registration.php:
+  destination: registration.php
+  label: "Module registration file"
+  scope: module
+  template: source/registration.html.twig
+readme.md:
+  destination: README.md
+  label: "Module readme file"
+  scope: module
+  template: source/readme.html.twig
+composer.json:
+  destination: composer.json
+  label: "Module composer file"
+  scope: module
+  template: source/composer.json.html.twig
+etc/module.xml:
+  destination: etc/module.xml
+  label: "Module declaration file"
+  scope: module
+  template: source/etc/module.xml.html.twig
+etc/acl.xml:
+  destination: etc/acl.xml
+  label: "ACL file"
+  scope: module
+  template: source/etc/acl.xml.html.twig
+etc/di.xml:
+  destination: etc/di.xml
+  label: "DI file"
+  scope: module
+  template: source/etc/di.xml.html.twig
+etc/adminhtml/di.xml:
+  destination: etc/adminhtml/di.xml
+  label: "Admin DI file"
+  scope: module
+  template: source/etc/adminhtml/di.xml.html.twig
+etc/adminhtml/routes.xml:
+  destination: etc/adminhtml/routes.xml
+  label: "Admin menu routes file"
+  scope: module
+  template: source/etc/adminhtml/routes.xml.html.twig
+etc/adminhtml/menu.xml:
+  destination: etc/adminhtml/menu.xml
+  label: "Admin menu file"
+  scope: module
+  template: source/etc/adminhtml/menu.xml.html.twig
+Model/ResourceModel/AbstractModel.php:
+  destination: Model/ResourceModel/AbstractModel.php
+  label: "Abstract Resource model"
+  scope: module
+  template: source/Model/ResourceModel/AbstractModel.php.html.twig
+Model/ResourceModel/AbstractCollection.php:
+  destination: Model/ResourceModel/AbstractCollection.php
+  label: "Abstract Resource collection"
+  scope: module
+  template: source/Model/ResourceModel/AbstractCollection.php.html.twig
+Model/UploaderPool.php:
+  destination: Model/UploaderPool.php
+  label: "Pool of uploaders"
+  scope: module
+  template: source/Model/UploaderPool.php.html.twig
+Model/Uploader.php:
+  destination: Model/Uploader.php
+  label: "File and image uploader base class"
+  scope: module
+  template: source/Model/Uploader.php.html.twig
+Model/DateFilter.php:
+  destination: Model/DateFilter.php
+  label: "Filter for date inputs"
+  scope: module
+  template: source/Model/DateFilter.php.html.twig
+Model/UploadPath.php:
+  destination: Model/UploadPath.php
+  label: "Upload paths for all entities"
+  scope: module
+  template: source/Model/UploadPath.php.html.twig
+Controller/Adminhtml/AbstractIndex.php:
+  destination: Controller/Adminhtml/AbstractIndex.php
+  label: "Base Index Controller"
+  scope: module
+  template: source/Controller/Adminhtml/AbstractIndex.php.html.twig
+Controller/Adminhtml/AbstractNewAction.php:
+  destination: Controller/Adminhtml/AbstractNewAction.php
+  label: "Base NewAction Controller"
+  scope: module
+  template: source/Controller/Adminhtml/AbstractNewAction.php.html.twig
+Controller/Adminhtml/AbstractDelete.php:
+  destination: Controller/Adminhtml/AbstractDelete.php
+  label: "Base Delete Controller"
+  scope: module
+  template: source/Controller/Adminhtml/AbstractDelete.php.html.twig
+Controller/Adminhtml/AbstractMassAction.php:
+  destination: Controller/Adminhtml/AbstractMassAction.php
+  label: "Base MassAction Controller"
+  scope: module
+  template: source/Controller/Adminhtml/AbstractMassAction.php.html.twig
+ontroller/Adminhtml/Upload.php:
+  destination: Controller/Adminhtml/Upload.php
+  label: "Upload Controller"
+  scope: module
+  template: source/Controller/Adminhtml/Upload.php.html.twig
+Api/ExecutorInterface.php:
+  destination: Api/ExecutorInterface.php
+  label: "Executor interface"
+  scope: module
+  template: source/Api/ExecutorInterface.php.html.twig
+Ui/Provider/CollectionProviderInterface.php:
+  destination: Ui/Provider/CollectionProviderInterface.php
+  label: "Collection provider interface"
+  scope: module
+  template: source/Ui/Provider/CollectionProviderInterface.php.html.twig
+Block/Adminhtml/Button/Back.php:
+  destination: Block/Adminhtml/Button/Back.php
+  label: "back button"
+  scope: module
+  template: source/Block/Adminhtml/Button/Back.php.html.twig
+Block/Adminhtml/Button/Reset.php:
+  destination: Block/Adminhtml/Button/Reset.php
+  label: "reset button"
+  scope: module
+  template: source/Block/Adminhtml/Button/Reset.php.html.twig
+Setup/Uninstall.php:
+  destination: Setup/Uninstall.php
+  label: "Uninstall script"
+  scope: module
+  template: source/Setup/Uninstall.php.html.twig
+Setup/InstallSchema.php:
+  destination: Setup/InstallSchema.php
+  label: "Install Schema script"
+  scope: module
+  template: source/Setup/InstallSchema.php.html.twig
+Block/Adminhtml/Button/Save.php:
+  destination: Block/Adminhtml/Button/Save.php
+  label: "Save button"
+  scope: module
+  template: source/Block/Adminhtml/Button/Save.php.html.twig
+Block/Adminhtml/Button/SaveAndContinue.php:
+  destination: Block/Adminhtml/Button/SaveAndContinue.php
+  label: "Save and continue edit button"
+  scope: module
+  template: source/Block/Adminhtml/Button/SaveAndContinue.php.html.twig
+view/adminhtml/web/template/image-preview.html:
+  destination: view/adminhtml/web/template/image-preview.html
+  label: "Image preview template"
+  scope: module
+  template: source/view/adminhtml/web/template/image-preview.html.html.twig
+view/adminhtml/web/template/file-preview.html:
+  destination: view/adminhtml/web/template/file-preview.html
+  label: "File preview template"
+  scope: module
+  template: source/view/adminhtml/web/template/file-preview.html.html.twig

@@ -1,0 +1,172 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|camel|ucfirst }};
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|camel|ucfirst }}Interface;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|camel|ucfirst }}InterfaceFactory;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Registry;
+{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\UploaderPool;
+{% endif %}
+{% if entity.hasAttributeType('date') %}
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\DateFilter;
+{% endif %}
+
+/**
+ * Class Save
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends Action
+{
+    /**
+     * {{ entity.getData('label_singular')|ucfirst }} factory
+     * @var {{ entity.getData('name_singular')|ucfirst }}InterfaceFactory
+     */
+    protected ${{ entity.getData('name_singular')|camel }}Factory;
+    /**
+     * Data Object Processor
+     * @var DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+    /**
+     * Data Object Helper
+     * @var DataObjectHelper
+     */
+    protected $dataObjectHelper;
+    /**
+     * Data Persistor
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
+    /**
+     * Uploader pool
+     * @var UploaderPool
+     */
+    protected $uploaderPool;
+{% endif %}
+{% if entity.hasAttributeType('date') %}
+    /**
+     * Date inputs filter
+     * @var DateFilter
+     */
+    protected $dateFilter;
+{% endif %}
+    /**
+     * Core registry
+     * @var Registry
+     */
+    protected $registry;
+    /**
+     * {{ entity.getData('label_singular')|ucfirst }} repository
+     * @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+     */
+    protected ${{ entity.getData('name_singular')|snake }}Repository;
+
+    /**
+     * Save constructor.
+     * @param Context $context
+     * @param {{ entity.getData('name_singular')|camel|ucfirst }}InterfaceFactory ${{ entity.getData('name_singular')|camel }}Factory
+     * @param {{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectHelper $dataObjectHelper
+     * @param DataPersistorInterface $dataPersistor
+{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
+     * @param UploaderPool $uploaderPool
+{% endif %}
+{% if entity.hasAttributeType('date') %}
+     * @param DateFilter $dateFilter
+{% endif %}
+     * @param Registry $registry
+     */
+    public function __construct(
+        Context $context,
+        {{ entity.getData('name_singular')|camel|ucfirst }}InterfaceFactory ${{ entity.getData('name_singular')|camel }}Factory,
+        {{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository,
+        DataObjectProcessor $dataObjectProcessor,
+        DataObjectHelper $dataObjectHelper,
+        DataPersistorInterface $dataPersistor,
+{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
+        UploaderPool $uploaderPool,
+{% endif %}
+{% if entity.hasAttributeType('date') %}
+        DateFilter $dateFilter,
+{% endif %}
+        Registry $registry
+    ) {
+        $this->{{ entity.getData('name_singular')|camel }}Factory = ${{ entity.getData('name_singular')|camel }}Factory;
+        $this->{{ entity.getData('name_singular')|snake }}Repository = ${{ entity.getData('name_singular')|snake }}Repository;
+        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->dataPersistor = $dataPersistor;
+        $this->registry = $registry;
+{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
+        $this->uploaderPool = $uploaderPool;
+{% endif %}
+{% if entity.hasAttributeType('date')%}
+        $this->dateFilter = $dateFilter;
+{% endif %}
+        parent::__construct($context);
+    }
+
+    /**
+     * run the action
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function execute()
+    {
+        /** @var {{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|snake }} */
+        ${{ entity.getData('name_singular')|camel }} = null;
+        $postData = $this->getRequest()->getPostValue();
+        $data = $postData;
+{% if entity.hasAttributeType('date') %}
+        $data = $this->dateFilter->filterDates(
+            $data,
+            [
+{{ entity.getDateFieldsString()|raw }}
+            ]
+        );
+{% endif %}
+        $id = !empty($data['{{ entity.getData('name_singular')|snake }}_id']) ? $data['{{ entity.getData('name_singular')|snake }}_id'] : null;
+        $resultRedirect = $this->resultRedirectFactory->create();
+        try {
+            if ($id) {
+                ${{ entity.getData('name_singular')|camel }} = $this->{{ entity.getData('name_singular')|camel }}Repository->get((int)$id);
+            } else {
+                unset($data['{{ entity.getData('name_singular')|snake }}_id']);
+                ${{ entity.getData('name_singular')|camel }} = $this->{{ entity.getData('name_singular')|camel }}Factory->create();
+            }
+{% for attribute in entity.getAttributes() %}
+{% if attribute.getData('type') == "image"  or attribute.getData('type') == "file" %}
+            ${{ attribute.getData('code')|camel }} = $this->uploaderPool->getUploader('{{ attribute.getData('type') }}')->uploadFileAndGetName('{{ attribute.getData('code')|snake }}', $data);
+            $data['{{ attribute.getData('code')|snake }}'] = ${{ attribute.getData('code')|camel }};
+{% endif %}
+{% endfor %}
+            $this->dataObjectHelper->populateWithArray(${{ entity.getData('name_singular')|camel }}, $data, {{ entity.getData('name_singular')|camel|ucfirst }}Interface::class);
+            $this->{{ entity.getData('name_singular')|camel }}Repository->save(${{ entity.getData('name_singular')|camel }});
+            $this->messageManager->addSuccessMessage(__('You saved the {{ entity.getData('label_singular') }}'));
+            $this->dataPersistor->clear('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
+            if ($this->getRequest()->getParam('back')) {
+                $resultRedirect->setPath('*/*/edit', ['{{ entity.getData('name_singular')|snake }}_id' => ${{ entity.getData('name_singular')|camel }}->getId()]);
+            } else {
+                $resultRedirect->setPath('*/*');
+            }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->dataPersistor->set('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}', $postData);
+            $resultRedirect->setPath('*/*/edit', ['{{ entity.getData('name_singular')|snake }}_id' => $id]);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('There was a problem saving the {{ entity.getData('label_singular') }}'));
+            $this->dataPersistor->set('{{ module.getData('namespace')|snake }}\{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}', $postData);
+            $resultRedirect->setPath('*/*/edit', ['{{ entity.getData('name_singular')|snake }}_id' => $id]);
+        }
+        return $resultRedirect;
+    }
+}

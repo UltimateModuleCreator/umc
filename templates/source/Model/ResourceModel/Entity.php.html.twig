@@ -1,0 +1,17 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel;
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\AbstractModel;
+
+class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel
+{
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}', '{{ entity.getData('name_singular')|snake }}_id');
+    }
+}

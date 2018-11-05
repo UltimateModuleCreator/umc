@@ -1,0 +1,11 @@
+{% if entity.hasAttributeType('file') %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\File;
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\Upload as GenericUpload;
+
+class Upload extends GenericUpload
+{
+
+}
+{% endif %}

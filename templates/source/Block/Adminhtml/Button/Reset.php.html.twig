@@ -1,0 +1,22 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button;
+
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+
+class Reset implements ButtonProviderInterface
+{
+    /**
+     * get button data
+     *
+     * @return array
+     */
+    public function getButtonData()
+    {
+        return [
+            'label' => __('Reset'),
+            'class' => 'reset',
+            'on_click' => 'location.reload();',
+            'sort_order' => 30
+        ];
+    }
+}

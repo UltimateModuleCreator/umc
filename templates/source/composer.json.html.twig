@@ -1,0 +1,30 @@
+{
+  "name": "{{module.getData('namespace')|lower}}/module-{{ module.getData('module_name')|hyphen }}",
+  "description": "{{ module.getData('namespace') }}_{{ module.getData('module_name') }} magento 2 extension",
+  "require": {
+    "php": "~7.0.13|~7.1.0",
+    "magento/module-backend": "*",
+    "magento/module-config": "*",
+    "magento/module-ui": "*",
+    "magento/module-config": "*",
+{% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
+    "magento/module-media-storage": "*",
+    "magento/module-store": "*",
+{% endif %}
+    "magento/framework": "*.*"
+  },
+  "type": "magento2-module",
+  "version": "{{ module.getData('version') }}",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "{{ module.getData('namespace') }}\\{{ module.getData('module_name') }}\\": ""
+    }
+  }
+}

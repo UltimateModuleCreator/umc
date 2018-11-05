@@ -1,0 +1,51 @@
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+{% for entity in module.getEntities() %}
+    <preference for="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|ucfirst }}RepositoryInterface" type="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}Repository"/>
+    <preference for="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface" type="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}"/>
+    <preference for="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}SearchResultInterface" type="Magento\Framework\Api\SearchResults"/>
+{% endfor %}
+{% if module.hasSearchableEntities() %}
+    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
+        <arguments>
+            <argument name="searchModules" xsi:type="array">
+{% for entity in module.getSearchableEntities() %}
+                <item name="{{ module.getData('namespace')|snake }}_{{module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}" xsi:type="array">
+                    <item name="class" xsi:type="string">{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\Search\{{ entity.getData('name_singular')|ucfirst }}</item>
+                    <item name="acl" xsi:type="string">{{ module.getData('namespace') }}\{{module.getData('module_name') }}::{{module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}</item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+{% for entity in module.getEntities() %}
+                <item name="{{ module.getData('namespace')|snake }}_{{module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing_data_source" xsi:type="string">{{ module.getData('namespace') }}{{module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}GridCollection</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% for entity in module.getEntities() %}
+    <type name="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}\Collection">
+        <arguments>
+            <argument name="model" xsi:type="string">{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}</argument>
+            <argument name="resourceModel" xsi:type="string">{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}</argument>
+            <argument name="idFieldName" xsi:type="string">{{ entity.getData('name_singular')|snake }}_id</argument>
+            <argument name="eventPrefix" xsi:type="string">{{ module.getData('namespace')|snake }}_{{module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_collection</argument>
+            <argument name="eventObject" xsi:type="string">{{ entity.getData('name_singular')|snake }}_collection</argument>
+        </arguments>
+    </type>
+    <virtualType name="{{ module.getData('namespace') }}{{module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}GridCollection" type="{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}\Collection">
+        <arguments>
+            <argument name="model" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\Document</argument>
+            <argument name="resourceModel" xsi:type="string">{{ module.getData('namespace') }}\{{module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}</argument>
+            <argument name="idFieldName" xsi:type="string">{{ entity.getData('name_singular')|snake }}_id</argument>
+            <argument name="eventPrefix" xsi:type="string">{{ module.getData('namespace')|snake }}_{{module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_collection</argument>
+            <argument name="eventObject" xsi:type="string">{{ entity.getData('name_singular')|snake }}_collection</argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+</config>

@@ -1,0 +1,105 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Setup;
+
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+
+class InstallSchema implements InstallSchemaInterface
+{
+    /**
+     * install tables
+     *
+     * @param SchemaSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $installer = $setup;
+        $installer->startSetup();
+{% for entity in module.getEntities() %}
+        $this->create{{ entity.getData('name_singular')|ucfirst }}Table($setup);
+{% endfor %}
+        $installer->endSetup();
+    }
+{% for entity in module.getEntities() %}
+
+    /**
+     * install table for {{ entity.getData('label_singular') }}
+     *
+     * @param SchemaSetupInterface $setup
+     * @throws \Zend_Db_Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    private function create{{ entity.getData('name_singular')|ucfirst }}Table(SchemaSetupInterface $setup)
+    {
+        if (!$setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')) {
+            $table = $setup->getConnection()->newTable(
+                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')
+            )
+            ->addColumn(
+                '{{ entity.getData('name_singular')|snake }}_id',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'identity' => true,
+                    'nullable' => false,
+                    'primary'  => true,
+                    'unsigned' => true,
+                ],
+                '{{ entity.getData('label_singular')|ucfirst }} ID'
+            )
+{%  for attribute in entity.getAttributes %}
+            ->addColumn(
+                '{{ attribute.getData('code') }}',
+                Table::{{ attribute.getTypeInstance().getData('sql_type_constant') }},
+                {{ attribute.getTypeInstance().getData('sql_size')|raw }},
+                [{% if attribute.getData('required') %}'nullable' => false{% endif %}],
+                '{{ entity.getData('label_singular')|ucfirst }} {{ attribute.getData('label') }}'
+            )
+{% endfor %}
+            ->addColumn(
+                'created_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                [
+                    'nullable' => false,
+                    'default' => Table::TIMESTAMP_INIT
+                ],
+                '{{ entity.getData('label_singular')|ucfirst }} Created At'
+            )
+            ->addColumn(
+                'updated_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                [
+                    'nullable' => false,
+                    'default' => Table::TIMESTAMP_INIT_UPDATE
+                ],
+                '{{ entity.getData('label_singular')|ucfirst }} Updated At'
+            )
+            ->setComment('{{ entity.getData('label_singular')|ucfirst }} Table');
+            $setup->getConnection()->createTable($table);
+{% if entity.hasFullTextAttributes() %}
+            $setup->getConnection()->addIndex(
+                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
+                $setup->getIdxName(
+                    $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
+                    [
+{{ entity.getFullTextAttributeString(6)|raw }}
+                    ],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                [
+{{ entity.getFullTextAttributeString(5)|raw }}
+                ],
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            );
+{% endif %}
+        }
+    }
+{% endfor %}
+}

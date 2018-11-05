@@ -1,0 +1,83 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }};
+
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}\CollectionFactory as {{ entity.getData('name_singular')|ucfirst }}CollectionFactory;
+
+class DataProvider extends AbstractDataProvider
+{
+    /**
+     * Loaded data cache
+     *
+     * @var array
+     */
+    protected $loadedData;
+
+    /**
+     * Data persistor
+     *
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
+     * constructor
+     *
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param {{ entity.getData('name_singular')|ucfirst }}CollectionFactory $collectionFactory
+     * @param DataPersistorInterface $dataPersistor
+     * @param array $meta
+     * @param array $data
+     */
+    public function __construct(
+        $name,
+        $primaryFieldName,
+        $requestFieldName,
+        {{ entity.getData('name_singular')|ucfirst }}CollectionFactory $collectionFactory,
+        DataPersistorInterface $dataPersistor,
+        array $meta = [],
+        array $data = []
+    ) {
+        $this->dataPersistor = $dataPersistor;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->collection = $collectionFactory->create();
+    }
+
+    /**
+     * Get data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+        $items = $this->collection->getItems();
+        /** @var \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }} ${{ entity.getData('name_singular')|camel }} */
+        foreach ($items as ${{ entity.getData('name_singular')|camel }}) {
+            $this->loadedData[${{ entity.getData('name_singular')|camel }}->getId()] = ${{ entity.getData('name_singular')|camel }}->getData();
+{% for attribute in entity.getAttributes() %}
+{% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
+            if (isset($this->loadedData[${{ entity.getData('name_singular')|camel }}->getId()]['{{ attribute.getData('code') }}'])) {
+                ${{ attribute.getData('code')|camel }} = [];
+                ${{ attribute.getData('code')|camel }}[0]['name'] = $article->get{{ attribute.getData('code')|camel|ucfirst }}();
+                ${{ attribute.getData('code')|camel }}[0]['url'] = $article->get{{ attribute.getData('code')|camel|ucfirst }}Url();
+                $this->loadedData[${{ entity.getData('name_singular')|camel }}->getId()]['{{ attribute.getData('code') }}'] = ${{ attribute.getData('code')|camel }};
+            }
+{% endif %}
+{% endfor %}
+        }
+        $data = $this->dataPersistor->get('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
+        if (!empty($data)) {
+            ${{ entity.getData('name_singular')|camel }} = $this->collection->getNewEmptyItem();
+            ${{ entity.getData('name_singular')|camel }}->setData($data);
+            $this->loadedData[${{ entity.getData('name_singular')|camel }}->getId()] = ${{ entity.getData('name_singular')|camel }}->getData();
+            $this->dataPersistor->clear('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
+        }
+        return $this->loadedData;
+    }
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+{% for entity in module.getEntities() %}
+    <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Index">
+        <arguments>
+            <argument name="activeMenuItem" xsi:type="string">{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('namespace')|snake }}_{{ entity.getData('name_singular')|snake }}</argument>
+            <argument name="pageTitle" xsi:type="string" translate="true">{{ entity.getData('label_plural') }}</argument>
+        </arguments>
+    </type>
+    <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\MassDelete">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">{{  module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\CollectionProvider</argument>
+            <argument name="executor" xsi:type="object">{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor\Delete</argument>
+            <argument name="successMessage" xsi:type="string">A total of %1 {{ entity.getData('label_plural')|ucfirst }} have been deleted.</argument>
+            <argument name="errorMessage" xsi:type="string" translate="true">An error occurred while deleting {{ entity.getData('label_plural')|ucfirst }}.</argument>
+        </arguments>
+    </type>
+    <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete">
+        <arguments>
+            <argument name="executor" xsi:type="object">{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor\Delete</argument>
+            <argument name="paramName" xsi:type="string">{{ entity.getData('name_singular')|snake }}_id</argument>
+            <argument name="successMessage" xsi:type="string" translate="true">{{ entity.getData('label_singular')|ucfirst }} was deleted</argument>
+            <argument name="missingEntityErrorMessage" xsi:type="string" translate="true">Requested {{ entity.getData('label_singular') }} for delete does not exist.</argument>
+            <argument name="generalErrorMessage" xsi:type="string" translate="true">There was a problem deleting the {{ entity.getData('label_singular')|ucfirst }}</argument>
+        </arguments>
+    </type>
+{% if entity.hasAttributeType('image') %}
+    <virtualType name="{{ module.getData('namespace') }}{{ module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}ImageUploader" type="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\Uploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="const">{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\UploadPath::{{ entity.getData('name_singular')|snake|upper }}_IMAGE_TMP_PATH</argument>
+            <argument name="basePath" xsi:type="const">{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\UploadPath::{{ entity.getData('name_singular')|snake|upper }}_IMAGE_PATH</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Image\Upload">
+        <arguments>
+            <argument name="uploader" xsi:type="object">{{ module.getData('namespace') }}{{ module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}ImageUploader</argument>
+            <argument name="aclResource" xsi:type="string">{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}</argument>
+        </arguments>
+    </type>
+{% endif %}
+{% if entity.hasAttributeType('file') %}
+    <virtualType name="{{ module.getData('namespace') }}{{ module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}FileUploader" type="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\Uploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="const">{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\UploadPath::{{ entity.getData('name_singular')|snake|upper }}_FILE_TMP_PATH</argument>
+            <argument name="basePath" xsi:type="const">{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\UploadPath::{{ entity.getData('name_singular')|snake|upper }}_FILE_PATH</argument>
+            <argument name="allowedExtensions" xsi:type="array"/>
+        </arguments>
+    </virtualType>
+    <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\File\Upload">
+        <arguments>
+            <argument name="uploader" xsi:type="object">{{ module.getData('namespace') }}{{ module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}FileUploader</argument>
+            <argument name="aclResource" xsi:type="string">{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}</argument>
+        </arguments>
+    </type>
+{% endif %}
+{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
+    <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\UploaderPool">
+        <arguments>
+            <argument name="uploaders" xsi:type="array">
+{% if entity.hasAttributeType('image') %}
+                <item name="image" xsi:type="object">{{ module.getData('namespace') }}{{ module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}ImageUploader</item>
+{% endif %}
+{% if entity.hasAttributeType('file') %}
+                <item name="file" xsi:type="object">{{ module.getData('namespace') }}{{ module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}FileUploader</item>
+{% endif %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+{% endfor %}
+{% if module.hasSearchableEntities() %}
+    <type name="Magento\Backend\Block\GlobalSearch">
+        <arguments>
+            <argument name="entityResources" xsi:type="array">
+{% for entity in module.getSearchableEntities() %}
+                <item name="{{ module.getData('menu_text') }} {{ entity.getData('label_plural') }}" xsi:type="string">{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}</item>
+{% endfor %}
+            </argument>
+            <argument name="entityPaths" xsi:type="array">
+{% for entity in module.getSearchableEntities() %}
+                <item name="{{ module.getData('menu_text') }} {{ entity.getData('label_plural') }}" xsi:type="string">{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}/{{ entity.getData('name_singular') }}/index</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+</config>

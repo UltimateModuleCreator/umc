@@ -1,0 +1,20 @@
+index:
+  path: /
+  controller: App\Controller\Index::run
+  methods:
+    - GET
+edit:
+  path: /edit
+  controller: App\Controller\Edit::run
+  methods:
+    - GET
+save:
+  path: /save
+  controller: App\Controller\Save::run
+  methods:
+    - POST
+files:
+  path: /files
+  controller: App\Controller\Files::run
+  methods:
+  - GET

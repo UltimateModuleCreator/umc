@@ -1,0 +1,31 @@
+{% if attribute.getTypeInstance().getData('can_have_options') %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|camel|ucfirst }}\Source;
+
+use Magento\Framework\Option\ArrayInterface;
+
+class {{ attribute.getData('code')|camel|ucfirst }} implements ArrayInterface
+{
+{% for name,settings in attribute.getProcessedOptions() %}
+    const {{ name }} = {{ settings.value }};
+{% endfor %}
+
+    /**
+     * to option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $options = [
+{% for name,settings in attribute.getProcessedOptions() %}
+            [
+                'value' => self::{{ name }},
+                'label' => __('{{ settings['label'] }}')
+            ],
+{% endfor %}
+        ];
+        return $options;
+    }
+}
+{% endif %}

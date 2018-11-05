@@ -1,0 +1,43 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }};
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }};
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\AbstractCollection;
+
+class Collection extends AbstractCollection
+{
+
+    /**
+     * Define resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init(
+            {{ entity.getData('name_singular')|ucfirst }}::class,
+            \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}::class
+        );
+    }
+{% if entity.hasMultiSelectFields() %}
+
+    /**
+     * after collection load
+     */
+    protected function _afterLoad()
+    {
+        $fields = [
+{{ entity.getMultiSelectFieldsString()|raw }}
+        ];
+        /** @var {{ entity.getData('name_singular')|ucfirst }} $item */
+        foreach ($this as $item) {
+            foreach ($fields as $field) {
+                if (!is_array($item->getData($field))) {
+                    $item->setData($field, explode(',', $item->getData($field)));
+                }
+            }
+        }
+        return parent::_afterLoad();
+    }
+{% endif %}
+}

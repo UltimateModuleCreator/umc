@@ -1,0 +1,60 @@
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_form.{{ entity.getData('name_singular')|snake }}_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">{{ entity.getData('label_singular')|ucfirst }} Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\Back"/>
+            <button name="delete" class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|camel|ucfirst }}\Delete"/>
+            <button name="reset" class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\Reset"/>
+            <button name="save" class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\Save"/>
+            <button name="save_and_continue" class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\SaveAndContinue"/>
+        </buttons>
+        <namespace>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_form.{{ entity.getData('name_singular')|snake }}_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="{{ entity.getData('name_singular')|snake }}_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular')|snake }}/save"/>
+        </settings>
+        <dataProvider class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|camel|ucfirst }}\DataProvider" name="{{ entity.getData('name_singular')|snake }}_form_data_source">
+            <settings>
+                <requestFieldName>{{ entity.getData('name_singular')|snake }}_id</requestFieldName>
+                <primaryFieldName>{{ entity.getData('name_singular')|snake }}_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">{{ entity.getData('label_singular')|ucfirst }} Information</label>
+        </settings>
+        <field name="{{ entity.getData('name_singular')|snake }}_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getData('name_singular')|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>{{ entity.getData('name_singular')|snake }}_id</dataScope>
+            </settings>
+        </field>
+{% for attribute in entity.getAttributes() %}
+    {{ attribute.getTypeInstance().renderForm()|raw }}
+{% endfor %}
+    </fieldset>
+</form>

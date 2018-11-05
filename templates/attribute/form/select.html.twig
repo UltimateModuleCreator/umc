@@ -1,0 +1,36 @@
+        <field name="{{ attribute.getData('code') }}" formElement="select" component="Magento_Ui/js/form/element/ui-select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{  attribute.getEntity().getData('name_singular')|snake }}</item>
+{% if attribute.getData('default_value') %}
+                    <item name="default" xsi:type="string">{{ attribute.getData('default_value') }}</item>
+{% endif %}
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="chipsEnabled" xsi:type="boolean">true</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">{{ type.getData('multiple_text') }}</item>
+                </item>
+            </argument>
+            <settings>
+                <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
+                <dataType>text</dataType>
+                <label translate="true">{{ attribute.getData('label') }}</label>
+                <dataScope>{{ attribute.getData('code') }}</dataScope>
+{% if attribute.getData('required') %}
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+{% endif %}
+                <componentType>field</componentType>
+{% if attribute.getData('note') %}
+                <notice>{{ attribute.getData('note') }}</notice>
+{% endif %}
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="{{ type.getData('source_model') }}"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
