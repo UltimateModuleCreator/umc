@@ -2,7 +2,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_form.{{ entity.getData('name_singular')|snake }}_form_data_source</item>
+            <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_form.{{ entity.getData('name_singular')|camel|lower }}_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">{{ entity.getData('label_singular')|ucfirst }} Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -18,19 +18,19 @@
         <namespace>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_form</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_form.{{ entity.getData('name_singular')|snake }}_form_data_source</dep>
+            <dep>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_form.{{ entity.getData('name_singular')|camel|lower }}_form_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="{{ entity.getData('name_singular')|snake }}_form_data_source">
+    <dataSource name="{{ entity.getData('name_singular')|camel|lower }}_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
         <settings>
-            <submitUrl path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular')|snake }}/save"/>
+            <submitUrl path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}/{{ entity.getData('name_singular')|camel|lower }}/save"/>
         </settings>
-        <dataProvider class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|camel|ucfirst }}\DataProvider" name="{{ entity.getData('name_singular')|snake }}_form_data_source">
+        <dataProvider class="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|camel|ucfirst }}\DataProvider" name="{{ entity.getData('name_singular')|camel|lower }}_form_data_source">
             <settings>
                 <requestFieldName>{{ entity.getData('name_singular')|snake }}_id</requestFieldName>
                 <primaryFieldName>{{ entity.getData('name_singular')|snake }}_id</primaryFieldName>
@@ -54,7 +54,7 @@
             </settings>
         </field>
 {% for attribute in entity.getAttributes() %}
-    {{ attribute.getTypeInstance().renderForm()|raw }}
+{{ attribute.getTypeInstance().renderForm()|raw }}
 {% endfor %}
     </fieldset>
 </form>

@@ -104,7 +104,9 @@ class EntityTest extends TestCase
         $attribute1 = $this->createMock(Attribute::class);
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')->with('is_name')->willReturn(true);
+        $attribute2->method('getData')->willReturnMap([
+            ['is_name', null, 1]
+        ]);
         $this->entity->addAttribute($attribute1);
         $this->entity->addAttribute($attribute2);
         $this->assertEquals($attribute2, $this->entity->getNameAttribute());
@@ -131,10 +133,14 @@ class EntityTest extends TestCase
     {
         /** @var Attribute | MockObject $attribute1 */
         $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getData')->with('type')->willReturn('text');
+        $attribute1->method('getData')->willReturnMap([
+            ['type', null, 'text']
+        ]);
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')->with('type')->willReturn('textarea');
+        $attribute2->method('getData')->willReturnMap([
+            ['type', null, 'textarea']
+        ]);
         $entity = new Entity();
         $entity->addAttribute($attribute1);
         $entity->addAttribute($attribute2);
@@ -208,7 +214,9 @@ class EntityTest extends TestCase
         $type1 = $this->createMock(Attribute\TypeInterface::class);
         $type1->method('getData')->with('full_text')->willReturn(false);
         $attribute1->method('getTypeInstance')->willReturn($type1);
-        $attribute1->method('getData')->with('code')->willReturn('attr1');
+        $attribute1->method('getData')->willReturnMap([
+            ['code', null. 'attr1']
+        ]);
 
         $entity1 = new Entity();
         $entity1->addAttribute($attribute1);
@@ -217,16 +225,24 @@ class EntityTest extends TestCase
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
         $type2 = $this->createMock(Attribute\TypeInterface::class);
-        $type2->method('getData')->with('full_text')->willReturn(true);
+        $type2->method('getData')->willReturnMap([
+            ['full_text', null, true]
+        ]);
         $attribute2->method('getTypeInstance')->willReturn($type2);
-        $attribute2->method('getData')->with('code')->willReturn('attr2');
+        $attribute2->method('getData')->willReturnMap([
+            ['code', null, 'attr2']
+        ]);
 
         /** @var Attribute | MockObject $attribute3 */
         $attribute3 = $this->createMock(Attribute::class);
         $type3 = $this->createMock(Attribute\TypeInterface::class);
-        $type3->method('getData')->with('full_text')->willReturn(true);
+        $type3->method('getData')->willReturnMap([
+            ['full_text', null, true]
+        ]);
         $attribute3->method('getTypeInstance')->willReturn($type3);
-        $attribute3->method('getData')->with('code')->willReturn('attr3');
+        $attribute3->method('getData')->willReturnMap([
+            ['code', null, 'attr3']
+        ]);
 
         $entity2 = new Entity();
         $entity2->addAttribute($attribute1);
@@ -278,7 +294,10 @@ class EntityTest extends TestCase
         /** @var Attribute | MockObject $attribute1 */
         $attribute1 = $this->createMock(Attribute::class);
         $type1 = $this->createMock(Attribute\TypeInterface::class);
-        $type1->method('getData')->with('multiple')->willReturn(false);
+        $type1->method('getData')
+            ->willReturnMap([
+                ['multiple', null, false]
+            ]);
         $attribute1->method('getTypeInstance')->willReturn($type1);
 
         $entity1 = new Entity();
@@ -289,9 +308,14 @@ class EntityTest extends TestCase
 
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')->with('code')->willReturn('attr2');
+        $attribute2->method('getData')
+            ->willReturnMap([
+                ['code', null, 'attr2']
+            ]);
         $type2 = $this->createMock(Attribute\TypeInterface::class);
-        $type2->method('getData')->with('multiple')->willReturn(true);
+        $type2->method('getData')->willReturnMap([
+            ['multiple', null, true]
+        ]);
         $attribute2->method('getTypeInstance')->willReturn($type2);
 
         $entity2 = new Entity();
@@ -339,4 +363,44 @@ class EntityTest extends TestCase
         $this->assertEquals([$attribute2], $entity2->getDateFields());
         $this->assertEquals("                'attr2'", $entity2->getDateFieldsString());
     }
+
+    /**
+     * @covers \App\Model\Entity::getAttributes
+     * @covers \App\Model\Entity::sortAttributes
+     */
+    public function testSortAttributes()
+    {
+        $attribute1 = $this->getSortOrderAttributeMock("2");
+        $attribute2 = $this->getSortOrderAttributeMock("1");
+        $attribute3 = $this->getSortOrderAttributeMock("");
+        $attribute4 = $this->getSortOrderAttributeMock("2");
+        $attribute5 = $this->getSortOrderAttributeMock("");
+        $entity = new Entity();
+        $entity->addAttribute($attribute4);
+        $entity->addAttribute($attribute3);
+        $entity->addAttribute($attribute2);
+        $entity->addAttribute($attribute1);
+        $entity->addAttribute($attribute5);
+        $attributes = $entity->getAttributes();
+        $this->assertEquals($attribute2, $attributes[0]);
+        $this->assertEquals($attribute1, $attributes[1]);
+        $this->assertEquals($attribute4, $attributes[2]);
+        $this->assertEquals($attribute3, $attributes[3]);
+        $this->assertEquals($attribute5, $attributes[4]);
+
+    }
+
+    /**
+     * @param $sortOrder
+     * @return MockObject | Attribute
+     */
+    private function getSortOrderAttributeMock($sortOrder)
+    {
+        $attribute = $this->createMock(Attribute::class);
+        $attribute->method('getData')->willReturnMap([
+            ['position', null, $sortOrder]
+        ]);
+        return $attribute;
+    }
 }
+

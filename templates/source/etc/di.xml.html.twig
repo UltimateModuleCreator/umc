@@ -23,7 +23,7 @@
         <arguments>
             <argument name="collections" xsi:type="array">
 {% for entity in module.getEntities() %}
-                <item name="{{ module.getData('namespace')|snake }}_{{module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing_data_source" xsi:type="string">{{ module.getData('namespace') }}{{module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}GridCollection</item>
+                <item name="{{ module.getData('namespace')|snake }}_{{module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing_data_source" xsi:type="string">{{ module.getData('namespace') }}{{module.getData('module_name') }}{{ entity.getData('name_singular')|ucfirst }}GridCollection</item>
 {% endfor %}
             </argument>
         </arguments>

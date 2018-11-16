@@ -101,7 +101,7 @@ class Save extends Action
         Registry $registry
     ) {
         $this->{{ entity.getData('name_singular')|camel }}Factory = ${{ entity.getData('name_singular')|camel }}Factory;
-        $this->{{ entity.getData('name_singular')|snake }}Repository = ${{ entity.getData('name_singular')|snake }}Repository;
+        $this->{{ entity.getData('name_singular')|camel }}Repository = ${{ entity.getData('name_singular')|camel }}Repository;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataPersistor = $dataPersistor;

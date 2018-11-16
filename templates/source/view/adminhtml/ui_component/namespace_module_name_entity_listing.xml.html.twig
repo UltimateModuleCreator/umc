@@ -2,7 +2,7 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing_data_source</item>
+            <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing_data_source</item>
         </item>
     </argument>
     <settings>
@@ -13,19 +13,19 @@
                 <label translate="true">Add New {{ entity.getData('label_singular')|ucfirst }}</label>
             </button>
         </buttons>
-        <spinner>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_columns</spinner>
+        <spinner>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_columns</spinner>
         <deps>
-            <dep>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing_data_source</dep>
+            <dep>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">{{ entity.getData('name_singular')|snake }}_id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing_data_source">
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing_data_source">
             <settings>
                 <requestFieldName>{{ entity.getData('name_singular')|snake }}_id</requestFieldName>
                 <primaryFieldName>{{ entity.getData('name_singular')|snake }}_id</primaryFieldName>
@@ -63,7 +63,7 @@
                         <message translate="true">Are you sure you wan't to delete selected {{ entity.getData('label_plural')|ucfirst }}?</message>
                         <title translate="true">Delete {{ entity.getData('label_singular')|ucfirst }}</title>
                     </confirm>
-                    <url path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular') }}/massDelete"/>
+                    <url path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}/{{ entity.getData('name_singular')|camel|lower }}/massDelete"/>
                     <type>delete</type>
                     <label translate="true">Delete</label>
                 </settings>
@@ -72,7 +72,7 @@
                 <settings>
                     <callback>
                         <target>editSelected</target>
-                        <provider>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_columns_editor</provider>
+                        <provider>{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_columns_editor</provider>
                     </callback>
                     <type>edit</type>
                     <label translate="true">Edit</label>
@@ -81,20 +81,20 @@
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_columns">
+    <columns name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_columns">
         <settings>
             <editorConfig>
                 <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular') }}/inlineEdit"/>
+                    <item name="saveUrl" xsi:type="url" path="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}/{{ entity.getData('name_singular')|camel|lower }}/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
                 <param name="indexField" xsi:type="string">{{ entity.getData('name_singular')|snake }}_id</param>
                 <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_columns.ids</param>
+                <param name="selectProvider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_columns.ids</param>
             </editorConfig>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_columns_editor</item>
+                    <item name="provider" xsi:type="string">{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing.{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_columns_editor</item>
                     <item name="target" xsi:type="string">startEdit</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>

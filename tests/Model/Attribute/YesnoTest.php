@@ -25,15 +25,40 @@ use PHPUnit\Framework\TestCase;
 class YesnoTest extends TestCase
 {
     /**
+     * @var \Twig_Environment | MockObject
+     */
+    private $twig;
+    /**
+     * @var Attribute | MockObject
+     */
+    private $attribute;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->attribute = $this->createMock(Attribute::class);
+    }
+
+    /**
      * @covers \App\Model\Attribute\Yesno::getPropertyNames
      */
     public function testGetPropertyNames()
     {
-        /** @var \Twig_Environment | MockObject $twig */
-        $twig = $this->createMock(\Twig_Environment::class);
-        /** @var Attribute | MockObject $attribute */
-        $attribute = $this->createMock(Attribute::class);
-        $yesNo = new Yesno($twig, $attribute, []);
+        $yesNo = new Yesno($this->twig, $this->attribute, []);
         $this->assertArrayHasKey('source_model', $yesNo->getPropertiesData());
+    }
+
+    /**
+     * @covers \App\Model\Attribute\Yesno::getSourceModel
+     */
+    public function testGetSourceModel()
+    {
+        /** @var Attribute | MockObject $attribute */
+        $expected = 'dummySourceModel';
+        $yesNo = new Yesno($this->twig, $this->attribute, ['source_model' => $expected]);
+        $this->assertEquals($expected, $yesNo->getSourceModel());
     }
 }

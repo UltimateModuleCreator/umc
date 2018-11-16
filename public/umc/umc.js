@@ -20,12 +20,21 @@ function wrapFormElements(elements) {
         elements.slice(i, i+2).wrapAll('<div class="row"/>');
     }
 }
-
+function pretyfyElements(element) {
+    $(element).find('select').select2();
+    triggerTooltips(element);
+}
 function detectPlacement(tooltip, element) {
     return ($(element).parent().prev().length === 0) ? 'left' : 'right';
 }
 function triggerTooltips(element) {
     $(element).find('[data-toggle="tooltip"]').tooltip({'placement': detectPlacement});
+    $(element).find('.select2-container').tooltip({
+        title: function () {
+            return $(this).prev().attr("data-original-title")
+        },
+        placement: detectPlacement
+    })
 }
 
 jQuery.widget('umc.umcmodule', {
@@ -59,7 +68,7 @@ jQuery.widget('umc.umcmodule', {
                 }
             }
         }
-        triggerTooltips(this.element);
+        pretyfyElements($(this.element))
         if (typeof data._entities !== "undefined") {
             for (i = 0; i< data._entities.length ; i++) {
                 this.addEntity(data._entities[i]);
@@ -140,7 +149,7 @@ jQuery.widget('umc.umcentity', {
                 }
             }
         }
-        triggerTooltips(this.element);
+        pretyfyElements($(this.element));
         if (typeof data._attributes !== "undefined") {
             for (i = 0; i< data._attributes.length ; i++) {
                 this.addAttribute(data._attributes[i]);
@@ -210,6 +219,6 @@ jQuery.widget('umc.umcattribute', {
             $(self.element).find('[umc-type=admin-grid-filter]').prop('disabled', !self.options.attrConfig[val]['can_show_in_grid']);
         });
         $(this.element).find('[umc-type=type]').trigger('change');
-        triggerTooltips(this.element);
+        pretyfyElements($(this.element));
     }
 });

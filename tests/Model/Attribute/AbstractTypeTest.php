@@ -82,6 +82,22 @@ class AbstractTypeTest extends TestCase
     }
 
     /**
+     * @covers \App\Model\Attribute\AbstractType::renderFk()
+     * @covers \App\Model\Attribute\AbstractType::render()
+     */
+    public function testRenderFk()
+    {
+        /** @var Attribute | MockObject $attribute */
+        $attribute = $this->createMock(Attribute::class);
+        /** @var Entity | MockObject $attribute */
+        $entity = $this->createMock(Entity::class);
+        $attribute->method('getEntity')->willReturn($entity);
+        $abstractType = new Attribute\AbstractType($this->twig, $attribute, ['fk_template' => 'tmpl.html.twig']);
+        $this->twig->expects($this->once())->method('render')->willReturn('rendered');
+        $this->assertEquals('rendered', $abstractType->renderFk());
+    }
+
+    /**
      * @covers \App\Model\Attribute\AbstractType::renderForm()
      * @covers \App\Model\Attribute\AbstractType::renderGrid()
      * @covers \App\Model\Attribute\AbstractType::render()
@@ -97,5 +113,33 @@ class AbstractTypeTest extends TestCase
         $this->twig->expects($this->never())->method('render');
         $this->assertEquals('', $abstractType->renderForm());
         $this->assertEquals('', $abstractType->renderGrid());
+    }
+
+    /**
+     * @covers \App\Model\Attribute\AbstractType::getAttributeColumnSettings
+     * @covers \App\Model\Attribute\AbstractType::getAttributeColumnSettingsString
+     */
+    public function testGetAttributeColumnSettingsString()
+    {
+        /** @var Attribute | MockObject $attribute */
+        $attribute = $this->createMock(Attribute::class);
+        $attribute->method('getData')->with('required')->willReturn(true);
+        $expected = "[".PHP_EOL."    'nullable' => false,".PHP_EOL.']';
+        $abstractType = new Attribute\AbstractType($this->twig, $attribute, []);
+        $this->assertEquals($expected, $abstractType->getAttributeColumnSettingsString(0));
+    }
+
+    /**
+     * @covers \App\Model\Attribute\AbstractType::getAttributeColumnSettings
+     * @covers \App\Model\Attribute\AbstractType::getAttributeColumnSettingsString
+     */
+    public function testGetAttributeColumnSettingsStringNotRequired()
+    {
+        /** @var Attribute | MockObject $attribute */
+        $attribute = $this->createMock(Attribute::class);
+        $attribute->method('getData')->with('required')->willReturn(false);
+        $expected = "[".PHP_EOL."]";
+        $abstractType = new Attribute\AbstractType($this->twig, $attribute, []);
+        $this->assertEquals($expected, $abstractType->getAttributeColumnSettingsString(0));
     }
 }

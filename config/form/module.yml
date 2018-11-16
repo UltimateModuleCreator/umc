@@ -37,7 +37,7 @@ menu_text:
       title: This is the title that will be added to the menu.
 menu_parent:
   id: menu_parent
-  type: text
+  type: menu
   options:
     label: Admin parent menu ID
     required: false

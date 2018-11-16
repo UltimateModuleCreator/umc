@@ -92,7 +92,7 @@ class ValidatorTest extends TestCase
         $entity->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
         $entity->expects($this->once())->method('getNameAttribute')->willReturn($attribute);
         $attribute->method('getData')->willReturn('name');
-        $this->assertEquals(1,  count($validator->validateEntity($entity)));
+        $this->assertEquals(1, count($validator->validateEntity($entity)));
     }
 
     /**
@@ -109,7 +109,7 @@ class ValidatorTest extends TestCase
         $entity->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
         $entity->expects($this->once())->method('getNameAttribute')->willReturn(null);
         $attribute->method('getData')->willReturn('name');
-        $this->assertEquals(2,  count($validator->validateEntity($entity)));
+        $this->assertEquals(2, count($validator->validateEntity($entity)));
     }
 
     /**

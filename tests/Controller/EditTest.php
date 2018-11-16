@@ -84,7 +84,8 @@ class EditTest extends TestCase
             $this->requestStack,
             $this->yamlLoader,
             'basePath',
-            $this->attributeConfig);
+            $this->attributeConfig
+        );
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->formFactory->expects($this->once())->method('create')
             ->willReturn($this->createMock(FormInterface::class));

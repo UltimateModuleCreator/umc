@@ -76,9 +76,11 @@ class EntityGenerator implements GeneratorInterface
     {
         $replace = [
             '_Entity_' =>  ucfirst($entity->getData('name_singular')),
-            '_entity_' =>  $this->stringUtil->snake((string)$entity->getData('name_singular')),
+            '_entity_' =>  strtolower($this->stringUtil->camel((string)$entity->getData('name_singular'))),
             '_namespace_' => $this->stringUtil->snake((string)$entity->getModule()->getData('namespace')),
-            '_module_name_' => $this->stringUtil->snake((string)$entity->getModule()->getData('module_name'))
+            '_modulename_' => strtolower($this->stringUtil->camel(
+                (string)$entity->getModule()->getData('module_name'))
+            )
         ];
         return str_replace(array_keys($replace), array_values($replace), $destination);
     }

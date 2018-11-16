@@ -10,12 +10,17 @@ abstract class AbstractIndex extends Action
     /**
      * @var string
      */
+    private $pageTitle;
+    /**
+     * @var string
+     */
     protected $activeMenuItem;
 
     /**
      * Index constructor.
      * @param Context $context
      * @param string $activeMenuItem
+     * @param string $pageTitle
      */
     public function __construct(Context $context, $activeMenuItem = '', $pageTitle = '')
     {

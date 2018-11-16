@@ -109,22 +109,22 @@ Block/Adminhtml/Button/Entity//Delete.php:
   scope: entity
   template: source/Block/Adminhtml/Button/Entity/Delete.php.html.twig
 view/admminhtml/layout/namespace_module_entity_edit.xml:
-  destination: view/adminhtml/layout/_namespace___module_name___entity__edit.xml
+  destination: view/adminhtml/layout/_namespace___modulename___entity__edit.xml
   label: "Entity admin edit layout handle"
   scope: entity
   template: source/view/adminhtml/layout/namespace_module_name_entity_edit.xml.html.twig
 view/admminhtml/layout/namespace_module_entity_index.xml:
-  destination: view/adminhtml/layout/_namespace___module_name___entity__index.xml
+  destination: view/adminhtml/layout/_namespace___modulename___entity__index.xml
   label: "Entity admin index layout handle"
   scope: entity
   template: source/view/adminhtml/layout/namespace_module_name_entity_index.xml.html.twig
 source/view/adminhtml/ui_component/namespace_module_name_entity_listing.xml:
-  destination: view/adminhtml/ui_component/_namespace___module_name___entity__listing.xml
+  destination: view/adminhtml/ui_component/_namespace___modulename___entity__listing.xml
   label: "Entity admin grid ui component"
   scope: entity
   template: source/view/adminhtml/ui_component/namespace_module_name_entity_listing.xml.html.twig
 source/view/adminhtml/ui_component/namespace_module_name_entity_form.xml:
-  destination: view/adminhtml/ui_component/_namespace___module_name___entity__form.xml
+  destination: view/adminhtml/ui_component/_namespace___modulename___entity__form.xml
   label: "Entity admin grid ui component"
   scope: entity
   template: source/view/adminhtml/ui_component/namespace_module_name_entity_form.xml.html.twig

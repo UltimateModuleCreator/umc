@@ -73,6 +73,16 @@ Model/UploadPath.php:
   label: "Upload paths for all entities"
   scope: module
   template: source/Model/UploadPath.php.html.twig
+Model/Source/ProductAttribute.php:
+  destination: Model/Source/ProductAttribute.php
+  label: "Product Attribute Source Model"
+  scope: module
+  template: source/Model/Source/ProductAttribute.php.html.twig
+Model/Source/ProductAttributeSet.php:
+  destination: Model/Source/ProductAttributeSet.php
+  label: "Product Attribute Set Source Model"
+  scope: module
+  template: source/Model/Source/ProductAttributeSet.php.html.twig
 Controller/Adminhtml/AbstractIndex.php:
   destination: Controller/Adminhtml/AbstractIndex.php
   label: "Base Index Controller"

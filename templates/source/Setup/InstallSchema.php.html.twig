@@ -52,12 +52,12 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 '{{ entity.getData('label_singular')|ucfirst }} ID'
             )
-{%  for attribute in entity.getAttributes %}
+{%  for attribute in entity.getAttributes() %}
             ->addColumn(
                 '{{ attribute.getData('code') }}',
                 Table::{{ attribute.getTypeInstance().getData('sql_type_constant') }},
                 {{ attribute.getTypeInstance().getData('sql_size')|raw }},
-                [{% if attribute.getData('required') %}'nullable' => false{% endif %}],
+{{ attribute.getTypeInstance().getAttributeColumnSettingsString()|raw }},
                 '{{ entity.getData('label_singular')|ucfirst }} {{ attribute.getData('label') }}'
             )
 {% endfor %}
@@ -81,6 +81,9 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 '{{ entity.getData('label_singular')|ucfirst }} Updated At'
             )
+{%  for attribute in entity.getAttributes() %}
+{{ attribute.getTypeInstance().renderFk()|raw }}
+{% endfor %}
             ->setComment('{{ entity.getData('label_singular')|ucfirst }} Table');
             $setup->getConnection()->createTable($table);
 {% if entity.hasFullTextAttributes() %}

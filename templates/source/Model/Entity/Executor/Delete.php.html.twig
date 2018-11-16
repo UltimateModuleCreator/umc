@@ -1,7 +1,7 @@
 <?php{{ module.getFormattedLicense('php') }}
 namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor;
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\ArticleRepositoryInterface;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface;
 use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\ExecutorInterface;
 
 class Delete implements ExecutorInterface

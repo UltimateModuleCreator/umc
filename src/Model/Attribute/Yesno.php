@@ -30,4 +30,12 @@ class Yesno extends AbstractType implements TypeInterface
         $names[] = 'source_model';
         return $names;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getSourceModel()
+    {
+        return $this->getData('source_model');
+    }
 }

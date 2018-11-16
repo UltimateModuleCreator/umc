@@ -12,7 +12,7 @@
                 </editor>
 {% endif %}
                 <dataType>select</dataType>
-                <options class="{{ type.getData('source_model') }}"/>
+                <options class="{{ type.getSourceModel() }}"/>
                 <label translate="true">{{ attribute.getData('label') }}</label>
 {% if attribute.getData('admin_grid') is same as("2") %}
                 <visible>false</visible>

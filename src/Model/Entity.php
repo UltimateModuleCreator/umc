@@ -44,7 +44,34 @@ class Entity extends AbstractModel
      */
     public function getAttributes(): array
     {
+        $this->sortAttributes();
         return $this->attributes;
+    }
+
+    /**
+     * sort attributes
+     */
+    private function sortAttributes()
+    {
+        uasort(
+            $this->attributes,
+            function (Attribute $attributeA, Attribute $attributeB) {
+                $sortOrderA = $attributeA->getData('position');
+                $sortOrderB = $attributeB->getData('position');
+                if ($sortOrderA === $sortOrderB) {
+                    return 0;
+                }
+                // empty values are placed at the end
+                if ($sortOrderB === "") {
+                    return -1;
+                }
+                if ($sortOrderA === "") {
+                    return 1;
+                }
+                return ((int)$sortOrderA < (int)$sortOrderB) ? -1 : 1;
+            }
+        );
+        $this->attributes = array_values($this->attributes);
     }
 
     /**

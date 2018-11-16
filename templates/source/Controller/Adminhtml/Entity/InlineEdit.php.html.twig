@@ -72,7 +72,7 @@ class InlineEdit extends Action
 {% endif %}
         {{ entity.getData('name_singular')|camel|ucfirst }}ResourceModel ${{ entity.getData('name_singular')|camel }}ResourceModel
     ) {
-        $this->{{ entity.getData('name_singular')|snake }}Repository = ${{ entity.getData('name_singular')|snake }}Repository;
+        $this->{{ entity.getData('name_singular')|camel }}Repository = ${{ entity.getData('name_singular')|camel }}Repository;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->jsonFactory = $jsonFactory;

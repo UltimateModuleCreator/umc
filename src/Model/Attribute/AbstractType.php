@@ -97,4 +97,43 @@ class AbstractType extends AbstractModel implements TypeInterface
     {
         return $this->render('form_template');
     }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function renderFk() : string
+    {
+        return $this->render('fk_template');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAttributeColumnSettings() : array
+    {
+        $options = [];
+        if ($this->getAttribute()->getData('required')) {
+            $options['nullable'] = 'false';
+        }
+        return $options;
+    }
+
+    /**
+     * @param int $padd
+     * @return string
+     */
+    public function getAttributeColumnSettingsString($padd = 4) : string
+    {
+        $tab = str_repeat(' ', 4);
+        $padding = str_repeat($tab, $padd);
+        $string = $padding.'['.PHP_EOL;
+        foreach ($this->getAttributeColumnSettings() as $key => $value) {
+            $string .= $padding.$tab."'".$key."' => ".$value.','.PHP_EOL;
+        }
+        $string .= $padding.']';
+        return $string;
+    }
 }

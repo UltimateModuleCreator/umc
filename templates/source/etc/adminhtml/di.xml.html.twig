@@ -3,7 +3,7 @@
 {% for entity in module.getEntities() %}
     <type name="{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Index">
         <arguments>
-            <argument name="activeMenuItem" xsi:type="string">{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('namespace')|snake }}_{{ entity.getData('name_singular')|snake }}</argument>
+            <argument name="activeMenuItem" xsi:type="string">{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|snake }}</argument>
             <argument name="pageTitle" xsi:type="string" translate="true">{{ entity.getData('label_plural') }}</argument>
         </arguments>
     </type>

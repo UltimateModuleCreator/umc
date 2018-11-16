@@ -46,7 +46,7 @@ class Edit extends Action
         try {
             ${{ entity.getData('name_singular')|camel }} = $this->{{ entity.getData('name_singular')|camel }}Repository->get(${{ entity.getData('name_singular')|camel }}Id);
         } catch (NoSuchEntityException $e) {
-            ${{ entity.getData('name_singular')|snake }} = null;
+            ${{ entity.getData('name_singular')|camel }} = null;
         }
         $this->registry->register('current_{{ entity.getData('name_singular')|snake }}', ${{ entity.getData('name_singular')|camel }});
         return ${{ entity.getData('name_singular')|camel }};
@@ -60,10 +60,9 @@ class Edit extends Action
     public function execute()
     {
         ${{ entity.getData('name_singular')|camel }} = $this->init{{ entity.getData('name_singular')|camel|ucfirst }}();
-
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
+        $resultPage->setActiveMenu('{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|snake }}');
         $resultPage->getConfig()->getTitle()->prepend(__('{{ entity.getData('label_plural') }}'));
 
         if (${{ entity.getData('name_singular')|camel }} === null) {
