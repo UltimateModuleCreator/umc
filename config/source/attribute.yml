@@ -1,0 +1,5 @@
+Model/Entity/Source/Attribute.php:
+  destination: Model/_Entity_/Source/_Code_.php
+  label: "Attribute Options Source Model"
+  scope: attribute
+  template: source/Model/Entity/Source/Attribute.php.html.twig

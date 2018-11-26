@@ -1,0 +1,14 @@
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="{{ module.getData('namespace') }}_{{module.getData('module_name') }}::{{module.getData('module_name')|lower }}" title="{{ module.getData('menu_text') }}" sortOrder="{{ module.getData('sort_order') }}">
+{% for entity in module.getEntities() %}
+                    <resource id="{{ module.getData('namespace') }}_{{module.getData('module_name') }}::{{module.getData('module_name')|lower }}_{{ entity.getData('name_singular') }}" title="{{ entity.getData('label_plural') }}"/>
+{% endfor %}
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,32 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor;
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\ExecutorInterface;
+
+class Delete implements ExecutorInterface
+{
+    /**
+     * @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+     */
+    private ${{ entity.getData('name_singular')|camel }}Repository;
+
+    /**
+     * Delete constructor.
+     * @param {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+     */
+    public function __construct(
+        {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+    ) {
+        $this->{{ entity.getData('name_singular')|camel }}Repository = ${{ entity.getData('name_singular')|camel }}Repository;
+    }
+
+    /**
+     * @param int $id
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function execute($id)
+    {
+        $this->{{ entity.getData('name_singular')|camel }}Repository->deleteById($id);
+    }
+}

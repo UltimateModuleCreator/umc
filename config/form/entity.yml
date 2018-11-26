@@ -1,0 +1,65 @@
+name_singular:
+  id: name_singular
+  type: text
+  options:
+    label: Name Singular
+    attr:
+      title: Each entity must have a label used for buttons, links, messages. This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form 'Post'
+name_plural:
+  id: name_plural
+  type: text
+  options:
+    label: Name Plural
+    attr:
+      title: "This is the plural value of the entity code. For example 'posts'."
+label_singular:
+  id: label_singular
+  type: text
+  options:
+    label: Label Singular
+    attr:
+      class: 'label-singular'
+      title: UMC generates the code in a 'human readable' form. It's easier to figure out what the code is about when the variables and methods have a propper name.For example it's easier to read foreach ($posts as $_post){...} or $post->getTags() than foreach ($list as $item){...} or $entity->getRelated('tags');The value you fill in here will be used for variable names, file names and table names.
+label_plural:
+  id: label_plural
+  type: text
+  options:
+    label: Label Plural
+    attr:
+      title: "This is the plural form of the label above. It will be used for lists. (For example: 'Posts'). Try to use English words for this label. It's not mandatory, but it makes the taxonomy more readable. I recommend the first letter to be uppercase."
+add_created_to_grid:
+  id: add_created_to_grid
+  type: choice
+  has_default: true
+  options:
+    label: Add "Created at" field to grid
+    choices:
+      Yes: 1
+      No: 0
+      Yes but hidden: 2
+    attr:
+      title: The entities created with UMC will have a field called 'created_at' with the creation date of any entity instance. If this is set to 'Yes' the 'Created at' field will be added to the admin grid.
+add_updated_to_grid:
+  id: add_updated_to_grid
+  type: choice
+  has_default: true
+  options:
+    label: Add "Updated at" field to grid
+    choices:
+      Yes: 1
+      No: 0
+      Yes but hidden: 2
+    attr:
+      title: The entities created with UMC will have a field called 'updated_at' with the last update date of any entity instance. If this is set to 'Yes' the 'Updated at' field will be added to the admin grid.
+search:
+  id: search
+  type: choice
+  has_default: true
+  options:
+    label: Add entity to global admin search
+    choices:
+      Yes: 1
+      No: 0
+    attr:
+      title: The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders. If you set this to 'Yes' than it will search in your entity also.
+

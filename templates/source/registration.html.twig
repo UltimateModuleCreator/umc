@@ -1,0 +1,6 @@
+<?php{{ module.getFormattedLicense('php') }}
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    '{{ module.getData('namespace')|ucfirst }}_{{ module.getData('module_name')|ucfirst }}',
+    __DIR__
+);

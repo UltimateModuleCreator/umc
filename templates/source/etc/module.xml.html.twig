@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>{{ module.getFormattedLicense('xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="{{ module.getData('namespace') }}_{{module.getData('module_name') }}" setup_version="{{ module.getData('version') }}">
+        <sequence>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Ui" />
+            <module name="Magento_Config" />
+{% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
+            <module name="Magento_MediaStorage" />
+            <module name="Magento_Store" />
+{% endif %}
+{% if module.hasAttributeType('product_attribute') or module.hasAttributeType('product_attribute_set')%}
+            <module name="Magento_Eav" />
+            <module name="Magento_Catalog" />
+{% endif %}
+        </sequence>
+    </module>
+</config>

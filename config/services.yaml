@@ -1,0 +1,655 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+  form_config_path: '%kernel.root_dir%/../config/form'
+  module_list_path: '%kernel.root_dir%/../var/umc'
+  defaults_path: '%module_list_path%/defaults/'
+  defaults_file: 'defaults.yml'
+  attribute_type_config:
+    text:
+      label: Text
+      grid_filter_type: text
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/text.html.twig
+      fk_template: false
+      class: App\Model\Attribute\Text
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 'null'
+      type_hint: string
+      input_type: Text Input
+    product_attribute:
+      label: Product Attribute
+      grid_filter_type: select
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: attribute/fk/product_attribute.html.twig
+      class: App\Model\Attribute\Attributes
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_SMALLINT
+      sql_size: 'null'
+      type_hint: int
+      multiple_text: 'false'
+      input_type: Select
+    product_attribute_set:
+      label: Product Attribute Set
+      grid_filter_type: select
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: attribute/fk/product_attribute_set.html.twig
+      class: App\Model\Attribute\AttributeSet
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_SMALLINT
+      sql_size: 'null'
+      type_hint: int
+      multiple_text: 'false'
+      input_type: Select
+    country:
+      label: Country
+      source_model: Magento\Config\Model\Config\Source\Locale\Country
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: false
+      multiple_text: 'false'
+      class: \App\Model\Attribute\Country
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 3
+      type_hint: string
+      grid_filter_type: select
+      input_type: Select
+    country_multiselect:
+      label: Country Multiselect
+      source_model: Magento\Config\Model\Config\Source\Locale\Country
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: false
+      multiple_text: 'true'
+      class: \App\Model\Attribute\CountryMultiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+    date:
+      label: Date
+      grid_template: attribute/grid/date.html.twig
+      form_template: attribute/form/date.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\Date
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_DATETIME
+      sql_size: 'null'
+      type_hint: string
+      grid_filter_type: dateRange
+      input_type: Date
+    decimal:
+      label: Decimal
+      grid_filter_type: textRange
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/text.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\Decimal
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_DECIMAL
+      sql_size: "'12,4'"
+      type_hint: float
+      input_type: Text Input
+    dropdown:
+      label: Dropdown
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: false
+      multiple_text: 'false'
+      class: \App\Model\Attribute\Dropdown
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: true
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_INTEGER
+      sql_size: 'null'
+      type_hint: int
+      grid_filter_type: select
+      input_type: Select
+    file:
+      label: File
+      grid_template: false
+      form_template: attribute/form/file.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\File
+      upload_type: file
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 255
+      type_hint: string
+      input_type: File
+    image:
+      label: Image
+      grid_template: false
+      form_template: attribute/form/file.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\Image
+      upload_type: image
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: 255
+      type_hint: string
+      input_type: File
+    integer:
+      label: Integer
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/text.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\Integer
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_INTEGER
+      sql_size: 'null'
+      type_hint: int
+      grid_filter_type: textRange
+      input_type: Text Input
+    multiselect:
+      label: Multiselect
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: false
+      multiple_text: 'true'
+      class: \App\Model\Attribute\Multiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: true
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+    textarea:
+      label: Textarea (no editor)
+      grid_template: attribute/grid/text.html.twig
+      form_template: attribute/form/textarea.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\Textarea
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      grid_filter_type: 'false'
+      input_type: Textarea
+    wysisyg:
+      label: Wysiwyg
+      grid_template: false
+      form_template: attribute/form/wysiwyg.html.twig
+      fk_template: false
+      class: \App\Model\Attribute\Wysiwyg
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      grid_filter_type: 'false'
+      input_type: Textarea
+    yesno:
+      label: Yes/No
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/yesno.html.twig
+      fk_template: false
+      source_model: Magento\Config\Model\Config\Source\Yesno
+      class: \App\Model\Attribute\Yesno
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: false
+      full_text: false
+      sql_type_constant: TYPE_INTEGER
+      sql_size: 1
+      type_hint: int
+      grid_filter_type: select
+      input_type: Checkbox (toggle)
+
+  menu_type_config:
+    '':
+      label: '--Top Level--'
+    'Magento_Backend::dashboard':
+      label: 'Dasboard (Magento_Backend::dashboard  )'
+    'Magento_Sales::sales':
+      label: 'Sales (Magento_Sales::sales)'
+    'Magento_Sales::sales_operation':
+      label: '|--- Sales->Operations (Magento_Sales::sales_operation)'
+    'Magento_Sales::sales_order':
+      label: '|---|--- Sales->Operations->Orders(Magento_Sales::sales_order)'
+    'Magento_Sales::sales_invoice':
+      label: '|---|--- Sales->Operations->Invoices (Magento_Sales::sales_invoice)'
+    'Magento_Sales::sales_shipment':
+      label: '|---|--- Sales->Operations->Shipments (Magento_Sales::sales_shipment)'
+    'Magento_Sales::sales_creditmemo':
+      label: '|---|--- Sales->Operations->Credit Memos (Magento_Sales::sales_creditmemo)'
+    'Magento_Paypal::paypal_billing_agreement':
+      label: '|---|--- Sales->Operations->Billing Agreements (Magento_Paypal::paypal_billing_agreement)'
+    'Magento_Sales::sales_transactions':
+      label: '|---|--- (Sales->Operations->Transactions (Magento_Sales::sales_transactions)'
+    'Magento_Catalog::catalog':
+      label: 'Catalog (Magento_Catalog::catalog)'
+    'Magento_Catalog::catalog_products':
+      label: '|--Catalog->Products (Magento_Catalog::catalog_products)'
+    'Magento_Catalog::catalog_categories':
+      label: '|--- Catalog->Categories (Magento_Catalog::catalog_categories)'
+    'Magento_Customer::customer':
+      label: 'Customers (Magento_Customer::customer)'
+    'Magento_Customer::customer_manage':
+      label: '|--- Customers->All Customers (Magento_Customer::customer_manage)'
+    'Magento_Customer::customer_online':
+      label: '|--- Customers->Now Online (Magento_Customer::customer_online)'
+    'Magento_Customer::customer_group':
+      label: '|--- Customers->Customer Groups (Magento_Customer::customer_group)'
+    'Magento_Backend::marketing':
+      label: 'Marketing (Magento_Backend::marketing)'
+    'Magento_CatalogRule::promo':
+      label: '|--- Marketing->Promotions (Magento_CatalogRule::promo)'
+    'Magento_CatalogRule::promo_catalog':
+      label: '|---|---Marketing->Promotions->Catalog Price Rules (Magento_CatalogRule::promo_catalog)'
+    'Magento_SalesRule::promo_quote':
+      label: '|---|---Marketing->Promotions->Cart Price Rules (Magento_CatalogRule::promo_quote)'
+    'Magento_Backend::marketing_communications':
+      label: '|---Marketing->Communications (Magento_Backend::marketing_communications)'
+    'Magento_Email::template':
+      label: '|---|---Marketing->Communications->Email Templates (Magento_Email::template)'
+    'Magento_Newsletter::newsletter_template':
+      label: '|---|---Marketing->Communications->Newsletter Templates (Magento_Newsletter::newsletter_template)'
+    'Magento_Newsletter::newsletter_queue':
+      label: '|---|---Marketing->Communications->Newsletter Queue (Magento_Newsletter::newsletter_queue)'
+    'Magento_Newsletter::newsletter_subscriber':
+      label: '|---|---Marketing->Communications->Newsletter Subscribers (Magento_Newsletter::newsletter_subscriber)'
+    'Magento_Backend::marketing_seo':
+      label: '|--- Marketing->Seo & Search (Magento_Backend::marketing_seo)'
+    'Magento_UrlRewrite::urlrewrite':
+      label: '|---|--- Marketing->Seo & Search->URL Rewrites (Magento_UrlRewrite::urlrewrite)'
+    'Magento_Search::search_terms':
+      label: '|---|--- Marketing->Seo & Search->Search Terms (Magento_Search::search_terms)'
+    'Magento_Search::search_synonyms':
+      label: '|---|--- Marketing->Seo & Search->Search Synonyms (Magento_Search::search_synonyms)'
+    'Magento_Sitemap::catalog_sitemap':
+      label: '|---|--- Marketing->Seo & Search->Site Map (Magento_Sitemap::catalog_sitemap)'
+    'Magento_Backend::marketing_user_content':
+      label: '|--- Marketing->User Content (Magento_Backend::marketing_user_content)'
+    'Magento_Review::catalog_reviews_ratings_reviews_all':
+      label: '|---|--- Marketing->User Content->Reviews (Magento_Review::catalog_reviews_ratings_reviews_all)'
+    'Magento_Backend::content':
+      label: 'Content (Magento_Backend::content)'
+    'Magento_Backend::content_elements':
+      label: '|---Content->Elements (Magento_Backend::content_elements)'
+    'Magento_Cms::cms_page':
+      label: '|---|--- Content->Elements->Pages (Magento_Cms::cms_page)'
+    'Magento_Cms::cms_block':
+      label: '|---|--- Content->Elements->Blocks (Magento_Cms::cms_block)'
+    'Magento_Widget::cms_widget_instance':
+      label: '|---|--- Content->Elements->Widgets (Magento_Widget::cms_widget_instance)'
+    'Magento_Backend::system_design':
+      label: '|---|--- Content->Design (Magento_Backend::system_design)'
+    'Magento_Theme::design_config':
+      label: '|---|--- Content->Design->Configuration (Magento_Theme::design_config)'
+    'Magento_Theme::system_design_theme':
+      label: '|---|--- Content->Design->Themes (Magento_Theme::system_design_theme)'
+    'Magento_Backend::system_design_schedule':
+      label: '|---|--- Content->Design->Schedule (Magento_Backend::system_design_schedule)'
+    'Magento_Reports::report':
+      label: 'Reports (Magento_Reports::report)'
+    'Magento_Reports::report_marketing':
+      label: '|--- Reports->Marketing (Magento_Reports::report_marketing)'
+    'Magento_Reports::report_shopcart_product':
+      label: '|---|--- Reports->Marketing->Products in Cart (Magento_Reports::report_shopcart_product)'
+    'Magento_Search::report_search_term':
+      label: '|---|--- Reports->Marketing->Search Terms (Magento_Reports::report_search_term)'
+    'Magento_Reports::report_shopcart_abandoned':
+      label: '|---|--- Reports->Marketing->Abandoned Carts (Magento_Reports::report_shopcart_abandoned)'
+    'Magento_Newsletter::newsletter_problem':
+      label: '|---|--- Reports->Marketing->Newsletter Problem Reports (Magento_Reports::newsletter_problem)'
+    'Magento_Review::report_review':
+      label: '|--- Reports->Reviews (Magento_Review::report_review)'
+    'Magento_Review::report_review_customer':
+      label: '|--- Reports->Reviews->By Customers (Magento_Review::report_review_customer)'
+    'Magento_Review::report_review_product':
+      label: '|--- Reports->Reviews->By Products (Magento_Review::report_review_product)'
+    'Magento_Reports::report_salesroot':
+      label: '|---|--- Reports -> Sales (Magento_Reports::report_salesroot)'
+    'Magento_Reports::report_salesroot_sales':
+      label: '|---|--- Reports -> Sales -> Orders (Magento_Reports::report_salesroot_sales)'
+    'Magento_Reports::report_salesroot_tax':
+      label: '|---|--- Reports -> Sales -> Tax (Magento_Reports::report_salesroot_tax)'
+    'Magento_Reports::report_salesroot_invoiced':
+      label: '|---|--- Reports -> Sales -> Invoiced (Magento_Reports::report_salesroot_invoiced)'
+    'Magento_Reports::report_salesroot_shipping':
+      label: '|---|--- Reports -> Sales -> Shipping (Magento_Reports::report_salesroot_shipping)'
+    'Magento_Reports::report_salesroot_refunded':
+      label: '|---|--- Reports -> Sales -> Refunded (Magento_Reports::report_salesroot_refunded)'
+    'Magento_Reports::report_salesroot_coupons':
+      label: '|---|--- Reports -> Sales -> Coupons (Magento_Reports::report_salesroot_coupons)'
+    'Magento_Paypal::report_salesroot_paypal_settlement_reports':
+      label: '|---|--- Reports -> Sales -> PayPal Settlement (Magento_Paypal::report_salesroot_paypal_settlement_reports)'
+    'Magento_Braintree::settlement_report':
+      label: '|---|--- Reports -> Sales -> Braintree Settlement (Magento_Braintree::settlement_report)'
+    'Magento_Reports::report_customers':
+      label: '|---Reports -> Customers (Magento_Reports::report_customers)'
+    'Magento_Reports::report_customers_totals':
+      label: '|---|---Reports -> Customers -> Order Total (Magento_Reports::report_customers_totals)'
+    'Magento_Reports::report_customers_orders':
+      label: '|---|---Reports -> Customers -> Order Count (Magento_Reports::report_customers_orders)'
+    'Magento_Reports::report_customers_accounts':
+      label: '|---|---Reports -> Customers -> New (Magento_Reports::report_customers_accounts)'
+    'Magento_Reports::report_products':
+      label: '|---Reports -> Products (Magento_Reports::report_products)'
+    'Magento_Reports::report_products_viewed':
+      label: '|---|---Reports -> Products -> Views (Magento_Reports::report_products_viewed)'
+    'Magento_Reports::report_products_bestsellers':
+      label: '|---|---Reports -> Products -> Bestsellers (Magento_Reports::report_products_bestsellers)'
+    'Magento_Reports::report_products_lowstock':
+      label: '|---|---Reports -> Products -> Low Stock (Magento_Reports::report_products_lowstock)'
+    'Magento_Reports::report_products_sold':
+      label: '|---|---Reports -> Products -> Ordered (Magento_Reports::report_products_sold)'
+    'Magento_Downloadable::report_products_downloads':
+      label: '|---|---Reports -> Products -> Downloads (Magento_Downloadable::report_products_downloads)'
+    'Magento_Reports::report_statistics':
+      label: '|---Reports -> Statistics (Magento_Reports::report_statistics)'
+    'Magento_Reports::report_statistics_refresh':
+      label: '|---|---Reports -> Statistics -> Refresh Statistics (Magento_Reports::report_statistics_refresh)'
+    'Magento_Analytics::business_intelligence':
+      label: '|---Reports -> Business Intelligence (Magento_Analytics::business_intelligence)'
+    'Magento_Analytics::advanced_reporting':
+      label: '|---!---Reports -> Business Intelligence -> Advanced Reporting (Magento_Analytics::advanced_reporting)'
+    'Magento_Analytics::bi_essentials':
+      label: '|---!---Reports -> Business Intelligence -> BI Essentials (Magento_Analytics::bi_essentials)'
+    'Magento_Backend::stores':
+      label: 'Stores (Magento_Backend::stores)'
+    'Magento_Backend::stores_settings':
+      label: '|--- Stores -> Settings (Magento_Backend::stores_settings)'
+    'Magento_Backend::system_store':
+      label: '|---|--- Stores -> Settings -> All Stores (Magento_Backend::system_store)'
+    'Magento_Config::system_config':
+      label: '|---|--- Stores -> Settings -> Configuration (Magento_Config::system_config)'
+    'Magento_CheckoutAgreements::sales_checkoutagreement':
+      label: '|---|--- Stores -> Settings -> Terms and Conditions (Magento_CheckoutAgreements::sales_checkoutagreement)'
+    'Magento_Sales::system_order_statuses':
+      label: '|---|--- Stores -> Settings -> Order Status (Magento_Sales::system_order_statuses)'
+    'Magento_Tax::sales_tax':
+      label: '|--- Stores -> Taxes (Magento_Tax::sales_tax)'
+    'Magento_Tax::sales_tax_rules':
+      label: '|---|--- Stores -> Taxes -> Tax rules (Magento_Tax::sales_tax_rules)'
+    'Magento_Tax::sales_tax_rates':
+      label: '|---|--- Stores -> Taxes -> Tax zones and rates(Magento_Tax::sales_tax_rates)'
+    'Magento_CurrencySymbol::system_currency':
+      label: '|--- Stores -> Currency (Magento_CurrencySymbol::system_currency)'
+    'Magento_CurrencySymbol::system_currency_rates':
+      label: '|---|--- Stores -> Currency -> Currency Rates (Magento_CurrencySymbol::system_currency_rates)'
+    'Magento_CurrencySymbol::system_currency_symbols':
+      label: '|---|--- Stores -> Currency -> Currency Symbols (Magento_CurrencySymbol::system_currency_symbols)'
+    'Magento_Backend::stores_attributes':
+      label: '|--- Stores -> Attributes (Magento_Backend::stores_attributes)'
+    'Magento_Catalog::catalog_attributes_attributes':
+      label: '|---|--- Stores -> Attributes -> Product (Magento_Catalog::catalog_attributes_attributes)'
+    'Magento_Catalog::catalog_attributes_sets':
+      label: '|---|--- Stores -> Attributes -> Attribute Set (Magento_Catalog::catalog_attributes_sets)'
+    'Magento_Review::catalog_reviews_ratings_ratings':
+      label: '|---|--- Stores -> Attributes -> Rating (Magento_Review::catalog_reviews_ratings_ratings)'
+    'Magento_Backend::system':
+      label: 'System (Magento_Backend::system)'
+    'Magento_Backend::system_convert':
+      label: '|--- System -> Data Transfer (Magento_Backend::system_convert)'
+    'Magento_ImportExport::system_convert_import':
+      label: '|---|--- System -> Data Transfer -> Import (Magento_Review::catalog_reviews_ratings_ratings)'
+    'Magento_ImportExport::system_convert_export':
+      label: '|---|--- System -> Data Transfer -> Export (Magento_ImportExport::system_convert_export)'
+    'Magento_TaxImportExport::system_convert_tax':
+      label: '|---|--- System -> Data Transfer -> Import/Export Tax Rates (Magento_TaxImportExport::system_convert_tax)'
+    'Magento_ImportExport::system_convert_history':
+      label: '|---|--- System -> Data Transfer -> Import History (Magento_ImportExport::system_convert_history)'
+    'Magento_Integration::system_extensions':
+      label: '|--- System -> Extensions (Magento_Integration::system_extensions)'
+    'Magento_Integration::system_integrations':
+      label: '|---|--- System -> Extensions -> Integrations (Magento_Integration::system_integrations)'
+    'Magento_Backend::system_tools':
+      label: '|--- System -> Tools (Magento_Backend::system_tools)'
+    'Magento_Backend::system_cache':
+      label: '|---|--- System -> Tools -> Cache Management (Magento_Backend::system_cache)'
+    'Magento_Backup::system_tools_backup':
+      label: '|---|--- System -> Tools -> Backup (Magento_Backup::system_tools_backup)'
+    'Magento_Indexer::system_index':
+      label: '|---|--- System -> Tools -> Index Management (Magento_Indexer::system_index)'
+    'Magento_Backend::setup_wizard':
+      label: '|---|--- System -> Tools -> Web Setup Wizard (Magento_Backend::setup_wizard)'
+    'Magento_User::system_acl':
+      label: '|---System -> Permissions (Magento_User::system_acl)'
+    'Magento_User::system_acl_users':
+      label: '|---|--- System -> Permissions -> All Users (Magento_User::system_acl_users)'
+    'Magento_User::system_acl_locks':
+      label: '|---|--- System -> Permissions -> Locked Users (Magento_User::system_acl_locks)'
+    'Magento_User::system_acl_roles':
+      label: '|---|--- System -> Permissions -> User Roles (Magento_User::system_acl_roles)'
+    'Magento_Backend::system_other_settings':
+      label: '|---System -> Other Settings (Magento_Backend::system_other_settings)'
+    'Magento_AdminNotification::system_adminnotification':
+      label: '|---|--- System -> Other Settings -> Notifications (Magento_AdminNotification::system_adminnotification)'
+    'Magento_Variable::system_variable':
+      label: '|---|--- System -> Other Settings -> Custom Variables (Magento_Variable::system_variable)'
+    'Magento_EncryptionKey::system_crypt_key':
+      label: '|---|--- System -> Other Settings -> Manage Encryption Key (Magento_EncryptionKey::system_crypt_key)'
+
+  form_type_map:
+    text:
+      type: \Symfony\Component\Form\Extension\Core\Type\TextType
+    textarea:
+      type: \Symfony\Component\Form\Extension\Core\Type\TextareaType
+    number:
+      type: \Symfony\Component\Form\Extension\Core\Type\NumberType
+    choice:
+      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
+    radio:
+      type: \Symfony\Component\Form\Extension\Core\Type\RadioType
+    attribute_type:
+      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
+      choice_config: '%attribute_type_config%'
+      group: 'input_type'
+      sort: true
+    menu:
+      choice_config: '%menu_type_config%'
+      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Controller\Index:
+      arguments:
+        $template: 'index.html.twig'
+    App\Controller\Docs:
+      arguments:
+        $template: 'docs.html.twig'
+    App\Controller\Edit:
+      arguments:
+        $template: 'edit.html.twig'
+        $basePath: '%module_list_path%/'
+        $attributeConfig: '%attribute_type_config%'
+    App\Controller\Files:
+      arguments:
+        $template: 'files.html.twig'
+    App\Controller\Settings:
+      arguments:
+        $template: 'settings.html.twig'
+    App\Service\ModuleList:
+      arguments:
+        $basePath: '%module_list_path%/'
+
+    App\Form\BaseType:
+      arguments:
+        $type: ''
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: ''
+    App\Form\ModuleType:
+      arguments:
+        $type: '%form_config_path%/module.yml'
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'module'
+    App\Form\EntityType:
+      arguments:
+        $type: '%form_config_path%/entity.yml'
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'entity'
+    App\Form\AttributeType:
+      arguments:
+        $type: '%form_config_path%/attribute.yml'
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'attribute'
+    App\Form\Settings\ModuleType:
+      arguments:
+        $type: '%form_config_path%/module.yml'
+        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'module'
+    App\Form\Settings\EntityType:
+      arguments:
+        $type: '%form_config_path%/entity.yml'
+        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'entity'
+    App\Form\Settings\AttributeType:
+      arguments:
+        $type: '%form_config_path%/attribute.yml'
+        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'attribute'
+
+    App\Service\Source\Reader:
+      arguments:
+        $files:
+          - '%kernel.root_dir%/../config/source/module.yml'
+          - '%kernel.root_dir%/../config/source/entity.yml'
+          - '%kernel.root_dir%/../config/source/attribute.yml'
+          - '%kernel.root_dir%/../config/source/entity-unit-test.yml'
+
+    App\Service\Builder:
+      arguments:
+        $basePath: '%kernel.root_dir%/../var/umc/'
+        $configFilePath: '%module_list_path%/'
+    App\Service\Writer:
+      autowire: false
+    App\Service\Archiver:
+      autowire: false
+
+    App\Service\Generator:
+      arguments:
+        $contentGenerators:
+          module: '@App\Service\Generator\ModuleGenerator'
+          entity: '@App\Service\Generator\EntityGenerator'
+          attribute: '@App\Service\Generator\AttributeGenerator'
+
+    App\Util\CodingStandardsFactory:
+      arguments:
+        $standards: [PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
+        $phpcsPath: '%kernel.root_dir%/../vendor/squizlabs/php_codesniffer/bin/phpcs'
+
+    App\Service\ModuleLoader:
+      arguments:
+        $factories:
+          module : '@App\Model\ModuleFactory'
+          entity : '@App\Model\EntityFactory'
+          attribute : '@App\Model\AttributeFactory'
+    App\Model\ModuleFactory:
+      arguments:
+        $licenseFormatter:
+          php: '@App\Service\License\Php'
+          xml: '@App\Service\License\Xml'
+    App\Model\Attribute\TypeFactory:
+      arguments:
+        $map: '%attribute_type_config%'
+
+    App\Model\Settings:
+      arguments:
+        $path: '%defaults_path%'
+        $file: '%defaults_file%'
+
+    App\Twig\SnakeCase:
+      tags: ['twig.extension']
+    App\Twig\Ucfirst:
+      tags: ['twig.extension']
+    App\Twig\CamelCase:
+      tags: ['twig.extension']
+    App\Twig\Hyphen:
+      tags: ['twig.extension']
+    App\Twig\Version:
+      tags: ['twig.extension']

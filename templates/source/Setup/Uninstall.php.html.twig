@@ -1,0 +1,24 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Setup;
+
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UninstallInterface;
+
+class Uninstall implements UninstallInterface
+{
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.Generic.CodeAnalysis.UnusedFunctionParameter)
+     */
+    public function uninstall(
+        SchemaSetupInterface $setup,
+        ModuleContextInterface $context
+    ) {
+{% for entity in module.getEntities() %}
+        if ($setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')) {
+            $setup->getConnection()->dropTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
+        }
+{% endfor %}
+    }
+}

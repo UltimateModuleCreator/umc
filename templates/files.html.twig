@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h3>Files to be generated</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Filename</th>
+                    <th scope="col">Scope</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if files|length > 0 %}
+                    {% for file in files %}
+                        <tr>
+                            <td>{{ file.destination }}</td>
+                            <td>{{ file.scope }}</td>
+                            <td>{{ file.label }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">There are no files. Are you missing some config files?</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

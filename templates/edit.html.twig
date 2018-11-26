@@ -1,0 +1,126 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <h3>{{ title }}</h3>
+    {{ form_start(form) }}
+    <div class="card">
+        <div class="card-body">
+            {{ form_widget(form.module) }}
+            <div class="entity-container container"></div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-6">
+                    <div class="float-left">
+                        <button type="button" id="add-entity" class="btn btn-primary add-entity btn">Add Entity</button>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="float-right">
+                        <button type="submit" class="btn-primary btn-danger btn">Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="entity-template" style="display: none;">
+        <div class="entity-record" id="entity-container-__entity__">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-1">
+                            <a href="#collapsible-__entity__" class="entity-toggle" data-toggle="collapse">
+                                <span class="ui-icon ui-icon-circle-b-triangle-s"></span>
+                            </a>
+                        </div>
+                        <div class="col-10">
+                            <h3 data-umc="entity-label-title">New Entity</h3>
+                        </div>
+                        <div class="col-1">
+                            <a href="#" class="remove-entity pull-right">
+                                <span class="ui-icon ui-icon-trash"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="collapsible-__entity__">
+                    {{ form_widget(form.entity.__entity__, {attr: {'class': 'entity-element'}}) }}
+                    <div class="attribute-container container"></div>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary add-attribute btn">Add Attribute</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="attribute-template" style="display: none">
+        <div class="attribute-record" id="attribute-container-__entity__-__attribute__">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-1">
+                            <a href="#collapsible-__entity__-__attribute__" class="attribute-toggle" data-toggle="collapse">
+                                <span class="ui-icon ui-icon-circle-b-triangle-s"></span>
+                            </a>
+                        </div>
+                        <div class="col-10">
+                            <h3 data-umc="attribute-label-title">New Attribute</h3>
+                        </div>
+                        <div class="col-1">
+                            <a href="#" class="remove-attribute pull-right">
+                                <span class="ui-icon ui-icon-trash"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="collapsible-__entity__-__attribute__">
+                    {{ form_widget(form.attribute.__entity__.__attribute__, {attr: {'class': 'attribute-element'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+    <div class="modal" tabindex="-1" role="dialog" id="response-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>
+    <script type="text/javascript">
+        $.fn.select2.defaults.set( "theme", "bootstrap" );
+    </script>
+    <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('form[name=data]').umcmodule({
+                entityTemplateSelector: "#entity-template",
+                attributeTemplateSelector: "#attribute-template",
+                entityContainer: '.entity-container',
+                addEntityTrigger: '#add-entity',
+                data: {{ data|json_encode|raw }},
+                attrConfig: {{ attribute_config|raw }}
+            });
+            $.validate({
+                lang: 'en'
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,194 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
+use Magento\Framework\Model\AbstractModel;
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }} as {{ entity.getData('name_singular')|ucfirst }}ResourceModel;
+{% if entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+{% endif %}
+
+/**
+ * @method \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\Page _getResource()
+ * @method \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\Page getResource()
+ */
+class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implements {{ entity.getData('name_singular')|ucfirst }}Interface
+{
+    /**
+     * Cache tag
+     *
+     * @var string
+     */
+    const CACHE_TAG = '{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}';
+    /**
+     * Cache tag
+     *
+     * @var string
+     */
+    protected $_cacheTag = self::CACHE_TAG;
+    /**
+     * Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = '{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}';
+    /**
+     * Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = '{{ entity.getData('name_singular')|snake }}';
+{% if entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
+    /**
+     * Uploader pool
+     *
+     * @var UploaderPool
+     */
+    protected $uploaderPool;
+
+    /**
+     * constructor
+     * @param Context $context
+     * @param Registry $registry
+     * @param UploaderPool $uploaderPool
+     * @param AbstractResource $resource
+     * @param DbCollection $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        UploaderPool $uploaderPool,
+        AbstractResource $resource = null,
+        DbCollection $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->uploaderPool = $uploaderPool;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+{% endif %}
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init({{ entity.getData('name_singular')|ucfirst }}ResourceModel::class);
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * Get Page id
+     *
+     * @return array
+     */
+    public function get{{ entity.getData('name_singular')|ucfirst }}Id()
+    {
+        return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ entity.getData('name_singular')|snake|upper }}_ID);
+    }
+
+    /**
+     * set {{ entity.getData('label_singular') }} id
+     *
+     * @param  int ${{ entity.getData('name_singular')|camel }}Id
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function set{{ entity.getData('name_singular')|ucfirst }}Id(${{ entity.getData('name_singular')|camel }}Id)
+    {
+        return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ entity.getData('name_singular')|snake|upper }}_ID, ${{ entity.getData('name_singular')|camel }}Id);
+    }
+{% for attribute in entity.getAttributes() %}
+    /**
+     * @param {{ attribute.getTypeInstance().getData('type_hint') }} ${{ attribute.getData('code')|camel}}
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function set{{ attribute.getData('code')|camel|ucfirst }}(${{ attribute.getData('code')|camel}})
+    {
+        return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ attribute.getData('code')|upper}}, ${{ attribute.getData('code')|camel}});
+    }
+
+    /**
+     * @return {{ attribute.getTypeInstance().getData('type_hint') }}
+     */
+    public function get{{ attribute.getData('code')|camel|ucfirst }}()
+    {
+        return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ attribute.getData('code')|upper}});
+    }
+{% endfor %}
+{% for attribute in entity.getAttributes() %}
+{% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
+
+    /**
+     * @return bool|string
+     * @throws LocalizedException
+     */
+    public function get{{ attribute.getData('code')|camel|ucfirst }}Url()
+    {
+        $url = false;
+        ${{ attribute.getData('code')|camel }} = $this->get{{ attribute.getData('code')|camel|ucfirst }}();
+        if (${{ attribute.getData('code')|camel }}) {
+            if (is_string(${{ attribute.getData('code')|camel }})) {
+                $uploader = $this->uploaderPool->getUploader('{{ attribute.getData('type') }}');
+                $url = $uploader->getBaseUrl() . $uploader->getBasePath() . ${{ attribute.getData('code')|camel }};
+            } else {
+                throw new LocalizedException(
+                    __('Something went wrong while getting the {{ attribute.getData('label')|ucfirst }} url.')
+                );
+            }
+        }
+        return $url;
+    }
+{% endif %}
+{% endfor %}
+{% if entity.getAttributesWithTypeConfig('multiple')|length %}
+    /**
+     * @return array
+     */
+    private function getMultiSelectFields()
+    {
+        return [
+{{ entity.getAttributesWithTypeConfigString('multiple', 3)|raw }}
+        ];
+    }
+
+    /**
+     * @return AbstractModel|$this
+     */
+    public function beforeSave()
+    {
+        foreach ($this->getMultiSelectFields() as $field) {
+            if (is_array($this->getData($field))) {
+                $this->setData($field, implode(',', $this->getData($field)));
+            }
+        }
+        return parent::beforeSave();
+    }
+
+    /**
+     * @return AbstractModel|$this
+     */
+    public function afterLoad()
+    {
+        foreach ($this->getMultiSelectFields() as $field) {
+            if (!is_array($this->getData($field))) {
+                $this->setData($field, explode(',', $this->getData($field)));
+            }
+        }
+        return parent::afterLoad();
+    }
+{% endif %}
+}

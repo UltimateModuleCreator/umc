@@ -1,0 +1,55 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data;
+
+interface {{ entity.getData('name_singular')|ucfirst }}Interface
+{
+    const {{ entity.getData('name_singular')|upper }}_ID = '{{ entity.getData('name_singular')|snake }}_id';
+{% for attribute in entity.getAttributes() %}
+    const {{ attribute.getData('code')|upper }} = '{{ attribute.getData('code') }}';
+{% endfor %}
+
+    /**
+     * @param int $id
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function setId($id);
+
+    /**
+     * @return int
+     */
+    public function getId();
+
+    /**
+     * @param int $id
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function set{{ entity.getData('name_singular')|ucfirst }}Id($id);
+
+    /**
+     * @return int
+     */
+    public function get{{ entity.getData('name_singular')|ucfirst }}Id();
+
+{% for attribute in entity.getAttributes() %}
+    /**
+     * @param {{ attribute.getTypeInstance().getData('type_hint') }} ${{ attribute.getData('code')|camel}}
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function set{{ attribute.getData('code')|camel|ucfirst }}(${{ attribute.getData('code')|camel}});
+
+    /**
+     * @return {{ attribute.getTypeInstance().getData('type_hint') }}
+     */
+    public function get{{ attribute.getData('code')|camel|ucfirst }}();
+{% endfor %}
+{% for attribute in entity.getAttributes() %}
+{% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
+
+    /**
+     * @return bool|string
+     * @throws LocalizedException
+     */
+    public function get{{ attribute.getData('code')|camel|ucfirst }}Url();
+{% endif %}
+{% endfor %}
+}

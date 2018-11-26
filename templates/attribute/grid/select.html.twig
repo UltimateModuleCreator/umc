@@ -1,0 +1,21 @@
+        <column name="{{ attribute.getData('code') }}" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>{{ type.getData('grid_filter_type') }}</filter>
+{% if not attribute.getTypeInstance().getData('multiple') %}
+                <editor>
+{% if (attribute.getData('required')) %}
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+{% endif %}
+                    <editorType>select</editorType>
+                </editor>
+{% endif %}
+                <dataType>select</dataType>
+                <options class="{{ type.getSourceModel() }}"/>
+                <label translate="true">{{ attribute.getData('label') }}</label>
+{% if attribute.getData('admin_grid') is same as("2") %}
+                <visible>false</visible>
+{% endif %}
+            </settings>
+        </column>

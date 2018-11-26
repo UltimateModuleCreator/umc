@@ -1,0 +1,9 @@
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }};
+
+use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\AbstractDelete;
+
+class Delete extends AbstractDelete
+{
+
+}

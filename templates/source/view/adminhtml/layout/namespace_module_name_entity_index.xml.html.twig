@@ -1,0 +1,8 @@
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    <referenceContainer name="content">
+        <uiComponent name="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|camel|lower }}_listing"/>
+    </referenceContainer>
+    </body>
+</page>

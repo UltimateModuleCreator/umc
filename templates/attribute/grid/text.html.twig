@@ -1,0 +1,19 @@
+        <column name="{{ attribute.getData('code') }}">
+            <settings>
+{% if (attribute.getData('admin_grid_filter')) %}
+                <filter>{{ type.getData('grid_filter_type') }}</filter>
+{% endif %}
+                <editor>
+{% if (attribute.getData('required')) %}
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+{% endif %}
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">{{ attribute.getData('label') }}</label>
+{% if attribute.getData('admin_grid') is same as("2") %}
+                <visible>false</visible>
+{% endif %}
+            </settings>
+        </column>
