@@ -86,7 +86,7 @@ class Entity extends AbstractModel
     /**
      * @return Module
      */
-    public function getModule(): Module
+    public function getModule(): ?Module
     {
         return $this->module;
     }
@@ -94,7 +94,7 @@ class Entity extends AbstractModel
     /**
      * @param Module $module
      */
-    public function setModule(Module $module)
+    public function setModule(Module $module) : void
     {
         $this->module = $module;
     }
@@ -156,108 +156,71 @@ class Entity extends AbstractModel
     }
 
     /**
-     * @return bool
-     * @throws \Exception
+     * @param string $typeConfig
+     * @return Attribute[]
      */
-    public function hasFullTextAttributes() : bool
-    {
-        foreach ($this->getAttributes() as $attribute) {
-            if ($attribute->getTypeInstance()->getData('full_text')) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFullTextAttributes() : array
+    public function getAttributesWithTypeConfig(string $typeConfig) : array
     {
         return array_values(array_filter(
             $this->getAttributes(),
-            function (Attribute $item) {
-                return $item->getTypeInstance()->getData('full_text');
+            function (Attribute $item) use ($typeConfig) {
+                return $item->getTypeInstance()->getData($typeConfig);
             }
         ));
     }
 
     /**
-     * @return string
+     * @param string $typeConfig
+     * @return Attribute[]
      */
-    public function getFullTextAttributeString($tabs = 6) : string
-    {
-        $codes = array_map(
-            function (Attribute $item) {
-                return $item->getData('code');
-            },
-            $this->getFullTextAttributes()
-        );
-        return $this->arrayToPrintString($codes, $tabs);
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasMultiSelectFields() : bool
-    {
-        return count($this->getMultiSelectFields()) > 0;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMultiSelectFields() : array
+    public function getAttributesWithType(string $type) : array
     {
         return array_values(array_filter(
             $this->getAttributes(),
-            function (Attribute $item) {
-                return $item->getTypeInstance()->getData('multiple');
+            function (Attribute $item) use ($type) {
+                return $item->getData('type') === $type;
             }
         ));
     }
 
     /**
-     * @param ?int $tabs
-     * @return string
-     */
-    public function getMultiSelectFieldsString($tabs = 3) : string
-    {
-        $codes = array_map(
-            function (Attribute $item) {
-                return $item->getData('code');
-            },
-            $this->getMultiSelectFields()
-        );
-        return $this->arrayToPrintString($codes, $tabs);
-    }
-
-    /**
+     * @param string $typeConfig
      * @param int $tabs
      * @return string
      */
-    public function getDateFieldsString($tabs = 4) : string
+    public function getAttributesWithTypeConfigString(string $typeConfig, int $tabs = 0) : string
     {
-        $codes = array_map(
-            function (Attribute $item) {
-                return $item->getData('code');
-            },
-            $this->getDateFields()
+        return $this->arrayToPrintString(
+            $this->getAttributeCodes($this->getAttributesWithTypeConfig($typeConfig)),
+            $tabs
         );
-        return $this->arrayToPrintString($codes, $tabs);
     }
 
     /**
+     * @param string $type
+     * @param int $tabs
+     * @return string
+     */
+    public function getAttributesWithTypeString(string $type, int $tabs = 0) : string
+    {
+        return $this->arrayToPrintString(
+            $this->getAttributeCodes($this->getAttributesWithType($type)),
+            $tabs
+        );
+    }
+
+    /**
+     * @param Attribute[] $attributes
      * @return array
      */
-    public function getDateFields() : array
+    private function getAttributeCodes(array $attributes) : array
     {
-        return array_values(array_filter(
-            $this->getAttributes(),
+        return array_map(
             function (Attribute $item) {
-                return $item->getData('type') === 'date';
-            }
-        ));
+                return $item->getData('code');
+            },
+            $attributes
+        );
     }
 
     /**
@@ -265,7 +228,7 @@ class Entity extends AbstractModel
      * @param int $tabs
      * @return string
      */
-    private function arrayToPrintString($codes, $tabs) : string
+    private function arrayToPrintString($codes, $tabs = 0) : string
     {
         $pad = str_repeat(' ', 4 * $tabs);
         return (count($codes)) ? $pad . "'" . implode("'," . PHP_EOL . $pad . "'", $codes) . "'" : '';

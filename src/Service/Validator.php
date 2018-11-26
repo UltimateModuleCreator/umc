@@ -25,16 +25,25 @@ use App\Model\Module;
 
 class Validator
 {
+    /**
+     * @var array
+     */
     private $restrictedNamespaces = ['magento'];
-
+    /**
+     * @var array
+     */
     private $restrictedEntityNames = [
         'resource', 'result', 'setup', 'attribute', 'options', 'system', 'data', 'collection', 'adminhtml',
     ];
-
+    /**
+     * @var array
+     */
     private $restrictedAttributeCodes = [
         'identities', 'namespace', 'default_values', 'created_at', 'updated_at'
     ];
-
+    /**
+     * @var array
+     */
     private $reservedKeywords = [
         '__halt_compiler', 'abstract', 'and', 'array',
         'as', 'break', 'callable', 'case',

@@ -31,7 +31,7 @@ class Full extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) : void
     {
         $builder->add('module', ModuleType::class);
         $builder->add(
@@ -51,7 +51,7 @@ class Full extends AbstractType
     /**
      * @return string
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix() : string
     {
         return self::DEFAULT_BLOCK_PREFIX;
     }

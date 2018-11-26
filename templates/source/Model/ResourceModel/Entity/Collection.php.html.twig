@@ -19,7 +19,7 @@ class Collection extends AbstractCollection
             \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}::class
         );
     }
-{% if entity.hasMultiSelectFields() %}
+{% if entity.getAttributesWithTypeConfig('multiple') %}
 
     /**
      * after collection load
@@ -27,7 +27,7 @@ class Collection extends AbstractCollection
     protected function _afterLoad()
     {
         $fields = [
-{{ entity.getMultiSelectFieldsString()|raw }}
+{{ entity.getAttributesWithTypeConfigString('multiple', 3)|raw }}
         ];
         /** @var {{ entity.getData('name_singular')|ucfirst }} $item */
         foreach ($this as $item) {

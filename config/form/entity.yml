@@ -30,6 +30,7 @@ label_plural:
 add_created_to_grid:
   id: add_created_to_grid
   type: choice
+  has_default: true
   options:
     label: Add "Created at" field to grid
     choices:
@@ -41,6 +42,7 @@ add_created_to_grid:
 add_updated_to_grid:
   id: add_updated_to_grid
   type: choice
+  has_default: true
   options:
     label: Add "Updated at" field to grid
     choices:
@@ -52,6 +54,7 @@ add_updated_to_grid:
 search:
   id: search
   type: choice
+  has_default: true
   options:
     label: Add entity to global admin search
     choices:

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Form\Field\TransformerInterface;
 use App\Util\YamlLoader;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,6 +28,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class BaseType extends AbstractType
 {
+    const DEFAULT_GROUP = 'Misc';
     /**
      * @var YamlLoader
      */
@@ -38,22 +40,41 @@ class BaseType extends AbstractType
     /**
      * @var array
      */
-    private $typeMap;
+    protected $typeMap;
+    /**
+     * @var TransformerInterface
+     */
+    protected $fieldTransformer;
+    /**
+     * @var \App\Model\Settings
+     */
+    protected $settings;
+    /**
+     * @var string
+     */
+    protected $dataKey;
 
     /**
      * BaseType constructor.
      * @param YamlLoader $loader
      * @param string $type
      * @param array $typeMap
+     * @param string $dataKey
      */
     public function __construct(
         YamlLoader $loader,
+        TransformerInterface $fieldTransformer,
         string $type,
-        array $typeMap
+        \App\Model\Settings $settings,
+        array $typeMap,
+        string $dataKey = ''
     ) {
         $this->loader = $loader;
+        $this->fieldTransformer = $fieldTransformer;
         $this->type = $type;
+        $this->settings = $settings;
         $this->typeMap = $typeMap;
+        $this->dataKey = $dataKey;
     }
 
     /**
@@ -61,35 +82,76 @@ class BaseType extends AbstractType
      * @param array $options
      * @throws \Exception
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) : void
     {
-        $fields = $this->loader->load($this->type);
-        foreach ($fields as $field) {
+        $settings = $this->settings->getSettings();
+        foreach ($this->getFields() as $field) {
             $type = $field['type'] ?? '';
             $options = $field['options'] ?? [];
             if (isset($this->typeMap[$type])) {
                 $fieldTypeConfig = $this->typeMap[$type];
             } else {
-                throw new \Exception('Unsuported Form element type ' . $type);
+                throw new \Exception('Unsupported Form element type ' . $type);
             }
             if (!isset($fieldTypeConfig['type'])) {
                 continue;
             }
             $fieldType = $fieldTypeConfig['type'];
-            if (isset($fieldTypeConfig['choice_config'])) {
-                $choices = [];
-                foreach ($fieldTypeConfig['choice_config'] as $key => $settings) {
-                    if (isset($settings['label'])) {
-                        $choices[$settings['label']] = $key;
-                    }
-                }
+            $choices = $this->getChoices($fieldTypeConfig);
+            if ($choices !== null) {
                 $options['choices'] = $choices;
             }
             if (!isset($options['attr'])) {
                 $options['attr'] = [];
             }
+            $options['data'] = $settings[$this->dataKey][$field['id']] ?? null;
             $options['attr']['data-toggle'] = 'tooltip';
             $builder->add($field['id'], $fieldType, $options);
         }
+    }
+
+    /**
+     * @param array $fieldTypeConfig
+     * @return array|null
+     */
+    protected function getChoices(array $fieldTypeConfig) : ?array
+    {
+        if (isset($fieldTypeConfig['choice_config'])) {
+            $choices = [];
+            $groupBy = $fieldTypeConfig['group'] ?? false;
+            foreach ($fieldTypeConfig['choice_config'] as $key => $settings) {
+                if (!isset($settings['label'])) {
+                    continue;
+                }
+                if ($groupBy) {
+                    $groupLabel = $settings[$groupBy] ?? self::DEFAULT_GROUP;
+                    $choices[$groupLabel][$settings['label']] = $key;
+                } else {
+                    $choices[$settings['label']] = $key;
+                }
+            }
+            $sort = $fieldTypeConfig['sort'] ?? false;
+            if ($sort) {
+                ksort($choices);
+            }
+            return $choices;
+        }
+        return null;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    protected function getFields() : array
+    {
+        $fields = [];
+        foreach ($this->loader->load($this->type) as $key => $fieldConfig) {
+            $field = $this->fieldTransformer->transform($fieldConfig);
+            if ($field !== null) {
+                $fields[$key] = $field;
+            }
+        }
+        return $fields;
     }
 }

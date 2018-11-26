@@ -51,3 +51,8 @@
     top: 300px;
     z-index: 100;
 }
+
+.select2-container--bootstrap .select2-results__group {
+    font-size:18px;
+    opacity: 0.6;
+}

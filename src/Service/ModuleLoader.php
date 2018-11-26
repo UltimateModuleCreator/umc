@@ -46,7 +46,7 @@ class ModuleLoader
      * @return \App\Model\AbstractModel | Module
      * @throws \Exception
      */
-    public function loadModule(array $data)
+    public function loadModule(array $data) : Module
     {
         /** @var Module $module */
         $module = $this->getFactory('module')->create($data);
@@ -72,7 +72,7 @@ class ModuleLoader
      * @return FactoryInterface
      * @throws \Exception
      */
-    private function getFactory($key)
+    private function getFactory($key) : FactoryInterface
     {
         if (!isset($this->factories[$key])) {
             throw new \Exception("Factory not found for {$key}");

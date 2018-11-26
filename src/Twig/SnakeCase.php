@@ -15,6 +15,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+declare(strict_types=1);
 namespace App\Twig;
 
 use App\Util\StringUtil;

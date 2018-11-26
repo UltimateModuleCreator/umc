@@ -19,9 +19,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Model;
 
-use App\Model\Attribute;
 use App\Model\Entity;
 use App\Model\Module;
+use App\Service\License\ProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
@@ -45,11 +45,12 @@ class ModuleTest extends TestCase
      */
     protected function setUp()
     {
-        $this->module = new Module($this->data);
+        $this->module = new Module([], $this->data);
     }
 
     /**
      * @covers \App\Model\Module::getData()
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetData()
     {
@@ -61,6 +62,7 @@ class ModuleTest extends TestCase
 
     /**
      * @covers \App\Model\Module::getRawData()
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetRawData()
     {
@@ -69,6 +71,7 @@ class ModuleTest extends TestCase
 
     /**
      * @covers \App\Model\Module::getPropertiesData()
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetPropertiesData()
     {
@@ -78,6 +81,7 @@ class ModuleTest extends TestCase
     /**
      * @covers \App\Model\Module::toArray()
      * @covers \App\Model\Module::getAdditionalToArray()
+     * @covers \App\Model\Module::__construct()
      */
     public function testToArray()
     {
@@ -92,90 +96,46 @@ class ModuleTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Module::getProcessedLicense()
-     */
-    public function testGetProcessedLicense()
-    {
-        $module = new Module([
-            'namespace' => 'Namespace',
-            'module_name' => 'ModuleName',
-            'license' => "This is the license for {{Namespace}}_{{Module}} for the year {{Y}}\n" .
-                "and {{this should not be replaced}}"
-        ]);
-        $expected = "This is the license for Namespace_ModuleName for the year " . date('Y') . "\n" .
-            "and {{this should not be replaced}}";
-        $this->assertEquals($expected, $module->getProcessedLicense());
-    }
-
-    /**
-     * @covers \App\Model\Module::getProcessedLicense()
-     */
-    public function testGetProcessedLicenseEmpty()
-    {
-        $module = new Module([
-            'namespace' => 'Namespace',
-            'module_name' => 'ModuleName',
-            'license' => "    "
-        ]);
-        $this->assertEquals('', $module->getProcessedLicense());
-    }
-
-    /**
      * @covers \App\Model\Module::getFormattedLicense()
-     * @covers \App\Model\Module::formatPhpLicense()
-     * @covers \App\Model\Module::formatXmlLicense()
+     * @covers \App\Model\Module::__construct()
      * @throws \Exception
      */
     public function testGetFormattedLicense()
     {
-        $module = new Module([
-            'namespace' => 'Namespace',
-            'module_name' => 'ModuleName',
-            'license' => "<!---->This is the license for {{Namespace}}_{{Module}} for the year {{Y}}\n*//*" .
-                "and {{this should not be replaced}}"
-        ]);
-        $expected = PHP_EOL . "/**" . PHP_EOL;
-        $expected .= " * This is the license for Namespace_ModuleName for the year " . date('Y') . PHP_EOL;
-        $expected .= " * and {{this should not be replaced}}" . PHP_EOL;
-        $expected .= " */" . PHP_EOL;
-        $this->assertEquals($expected, $module->getFormattedLicense('php'));
-
-        $expected = PHP_EOL . "<!--" . PHP_EOL;
-        $expected .= "/**" . PHP_EOL;
-        $expected .= " * This is the license for Namespace_ModuleName for the year " . date('Y') . PHP_EOL;
-        $expected .= " * and {{this should not be replaced}}" . PHP_EOL;
-        $expected .= " */" . PHP_EOL;
-        $expected .= "-->" . PHP_EOL;
-        $this->assertEquals($expected, $module->getFormattedLicense('xml'));
-    }
-
-    /**
-     * @covers \App\Model\Module::getFormattedLicense
-     */
-    public function testGetFormatterLicenseNoLicense()
-    {
-        $module = new Module();
-        $this->assertEmpty($module->getFormattedLicense('php'));
+        $php = $this->createMock(ProcessorInterface::class);
+        $xml = $this->createMock(ProcessorInterface::class);
+        $php->expects($this->once())->method('process');
+        $xml->expects($this->once())->method('process');
+        $module = new Module(['php' => $php, 'xml' => $xml], []);
+        $module->getFormattedLicense('php');
+        $module->getFormattedLicense('xml');
     }
 
     /**
      * @covers \App\Model\Module::getFormattedLicense()
-     * @throws \Exception
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetFormattedLicenseWithException()
     {
-        $module = new Module([
-            'namespace' => 'Namespace',
-            'module_name' => 'ModuleName',
-            'license' => "This is the license for {{Namespace}}_{{Module}} for the year {{Y}}\n" .
-                "and {{this should not be replaced}}"
-        ]);
+        $module = new Module(['wrong' => new \stdClass()], []);
         $this->expectException(\Exception::class);
-        $module->getFormattedLicense('dummy');
+        $module->getFormattedLicense('wrong');
+    }
+
+    /**
+     * @covers \App\Model\Module::getFormattedLicense()
+     * @covers \App\Model\Module::__construct()
+     */
+    public function testGetFormattedLicenseWithMissingProcessor()
+    {
+        $module = new Module([], []);
+        $this->expectException(\Exception::class);
+        $module->getFormattedLicense('missing');
     }
 
     /**
      * @covers \App\Model\Module::hasAttributeType()
+     * @covers \App\Model\Module::__construct()
      */
     public function testHasAttributeType()
     {
@@ -193,7 +153,7 @@ class ModuleTest extends TestCase
             ['textarea', true],
             ['dummy', false]
         ]);
-        $module = new Module();
+        $module = new Module([]);
         $module->addEntity($entity1);
         $module->addEntity($entity2);
         $this->assertTrue($module->hasAttributeType('text'));
@@ -203,6 +163,7 @@ class ModuleTest extends TestCase
 
     /**
      * @covers \App\Model\Module::getSearchableEntities()
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetSearchableEntities()
     {
@@ -213,18 +174,19 @@ class ModuleTest extends TestCase
         $entity2 = $this->createMock(Entity::class);
         $entity2->method('getData')->willReturn('search')->willReturn("0");
 
-        $module = new Module();
+        $module = new Module([]);
         $module->addEntity($entity1);
         $module->addEntity($entity2);
         $this->assertEquals([$entity1], $module->getSearchableEntities());
 
-        $module = new Module();
+        $module = new Module([]);
         $module->addEntity($entity2);
         $this->assertEquals([], $module->getSearchableEntities());
     }
 
     /**
      * @covers \App\Model\Module::hasSearchableEntities()
+     * @covers \App\Model\Module::__construct()
      */
     public function testHasSearchableEntities()
     {
@@ -235,35 +197,40 @@ class ModuleTest extends TestCase
         $entity2 = $this->createMock(Entity::class);
         $entity2->method('getData')->willReturn('search')->willReturn("0");
 
-        $module = new Module();
+        $module = new Module([]);
         $module->addEntity($entity1);
         $module->addEntity($entity2);
         $this->assertTrue($module->hasSearchableEntities());
 
-        $module = new Module();
+        $module = new Module([]);
         $module->addEntity($entity2);
         $this->assertFalse($module->hasSearchableEntities());
     }
 
     /**
      * @covers \App\Model\Module::getExtensionName
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetExtensionName()
     {
-        $module = new Module([
-            'namespace' => 'Namespace',
-            'module_name' => 'ModuleName'
-        ]);
+        $module = new Module(
+            [],
+            [
+                'namespace' => 'Namespace',
+                'module_name' => 'ModuleName'
+            ]
+        );
         $this->assertEquals('Namespace_ModuleName', $module->getExtensionName());
     }
 
     /**
      * @covers \App\Model\Module::getEntities
      * @covers \App\Model\Module::addEntity
+     * @covers \App\Model\Module::__construct()
      */
     public function testGetEntities()
     {
-        $module = new Module();
+        $module = new Module([]);
         /** @var Entity | MockObject $entity1 */
         $entity1 = $this->createMock(Entity::class);
         /** @var Entity | MockObject $entity2 */

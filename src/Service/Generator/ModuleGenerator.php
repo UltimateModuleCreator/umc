@@ -45,7 +45,7 @@ class ModuleGenerator implements GeneratorInterface
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function generateContent(Module $module, array $fileConfig): array
+    public function generateContent(Module $module, array $fileConfig) : array
     {
         $destination = $this->processDestination($fileConfig['destination'], $module);
         $content = $this->twig->render($fileConfig['template'], ['module' => $module]);

@@ -18,3 +18,18 @@ files:
   controller: App\Controller\Files::run
   methods:
   - GET
+settings:
+  path: /settings
+  controller: App\Controller\Settings::run
+  methods:
+  - GET
+save-settings:
+  path: /save-settings
+  controller: App\Controller\SaveSettings::run
+  methods:
+  - POST
+docs:
+  path: /docs
+  controller: App\Controller\Docs::run
+  methods:
+  - GET

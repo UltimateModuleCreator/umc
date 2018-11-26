@@ -17,10 +17,10 @@
         "symfony/process": "*",
         "symfony/twig-bundle": "*",
         "symfony/yaml": "*",
-        "twig/extensions": "^1.5"
+        "twig/extensions": "^1.5",
+        "squizlabs/php_codesniffer": "^3.3"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.3",
         "symfony/dotenv": "*",
         "symfony/phpunit-bridge": "*"
     },

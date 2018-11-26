@@ -110,7 +110,7 @@ class InlineEdit extends Action
                 ${{ entity.getData('name_singular')|camel }}Data = $this->dateFilter->filterDates(
                     ${{ entity.getData('name_singular')|camel }}Data,
                     [
-{{ entity.getDateFieldsString(6)|raw }}
+{{ entity.getAttributesWithTypeString('date', 6)|raw }}
                     ]
                 );
 {% endif %}

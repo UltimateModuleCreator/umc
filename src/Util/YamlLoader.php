@@ -23,10 +23,10 @@ class YamlLoader
 {
     /**
      * @param $file
-     * @return mixed
+     * @return array
      * @throws \Exception
      */
-    public function load($file)
+    public function load($file) : array
     {
         try {
             $values = Yaml::parseFile($file, 1);

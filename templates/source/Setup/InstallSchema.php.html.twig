@@ -81,23 +81,21 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 '{{ entity.getData('label_singular')|ucfirst }} Updated At'
             )
-{%  for attribute in entity.getAttributes() %}
-{{ attribute.getTypeInstance().renderFk()|raw }}
-{% endfor %}
+{%  for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderFk()|raw }}{% endfor %}
             ->setComment('{{ entity.getData('label_singular')|ucfirst }} Table');
             $setup->getConnection()->createTable($table);
-{% if entity.hasFullTextAttributes() %}
+{% if entity.getAttributesWithTypeConfig('full_text')|length > 0 %}
             $setup->getConnection()->addIndex(
                 $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
                 $setup->getIdxName(
                     $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
                     [
-{{ entity.getFullTextAttributeString(6)|raw }}
+{{ entity.getAttributesWithTypeConfigString('full_text', 6)|raw }}
                     ],
                     AdapterInterface::INDEX_TYPE_FULLTEXT
                 ),
                 [
-{{ entity.getFullTextAttributeString(5)|raw }}
+{{ entity.getAttributesWithTypeConfigString('full_text',5)|raw }}
                 ],
                 AdapterInterface::INDEX_TYPE_FULLTEXT
             );

@@ -124,7 +124,7 @@ class AbstractTypeTest extends TestCase
         /** @var Attribute | MockObject $attribute */
         $attribute = $this->createMock(Attribute::class);
         $attribute->method('getData')->with('required')->willReturn(true);
-        $expected = "[".PHP_EOL."    'nullable' => false,".PHP_EOL.']';
+        $expected = "[" . PHP_EOL . "    'nullable' => false," . PHP_EOL . ']';
         $abstractType = new Attribute\AbstractType($this->twig, $attribute, []);
         $this->assertEquals($expected, $abstractType->getAttributeColumnSettingsString(0));
     }
@@ -138,7 +138,7 @@ class AbstractTypeTest extends TestCase
         /** @var Attribute | MockObject $attribute */
         $attribute = $this->createMock(Attribute::class);
         $attribute->method('getData')->with('required')->willReturn(false);
-        $expected = "[".PHP_EOL."]";
+        $expected = "[" . PHP_EOL . "]";
         $abstractType = new Attribute\AbstractType($this->twig, $attribute, []);
         $this->assertEquals($expected, $abstractType->getAttributeColumnSettingsString(0));
     }

@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Service\License\ProcessorInterface;
+
 class Module extends AbstractModel
 {
     /**
@@ -33,14 +35,25 @@ class Module extends AbstractModel
      */
     private $entities = [];
     /**
-     * @var string[]
+     * @var ProcessorInterface[]
      */
-    private $formattedLicense = [];
+    private $licenseFormatter;
+
+    /**
+     * Module constructor.
+     * @param array $licenseFormatter
+     * @param array $data
+     */
+    public function __construct(array $licenseFormatter, array $data = [])
+    {
+        $this->licenseFormatter = $licenseFormatter;
+        parent::__construct($data);
+    }
 
     /**
      * @return Entity[]
      */
-    public function getEntities()
+    public function getEntities() : array
     {
         return $this->entities;
     }
@@ -70,111 +83,20 @@ class Module extends AbstractModel
     }
 
     /**
-     * @return string
-     */
-    public function getProcessedLicense() : string
-    {
-        $license = $this->getData('license');
-        if (is_string($license)) {
-            $license = trim($license);
-        }
-        if (!$license) {
-            return '';
-        }
-        $replace = [
-            '{{Namespace}}' => $this->getData('namespace'),
-            '{{Module}}' => $this->getData('module_name'),
-            '{{Y}}' => date('Y')
-        ];
-        return str_replace(
-            array_keys($replace),
-            array_values($replace),
-            $license
-        );
-    }
-
-    /**
      * @param string $format
      * @return string
      * @throws \Exception
      */
     public function getFormattedLicense(string $format) : string
     {
-        $license = $this->getProcessedLicense();
-        if (!$license) {
-            return '';
+        if (!isset($this->licenseFormatter[$format])) {
+            throw new \Exception("Unsupported licenese formatter {$format}");
         }
-        if (!isset($this->formattedLicense[$format])) {
-            if ($format === 'php') {
-                $this->formattedLicense[$format] = $this->formatPhpLicense($license);
-            } elseif ($format === "xml") {
-                $this->formattedLicense[$format] = $this->formatXmlLicense($license);
-            } else {
-                throw new \Exception("Unsupported licenece formatter {$format}");
-            }
+        $formatter = $this->licenseFormatter[$format];
+        if (!$formatter instanceof ProcessorInterface) {
+            throw new \Exception("License formatter should implement " . ProcessorInterface::class);
         }
-        return $this->formattedLicense[$format];
-    }
-
-    /**
-     * @param string $license
-     * @return string
-     */
-    private function formatPhpLicense(string $license) : string
-    {
-        $eol = PHP_EOL;
-        $license = trim($license);
-        while (strpos($license, '*/') !== false) {
-            $license = str_replace('*/', '', $license);
-        }
-        while (strpos($license, '/*') !== false) {
-            $license = str_replace('/*', '', $license);
-        }
-        while (strpos($license, '<!--') !== false) {
-            $license = str_replace('<!--', '', $license);
-        }
-        while (strpos($license, '-->') !== false) {
-            $license = str_replace('-->', '', $license);
-        }
-        $lines = explode("\n", $license);
-        $top = "\n";
-        $processed = $top . '/**' . $eol;
-        foreach ($lines as $line) {
-            $processed .= ' * ' . trim($line) . $eol;
-        }
-        $processed .= ' */' . $eol;
-        return $processed;
-    }
-
-    /**
-     * @param string $license
-     * @return string
-     */
-    private function formatXmlLicense(string $license) : string
-    {
-        $eol = PHP_EOL;
-        $license = trim($license);
-        while (strpos($license, '*/') !== false) {
-            $license = str_replace('*/', '', $license);
-        }
-        while (strpos($license, '/*') !== false) {
-            $license = str_replace('/*', '', $license);
-        }
-        while (strpos($license, '<!--') !== false) {
-            $license = str_replace('<!--', '', $license);
-        }
-        while (strpos($license, '-->') !== false) {
-            $license = str_replace('-->', '', $license);
-        }
-        $lines = explode("\n", $license);
-        $top = $eol . "<!--" . $eol;
-        $footer = $eol . '-->' . $eol;
-        $processed = $top . '/**' . $eol;
-        foreach ($lines as $line) {
-            $processed .= ' * ' . trim($line) . $eol;
-        }
-        $processed .= ' */' . $footer;
-        return $processed;
+        return $formatter->process($this);
     }
 
     /**

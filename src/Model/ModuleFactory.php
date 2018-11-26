@@ -19,14 +19,30 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Service\License\ProcessorInterface;
+
 class ModuleFactory implements FactoryInterface
 {
+    /**
+     * @var ProcessorInterface[]
+     */
+    private $licenseFormatter;
+
+    /**
+     * ModuleFactory constructor.
+     * @param ProcessorInterface[] $licenseFormatter
+     */
+    public function __construct(array $licenseFormatter)
+    {
+        $this->licenseFormatter = $licenseFormatter;
+    }
+
     /**
      * @param array $data
      * @return Module | AbstractModel
      */
     public function create(array $data = []) : Module
     {
-        return new Module($data);
+        return new Module($this->licenseFormatter, $data);
     }
 }

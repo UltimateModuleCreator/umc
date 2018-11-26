@@ -24,16 +24,42 @@ use PHPUnit\Framework\TestCase;
 class CountryTest extends TestCase
 {
     /**
+     * @var \Twig_Environment | MockObject
+     */
+    private $twig;
+    /**
+     * @var Attribute\Country
+     */
+    private $country;
+    /**
+     * @var Attribute | MockObject
+     */
+    private $attribute;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->attribute = $this->createMock(Attribute::class);
+        $this->country = new Attribute\Country($this->twig, $this->attribute, ['source_model' => 'dummy']);
+    }
+
+    /**
      * @covers \App\Model\Attribute\Country::getPropertyNames
      */
     public function testGetPropertyNames()
     {
-        /** @var \Twig_Environment | MockObject $twig */
-        $twig = $this->createMock(\Twig_Environment::class);
-        /** @var Attribute | MockObject $attribute */
-        $attribute = $this->createMock(Attribute::class);
-        $country = new Attribute\Country($twig, $attribute, []);
-        $this->assertArrayHasKey('source_model', $country->getPropertiesData());
-        $this->assertArrayHasKey('multiple_text', $country->getPropertiesData());
+        $this->assertArrayHasKey('source_model', $this->country->getPropertiesData());
+        $this->assertArrayHasKey('multiple_text', $this->country->getPropertiesData());
+    }
+
+    /**
+     * @covers \App\Model\Attribute\Country::getSourceModel
+     */
+    public function testGetSourceModel()
+    {
+        $this->assertEquals('dummy', $this->country->getSourceModel());
     }
 }

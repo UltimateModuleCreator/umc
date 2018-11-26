@@ -6,6 +6,8 @@
 parameters:
   form_config_path: '%kernel.root_dir%/../config/form'
   module_list_path: '%kernel.root_dir%/../var/umc'
+  defaults_path: '%module_list_path%/defaults/'
+  defaults_file: 'defaults.yml'
   attribute_type_config:
     text:
       label: Text
@@ -22,6 +24,7 @@ parameters:
       sql_type_constant: TYPE_TEXT
       sql_size: 'null'
       type_hint: string
+      input_type: Text Input
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
@@ -38,6 +41,7 @@ parameters:
       sql_size: 'null'
       type_hint: int
       multiple_text: 'false'
+      input_type: Select
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
@@ -54,6 +58,7 @@ parameters:
       sql_size: 'null'
       type_hint: int
       multiple_text: 'false'
+      input_type: Select
     country:
       label: Country
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -71,6 +76,7 @@ parameters:
       sql_size: 3
       type_hint: string
       grid_filter_type: select
+      input_type: Select
     country_multiselect:
       label: Country Multiselect
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -89,6 +95,7 @@ parameters:
       type_hint: string
       multiple: true
       grid_filter_type: 'false'
+      input_type: Multiselect
     date:
       label: Date
       grid_template: attribute/grid/date.html.twig
@@ -104,6 +111,7 @@ parameters:
       sql_size: 'null'
       type_hint: string
       grid_filter_type: dateRange
+      input_type: Date
     decimal:
       label: Decimal
       grid_filter_type: textRange
@@ -119,6 +127,7 @@ parameters:
       sql_type_constant: TYPE_DECIMAL
       sql_size: "'12,4'"
       type_hint: float
+      input_type: Text Input
     dropdown:
       label: Dropdown
       grid_template: attribute/grid/select.html.twig
@@ -135,6 +144,7 @@ parameters:
       sql_size: 'null'
       type_hint: int
       grid_filter_type: select
+      input_type: Select
     file:
       label: File
       grid_template: false
@@ -150,6 +160,7 @@ parameters:
       sql_type_constant: TYPE_TEXT
       sql_size: 255
       type_hint: string
+      input_type: File
     image:
       label: Image
       grid_template: false
@@ -165,6 +176,7 @@ parameters:
       sql_type_constant: TYPE_TEXT
       sql_size: 255
       type_hint: string
+      input_type: File
     integer:
       label: Integer
       grid_template: attribute/grid/text.html.twig
@@ -180,6 +192,7 @@ parameters:
       sql_size: 'null'
       type_hint: int
       grid_filter_type: textRange
+      input_type: Text Input
     multiselect:
       label: Multiselect
       grid_template: attribute/grid/select.html.twig
@@ -197,6 +210,7 @@ parameters:
       type_hint: string
       multiple: true
       grid_filter_type: 'false'
+      input_type: Multiselect
     textarea:
       label: Textarea (no editor)
       grid_template: attribute/grid/text.html.twig
@@ -212,6 +226,7 @@ parameters:
       sql_size: "'64k'"
       type_hint: string
       grid_filter_type: 'false'
+      input_type: Textarea
     wysisyg:
       label: Wysiwyg
       grid_template: false
@@ -227,6 +242,7 @@ parameters:
       sql_size: "'64k'"
       type_hint: string
       grid_filter_type: 'false'
+      input_type: Textarea
     yesno:
       label: Yes/No
       grid_template: attribute/grid/select.html.twig
@@ -243,6 +259,7 @@ parameters:
       sql_size: 1
       type_hint: int
       grid_filter_type: select
+      input_type: Checkbox (toggle)
 
   menu_type_config:
     '':
@@ -484,6 +501,8 @@ parameters:
     attribute_type:
       type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
       choice_config: '%attribute_type_config%'
+      group: 'input_type'
+      sort: true
     menu:
       choice_config: '%menu_type_config%'
       type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
@@ -514,6 +533,9 @@ services:
     App\Controller\Index:
       arguments:
         $template: 'index.html.twig'
+    App\Controller\Docs:
+      arguments:
+        $template: 'docs.html.twig'
     App\Controller\Edit:
       arguments:
         $template: 'edit.html.twig'
@@ -522,7 +544,9 @@ services:
     App\Controller\Files:
       arguments:
         $template: 'files.html.twig'
-
+    App\Controller\Settings:
+      arguments:
+        $template: 'settings.html.twig'
     App\Service\ModuleList:
       arguments:
         $basePath: '%module_list_path%/'
@@ -530,19 +554,46 @@ services:
     App\Form\BaseType:
       arguments:
         $type: ''
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
         $typeMap: '%form_type_map%'
+        $dataKey: ''
     App\Form\ModuleType:
       arguments:
         $type: '%form_config_path%/module.yml'
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
         $typeMap: '%form_type_map%'
+        $dataKey: 'module'
     App\Form\EntityType:
       arguments:
         $type: '%form_config_path%/entity.yml'
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
         $typeMap: '%form_type_map%'
+        $dataKey: 'entity'
     App\Form\AttributeType:
       arguments:
         $type: '%form_config_path%/attribute.yml'
+        $fieldTransformer: '@App\Form\Field\BaseTransformer'
         $typeMap: '%form_type_map%'
+        $dataKey: 'attribute'
+    App\Form\Settings\ModuleType:
+      arguments:
+        $type: '%form_config_path%/module.yml'
+        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'module'
+    App\Form\Settings\EntityType:
+      arguments:
+        $type: '%form_config_path%/entity.yml'
+        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'entity'
+    App\Form\Settings\AttributeType:
+      arguments:
+        $type: '%form_config_path%/attribute.yml'
+        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
+        $typeMap: '%form_type_map%'
+        $dataKey: 'attribute'
+
     App\Service\Source\Reader:
       arguments:
         $files:
@@ -578,9 +629,19 @@ services:
           module : '@App\Model\ModuleFactory'
           entity : '@App\Model\EntityFactory'
           attribute : '@App\Model\AttributeFactory'
+    App\Model\ModuleFactory:
+      arguments:
+        $licenseFormatter:
+          php: '@App\Service\License\Php'
+          xml: '@App\Service\License\Xml'
     App\Model\Attribute\TypeFactory:
       arguments:
         $map: '%attribute_type_config%'
+
+    App\Model\Settings:
+      arguments:
+        $path: '%defaults_path%'
+        $file: '%defaults_file%'
 
     App\Twig\SnakeCase:
       tags: ['twig.extension']

@@ -59,8 +59,11 @@ class ProductAttribute implements ArrayInterface
             );
             $attributes = $this->attributeRepository->getList($this->searchCriteriaBuilder->create())->getItems();
             foreach ($attributes as $attribute) {
+                $label = $attribute->getDefaultFrontendLabel()
+                    ? $attribute->getDefaultFrontendLabel()
+                    : $attribute->getAttributeCode();
                 $this->options[] = [
-                    'label' => $attribute->getDefaultFrontendLabel(),
+                    'label' => $label,
                     'value' => $attribute->getAttributeId()
                 ];
             }

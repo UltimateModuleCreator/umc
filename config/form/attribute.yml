@@ -19,6 +19,7 @@ label:
 type:
   id: type
   type: attribute_type
+  has_default: true
   options:
     label: Attribute Type
     attr:
@@ -36,6 +37,7 @@ is_name:
 required:
   id: required
   type: choice
+  has_default: true
   options:
     label: Required
     attr:
@@ -55,6 +57,7 @@ position:
 admin_grid:
   id: admin_grid
   type: choice
+  has_default: true
   options:
     label: Show in admin grid
     attr:
@@ -67,6 +70,7 @@ admin_grid:
 admin_grid_filter:
   id: admin_grid_filter
   type: choice
+  has_default: true
   options:
     label: Filterable in admin grid
     attr:

@@ -63,7 +63,7 @@ class Archiver
      * @param $destination
      * @param bool $removeSource
      */
-    public function createZip($source, $zipName, $removeSource = true)
+    public function createZip($source, $zipName, $removeSource = true) : void
     {
         $source = realpath($source);
         $destination = $this->baseDestination . $zipName . '.zip';

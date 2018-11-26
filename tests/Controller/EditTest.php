@@ -63,6 +63,9 @@ class EditTest extends TestCase
      */
     private $edit;
 
+    /**
+     * setup tests
+     */
     protected function setUp()
     {
         $this->twig = $this->createMock(\Twig_Environment::class);

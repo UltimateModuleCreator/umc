@@ -66,9 +66,9 @@ class Save extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @return JsonResponse
      */
-    public function run()
+    public function run() : JsonResponse
     {
         try {
             $response = [];
@@ -102,7 +102,7 @@ class Save extends AbstractController
             $response['message'] = "You have created the module " . $module->getExtensionName();
         } catch (\Exception $e) {
             $response['success'] = false;
-            $response['message'] = $e->getMessage();
+            $response['message'] = $e->getMessage() . '<pre>' . print_r($e->getTraceAsString(), true);
         }
         return new JsonResponse($response);
     }

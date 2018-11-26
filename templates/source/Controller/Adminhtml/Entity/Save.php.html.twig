@@ -130,7 +130,7 @@ class Save extends Action
         $data = $this->dateFilter->filterDates(
             $data,
             [
-{{ entity.getDateFieldsString()|raw }}
+{{ entity.getAttributesWithTypeString('date', 4)|raw }}
             ]
         );
 {% endif %}

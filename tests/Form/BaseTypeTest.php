@@ -1,8 +1,26 @@
 <?php
+/**
+ *
+ * UMC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ *
+ */
 declare(strict_types=1);
 namespace App\Tests\Form;
 
 use App\Form\BaseType;
+use App\Form\Field\TransformerInterface;
+use App\Model\Settings;
 use App\Util\YamlLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +40,14 @@ class BaseTypeTest extends TestCase
      * @var FormBuilderInterface | MockObject
      */
     private $formBuilder;
+    /**
+     * @var Settings | MockObject
+     */
+    private $settings;
+    /**
+     * @var TransformerInterface | MockObject
+     */
+    private $checker;
 
     /**
      * setup tests
@@ -45,18 +71,38 @@ class BaseTypeTest extends TestCase
                         'label' => 'Two'
                     ],
                     3 => []
-                ]
+                ],
+                'sort' => true
             ],
-            'type4' => []
+            'type4' => [],
+            'type5' => [
+                'type' => 'type5',
+                'choice_config' => [
+                    1 => [
+                        'label' => 'One',
+                        'group' => 'one',
+                    ],
+                    2 => [
+                        'label' => 'Two',
+                        'group' => 'two'
+                    ],
+                    3 => []
+                ],
+                'group' => 'group'
+            ],
         ];
         $this->loader = $this->createMock(YamlLoader::class);
-        $this->baseType = new BaseType($this->loader, 'type', $typeMap);
+        $this->checker = $this->createMock(TransformerInterface::class);
+        $this->settings = $this->createMock(Settings::class);
+        $this->baseType = new BaseType($this->loader, $this->checker, 'type', $this->settings, $typeMap);
         $this->formBuilder = $this->createMock(FormBuilderInterface::class);
     }
 
     /**
      * @covers \App\Form\BaseType::buildForm()
      * @covers \App\Form\BaseType::__construct()
+     * @covers \App\Form\BaseType::getChoices()
+     * @covers \App\Form\BaseType::getFields()
      */
     public function testBuildForm()
     {
@@ -81,9 +127,15 @@ class BaseTypeTest extends TestCase
                 'options' => [],
                 'type' => 'type4'
             ],
+            'field5' => [
+                'id' => 'field5',
+                'options' => [],
+                'type' => 'type5'
+            ],
         ];
+        $this->checker->method('transform')->willReturnArgument(0);
         $this->loader->expects($this->once())->method('load')->willReturn($fields);
-        $this->formBuilder->expects($this->exactly(3))->method('add');
+        $this->formBuilder->expects($this->exactly(4))->method('add');
         $this->baseType->buildForm($this->formBuilder, []);
     }
 
@@ -101,6 +153,7 @@ class BaseTypeTest extends TestCase
             ]
         ];
         $this->expectException(\Exception::class);
+        $this->checker->method('transform')->willReturnArgument(0);
         $this->loader->expects($this->once())->method('load')->willReturn($fields);
         $this->formBuilder->expects($this->exactly(0))->method('add');
         $this->baseType->buildForm($this->formBuilder, []);

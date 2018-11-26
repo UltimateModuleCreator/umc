@@ -72,7 +72,7 @@ class Attribute extends AbstractModel
     /**
      * @param Entity $entity
      */
-    public function setEntity(Entity $entity)
+    public function setEntity(Entity $entity) : void
     {
         $this->entity = $entity;
     }

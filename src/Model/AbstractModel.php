@@ -56,7 +56,7 @@ class AbstractModel
     /**
      * @return array
      */
-    public function getRawData()
+    public function getRawData() : array
     {
         return $this->data;
     }
@@ -66,7 +66,7 @@ class AbstractModel
      * @param $value
      * @return $this
      */
-    public function setData(string $key, $value)
+    public function setData(string $key, $value) : AbstractModel
     {
         $this->data[$key] = $value;
         return $this;

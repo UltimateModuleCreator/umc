@@ -118,6 +118,7 @@ class EntityGeneratorTest extends TestCase
     private function getEntityMock($nameSingular)
     {
         $entity = $this->createMock(Entity::class);
+        $entity->method('getModule')->willReturn($this->module);
         $entity->method('getData')->with('name_singular')->willReturn($nameSingular);
         return $entity;
     }

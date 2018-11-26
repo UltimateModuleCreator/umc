@@ -39,6 +39,11 @@ interface TypeInterface
     public function renderForm() : string;
 
     /**
+     * @return string
+     */
+    public function renderFk() : string;
+
+    /**
      * @param string $key
      * @param null|string $default
      * @return null|string

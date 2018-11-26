@@ -154,14 +154,14 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
     }
 {% endif %}
 {% endfor %}
-{% if entity.hasMultiSelectFields() %}
+{% if entity.getAttributesWithTypeConfig('multiple')|length %}
     /**
      * @return array
      */
     private function getMultiSelectFields()
     {
         return [
-{{ entity.getMultiSelectFieldsString()|raw }}
+{{ entity.getAttributesWithTypeConfigString('multiple', 3)|raw }}
         ];
     }
 

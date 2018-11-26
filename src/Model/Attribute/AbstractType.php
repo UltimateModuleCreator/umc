@@ -35,8 +35,9 @@ class AbstractType extends AbstractModel implements TypeInterface
 
     /**
      * AbstractType constructor.
-     * @param Attribute $attribute
      * @param \Twig_Environment $twig
+     * @param Attribute $attribute
+     * @param array $data
      */
     public function __construct(\Twig_Environment $twig, Attribute $attribute, array $data = [])
     {
@@ -60,7 +61,7 @@ class AbstractType extends AbstractModel implements TypeInterface
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function render($type)
+    protected function render($type) : string
     {
         if (!$this->getData($type)) {
             return '';
@@ -129,11 +130,11 @@ class AbstractType extends AbstractModel implements TypeInterface
     {
         $tab = str_repeat(' ', 4);
         $padding = str_repeat($tab, $padd);
-        $string = $padding.'['.PHP_EOL;
+        $string = $padding . '[' . PHP_EOL;
         foreach ($this->getAttributeColumnSettings() as $key => $value) {
-            $string .= $padding.$tab."'".$key."' => ".$value.','.PHP_EOL;
+            $string .= $padding . $tab . "'" . $key . "' => " . $value . ',' . PHP_EOL;
         }
-        $string .= $padding.']';
+        $string .= $padding . ']';
         return $string;
     }
 }

@@ -1,6 +1,7 @@
 namespace:
   id: namespace
   type: text
+  has_default: true
   options:
     label: Namespace
     attr:
@@ -21,6 +22,7 @@ module_name:
 version:
   id: version
   type: text
+  has_default: true
   options:
     label: Version
     attr:
@@ -38,6 +40,7 @@ menu_text:
 menu_parent:
   id: menu_parent
   type: menu
+  has_default: true
   options:
     label: Admin parent menu ID
     required: false
@@ -58,6 +61,7 @@ sort_order:
 license:
   id: license
   type: textarea
+  has_default: true
   options:
     label: License
     required: false

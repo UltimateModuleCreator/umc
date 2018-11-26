@@ -6,7 +6,10 @@
     "magento/module-backend": "*",
     "magento/module-config": "*",
     "magento/module-ui": "*",
-    "magento/module-config": "*",
+{% if module.hasAttributeType('product_attribute') or module.hasAttributeType('product_attribute_set')%}
+    "magento/module-eav": "*",
+    "magento/module-catalog": "*",
+{% endif %}
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
     "magento/module-media-storage": "*",
     "magento/module-store": "*",

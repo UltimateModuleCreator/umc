@@ -1,0 +1,86 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <h3>{{ title }}</h3>
+    {{ form_start(form) }}
+    <div class="card">
+        <div class="card-header">
+            <h2>Module default settings</h2>
+        </div>
+        <div class="card-body">
+            {{ form_widget(form.module) }}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h2>Entity default settings</h2>
+        </div>
+        <div class="card-body">
+            {{ form_widget(form.entity) }}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h2>Attribute default settings</h2>
+        </div>
+        <div class="card-body">
+            {{ form_widget(form.attribute) }}
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn-primary btn-danger btn">Save</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+    <div class="modal" tabindex="-1" role="dialog" id="response-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>
+    <script type="text/javascript">
+        $.fn.select2.defaults.set( "theme", "bootstrap" );
+    </script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('select').select2();
+            $('form[name=settings]').on('submit', function(e) {
+                var form = $(this);
+                $('#body-loader').show();
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        var content = data.message;
+                        var modal = $('#response-modal');
+                        modal.find('.modal-body').html(content);
+                        modal.modal('show');
+                    },
+                    complete: function () {
+                        $('#body-loader').hide();
+                    }
+                });
+
+                e.preventDefault()
+            });
+            $.validate({
+                lang: 'en'
+            });
+        });
+    </script>
+{% endblock %}

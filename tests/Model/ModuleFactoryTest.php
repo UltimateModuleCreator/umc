@@ -27,10 +27,11 @@ class ModuleFactoryTest extends TestCase
 {
     /**
      * @covers \App\Model\ModuleFactory::create
+     * @covers \App\Model\ModuleFactory::__construct
      */
     public function testCreate()
     {
-        $factory = new ModuleFactory();
+        $factory = new ModuleFactory([]);
         $module1 = $factory->create(['namespace' => 'Namespace']);
         $module2 = $factory->create();
         $this->assertNotSame($module1, $module2);
