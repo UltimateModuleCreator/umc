@@ -22,6 +22,9 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 {% for entity in module.getEntities() %}
         $this->create{{ entity.getData('name_singular')|ucfirst }}Table($setup);
+{% if entity.getData('store') %}
+        $this->create{{ entity.getData('name_singular')|ucfirst }}StoreTable($setup);
+{% endif %}
 {% endfor %}
         $installer->endSetup();
     }
@@ -102,5 +105,61 @@ class InstallSchema implements InstallSchemaInterface
 {% endif %}
         }
     }
+{% if entity.getData('store') %}
+
+    /**
+     * install table for {{ entity.getData('label_singular') }} store link
+     *
+     * @param SchemaSetupInterface $setup
+     * @throws \Zend_Db_Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+    */
+    private function create{{ entity.getData('name_singular')|ucfirst }}StoreTable(SchemaSetupInterface $setup)
+    {
+        if (!$setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')) {
+            $table = $setup->getConnection()->newTable(
+                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')
+            )->addColumn(
+                '{{ entity.getData('name_singular')|snake }}_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'primary' => true, 'unsigned' => true],
+                '{{ entity.getData('label_singular')|ucfirst }} ID'
+            )->addColumn(
+                'store_id',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Store ID'
+            )->addIndex(
+                $setup->getIdxName('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store', ['store_id']),
+                ['store_id']
+            )->addForeignKey(
+                $setup->getFkName(
+                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store',
+                    '{{ entity.getData('name_singular')|snake }}_id',
+                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}',
+                    '{{ entity.getData('name_singular')|snake }}_id'
+                ),
+                '{{ entity.getData('name_singular')|snake }}_id',
+                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
+                '{{ entity.getData('name_singular')|snake }}_id',
+                Table::ACTION_CASCADE
+            )->addForeignKey(
+                $setup->getFkName(
+                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store',
+                    'store_id',
+                    'store',
+                    'store_id'
+                ),
+                'store_id',
+                $setup->getTable('store'),
+                'store_id',
+                Table::ACTION_CASCADE
+            )->setComment('{{ entity.getData('label_singular')|ucfirst }} To Store Linkage Table');
+            $setup->getConnection()->createTable($table);
+        }
+    }
+{% endif %}
 {% endfor %}
 }

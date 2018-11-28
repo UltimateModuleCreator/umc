@@ -62,4 +62,15 @@ search:
       No: 0
     attr:
       title: The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders. If you set this to 'Yes' than it will search in your entity also.
+store:
+  id: store
+  type: choice
+  has_default: true
+  options:
+    label: Associate to store views
+    choices:
+      Yes: 1
+      No: 0
+    attr:
+      title: Selecting "Yes" it will add a multiselect field in the add / edit form for the entity that will allow you to select the associated stores. Similar to CMS blocks and pages
 

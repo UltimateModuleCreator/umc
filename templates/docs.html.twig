@@ -46,6 +46,7 @@
                     <div>This is a standalone application for creating Magento 2 CRUD modules.</div>
                     <div>This application is intended for developers. It should not be used in production.</div>
                     <div>Also, the modules you create with it should be tested before moved to production.</div>
+                    <div><strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a> . Any amount is welcomed. Just change 10 from the previous URL.</strong></div>
                 </div>
             </div>
             <div class="card" id="compatibility">
@@ -120,7 +121,7 @@
                         <li>
                             <strong>I want to add my module admin menu inside one of my custom admin menu iteams. How do I do that? </strong><br />
                             You can edit the <code>config/services.yaml</code> file, in the section <code>menu_type_config</code> and add your menu item(s) similar to the others.<br />
-                            Or, you can edit the <code>config/form/module.yml</code> file and make the menu dropdown be a text field where you can fill in your desided value. For <code>menu_parent</code> field change the attribute <code>type</code> from <code>menu</code> to <code>text</code>
+                            Or, you can edit the <code>config/form/module.yml</code> file and make the menu dropdown be a text field where you can fill in your desided value. For <code>menu_parent</code> field change the attribute <code>type</code> from <code>menu</code> to <code>text</code>. But there is a catch here. The <code>acl.xml</code> file of your extension may need manual intervention since UMC cannot detect the full structure of the acl resources.
                         </li>
                     </ul>
                 </div>
@@ -149,8 +150,7 @@
                         <li>If you find a bug, report it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a></li>
                         <li>you have a cool idea for improving it but you don't want to implement it, post it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a>. There are no guarantees that it will get implemeted though.</li>
                         <li>you have a cool idea for improving it and you can implement it, feel free to make a PR. But before doing so, make sure that the new code you create it is covered with unit tests and the existing unit tests still pass.</li>
-                        <li><strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a> . Any amount is welcomed. Just change 10 from the previous URL.</strong></li>
-                        <li>You think the UI looks ugly and you want to change it, I would really apreciate it.</li>
+                        <li>You think the UI looks ugly and you want to change it? I think so too, but I lack the skills. I would really apreciate an UI if someone wants to get involved.</li>
                     </ul>
                 </div>
             </div>

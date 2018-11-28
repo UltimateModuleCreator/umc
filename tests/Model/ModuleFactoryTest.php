@@ -31,7 +31,7 @@ class ModuleFactoryTest extends TestCase
      */
     public function testCreate()
     {
-        $factory = new ModuleFactory([]);
+        $factory = new ModuleFactory([], []);
         $module1 = $factory->create(['namespace' => 'Namespace']);
         $module2 = $factory->create();
         $this->assertNotSame($module1, $module2);

@@ -21,7 +21,7 @@ namespace App;
 class Version
 {
     const VERSION = '3.0.0';
-    const BUILD = 'alpha1';
+    const BUILD = 'alpha2';
 
     /**
      * @return string

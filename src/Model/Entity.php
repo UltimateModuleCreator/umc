@@ -27,7 +27,7 @@ class Entity extends AbstractModel
     protected $propertyNames = [
         'label_singular', 'label_plural', 'name_singular', 'name_plural',
         'type', 'is_tree', 'add_created_to_grid',
-        'add_updated_to_grid', 'search'
+        'add_updated_to_grid', 'search', 'store'
     ];
     /**
      * @var Attribute[]
