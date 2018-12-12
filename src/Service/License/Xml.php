@@ -71,7 +71,7 @@ class Xml implements ProcessorInterface
             $footer = $eol . '-->' . $eol;
             $processed = $top . '/**' . $eol;
             foreach ($lines as $line) {
-                $processed .= ' * ' . trim($line) . $eol;
+                $processed .= rtrim(' * ' . trim($line)) . $eol;
             }
             $processed .= ' */' . $footer;
             $this->cache[$key] = $processed;

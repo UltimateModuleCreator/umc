@@ -2,30 +2,30 @@
 {% block body %}
     <h3>{{ title }}</h3>
     {{ form_start(form) }}
-    <div class="card">
-        <div class="card-header">
+    <div class="panel panel-default">
+        <div class="panel-heading">
             <h2>Module default settings</h2>
         </div>
-        <div class="card-body">
+        <div class="panel-body">
             {{ form_widget(form.module) }}
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">
+    <div class="panel">
+        <div class="panel-heading">
             <h2>Entity default settings</h2>
         </div>
-        <div class="card-body">
+        <div class="panel-body">
             {{ form_widget(form.entity) }}
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">
+    <div class="panel">
+        <div class="panel-heading">
             <h2>Attribute default settings</h2>
         </div>
-        <div class="card-body">
+        <div class="panel-body">
             {{ form_widget(form.attribute) }}
         </div>
-        <div class="card-footer">
+        <div class="panel-footer">
             <button type="submit" class="btn-primary btn-danger btn">Save</button>
         </div>
     </div>
@@ -57,7 +57,14 @@
     </script>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
-            $('select').select2();
+            $('[data-pretty-select=true]').select2({ width: '100%' });
+            $('[data-toggle=tooltip]').tooltip({placement: 'left'});
+            $('.select2-container').tooltip({
+                placement: 'left',
+                title: function () {
+                    return $(this).prev().attr("data-original-title")
+                }
+            });
             $('form[name=settings]').on('submit', function(e) {
                 var form = $(this);
                 $('#body-loader').show();
@@ -66,7 +73,8 @@
                     url: form.attr('action'),
                     data: $(this).serialize(),
                     success: function(data) {
-                        var content = data.message;
+                        var className = (data.success) ? 'alert-success' : 'alert-error';
+                        var content = '<div class="alert ' + className + '">' + data.message + '</div>';
                         var modal = $('#response-modal');
                         modal.find('.modal-body').html(content);
                         modal.modal('show');
@@ -79,7 +87,9 @@
                 e.preventDefault()
             });
             $.validate({
-                lang: 'en'
+                validateOnBlur : false,
+                showHelpOnFocus : false,
+                addSuggestions : false
             });
         });
     </script>

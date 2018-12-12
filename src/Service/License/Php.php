@@ -70,7 +70,7 @@ class Php implements ProcessorInterface
             $top = "\n";
             $processed = $top . '/**' . $eol;
             foreach ($lines as $line) {
-                $processed .= ' * ' . trim($line) . $eol;
+                $processed .= rtrim(' * ' . trim($line)) . $eol;
             }
             $processed .= ' */' . $eol;
             $this->cache[$key] = $processed;

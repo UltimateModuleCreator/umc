@@ -27,14 +27,20 @@ class ModuleFactory implements FactoryInterface
      * @var ProcessorInterface[]
      */
     private $licenseFormatter;
+    /**
+     * @var array
+     */
+    private $menuConfig;
 
     /**
      * ModuleFactory constructor.
      * @param ProcessorInterface[] $licenseFormatter
+     * @param array$menuConfig
      */
-    public function __construct(array $licenseFormatter)
+    public function __construct(array $licenseFormatter, array $menuConfig)
     {
         $this->licenseFormatter = $licenseFormatter;
+        $this->menuConfig = $menuConfig;
     }
 
     /**
@@ -43,6 +49,6 @@ class ModuleFactory implements FactoryInterface
      */
     public function create(array $data = []) : Module
     {
-        return new Module($this->licenseFormatter, $data);
+        return new Module($this->licenseFormatter, $this->menuConfig, $data);
     }
 }

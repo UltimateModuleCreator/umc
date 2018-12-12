@@ -1,16 +1,17 @@
 {% extends "base.html.twig" %}
 {% block body %}
-    <div class="card">
-        <div class="card-header">
-            <h3>Installed modules:</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Created modules:</h3>
         </div>
-        <div class="card-body">
-            <table class="table table-bordered">
+        <div class="panel-body">
+            <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Module</th>
                     <th scope="col">Date</th>
                     <th scope="col">Edit</th>
+                    <th scope="col">Download</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,6 +21,7 @@
                             <td>{{ module.name }}</td>
                             <td>{{ module.date.format('Y-m-d H:i') }}</td>
                             <td><a href="{{ url('edit', {"module":module.module_name}) }}">Edit</a></td>
+                            <td><a href="{{ url('download', {"module":module.module_name}) }}">Download</a></td>
                         </tr>
                     {% endfor %}
                 {% else %}

@@ -158,4 +158,12 @@ class BaseTypeTest extends TestCase
         $this->formBuilder->expects($this->exactly(0))->method('add');
         $this->baseType->buildForm($this->formBuilder, []);
     }
+
+    /**
+     * @covers \App\Form\BaseType::getBlockPrefix
+     */
+    public function testGetBlockPrefix()
+    {
+        $this->assertEquals('', $this->baseType->getBlockPrefix());
+    }
 }

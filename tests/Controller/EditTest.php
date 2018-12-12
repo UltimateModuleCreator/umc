@@ -18,6 +18,7 @@
 namespace App\Tests\Controller;
 
 use App\Controller\Edit;
+use App\Model\Settings;
 use App\Util\YamlLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -55,9 +56,17 @@ class EditTest extends TestCase
      */
     private $attributeConfig;
     /**
+     * @var array
+     */
+    private $formConfig;
+    /**
      * @var Request | MockObject
      */
     private $request;
+    /**
+     * @var Settings | MockObject
+     */
+    private $settings;
     /**
      * @var Edit
      */
@@ -76,18 +85,29 @@ class EditTest extends TestCase
         $this->request = $this->createMock(Request::class);
         $this->requestStack->expects($this->once())->method('getCurrentRequest')->willReturn($this->request);
         $this->yamlLoader = $this->createMock(YamlLoader::class);
+        $this->settings = $this->createMock(Settings::class);
         $this->attributeConfig = [
             'can_be_name' => true,
             'can_show_in_grid' => false,
             'can_have_options' => true,
             'can_be_required' => false
         ];
+
+        $this->formConfig = [
+            'module' => [
+                'class' => \Symfony\Component\Form\AbstractType::class,
+                'name' => 'dummy'
+            ]
+        ];
+
         $this->edit = new Edit(
             'template',
             $this->requestStack,
             $this->yamlLoader,
+            $this->settings,
             'basePath',
-            $this->attributeConfig
+            $this->attributeConfig,
+            $this->formConfig
         );
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->formFactory->expects($this->once())->method('create')

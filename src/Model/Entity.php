@@ -19,15 +19,37 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Util\Sorter;
+
 class Entity extends AbstractModel
 {
+    /**
+     * @var Sorter
+     */
+    private $sorter;
+    /**
+     * @var bool
+     */
+    private $needsAttributeSort = false;
+
+    /**
+     * Entity constructor.
+     * @param Sorter $sorter
+     * @param array $data
+     */
+    public function __construct(Sorter $sorter, array $data = [])
+    {
+        $this->sorter = $sorter;
+        parent::__construct($data);
+    }
+
     /**
      * @var array
      */
     protected $propertyNames = [
         'label_singular', 'label_plural', 'name_singular', 'name_plural',
         'type', 'is_tree', 'add_created_to_grid',
-        'add_updated_to_grid', 'search'
+        'add_updated_to_grid', 'search', 'store'
     ];
     /**
      * @var Attribute[]
@@ -44,34 +66,11 @@ class Entity extends AbstractModel
      */
     public function getAttributes(): array
     {
-        $this->sortAttributes();
+        if ($this->needsAttributeSort) {
+            $this->attributes = $this->sorter->sort($this->attributes);
+            $this->needsAttributeSort = false;
+        }
         return $this->attributes;
-    }
-
-    /**
-     * sort attributes
-     */
-    private function sortAttributes()
-    {
-        uasort(
-            $this->attributes,
-            function (Attribute $attributeA, Attribute $attributeB) {
-                $sortOrderA = $attributeA->getData('position');
-                $sortOrderB = $attributeB->getData('position');
-                if ($sortOrderA === $sortOrderB) {
-                    return 0;
-                }
-                // empty values are placed at the end
-                if ($sortOrderB === "") {
-                    return -1;
-                }
-                if ($sortOrderA === "") {
-                    return 1;
-                }
-                return ((int)$sortOrderA < (int)$sortOrderB) ? -1 : 1;
-            }
-        );
-        $this->attributes = array_values($this->attributes);
     }
 
     /**
@@ -81,6 +80,7 @@ class Entity extends AbstractModel
     {
         $attribute->setEntity($this);
         $this->attributes[] = $attribute;
+        $this->needsAttributeSort = true;
     }
 
     /**

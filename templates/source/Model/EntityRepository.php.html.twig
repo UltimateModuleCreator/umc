@@ -90,7 +90,7 @@ class {{ entity.getData('name_singular')|ucfirst }}Repository implements {{ enti
      * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save({{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('label_singular')|camel }})
+    public function save({{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }})
     {
         /** @var {{ entity.getData('name_singular')|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getData('name_singular')|camel }} */
         try {

@@ -28,7 +28,7 @@ class Module extends AbstractModel
      */
     protected $propertyNames = [
         'namespace', 'module_name', 'version', 'menu_parent',
-        'sort_order', 'menu_text', 'license','composer_description'
+        'sort_order', 'menu_text', 'license', 'composer_description'
     ];
     /**
      * @var Entity[]
@@ -38,15 +38,21 @@ class Module extends AbstractModel
      * @var ProcessorInterface[]
      */
     private $licenseFormatter;
+    /**
+     * @var array
+     */
+    private $menuConfig;
 
     /**
      * Module constructor.
      * @param array $licenseFormatter
+     * @param array $menuConfig
      * @param array $data
      */
-    public function __construct(array $licenseFormatter, array $data = [])
+    public function __construct(array $licenseFormatter, array $menuConfig, array $data = [])
     {
         $this->licenseFormatter = $licenseFormatter;
+        $this->menuConfig = $menuConfig;
         parent::__construct($data);
     }
 
@@ -140,5 +146,19 @@ class Module extends AbstractModel
                 return $entity->getData('search') !== "0";
             }
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getAclMenuParents()
+    {
+        $menuParent = $this->getData('menu_parent');
+        $parents = [];
+        while ($menuParent != '') {
+            $parents[] = $menuParent;
+            $menuParent = $this->menuConfig[$menuParent]['parent'] ?? '';
+        };
+        return array_reverse($parents);
     }
 }

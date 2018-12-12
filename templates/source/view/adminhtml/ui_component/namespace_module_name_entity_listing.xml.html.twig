@@ -55,6 +55,19 @@
                     </filters>
                 </templates>
             </settings>
+{% if entity.getData('store') %}
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <captionValue>0</captionValue>
+                    <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+{% endif %}
         </filters>
         <massaction name="listing_massaction">
             <action name="delete">
@@ -143,6 +156,15 @@
 {% if entity.getData('add_updated_to_grid') is same as("2") %}
                 <visible>false</visible>
 {% endif %}
+            </settings>
+        </column>
+{% endif %}
+{% if entity.getData('store') %}
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <settings>
+                <label translate="true">Store View</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
             </settings>
         </column>
 {% endif %}

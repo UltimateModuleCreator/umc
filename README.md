@@ -6,6 +6,8 @@ This is a standalone application for creating Magento 2 CRUD modules.
 This application is intended for developers. It should not be used in production.  
 Also, the modules you create with it should be tested before moved to production.
 
+<strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a>. Any amount is welcomed. Just change 10 from the previous URL.</strong>
+
 ## Compatibility  
 The modules you create with this application should be compatible with Magento 2.1.* and 2.2.* versions.  
 They might work with 2.3.*, but 2.3 is not officially supported yet.   
@@ -18,6 +20,7 @@ PHP version 7.1.3 or higher. Some PHP extension. See composer.json for more deta
  - navigate to that folder
  - clone this repo: `https://github.com/UltimateModuleCreator/umc.git .`
  - run `composer install`
+ - copy `.env.dist` to `.env`
  - go to that folder in your browser.
  
 ## How to use  
@@ -50,7 +53,6 @@ If you have your own coding standards you can add them the `config/services.yaml
  - If you find a bug, report it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a>  
  - you have a cool idea for improving it but you don't want to implement it, post it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a>. There are no guarantees that it will get implemeted though.  
  - you have a cool idea for improving it and you can implement it, feel free to make a PR. But before doing so, make sure that the new code you create it is covered with unit tests and the existing unit tests still pass.  
- - <strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a>. Any amount is welcomed. Just change 10 from the previous URL.</strong>
- - You think the UI looks ugly and you want to change it, I would really apreciate it.
+ - You think the UI looks ugly and you want to change it? I think so too, but I lack the skills. I would really apreciate an UI if someone wants to get involved.
 
   
