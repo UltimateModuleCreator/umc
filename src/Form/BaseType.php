@@ -154,4 +154,12 @@ class BaseType extends AbstractType
         }
         return $fields;
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix() : string
+    {
+        return '';
+    }
 }

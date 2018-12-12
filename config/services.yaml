@@ -608,6 +608,41 @@ parameters:
     menu:
       choice_config: '%menu_type_config%'
       type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
+    hidden:
+      type: \Symfony\Component\Form\Extension\Core\Type\HiddenType
+
+  app_menu_config:
+    index:
+      label: Module List
+      icon: 'fa fa-list'
+      active:
+        - index
+        - ''
+      url: index
+    edit:
+      label: Create Module
+      icon: 'fa fa-edit'
+      active:
+      - edit
+      url: edit
+    files:
+      label: Files
+      icon: 'fa fa-file'
+      active:
+      - files
+      url: files
+    settings:
+      label: Settings
+      icon: 'fa fa-gears'
+      active:
+      - settings
+      url: settings
+    docs:
+      label: Docs
+      icon: 'fa fa-book'
+      active:
+      - docs
+      url: docs
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -643,6 +678,16 @@ services:
         $template: 'edit.html.twig'
         $basePath: '%module_list_path%/'
         $attributeConfig: '%attribute_type_config%'
+        $formConfig:
+          module:
+            class: App\Form\ModuleType
+            name: umc
+          entity:
+            class: App\Form\EntityType
+            name: entity
+          attribute:
+            class: App\Form\AttributeType
+            name: attribute
     App\Controller\Files:
       arguments:
         $template: 'files.html.twig'
@@ -652,6 +697,9 @@ services:
     App\Service\ModuleList:
       arguments:
         $basePath: '%module_list_path%/'
+    App\Controller\Download:
+      arguments:
+        $path: '%module_list_path%/'
 
     App\Form\BaseType:
       arguments:
@@ -746,6 +794,10 @@ services:
         $path: '%defaults_path%'
         $file: '%defaults_file%'
 
+    App\Service\Menu:
+      arguments:
+        $config: '%app_menu_config%'
+
     App\Twig\SnakeCase:
       tags: ['twig.extension']
     App\Twig\Ucfirst:
@@ -755,4 +807,6 @@ services:
     App\Twig\Hyphen:
       tags: ['twig.extension']
     App\Twig\Version:
+      tags: ['twig.extension']
+    App\Twig\Menu:
       tags: ['twig.extension']

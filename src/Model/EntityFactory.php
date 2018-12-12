@@ -19,14 +19,31 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Util\Sorter;
+
 class EntityFactory implements FactoryInterface
 {
+    /**
+     * @var Sorter
+     */
+    private $sorter;
+
+    /**
+     * EntityFactory constructor.
+     * @param Sorter $sorter
+     */
+    public function __construct(Sorter $sorter)
+    {
+        $this->sorter = $sorter;
+    }
+
+
     /**
      * @param array $data
      * @return Entity | AbstractModel
      */
     public function create(array $data = []) : Entity
     {
-        return new Entity($data);
+        return new Entity($this->sorter, $data);
     }
 }

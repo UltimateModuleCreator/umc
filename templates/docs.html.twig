@@ -1,76 +1,81 @@
 {% extends "base.html.twig" %}
 {% block body %}
-    <div class="card">
-        <div class="card-header">
+    <div class="panel panel-default">
+        <div class="panel-heading">
             <h3>UMC Docs</h3>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="collapse navbar-collapse" id="docs-nav">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
+            <div class="collapse navbar-collapse">
+                <ul class="nav nav-pills">
+                    <li>
                         <a class="nav-link" href="#description">Description</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#compatibility">Compatibility</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#requirements">Requirements</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#installation">Installation</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#how-to-use">How To Use</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#defaults">Setting defaults</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#faq">FAQs</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
                         <a class="nav-link" href="#coding-standards">Coding Standards</a>
                     </li>
-                    <li class="nav-item">
+                    <li>
+                        <a class="nav-link" href="#release-notes">Release Notes</a>
+                    </li>
+                    <li>
                         <a class="nav-link" href="#contribute">Contributing to the UMC</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div class="card-body">
-            <div class="card" id="description">
-                <div class="card-header">
+        <div class="panel-body">
+            <div class="panel panel-default" id="description">
+                <div class="panel-heading">
                     <h3>Description</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <div>This is a standalone application for creating Magento 2 CRUD modules.</div>
+                    <div>You can use the UI to create your entities just like you would use PhpMyAdmin to create tables.</div>
+                    <div>When you are done, you can download imediately the module from the popup that appears or you can find your module in var/umc folder.</div>
                     <div>This application is intended for developers. It should not be used in production.</div>
                     <div>Also, the modules you create with it should be tested before moved to production.</div>
                     <div><strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a> . Any amount is welcomed. Just change 10 from the previous URL.</strong></div>
                 </div>
             </div>
-            <div class="card" id="compatibility">
-                <div class="card-header">
+            <div class="panel panel-default" id="compatibility">
+                <div class="panel-heading">
                     <h3>Compatibility</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <div>The modules you create with this application should be compatible with Magento 2.1.* and 2.2.* versions.</div>
                     <div>They might work with 2.3.*, but 2.3 is not officially supported yet.</div>
                 </div>
             </div>
-            <div class="card" id="requirements">
-                <div class="card-header">
+            <div class="panel panel-default" id="requirements">
+                <div class="panel-heading">
                     <h3>Requirements</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <div>PHP version 7.1.3 or higher. Some PHP extension. See composer.json for more details.</div>
                 </div>
             </div>
-            <div class="card" id="installation">
-                <div class="card-header">
+            <div class="panel panel-default" id="installation">
+                <div class="panel-heading">
                     <h3>Installation</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <div>If you are reading this, them probably you already installed it. But anyway....</div>
                     <ul>
                         <li>create a folder on your server.</li>
@@ -81,11 +86,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="card" id="how-to-use">
-                <div class="card-header">
+            <div class="panel panel-default" id="how-to-use">
+                <div class="panel-heading">
                     <h3>How to use</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <ul>
                         <li>In the top menu named, surprisingly, "Menu", click on the item "Create Module"</li>
                         <li>Fill in the form as you want. Each field has a tooltip explaining what it is used for.</li>
@@ -96,19 +101,19 @@
                     </ul>
                 </div>
             </div>
-            <div class="card" id="defaults">
-                <div class="card-header">
+            <div class="panel panel-default" id="defaults">
+                <div class="panel-heading">
                     <h3>Setting defaults</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <div>In case you don't like to fill over and over again the same values in the same fields, you can go to the "Settings" section in the same menu and fill in default values for module, entity and attribute.</div>
                 </div>
             </div>
-            <div class="card" id="faq">
-                <div class="card-header">
+            <div class="panel panel-default" id="faq">
+                <div class="panel-heading">
                     <h3>FAQs</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <ul>
                         <li>
                             <strong>If I edit a module, and copy the files in my magento instance over the previous version, does it work?</strong><br />
@@ -126,11 +131,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="card" id="coding-standards">
-                <div class="card-header">
+            <div class="panel panel-default" id="coding-standards">
+                <div class="panel-heading">
                     <h3>Coding Standards</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     The generated extensions follow the magento coding standards, but...<br/>
                     Due to the values filled in the form, you can easily break one of the rules. Special the max 120 chars per line.  <br />
                     This is not prevented by the UMC, but you will find in the arvhive that is generated with the module 3 files. All pf them start with <code>PHPCS_</code>. (these files are not useful for the proper fuctioning of the extension you create)<br/>
@@ -141,16 +146,59 @@
 
                 </div>
             </div>
-            <div class="card" id="contribute">
-                <div class="card-header">
+            <div class="panel panel-default" id="release-notes">
+                <div class="panel-heading">
+                    <h3>Release notes</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3"><strong>3.0.0-alpha2: Dec 12th 2018</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Improvement</td>
+                                <td>Fancy UI provided by <a href="https://colorlib.com">Colorlib</a> Gentelella - Bootstrap Admin Template</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Feature</td>
+                                <td>Entities can be related to stores (many to many)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Bug Fix</td>
+                                <td>ACL resources matches admin menu structure.</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><strong>3.0.0-alpha1: Nov 26th 2018</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Basic</td>
+                                <td>MVP. Creating simple modules with only admin support.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-default" id="contribute">
+                <div class="panel-heading">
                     <h3>Contributing to the UMC</h3>
                 </div>
-                <div class="card-body">
+                <div class="panel-body">
                     <ul>
                         <li>If you find a bug, report it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a></li>
                         <li>you have a cool idea for improving it but you don't want to implement it, post it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a>. There are no guarantees that it will get implemeted though.</li>
                         <li>you have a cool idea for improving it and you can implement it, feel free to make a PR. But before doing so, make sure that the new code you create it is covered with unit tests and the existing unit tests still pass.</li>
-                        <li>You think the UI looks ugly and you want to change it? I think so too, but I lack the skills. I would really apreciate an UI if someone wants to get involved.</li>
                     </ul>
                 </div>
             </div>

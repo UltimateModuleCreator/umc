@@ -70,6 +70,7 @@ class ModuleListTest extends TestCase
         $this->finder->expects($this->once())->method('in')->willReturnSelf();
         $this->finder->expects($this->once())->method('name')->willReturnSelf();
         $this->finder->expects($this->once())->method('sortByName')->willReturnSelf();
+        $this->finder->expects($this->once())->method('depth')->willReturnSelf();
 
         $moduleList = new ModuleList($this->finderFactory, $this->filesystem, 'path/to/modules');
         $moduleList->getModules();

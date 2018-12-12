@@ -5,44 +5,70 @@
         <title>{% block title %}Magento Ultimate Module Creator{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" />
-            <link rel="stylesheet" href="{{ asset('jquery-ui/jquery-ui.css') }}" />
-            <link rel="stylesheet" href="{{ asset('jquery-ui/jquery-ui.icon-font.css') }}" />
+            <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}" />
             <link rel="stylesheet" href="{{ asset('select2/select2.css') }}" />
             <link rel="stylesheet" href="{{ asset('select2/select2-bootstrap.css') }}" />
+            <link rel="stylesheet" href="{{ asset('gentelella/css/custom.min.css') }}" />
             <link rel="stylesheet" href="{{ asset('umc/umc.css') }}" />
         {% endblock %}
     </head>
-    <body>
-        <div id="body-loader" class="loading" style="display: none">
-            <span class="loading-icon ui-icon ui-icon-loading-status-balls">Wait for it....</span>
-        </div>
-        <div class="container">
-            <ul class="nav nav-tabs">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ url('index') }}">Module List</a>
-                        <a class="dropdown-item" href="{{ url('edit') }}">Create Module</a>
-                        <a class="dropdown-item" href="{{ url('files') }}">Files</a>
-                        <a class="dropdown-item" href="{{ url('settings') }}">Settings</a>
-                        <a class="dropdown-item" href="{{ url('docs') }}">Docs</a>
+    <body class="nav-md">
+    <div id="body-loader" class="loading" style="display: none">
+        <span class="loading-icon fa fa-spinner">Wait for it....</span>
+    </div>
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="#" class="site_title"><i class="fa fa-puzzle-piece"></i> <span>UMC</span></a>
                     </div>
-                </li>
-            </ul>
-            {% block body %}{% endblock %}
-        </div>
-        <footer class="page-footer font-small blue">
-            <!-- Copyright -->
-            <div class="footer-copyright text-center py-3">
-                <a href="https://github.com/UltimateModuleCreator/umc" target="_blank">Ultimate Module Creator v{{ appVersion() }}</a>
+                    <div class="clearfix"></div>
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>Menu</h3>
+                            {{ appMenu().render() | raw }}
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+                </div>
             </div>
-            <!-- Copyright -->
-        </footer>
-        {% block javascripts %}
-            <script type="text/javascript" src="{{ asset('jquery/jquery.js') }}"> </script>
-            <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.js') }}"> </script>
-            <script type="text/javascript" src="{{ asset('bootstrap/js/popper.js') }}"> </script>
-            <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"> </script>
-        {% endblock %}
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="">
+                    <div>
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% block body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    <a href="https://github.com/UltimateModuleCreator/umc" target="_blank">Ultimate Module Creator v{{ appVersion() }}</a><br />
+                    Ui provided by <a href="https://colorlib.com">Colorlib</a> Gentelella - Bootstrap Admin Template
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+    {% block javascripts %}
+    <!-- jQuery -->
+<script type="text/javascript" src="{{ asset('jquery/jquery.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.js') }}"> </script>
+    <script type="text/javascript">
+        $.widget.bridge('uitooltip', $.ui.tooltip);
+    </script>
+    <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"> </script>
+    {% endblock %}
     </body>
 </html>

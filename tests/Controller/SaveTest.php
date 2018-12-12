@@ -21,12 +21,13 @@ use App\Controller\Save;
 use App\Model\Module;
 use App\Service\Builder;
 use App\Service\ModuleLoader;
-use App\Service\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Router;
 
 class SaveTest extends TestCase
 {
@@ -47,9 +48,9 @@ class SaveTest extends TestCase
      */
     private $moduleLoader;
     /**
-     * @var Validator | MockObject
+     * @var Router | MockObject
      */
-    private $validator;
+    private $router;
     /**
      * @var Save
      */
@@ -65,8 +66,17 @@ class SaveTest extends TestCase
         $this->requestStack->method('getCurrentRequest')->willReturn($this->request);
         $this->builder = $this->createMock(Builder::class);
         $this->moduleLoader = $this->createMock(ModuleLoader::class);
-        $this->validator = $this->createMock(Validator::class);
-        $this->save = new Save($this->requestStack, $this->builder, $this->moduleLoader, $this->validator);
+        $this->router = $this->createMock(Router::class);
+        $this->save = new Save($this->requestStack, $this->builder, $this->moduleLoader);
+        /** @var ContainerInterface | MockObject $container */
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->willReturnMap([
+            ['router', true]
+        ]);
+        $container->method('get')->willReturnMap([
+            ['router', $this->router]
+        ]);
+        $this->save->setContainer($container);
     }
 
     /**
@@ -96,7 +106,7 @@ class SaveTest extends TestCase
         ]);
         $this->moduleLoader->expects($this->once())->method('loadModule')
             ->willReturn($this->createMock(Module::class));
-        $this->validator->method('validate')->willReturn([]);
+        $this->router->expects($this->once())->method('generate')->willReturn('url');
         $this->assertInstanceOf(JsonResponse::class, $this->save->run());
     }
 
@@ -109,20 +119,7 @@ class SaveTest extends TestCase
         $this->request->method('get')->willReturn([]);
         $this->moduleLoader->expects($this->once())->method('loadModule')
             ->willReturn($this->createMock(Module::class));
-        $this->validator->method('validate')->willThrowException(new \Exception('Not valid'));
-        $this->assertInstanceOf(JsonResponse::class, $this->save->run());
-    }
-
-    /**
-     * @covers \App\Controller\Save::run
-     * @covers \App\Controller\Save::__construct
-     */
-    public function testRunWithValidationErrors()
-    {
-        $this->request->method('get')->willReturn([]);
-        $this->moduleLoader->expects($this->once())->method('loadModule')
-            ->willReturn($this->createMock(Module::class));
-        $this->validator->method('validate')->willReturn(['dummy-error']);
+        $this->moduleLoader->method('loadModule')->willThrowException(new \Exception(''));
         $this->assertInstanceOf(JsonResponse::class, $this->save->run());
     }
 }

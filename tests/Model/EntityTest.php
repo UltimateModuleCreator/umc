@@ -22,11 +22,16 @@ namespace App\Tests\Model;
 use App\Model\Attribute;
 use App\Model\Entity;
 use App\Model\Module;
+use App\Util\Sorter;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class EntityTest extends TestCase
 {
+    /**
+     * @var Sorter | MockObject
+     */
+    private $sorter;
     /**
      * @var Entity
      */
@@ -45,11 +50,14 @@ class EntityTest extends TestCase
      */
     protected function setUp()
     {
-        $this->entity = new Entity($this->data);
+        $this->sorter = $this->createMock(Sorter::class);
+        $this->sorter->method('sort')->willReturnArgument(0);
+        $this->entity = new Entity($this->sorter, $this->data);
     }
 
     /**
      * @covers \App\Model\Entity::getData()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetData()
     {
@@ -62,6 +70,7 @@ class EntityTest extends TestCase
 
     /**
      * @covers \App\Model\Entity::getRawData()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetRawData()
     {
@@ -70,6 +79,7 @@ class EntityTest extends TestCase
 
     /**
      * @covers \App\Model\Entity::getPropertiesData()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetPropertiesData()
     {
@@ -82,6 +92,7 @@ class EntityTest extends TestCase
     /**
      * @covers \App\Model\Entity::toArray()
      * @covers \App\Model\Entity::getAdditionalToArray()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testToArray()
     {
@@ -97,6 +108,7 @@ class EntityTest extends TestCase
 
     /**
      * @covers  \App\Model\Entity::getNameAttribute()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetNameAttribute()
     {
@@ -114,6 +126,7 @@ class EntityTest extends TestCase
 
     /**
      * @covers  \App\Model\Entity::getNameAttribute()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetNameAttributeNoAttribute()
     {
@@ -128,6 +141,7 @@ class EntityTest extends TestCase
 
     /**
      * @covers \App\Model\Entity::hasAttributeType()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testHasAttributeType()
     {
@@ -141,7 +155,7 @@ class EntityTest extends TestCase
         $attribute2->method('getData')->willReturnMap([
             ['type', null, 'textarea']
         ]);
-        $entity = new Entity();
+        $entity = new Entity($this->sorter);
         $entity->addAttribute($attribute1);
         $entity->addAttribute($attribute2);
         $this->assertTrue($entity->hasAttributeType('text'));
@@ -149,90 +163,17 @@ class EntityTest extends TestCase
         $this->assertFalse($entity->hasAttributeType('dummy'));
     }
 
-    /**
-     * @covers \App\Model\Entity::getFullTextAttributes()
-     */
-//    public function testGetFullTextAttributes()
-//    {
-//        /** @var Attribute | MockObject $attribute1 */
-//        $attribute1 = $this->createMock(Attribute::class);
-//        $type1 = $this->createMock(Attribute\TypeInterface::class);
-//        $type1->method('getData')->with('full_text')->willReturn(false);
-//        $attribute1->method('getTypeInstance')->willReturn($type1);
-//
-//        $entity1 = new Entity();
-//        $entity1->addAttribute($attribute1);
-//        $this->assertEquals([], $entity1->getFullTextAttributes());
-//
-//        /** @var Attribute | MockObject $attribute2 */
-//        $attribute2 = $this->createMock(Attribute::class);
-//        $type2 = $this->createMock(Attribute\TypeInterface::class);
-//        $type2->method('getData')->with('full_text')->willReturn(true);
-//        $attribute2->method('getTypeInstance')->willReturn($type2);
-//
-//        $entity2 = new Entity();
-//        $entity2->addAttribute($attribute1);
-//        $entity2->addAttribute($attribute2);
-//        $this->assertEquals([$attribute2], $entity2->getFullTextAttributes());
-//    }
-
-    /**
-     * @covers \App\Model\Entity::getFullTextAttributeString()
-     * @covers \App\Model\Entity::arrayToPrintString()
-     */
-//    public function testGetFullTextAttributesString()
-//    {
-//        /** @var Attribute | MockObject $attribute1 */
-//        $attribute1 = $this->createMock(Attribute::class);
-//        $type1 = $this->createMock(Attribute\TypeInterface::class);
-//        $type1->method('getData')->with('full_text')->willReturn(false);
-//        $attribute1->method('getTypeInstance')->willReturn($type1);
-//        $attribute1->method('getData')->willReturnMap([
-//            ['code', null . 'attr1']
-//        ]);
-//
-//        $entity1 = new Entity();
-//        $entity1->addAttribute($attribute1);
-//        $this->assertEquals('', $entity1->getFullTextAttributeString());
-//
-//        /** @var Attribute | MockObject $attribute2 */
-//        $attribute2 = $this->createMock(Attribute::class);
-//        $type2 = $this->createMock(Attribute\TypeInterface::class);
-//        $type2->method('getData')->willReturnMap([
-//            ['full_text', null, true]
-//        ]);
-//        $attribute2->method('getTypeInstance')->willReturn($type2);
-//        $attribute2->method('getData')->willReturnMap([
-//            ['code', null, 'attr2']
-//        ]);
-//
-//        /** @var Attribute | MockObject $attribute3 */
-//        $attribute3 = $this->createMock(Attribute::class);
-//        $type3 = $this->createMock(Attribute\TypeInterface::class);
-//        $type3->method('getData')->willReturnMap([
-//            ['full_text', null, true]
-//        ]);
-//        $attribute3->method('getTypeInstance')->willReturn($type3);
-//        $attribute3->method('getData')->willReturnMap([
-//            ['code', null, 'attr3']
-//        ]);
-//
-//        $entity2 = new Entity();
-//        $entity2->addAttribute($attribute1);
-//        $entity2->addAttribute($attribute2);
-//        $entity2->addAttribute($attribute3);
-//        $this->assertEquals("    'attr2'," . PHP_EOL . "    'attr3'", $entity2->getFullTextAttributeString(1));
-//    }
 
     /**
      * @covers \App\Model\Entity::getModule
      * @covers \App\Model\Entity::setModule
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetModule()
     {
         /** @var Module | MockObject $module */
         $module = $this->createMock(Module::class);
-        $entity = new Entity();
+        $entity = new Entity($this->sorter);
         $entity->setModule($module);
         $this->assertEquals($module, $entity->getModule());
     }
@@ -240,6 +181,7 @@ class EntityTest extends TestCase
     /**
      * @covers \App\Model\Entity::getAttributes
      * @covers \App\Model\Entity::addAttribute
+     * @covers \App\Model\Entity::__construct()
      */
     public function testAddAttribute()
     {
@@ -247,7 +189,7 @@ class EntityTest extends TestCase
         $attribute1 = $this->createMock(Attribute::class);
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $entity = new Entity();
+        $entity = new Entity($this->sorter);
         $entity->addAttribute($attribute1);
         $entity->addAttribute($attribute2);
         $attributes = $entity->getAttributes();
@@ -261,6 +203,7 @@ class EntityTest extends TestCase
      * @covers \App\Model\Entity::getAttributesWithTypeConfigString()
      * @covers \App\Model\Entity::arrayToPrintString()
      * @covers \App\Model\Entity::getAttributeCodes()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetAttributesWithTypeConfig()
     {
@@ -273,7 +216,7 @@ class EntityTest extends TestCase
             ]);
         $attribute1->method('getTypeInstance')->willReturn($type1);
 
-        $entity1 = new Entity();
+        $entity1 = new Entity($this->sorter);
         $entity1->addAttribute($attribute1);
         $this->assertEquals([], $entity1->getAttributesWithTypeConfig('multiple'));
         $this->assertEquals('', $entity1->getAttributesWithTypeConfigString('multiple'));
@@ -290,7 +233,7 @@ class EntityTest extends TestCase
         ]);
         $attribute2->method('getTypeInstance')->willReturn($type2);
 
-        $entity2 = new Entity();
+        $entity2 = new Entity($this->sorter);
         $entity2->addAttribute($attribute1);
         $entity2->addAttribute($attribute2);
         $this->assertEquals([$attribute2], $entity2->getAttributesWithTypeConfig('multiple'));
@@ -302,6 +245,7 @@ class EntityTest extends TestCase
      * @covers \App\Model\Entity::getAttributesWithTypeString()
      * @covers \App\Model\Entity::arrayToPrintString()
      * @covers \App\Model\Entity::getAttributeCodes()
+     * @covers \App\Model\Entity::__construct()
      */
     public function testGetDateFields()
     {
@@ -310,7 +254,7 @@ class EntityTest extends TestCase
         $type1 = $this->createMock(Attribute\TypeInterface::class);
         $type1->method('getData')->with('date')->willReturn('select');
 
-        $entity1 = new Entity();
+        $entity1 = new Entity($this->sorter);
         $entity1->addAttribute($attribute1);
         $this->assertEquals([], $entity1->getAttributesWithType('date'));
         $this->assertEquals('', $entity1->getAttributesWithTypeString('date'));
@@ -329,48 +273,10 @@ class EntityTest extends TestCase
                 'date'
             ],
         ]);
-        $entity2 = new Entity();
+        $entity2 = new Entity($this->sorter);
         $entity2->addAttribute($attribute1);
         $entity2->addAttribute($attribute2);
         $this->assertEquals([$attribute2], $entity2->getAttributesWithType('date'));
         $this->assertEquals("                'attr2'", $entity2->getAttributesWithTypeString('date', 4));
-    }
-
-    /**
-     * @covers \App\Model\Entity::getAttributes
-     * @covers \App\Model\Entity::sortAttributes
-     */
-    public function testSortAttributes()
-    {
-        $attribute1 = $this->getSortOrderAttributeMock("2");
-        $attribute2 = $this->getSortOrderAttributeMock("1");
-        $attribute3 = $this->getSortOrderAttributeMock("");
-        $attribute4 = $this->getSortOrderAttributeMock("2");
-        $attribute5 = $this->getSortOrderAttributeMock("");
-        $entity = new Entity();
-        $entity->addAttribute($attribute4);
-        $entity->addAttribute($attribute3);
-        $entity->addAttribute($attribute2);
-        $entity->addAttribute($attribute1);
-        $entity->addAttribute($attribute5);
-        $attributes = $entity->getAttributes();
-        $this->assertEquals($attribute2, $attributes[0]);
-        $this->assertEquals($attribute1, $attributes[1]);
-        $this->assertEquals($attribute4, $attributes[2]);
-        $this->assertEquals($attribute3, $attributes[3]);
-        $this->assertEquals($attribute5, $attributes[4]);
-    }
-
-    /**
-     * @param $sortOrder
-     * @return MockObject | Attribute
-     */
-    private function getSortOrderAttributeMock($sortOrder)
-    {
-        $attribute = $this->createMock(Attribute::class);
-        $attribute->method('getData')->willReturnMap([
-            ['position', null, $sortOrder]
-        ]);
-        return $attribute;
     }
 }

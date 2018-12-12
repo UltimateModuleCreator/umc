@@ -64,7 +64,7 @@ class ModuleList
         if ($this->modules === null) {
             $this->createBaseDir();
             $finder = $this->finderFactory->create();
-            $finder->files()->in($this->basePath)->name(self::FILE_TYPE)->sortByName();
+            $finder->files()->in($this->basePath)->depth('== 0')->name(self::FILE_TYPE)->sortByName();
             $this->modules = [];
             foreach ($finder->getIterator() as $file) {
                 $this->modules[] = [
