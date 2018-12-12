@@ -14,7 +14,7 @@ label:
   options:
     label: Label
     attr:
-      class: 'label'
+      data-validation: validate_required
       title: This is the attribute label that will be visible in the back-end in the add/edit form and in some cases in frontend.
 type:
   id: type
@@ -23,17 +23,24 @@ type:
   options:
     label: Attribute Type
     attr:
+      data-validation: validate_required
+      data-pretty-select: 'true'
       umc-type: type
       title: This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.
 is_name:
   id: is_name
-  type: radio
+  type: choice
+  has_default: true
   options:
     label: Acts as name
     attr:
+      data-validation: validate_required
       class: is-name
       umc-type: is-name
       title: Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.
+    choices:
+      No: 0
+      Yes: 1
 required:
   id: required
   type: choice
@@ -48,12 +55,9 @@ required:
       No: 0
 position:
   id: position
-  type: text
+  type: hidden
   options:
-    label: Sort order
     required: false
-    attr:
-      title: The sort order of the field in form and grid.
 admin_grid:
   id: admin_grid
   type: choice

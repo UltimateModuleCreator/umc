@@ -1,12 +1,27 @@
 <?php{{ module.getFormattedLicense('php') }}
 namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Setup;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UninstallInterface;
 
 class Uninstall implements UninstallInterface
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * Uninstall constructor.
+     * @param ResourceConnection $resource
+     */
+    public function __construct(ResourceConnection $resource)
+    {
+        $this->resource = $resource;
+    }
+
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.Generic.CodeAnalysis.UnusedFunctionParameter)
@@ -15,7 +30,23 @@ class Uninstall implements UninstallInterface
         SchemaSetupInterface $setup,
         ModuleContextInterface $context
     ) {
+        //remove ui bookmark data
+        $this->resource->getConnection()->delete(
+            $this->resource->getTableName('ui_bookmark'),
+            [
+                'namespace IN (?)' => [
 {% for entity in module.getEntities() %}
+                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|lower }}_listing',
+{% endfor %}
+                ]
+            ]
+        );
+{% for entity in module.getEntities() %}
+{% if entity.getData('store') %}
+        if ($setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')) {
+            $setup->getConnection()->dropTable{{ entity.getData('name_singular')|ucfirst }}StoreTable($setup);
+        }
+{% endif %}
         if ($setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')) {
             $setup->getConnection()->dropTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
         }

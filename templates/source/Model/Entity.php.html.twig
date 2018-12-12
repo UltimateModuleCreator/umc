@@ -112,6 +112,7 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
         return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ entity.getData('name_singular')|snake|upper }}_ID, ${{ entity.getData('name_singular')|camel }}Id);
     }
 {% for attribute in entity.getAttributes() %}
+
     /**
      * @param {{ attribute.getTypeInstance().getData('type_hint') }} ${{ attribute.getData('code')|camel}}
      * @return {{ entity.getData('name_singular')|ucfirst }}Interface
@@ -129,6 +130,24 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
         return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ attribute.getData('code')|upper}});
     }
 {% endfor %}
+{% if entity.getData('store') %}
+    /**
+     * @param array $storeId
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function setStoreId(array $storeId)
+    {
+        return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::STORE_ID, $storeId);
+    }
+
+    /**
+    * @return int[]
+    */
+    public function getStoreId()
+    {
+        return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::STORE_ID);
+    }
+{% endif %}
 {% for attribute in entity.getAttributes() %}
 {% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
 

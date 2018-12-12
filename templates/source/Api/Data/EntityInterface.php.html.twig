@@ -3,11 +3,16 @@ namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\
 
 interface {{ entity.getData('name_singular')|ucfirst }}Interface
 {
-    const {{ entity.getData('name_singular')|upper }}_ID = '{{ entity.getData('name_singular')|snake }}_id';
+    const {{ entity.getData('name_singular')|snake|upper }}_ID = '{{ entity.getData('name_singular')|snake }}_id';
 {% for attribute in entity.getAttributes() %}
     const {{ attribute.getData('code')|upper }} = '{{ attribute.getData('code') }}';
 {% endfor %}
-
+{% if entity.getData('store') %}
+    /**
+     * @var string
+     */
+    const STORE_ID = 'store_id';
+{% endif %}
     /**
      * @param int $id
      * @return {{ entity.getData('name_singular')|ucfirst }}Interface
@@ -52,4 +57,17 @@ interface {{ entity.getData('name_singular')|ucfirst }}Interface
     public function get{{ attribute.getData('code')|camel|ucfirst }}Url();
 {% endif %}
 {% endfor %}
+{% if entity.getData('store') %}
+
+    /**
+     * @param int[] $store
+     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     */
+    public function setStoreId(array $store);
+
+    /**
+     * @return int[]
+     */
+    public function getStoreId();
+{% endif %}
 }

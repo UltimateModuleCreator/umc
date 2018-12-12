@@ -45,7 +45,7 @@ class ModuleTest extends TestCase
      */
     protected function setUp()
     {
-        $this->module = new Module([], $this->data);
+        $this->module = new Module([], [], $this->data);
     }
 
     /**
@@ -153,7 +153,7 @@ class ModuleTest extends TestCase
             ['textarea', true],
             ['dummy', false]
         ]);
-        $module = new Module([]);
+        $module = new Module([], []);
         $module->addEntity($entity1);
         $module->addEntity($entity2);
         $this->assertTrue($module->hasAttributeType('text'));
@@ -174,12 +174,12 @@ class ModuleTest extends TestCase
         $entity2 = $this->createMock(Entity::class);
         $entity2->method('getData')->willReturn('search')->willReturn("0");
 
-        $module = new Module([]);
+        $module = new Module([], []);
         $module->addEntity($entity1);
         $module->addEntity($entity2);
         $this->assertEquals([$entity1], $module->getSearchableEntities());
 
-        $module = new Module([]);
+        $module = new Module([], []);
         $module->addEntity($entity2);
         $this->assertEquals([], $module->getSearchableEntities());
     }
@@ -197,12 +197,12 @@ class ModuleTest extends TestCase
         $entity2 = $this->createMock(Entity::class);
         $entity2->method('getData')->willReturn('search')->willReturn("0");
 
-        $module = new Module([]);
+        $module = new Module([], []);
         $module->addEntity($entity1);
         $module->addEntity($entity2);
         $this->assertTrue($module->hasSearchableEntities());
 
-        $module = new Module([]);
+        $module = new Module([], []);
         $module->addEntity($entity2);
         $this->assertFalse($module->hasSearchableEntities());
     }
@@ -214,6 +214,7 @@ class ModuleTest extends TestCase
     public function testGetExtensionName()
     {
         $module = new Module(
+            [],
             [],
             [
                 'namespace' => 'Namespace',
@@ -230,7 +231,7 @@ class ModuleTest extends TestCase
      */
     public function testGetEntities()
     {
-        $module = new Module([]);
+        $module = new Module([], []);
         /** @var Entity | MockObject $entity1 */
         $entity1 = $this->createMock(Entity::class);
         /** @var Entity | MockObject $entity2 */
@@ -241,5 +242,44 @@ class ModuleTest extends TestCase
         $this->assertEquals(2, count($entities));
         $this->assertEquals($entity1, $entities[0]);
         $this->assertEquals($entity2, $entities[1]);
+    }
+
+    /**
+     * @covers \App\Model\Module::getAclMenuParents
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetAclMenuParents()
+    {
+        $menuConfig = [
+            'level1' => [
+                'label' => 'Level 1',
+            ],
+            'level2' => [
+                'label' => 'Level 2',
+                'parent' => 'level1'
+            ],
+            'level22' => [
+                'label' => 'Level 22',
+                'parent' => 'level1'
+            ],
+            'level3' => [
+                'label' => 'Level 3',
+                'parent' => 'level2'
+            ]
+        ];
+        $module = new Module([], $menuConfig, ['menu_parent' => '']);
+        $this->assertEquals([], $module->getAclMenuParents());
+
+        $module->setData('menu_parent', 'level1');
+        $this->assertEquals(['level1'], $module->getAclMenuParents());
+
+        $module->setData('menu_parent', 'level2');
+        $this->assertEquals(['level1', 'level2'], $module->getAclMenuParents());
+
+        $module->setData('menu_parent', 'level3');
+        $this->assertEquals(['level1', 'level2', 'level3'], $module->getAclMenuParents());
+
+        $module->setData('menu_parent', 'missing');
+        $this->assertEquals(['missing'], $module->getAclMenuParents());
     }
 }

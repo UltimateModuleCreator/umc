@@ -18,14 +18,19 @@ class Collection extends AbstractCollection
             {{ entity.getData('name_singular')|ucfirst }}::class,
             \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}::class
         );
+{% if entity.getData('store') %}
+        $this->_map['fields']['store_id'] = 'store_table.store_id';
+        $this->_map['fields']['{{ entity.getData('name_singular')|snake }}_id'] = 'main_table.{{ entity.getData('name_singular')|snake }}_id';
+{% endif %}
     }
-{% if entity.getAttributesWithTypeConfig('multiple') %}
+{% if entity.getAttributesWithTypeConfig('multiple') or entity.getData('store') %}
 
     /**
      * after collection load
      */
     protected function _afterLoad()
     {
+{% if entity.getAttributesWithTypeConfig('multiple')  %}
         $fields = [
 {{ entity.getAttributesWithTypeConfigString('multiple', 3)|raw }}
         ];
@@ -37,7 +42,70 @@ class Collection extends AbstractCollection
                 }
             }
         }
+{% endif %}
+{% if entity.getData('store') %}
+        $ids = [];
+        foreach ($this as $item) {
+            $ids[] = $item->getId();
+        }
+        if (count($ids)) {
+            $connection = $this->getConnection();
+            $select = $connection->select()->from(
+                ['store_table' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')]
+            )->where('store_table.{{ entity.getData('name_singular')|snake }}_id IN (?)', $ids);
+            $result = $connection->fetchAll($select);
+            if ($result) {
+                $storesData = [];
+                foreach ($result as $storeData) {
+                    $storesData[$storeData['{{ entity.getData('name_singular')|snake }}_id']][] = $storeData['store_id'];
+                }
+                foreach ($this as $item) {
+                    $linkedId = $item->getData('{{ entity.getData('name_singular')|snake }}_id');
+                    if (!isset($storesData[$linkedId])) {
+                        continue;
+                    }
+                    $item->setData('store_id', $storesData[$linkedId]);
+                }
+            }
+        }
+{% endif %}
         return parent::_afterLoad();
+    }
+{% endif %}
+{% if entity.getData('store') %}
+
+    /**
+     * @param $storeId
+     */
+    public function addStoreFilter($storeId)
+    {
+        if (!isset($this->joinFields['store'])) {
+            $this->getSelect()->join(
+                [
+                    'related_store' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')
+                ],
+                'related_store.{{ entity.getData('name_singular')|snake }}_id = main_table.{{ entity.getData('name_singular')|snake }}_id'
+            );
+            $this->getSelect()->where('related_store.store_id IN (?)', [$storeId, 0]);
+            $this->joinFields['store'] = true;
+        }
+    }
+
+    /**
+     * Join store relation table
+     *
+     * @return void
+     */
+    protected function _renderFiltersBefore()
+    {
+        $this->getSelect()->join(
+            ['store_table' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')],
+            'main_table.{{ entity.getData('name_singular')|snake }}_id = store_table.{{ entity.getData('name_singular')|snake }}_id',
+            []
+        )->group(
+            'main_table.{{ entity.getData('name_singular')|snake }}_id'
+        );
+        parent::_renderFiltersBefore();
     }
 {% endif %}
 }

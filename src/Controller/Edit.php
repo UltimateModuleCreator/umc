@@ -17,10 +17,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Form\Full;
 use App\Util\YamlLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,6 +45,14 @@ class Edit extends AbstractController
      */
     private $attributeConfig;
     /**
+     * @var \App\Model\Settings
+     */
+    private $settingsModel;
+    /**
+     * @var array
+     */
+    private $formConfig;
+    /**
      * @var array
      */
     private $configProps = [
@@ -61,20 +67,27 @@ class Edit extends AbstractController
      * @param string $template
      * @param RequestStack $requestStack
      * @param YamlLoader $yamlLoader
+     * @param \App\Model\Settings $settingsModel
      * @param string $basePath
+     * @param array $attributeConfig
+     * @param array $formConfig
      */
     public function __construct(
         string $template,
         RequestStack $requestStack,
         YamlLoader $yamlLoader,
+        \App\Model\Settings $settingsModel,
         string $basePath,
-        array $attributeConfig
+        array $attributeConfig,
+        array $formConfig
     ) {
         $this->template = $template;
         $this->requestStack = $requestStack;
         $this->yamlLoader = $yamlLoader;
+        $this->settingsModel = $settingsModel;
         $this->basePath = $basePath;
         $this->attributeConfig = $attributeConfig;
+        $this->formConfig = $formConfig;
     }
 
     /**
@@ -83,30 +96,48 @@ class Edit extends AbstractController
     public function run() : Response
     {
         $moduleName = $this->requestStack->getCurrentRequest()->get('module');
-        $data = [];
+        $defaults = $this->settingsModel->getSettings(true);
         if ($moduleName) {
             try {
                 $data = $this->yamlLoader->load($this->basePath . basename($moduleName) . '.yml');
+                $entities = $data['_entities'] ?? [];
+                unset($data['_entities']);
+                $data = [
+                    'module' => $data,
+                    '_entities' => $entities
+                ];
             } catch (\Exception $e) {
-                $data = [];
+                $data = [
+                    'module' => $defaults['module'] ?? []
+                ];
             }
+        } else {
+            $data = [
+                'module' => $defaults['module'] ?? []
+            ];
         }
-        $form = $this->createForm(Full::class, [], array(
-            'action' => $this->generateUrl('save'),
-            'method' => 'POST',
-        ));
-        if (isset($data['namespace']) || isset($data['module_name'])) {
-            $title = 'Edit: ' . (($data['namespace']) ?? '') . '_' . (($data['module_name']) ?? '');
+        $forms = [];
+        foreach ($this->formConfig as $key => $config) {
+            $forms[$key] = $this->createForm($config['class'], [], ['attr' => ['name' => $config['name']]])
+                ->createView();
+        }
+        $isNewMode = true;
+        if (isset($data['module']['namespace']) && isset($data['module']['module_name'])) {
+            $title = 'Edit: ' . (($data['module']['namespace']) ?? '') . '_' . (($data['module']['module_name']) ?? '');
+            $isNewMode = false;
         } else {
             $title = 'New Module';
         }
         return $this->render(
             $this->template,
             [
-                'form' => $form->createView(),
+                'forms' => $forms,
                 'data' => $data,
                 'title' => $title,
-                'attribute_config' => $this->getAttributeConfig()
+                'attribute_config' => $this->getAttributeConfig(),
+                'defaults' => $defaults,
+                'is_new_mode' => (int)$isNewMode,
+                'submit_action' => $this->generateUrl('save')
             ]
         );
     }

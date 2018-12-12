@@ -24,6 +24,7 @@ use App\Model\Attribute\TypeInterface;
 
 class Attribute extends AbstractModel
 {
+    const OPTIONS_DELIMITER = "\n";
     /**
      * @var TypeInterface
      */
@@ -98,7 +99,7 @@ class Attribute extends AbstractModel
             $this->processedOptions = [];
             $options = $this->getData('options');
             if ($options != null) {
-                $options = explode("\n", $options);
+                $options = explode(self::OPTIONS_DELIMITER, $options);
                 foreach ($options as $key => $option) {
                     $option = trim($option);
                     $this->processedOptions[$this->toConstantName($option)] = [
