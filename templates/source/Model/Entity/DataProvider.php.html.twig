@@ -64,8 +64,8 @@ class DataProvider extends AbstractDataProvider
 {% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
             if (isset($this->loadedData[${{ entity.getData('name_singular')|camel }}->getId()]['{{ attribute.getData('code') }}'])) {
                 ${{ attribute.getData('code')|camel }} = [];
-                ${{ attribute.getData('code')|camel }}[0]['name'] = $article->get{{ attribute.getData('code')|camel|ucfirst }}();
-                ${{ attribute.getData('code')|camel }}[0]['url'] = $article->get{{ attribute.getData('code')|camel|ucfirst }}Url();
+                ${{ attribute.getData('code')|camel }}[0]['name'] = ${{ entity.getNameSingular()|camel }}->get{{ attribute.getData('code')|camel|ucfirst }}();
+                ${{ attribute.getData('code')|camel }}[0]['url'] = ${{ entity.getNameSingular()|camel }}->get{{ attribute.getData('code')|camel|ucfirst }}Url();
                 $this->loadedData[${{ entity.getData('name_singular')|camel }}->getId()]['{{ attribute.getData('code') }}'] = ${{ attribute.getData('code')|camel }};
             }
 {% endif %}
