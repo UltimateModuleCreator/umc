@@ -39,12 +39,12 @@ class Dropdown extends AbstractType implements TypeInterface
         $entity = $this->getAttribute()->getEntity();
         $module = $entity->getModule();
         $sourceModel = [
-            $module->getData('namespace'),
-            $module->getData('module_name'),
+            $module->getNamespace(),
+            $module->getModuleName(),
             'Model',
-            ucfirst($entity->getData('name_singular')),
+            ucfirst($entity->getNameSingular()),
             'Source',
-            ucfirst($this->camelize($this->getAttribute()->getData('code')))
+            ucfirst($this->camelize($this->getAttribute()->getCode()))
         ];
         return implode('\\', $sourceModel);
     }

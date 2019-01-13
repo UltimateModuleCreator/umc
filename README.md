@@ -9,8 +9,7 @@ Also, the modules you create with it should be tested before moved to production
 <strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a>. Any amount is welcomed. Just change 10 from the previous URL.</strong>
 
 ## Compatibility  
-The modules you create with this application should be compatible with Magento 2.1.* and 2.2.* versions.  
-They might work with 2.3.*, but 2.3 is not officially supported yet.   
+The modules you create with this application should be compatible with 2.2.* and 2.3.* versions.  
 
 ## Requirements  
 PHP version 7.1.3 or higher. Some PHP extension. See composer.json for more details.

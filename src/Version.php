@@ -16,12 +16,13 @@
  *
  */
 declare(strict_types=1);
+
 namespace App;
 
 class Version
 {
     const VERSION = '3.0.0';
-    const BUILD = 'alpha2';
+    const BUILD = 'beta1';
 
     /**
      * @return string

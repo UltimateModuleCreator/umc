@@ -1,24 +1,24 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Test\Unit\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model\{{ entity.getNameSingular()|ucfirst }}\Executor;
 
 use PHPUnit\Framework\TestCase;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|ucfirst }}RepositoryInterface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor\Delete;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}\Executor\Delete;
 
 class DeleteTest extends TestCase
 {
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor\Delete::execute()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}\Executor\Delete::execute()
      */
     public function testExecute()
     {
-        /** @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getData('name_singular')|camel }}Repository */
-        ${{ entity.getData('name_singular')|camel }}Repository = $this->createMock({{ entity.getData('name_singular')|ucfirst }}RepositoryInterface::class);
-        ${{ entity.getData('name_singular')|camel }}Repository->expects($this->once())->method('deleteById');
-        /** @var {{ entity.getData('name_singular')|ucfirst }}Interface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getData('name_singular')|camel }} */
-        ${{ entity.getData('name_singular')|camel }} = $this->createMock({{ entity.getData('name_singular')|ucfirst }}Interface::class);
-        $delete = new Delete(${{ entity.getData('name_singular')|camel }}Repository);
-        $delete->execute(${{ entity.getData('name_singular')|camel }}->getId());
+        /** @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getNameSingular()|camel }}Repository */
+        ${{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|ucfirst }}RepositoryInterface::class);
+        ${{ entity.getNameSingular()|camel }}Repository->expects($this->once())->method('deleteById');
+        /** @var {{ entity.getNameSingular()|ucfirst }}Interface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getNameSingular()|camel }} */
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|ucfirst }}Interface::class);
+        $delete = new Delete(${{ entity.getNameSingular()|camel }}Repository);
+        $delete->execute(${{ entity.getNameSingular()|camel }}->getId());
     }
 }

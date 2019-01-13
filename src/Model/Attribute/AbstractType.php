@@ -24,6 +24,24 @@ use App\Model\Attribute;
 
 class AbstractType extends AbstractModel implements TypeInterface
 {
+    const GRID_TEMPLATE = 'grid_template';
+    const FORM_TEMPLATE = 'form_template';
+    const FK_TEMPLATE = 'fk_template';
+    const FRONTEND_VIEW_TEMPLATE = 'frontend_view_template';
+    const FRONTEND_LIST_TEMPLATE = 'frontend_list_template';
+    const GRID_FILTER_TYPE = 'grid_filter_type';
+    const MULTIPLE = 'multiple';
+    const MULTIPLE_TEXT = 'multiple_text';
+    const UPLOAD_TYPE = 'upload_type';
+    const SQL_TYPE_CONSTANT = 'sql_type_constant';
+    const SQL_SIZE = 'sql_size';
+    const CAN_HAVE_OPTIONS = 'can_have_options';
+    const TYPE_HINT = 'type_hint';
+    const SOURCE_MODEL = 'source_model';
+    const SCHEMA_TYPE = 'schema_type';
+    const SCHEMA_ATTRIBUTES = 'schema_attributes';
+    const SCHEMA_FK_TEMPLATE = 'schema_fk_template';
+    const FULL_TEXT = 'full_text';
     /**
      * @var Attribute
      */
@@ -85,7 +103,7 @@ class AbstractType extends AbstractModel implements TypeInterface
      */
     public function renderGrid() : string
     {
-        return $this->render('grid_template');
+        return $this->render(self::GRID_TEMPLATE);
     }
 
     /**
@@ -96,7 +114,7 @@ class AbstractType extends AbstractModel implements TypeInterface
      */
     public function renderForm() : string
     {
-        return $this->render('form_template');
+        return $this->render(self::FORM_TEMPLATE);
     }
 
     /**
@@ -107,7 +125,40 @@ class AbstractType extends AbstractModel implements TypeInterface
      */
     public function renderFk() : string
     {
-        return $this->render('fk_template');
+        return $this->render(self::FK_TEMPLATE);
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function renderFrontendView() : string
+    {
+        return $this->render(self::FRONTEND_VIEW_TEMPLATE);
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function renderFrontendList() : string
+    {
+        return $this->render(self::FRONTEND_LIST_TEMPLATE);
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function renderSchemaFk() : string
+    {
+        return $this->render(self::SCHEMA_FK_TEMPLATE);
     }
 
     /**
@@ -116,7 +167,7 @@ class AbstractType extends AbstractModel implements TypeInterface
     protected function getAttributeColumnSettings() : array
     {
         $options = [];
-        if ($this->getAttribute()->getData('required')) {
+        if ($this->getAttribute()->getRequired()) {
             $options['nullable'] = 'false';
         }
         return $options;
@@ -136,5 +187,110 @@ class AbstractType extends AbstractModel implements TypeInterface
         }
         $string .= $padding . ']';
         return $string;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttributeColumnSettingsStringXml() : string
+    {
+        $attributes = trim($this->getData(self::SCHEMA_ATTRIBUTES, ''));
+        if (strlen($attributes) > 0) {
+            $attributes .= ' ';
+        }
+        if ($this->getAttribute()->getRequired()) {
+            $attributes .= 'nullable="false"';
+        } else {
+            $attributes .= 'nullable="true"';
+        }
+        return $attributes;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGridFilterType() : ?string
+    {
+        return $this->getData(self::GRID_FILTER_TYPE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMultiple() : bool
+    {
+        return (bool)$this->getData(self::MULTIPLE);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMultipleText() : ?string
+    {
+        return $this->getData(self::MULTIPLE_TEXT);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUploadType() : ?string
+    {
+        return $this->getData(self::UPLOAD_TYPE);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSqlTypeConstant() : ?string
+    {
+        return $this->getData(self::SQL_TYPE_CONSTANT);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSqlSize() : ?string
+    {
+        return $this->getData(self::SQL_SIZE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCanHaveOptions() : bool
+    {
+        return (bool)$this->getData(self::CAN_HAVE_OPTIONS);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTypeHint() : ?string
+    {
+        return $this->getData(self::TYPE_HINT);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSourceModel() : ?string
+    {
+        return $this->getData(self::SOURCE_MODEL);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSchemaType() : ?string
+    {
+        return $this->getData(self::SCHEMA_TYPE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFullText() : bool
+    {
+        return (bool)$this->getData(self::FULL_TEXT);
     }
 }

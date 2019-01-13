@@ -1,6 +1,6 @@
 {% if module.hasAttributeType('date') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 

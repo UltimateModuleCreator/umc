@@ -1,0 +1,8 @@
+            <?php if (${{ attribute.getCode()|camel }} = ${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}()) :?>
+            <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
+                <strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')) ?></strong>:
+                <a href="<?= $block->escapeUrl(${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}Url());?>">
+                    <?= $block->escapeHtml('{{ attribute.getLabel() }}'); ?>
+                </a>
+            </div>
+            <?php endif;?>

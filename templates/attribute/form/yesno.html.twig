@@ -1,18 +1,18 @@
-        <field name="{{ attribute.getData('code') }}" formElement="checkbox" sortOrder="15">
+        <field name="{{ attribute.getCode() }}" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">{{  attribute.getEntity().getData('name_singular')|snake }}</item>
-{% if attribute.getData('default_value') %}
-                    <item name="default" xsi:type="string">{{ attribute.getData('default_value') }}</item>
+                    <item name="source" xsi:type="string">{{  attribute.getEntity().getNameSingular()|snake }}</item>
+{% if attribute.getDefaultValue() %}
+                    <item name="default" xsi:type="string">{{ attribute.getDefaultValue() }}</item>
 {% endif %}
                 </item>
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <label translate="true">{{ attribute.getData('label') }}</label>
-                <dataScope>{{ attribute.getData('code') }}</dataScope>
-{% if attribute.getData('note') %}
-                <notice>{{ attribute.getData('note') }}</notice>
+                <label translate="true">{{ attribute.getLabel() }}</label>
+                <dataScope>{{ attribute.getCode() }}</dataScope>
+{% if attribute.getNote() %}
+                <notice>{{ attribute.getNote() }}</notice>
 {% endif %}
             </settings>
             <formElements>

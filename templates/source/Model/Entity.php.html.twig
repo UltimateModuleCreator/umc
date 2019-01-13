@@ -1,29 +1,32 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
 use Magento\Framework\Model\AbstractModel;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }} as {{ entity.getData('name_singular')|ucfirst }}ResourceModel;
-{% if entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} as {{ entity.getNameSingular()|ucfirst }}ResourceModel;
+{% if (entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())) or ( entity.hasAttributeType('file') or entity.hasAttributeType('image')) %}
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 {% endif %}
+{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
+use Magento\Framework\Option\ArrayInterface;
+{% endif %}
 
 /**
- * @method \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\Page _getResource()
- * @method \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\Page getResource()
+ * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Page _getResource()
+ * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Page getResource()
  */
-class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implements {{ entity.getData('name_singular')|ucfirst }}Interface
+class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|ucfirst }}Interface
 {
     /**
      * Cache tag
      *
      * @var string
      */
-    const CACHE_TAG = '{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}';
+    const CACHE_TAG = '{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}';
     /**
      * Cache tag
      *
@@ -35,13 +38,13 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
      *
      * @var string
      */
-    protected $_eventPrefix = '{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}';
+    protected $_eventPrefix = '{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}';
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject = '{{ entity.getData('name_singular')|snake }}';
+    protected $_eventObject = '{{ entity.getNameSingular()|snake }}';
 {% if entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
     /**
      * Uploader pool
@@ -49,12 +52,33 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
      * @var UploaderPool
      */
     protected $uploaderPool;
-
+{% endif %}
+{% if entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList()) %}
+    /**
+     * @var Output
+     */
+    protected $outputProcessor;
+{% endif %}
+{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
+    /**
+     * @var ArrayInterface[]
+     */
+    protected $optionProviders;
+{% endif %}
+{% if (entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())) or ( entity.hasAttributeType('file') or entity.hasAttributeType('image')) %}
     /**
      * constructor
      * @param Context $context
      * @param Registry $registry
+{% if  entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
      * @param UploaderPool $uploaderPool
+{% endif %}
+{% if entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())  %}
+     * @param Output $outputProcessor,
+{% endif %}
+{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
+     * @param array $optionProviders
+{% endif %}
      * @param AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
@@ -62,12 +86,28 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
     public function __construct(
         Context $context,
         Registry $registry,
+{% if  entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
         UploaderPool $uploaderPool,
+{% endif %}
+{% if entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())  %}
+        Output $outputProcessor,
+{% endif %}
+{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
+        array $optionProviders = [],
+{% endif %}
         AbstractResource $resource = null,
         DbCollection $resourceCollection = null,
         array $data = []
     ) {
+{% if  entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
+        $this->outputProcessor = $outputProcessor;
+{% endif %}
+{% if entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())  %}
         $this->uploaderPool = $uploaderPool;
+{% endif %}
+{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
+        $this->optionProviders = $optionProviders;
+{% endif %}
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 {% endif %}
@@ -78,7 +118,7 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
      */
     protected function _construct()
     {
-        $this->_init({{ entity.getData('name_singular')|ucfirst }}ResourceModel::class);
+        $this->_init({{ entity.getNameSingular()|ucfirst }}ResourceModel::class);
     }
 
     /**
@@ -96,48 +136,48 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
      *
      * @return array
      */
-    public function get{{ entity.getData('name_singular')|ucfirst }}Id()
+    public function get{{ entity.getNameSingular()|ucfirst }}Id()
     {
-        return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ entity.getData('name_singular')|snake|upper }}_ID);
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID);
     }
 
     /**
-     * set {{ entity.getData('label_singular') }} id
+     * set {{ entity.getLabelSingular() }} id
      *
-     * @param  int ${{ entity.getData('name_singular')|camel }}Id
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @param  int ${{ entity.getNameSingular()|camel }}Id
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
-    public function set{{ entity.getData('name_singular')|ucfirst }}Id(${{ entity.getData('name_singular')|camel }}Id)
+    public function set{{ entity.getNameSingular()|ucfirst }}Id(${{ entity.getNameSingular()|camel }}Id)
     {
-        return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ entity.getData('name_singular')|snake|upper }}_ID, ${{ entity.getData('name_singular')|camel }}Id);
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, ${{ entity.getNameSingular()|camel }}Id);
     }
 {% for attribute in entity.getAttributes() %}
 
     /**
-     * @param {{ attribute.getTypeInstance().getData('type_hint') }} ${{ attribute.getData('code')|camel}}
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
-    public function set{{ attribute.getData('code')|camel|ucfirst }}(${{ attribute.getData('code')|camel}})
+    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}})
     {
-        return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ attribute.getData('code')|upper}}, ${{ attribute.getData('code')|camel}});
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
     }
 
     /**
-     * @return {{ attribute.getTypeInstance().getData('type_hint') }}
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}
      */
-    public function get{{ attribute.getData('code')|camel|ucfirst }}()
+    public function get{{ attribute.getCode()|camel|ucfirst }}()
     {
-        return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::{{ attribute.getData('code')|upper}});
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::{{ attribute.getCode()|upper}});
     }
 {% endfor %}
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
     /**
      * @param array $storeId
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
     public function setStoreId(array $storeId)
     {
-        return $this->setData({{ entity.getData('name_singular')|ucfirst }}Interface::STORE_ID, $storeId);
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::STORE_ID, $storeId);
     }
 
     /**
@@ -145,31 +185,114 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
     */
     public function getStoreId()
     {
-        return $this->getData({{ entity.getData('name_singular')|ucfirst }}Interface::STORE_ID);
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::STORE_ID);
+    }
+{% endif %}
+{% if entity.getSeo() %}
+
+    /**
+     * @param string $metaTitle
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::META_TITLE, $metaTitle);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::META_TITLE);
+    }
+
+    /**
+     * @param string $metaDescription
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::META_DESCRIPTION, $metaDescription);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::META_DESCRIPTION);
+    }
+
+    /**
+     * @param string $metaKeywords
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::META_KEYWORDS, $metaKeywords);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords()
+    {
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::META_KEYWORDS);
+    }
+{% endif %}
+{% if entity.getFrontendList() or entity.getFrontendView() %}
+
+    /**
+     * @param int $isActive
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsActive()
+    {
+        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::IS_ACTIVE);
     }
 {% endif %}
 {% for attribute in entity.getAttributes() %}
-{% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
+{% if attribute.getType() == 'image' or attribute.getType() == 'file' %}
 
     /**
      * @return bool|string
      * @throws LocalizedException
      */
-    public function get{{ attribute.getData('code')|camel|ucfirst }}Url()
+    public function get{{ attribute.getCode()|camel|ucfirst }}Url()
     {
         $url = false;
-        ${{ attribute.getData('code')|camel }} = $this->get{{ attribute.getData('code')|camel|ucfirst }}();
-        if (${{ attribute.getData('code')|camel }}) {
-            if (is_string(${{ attribute.getData('code')|camel }})) {
-                $uploader = $this->uploaderPool->getUploader('{{ attribute.getData('type') }}');
-                $url = $uploader->getBaseUrl() . $uploader->getBasePath() . ${{ attribute.getData('code')|camel }};
+        ${{ attribute.getCode()|camel }} = $this->get{{ attribute.getCode()|camel|ucfirst }}();
+        if (${{ attribute.getCode()|camel }}) {
+            if (is_string(${{ attribute.getCode()|camel }})) {
+                $uploader = $this->uploaderPool->getUploader('{{ attribute.getType() }}');
+                $url = $uploader->getBaseUrl() . $uploader->getBasePath() . ${{ attribute.getCode()|camel }};
             } else {
                 throw new LocalizedException(
-                    __('Something went wrong while getting the {{ attribute.getData('label')|ucfirst }} url.')
+                    __('Something went wrong while getting the {{ attribute.getLabel()|ucfirst }} url.')
                 );
             }
         }
         return $url;
+    }
+{% endif %}
+{% if attribute.getType() == 'wysiwyg' and (entity.getFrontendList() or entity.getFrontendView())  %}
+
+    /**
+     * @return bool|string
+     * @throws LocalizedException
+     */
+    public function get{{ attribute.getCode()|camel|ucfirst }}Html()
+    {
+        return $this->outputProcessor->filterOutput($this->get{{ attribute.getCode()|camel|ucfirst }}());
     }
 {% endif %}
 {% endfor %}
@@ -208,6 +331,40 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel implem
             }
         }
         return parent::afterLoad();
+    }
+{% endif %}
+{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
+    /**
+     * @param $attribute
+     * @return string
+     */
+    public function getAttributeText($attribute)
+    {
+        if (!isset($this->optionProviders[$attribute])) {
+            return '';
+        }
+        if (!($this->optionProviders[$attribute] instanceof ArrayInterface)) {
+            return '';
+        }
+        $value = $this->getData($attribute);
+        if (!is_array($value)) {
+            $value = explode(',', $value);
+        }
+        $keyValuePair = array_filter(
+            $this->optionProviders[$attribute]->toOptionArray(),
+            function ($item) use ($value) {
+                return in_array($item['value'], $value);
+            }
+        );
+        return implode(
+            ', ',
+            array_map(
+                function ($item) {
+                    return $item['label'];
+                },
+                $keyValuePair
+            )
+        );
     }
 {% endif %}
 }

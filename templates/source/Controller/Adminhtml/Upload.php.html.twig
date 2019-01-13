@@ -1,11 +1,11 @@
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\Uploader;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 
 class Upload extends Action
 {

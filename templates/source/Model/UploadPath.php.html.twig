@@ -1,39 +1,39 @@
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 class UploadPath
 {
 {% for entity in module.getEntities() %}
 {% if entity.hasAttributeType('image') %}
     /**
-     * {{ entity.getData('label_singular')|capitalize }} tmp image path
+     * {{ entity.getLabelSingular()|capitalize }} tmp image path
      *
      * @var string
      */
-    const {{ entity.getData('name_singular')|snake|upper }}_IMAGE_TMP_PATH = '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/tmp/{{ entity.getData('name_singular')|snake }}/image';
+    const {{ entity.getNameSingular()|snake|upper }}_IMAGE_TMP_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/tmp/{{ entity.getNameSingular()|snake }}/image';
 
     /**
-     * {{ entity.getData('label_singular')|capitalize }} image path
+     * {{ entity.getLabelSingular()|capitalize }} image path
      *
      * @var string
      */
-    const {{ entity.getData('name_singular')|snake|upper }}_IMAGE_PATH = '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular')|snake }}/image';
+    const {{ entity.getNameSingular()|snake|upper }}_IMAGE_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/image';
 {% endif %}
 {% if entity.hasAttributeType('file') %}
     /**
-     * {{ entity.getData('label_singular')|capitalize }} tmp file path
+     * {{ entity.getLabelSingular()|capitalize }} tmp file path
      *
      * @var string
      */
-    const {{ entity.getData('name_singular')|snake|upper }}_FILE_TMP_PATH = '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/tmp/{{ entity.getData('name_singular')|snake }}/file';
+    const {{ entity.getNameSingular()|snake|upper }}_FILE_TMP_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/tmp/{{ entity.getNameSingular()|snake }}/file';
 
     /**
-     * {{ entity.getData('label_singular')|capitalize }} file path
+     * {{ entity.getLabelSingular()|capitalize }} file path
      *
      * @var string
      */
-    const {{ entity.getData('name_singular')|snake|upper }}_FILE_PATH = '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}/{{ entity.getData('name_singular')|snake }}/file';
+    const {{ entity.getNameSingular()|snake|upper }}_FILE_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/file';
 {% endif %}
 {% endfor %}
 }

@@ -1,24 +1,24 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
  * @api
  */
-interface {{ entity.getData('name_singular')|ucfirst }}SearchResultInterface
+interface {{ entity.getNameSingular()|ucfirst }}SearchResultInterface
 {
     /**
      * get items
      *
-     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface[]
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface[]
      */
     public function getItems();
 
     /**
      * Set items
      *
-     * @param \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface[] $items
+     * @param \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface[] $items
      * @return $this
      */
     public function setItems(array $items);

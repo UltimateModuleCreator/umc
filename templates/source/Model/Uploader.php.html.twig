@@ -1,6 +1,6 @@
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;

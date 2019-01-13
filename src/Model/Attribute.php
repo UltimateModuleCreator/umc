@@ -25,6 +25,19 @@ use App\Model\Attribute\TypeInterface;
 class Attribute extends AbstractModel
 {
     const OPTIONS_DELIMITER = "\n";
+    const CODE = 'code';
+    const LABEL = 'label';
+    const TYPE = 'type';
+    const IS_NAME = 'is_name';
+    const REQUIRED = 'required';
+    const OPTIONS = 'options';
+    const POSITION = 'position';
+    const NOTE = 'note';
+    const ADMIN_GRID = 'admin_grid';
+    const ADMIN_GRID_FILTER = 'admin_grid_filter';
+    const DEFAULT_VALUE = 'default_value';
+    const SHOW_IN_LIST = 'show_in_list';
+    const SHOW_IN_VIEW = 'show_in_view';
     /**
      * @var TypeInterface
      */
@@ -59,7 +72,8 @@ class Attribute extends AbstractModel
     protected $propertyNames = [
         'code', 'label', 'type', 'is_name', 'required',
         'options', 'position', 'note', 'admin_grid',
-        'admin_grid_filter', 'editor', 'default_value'
+        'admin_grid_filter', 'default_value',
+        'show_in_list', 'show_in_view'
     ];
 
     /**
@@ -91,13 +105,117 @@ class Attribute extends AbstractModel
     }
 
     /**
+     * @return null|string
+     */
+    public function getCode() : ?string
+    {
+        return $this->getData(self::CODE);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLabel() : ?string
+    {
+        return $this->getData(self::LABEL);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getType() : ?string
+    {
+        return $this->getData(self::TYPE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsName() : bool
+    {
+        return (bool)$this->getData(self::IS_NAME);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRequired() : bool
+    {
+        return (bool)$this->getData(self::REQUIRED);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getOptions() : ?string
+    {
+        return $this->getData(self::OPTIONS);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition() : int
+    {
+        return (int)$this->getData(self::POSITION);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNote() : ?string
+    {
+        return $this->getData(self::NOTE);
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdminGrid() : int
+    {
+        return (int)$this->getData(self::ADMIN_GRID);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAdminGridFilter() : bool
+    {
+        return (bool)$this->getAdminGrid() && (bool)$this->getData(self::ADMIN_GRID_FILTER);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDefaultValue() : ?string
+    {
+        return $this->getData(self::DEFAULT_VALUE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowInList() : bool
+    {
+        return $this->getEntity()->getFrontendList() && $this->getData(self::SHOW_IN_LIST);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowInView() : bool
+    {
+        return $this->getEntity()->getFrontendView() && $this->getData(self::SHOW_IN_VIEW);
+    }
+
+    /**
      * @return array
      */
     public function getProcessedOptions() : array
     {
         if ($this->processedOptions === null) {
             $this->processedOptions = [];
-            $options = $this->getData('options');
+            $options = $this->getOptions();
             if ($options != null) {
                 $options = explode(self::OPTIONS_DELIMITER, $options);
                 foreach ($options as $key => $option) {

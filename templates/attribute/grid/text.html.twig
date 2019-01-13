@@ -1,18 +1,18 @@
-        <column name="{{ attribute.getData('code') }}">
+        <column name="{{ attribute.getCode() }}">
             <settings>
-{% if (attribute.getData('admin_grid_filter')) %}
-                <filter>{{ type.getData('grid_filter_type') }}</filter>
+{% if (attribute.getAdminGridFilter()) %}
+                <filter>{{ type.getGridFilterType() }}</filter>
 {% endif %}
                 <editor>
-{% if (attribute.getData('required')) %}
+{% if (attribute.getRequired()) %}
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
 {% endif %}
                     <editorType>text</editorType>
                 </editor>
-                <label translate="true">{{ attribute.getData('label') }}</label>
-{% if attribute.getData('admin_grid') is same as("2") %}
+                <label translate="true">{{ attribute.getLabel() }}</label>
+{% if attribute.getAdminGrid() is same as("2") %}
                 <visible>false</visible>
 {% endif %}
             </settings>

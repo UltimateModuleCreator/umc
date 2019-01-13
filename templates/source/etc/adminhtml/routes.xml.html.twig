@@ -1,8 +1,8 @@
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="admin">
-        <route id="{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}" frontName="{{ module.getData('namespace')|lower }}_{{ module.getData('module_name')|lower }}">
-            <module name="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}" before="Magento_Backend"/>
+        <route id="{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}" frontName="{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}">
+            <module name="{{ module.getNamespace() }}_{{ module.getModuleName() }}" before="Magento_Backend"/>
         </route>
     </router>
 </config>

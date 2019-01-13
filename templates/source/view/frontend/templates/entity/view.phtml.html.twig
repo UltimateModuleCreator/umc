@@ -1,0 +1,17 @@
+{% if entity.getFrontendView() %}
+<?php{{ module.getFormattedLicense('php') }}
+/** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\View{{ entity.getNameSingular()|camel|ucfirst }} $block */
+?>
+<?php ${{ entity.getNameSingular()|camel }} = $block->getCurrent{{ entity.getNameSingular()|camel|ucfirst }}();?>
+<div class="{{ entity.getNameSingular()|hyphen }}-view">
+    <div class="{{ entity.getNameSingular()|hyphen }}-{{ entity.getNameAttribute().getCode()|hyphen }}">
+        <strong><?= $block->escapeHtml(__('{{ entity.getNameAttribute().getLabel() }}')) ?></strong>:
+        <?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());?>
+    </div>
+{% for attribute in entity.getAttributes() %}
+{% if attribute.getShowInView() and attribute.getCode() != entity.getNameAttribute().getCode() %}
+{{ attribute.getTypeInstance().renderFrontendView()|raw }}
+{% endif %}
+{% endfor %}
+{% endif %}
+</div>

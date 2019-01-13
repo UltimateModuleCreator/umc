@@ -1,24 +1,24 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Ui\Component\Listing\Column;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 
-class {{ entity.getData('name_singular')|ucfirst }}Actions extends Column
+class {{ entity.getNameSingular()|ucfirst }}Actions extends Column
 {
     /**
      * Url path  to edit
      * @var string
      */
-    const URL_PATH_EDIT = '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}/{{ entity.getData('name_singular')|camel|lower }}/edit';
+    const URL_PATH_EDIT = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}/{{ entity.getNameSingular()|camel|lower }}/edit';
 
     /**
      * Url path  to delete
      * @var string
      */
-    const URL_PATH_DELETE = '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|camel|lower }}/{{ entity.getData('name_singular')|camel|lower }}/delete';
+    const URL_PATH_DELETE = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}/{{ entity.getNameSingular()|camel|lower }}/delete';
 
     /**
      * Url builder
@@ -55,13 +55,13 @@ class {{ entity.getData('name_singular')|ucfirst }}Actions extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item['{{ entity.getData('name_singular')|snake }}_id'])) {
+                if (isset($item['{{ entity.getNameSingular()|snake }}_id'])) {
                     $item[$this->getData('name')] = [
                         'edit' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_EDIT,
                                 [
-                                    '{{ entity.getData('name_singular')|snake }}_id' => $item['{{ entity.getData('name_singular')|snake }}_id']
+                                    '{{ entity.getNameSingular()|snake }}_id' => $item['{{ entity.getNameSingular()|snake }}_id']
                                 ]
                             ),
                             'label' => __('Edit')
@@ -70,13 +70,13 @@ class {{ entity.getData('name_singular')|ucfirst }}Actions extends Column
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_DELETE,
                                 [
-                                    '{{ entity.getData('name_singular')|snake }}_id' => $item['{{ entity.getData('name_singular')|snake }}_id']
+                                    '{{ entity.getNameSingular()|snake }}_id' => $item['{{ entity.getNameSingular()|snake }}_id']
                                 ]
                             ),
                             'label' => __('Delete'),
                             'confirm' => [
-                                'title' => __('Delete "${ $.$data.{{ entity.getNameAttribute().getData('code') }} }"'),
-                                'message' => __('Are you sure you want to delete the {{ entity.getData('label_singular')|ucfirst }} "${ $.$data.{{ entity.getNameAttribute().getData('code') }} }" ?')
+                                'title' => __('Delete "${ $.$data.{{ entity.getNameAttribute().getCode() }} }"'),
+                                'message' => __('Are you sure you want to delete the {{ entity.getLabelSingular()|ucfirst }} "${ $.$data.{{ entity.getNameAttribute().getCode() }} }" ?')
                             ]
                         ]
                     ];

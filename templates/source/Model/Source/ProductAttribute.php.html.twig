@@ -1,6 +1,6 @@
 {% if module.hasAttributeType('product_attribute') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\Source;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;

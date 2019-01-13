@@ -53,6 +53,11 @@ Model/Search/Entity.php:
   label: "Entity admin search model"
   scope: entity
   template: source/Model/Search/Entity.php.html.twig
+Model/Entity/Url.php:
+  destination: Model/_Entity_/Url.php
+  label: "Entity url model"
+  scope: entity
+  template: source/Model/Entity/Url.php.html.twig
 Controller/Adminhtml/Entity/Index.php:
   destination: Controller/Adminhtml/_Entity_/Index.php
   label: "Entity index controller action"
@@ -98,6 +103,16 @@ Controller/Adminhtml/Entity/Image/Upload.php:
   label: "Entity image upload controller action"
   scope: entity
   template: source/Controller/Adminhtml/Entity/Image/Upload.php.html.twig
+Controller/Entity/Index.php:
+  destination: Controller/_Entity_/Index.php
+  label: "Entity frontend index controller action"
+  scope: entity
+  template: source/Controller/Entity/Index.php.html.twig
+Controller/Entity/View.php:
+  destination: Controller/_Entity_/View.php
+  label: "Entity frontend View controller action"
+  scope: entity
+  template: source/Controller/Entity/View.php.html.twig
 Ui/Component/Listing/Column/EntityActions.php:
   destination: Ui/Component/Listing/Column/_Entity_Actions.php
   label: "Entity Grid actions"
@@ -108,6 +123,21 @@ Block/Adminhtml/Button/Entity//Delete.php:
   label: "Entity Delete button"
   scope: entity
   template: source/Block/Adminhtml/Button/Entity/Delete.php.html.twig
+Block/Entity/ListEntity.php:
+  destination: Block/_Entity_/List_Entity_.php
+  label: "Entity list block"
+  scope: entity
+  template: source/Block/Entity/ListEntity.php.html.twig
+Block/Entity/Link.php:
+  destination: Block/_Entity_/Link.php
+  label: "Entity link"
+  scope: entity
+  template: source/Block/Entity/Link.php.html.twig
+Block/Entity/ViewEntity.php:
+  destination: Block/_Entity_/View_Entity_.php
+  label: "Entity view block"
+  scope: entity
+  template: source/Block/Entity/ViewEntity.php.html.twig
 view/admminhtml/layout/namespace_module_entity_edit.xml:
   destination: view/adminhtml/layout/_namespace___modulename___entity__edit.xml
   label: "Entity admin edit layout handle"
@@ -118,13 +148,33 @@ view/admminhtml/layout/namespace_module_entity_index.xml:
   label: "Entity admin index layout handle"
   scope: entity
   template: source/view/adminhtml/layout/namespace_module_name_entity_index.xml.html.twig
-source/view/adminhtml/ui_component/namespace_module_name_entity_listing.xml:
+view/frontend/layout/namespace_module_entity_index.xml:
+  destination: view/frontend/layout/_namespace___modulename___entity__index.xml
+  label: "Entity frontend index layout handle"
+  scope: entity
+  template: source/view/frontend/layout/namespace_module_name_entity_index.xml.html.twig
+view/frontend/layout/namespace_module_entity_view.xml:
+  destination: view/frontend/layout/_namespace___modulename___entity__view.xml
+  label: "Entity frontend view layout handle"
+  scope: entity
+  template: source/view/frontend/layout/namespace_module_name_entity_view.xml.html.twig
+view/adminhtml/ui_component/namespace_module_name_entity_listing.xml:
   destination: view/adminhtml/ui_component/_namespace___modulename___entity__listing.xml
   label: "Entity admin grid ui component"
   scope: entity
   template: source/view/adminhtml/ui_component/namespace_module_name_entity_listing.xml.html.twig
-source/view/adminhtml/ui_component/namespace_module_name_entity_form.xml:
+view/adminhtml/ui_component/namespace_module_name_entity_form.xml:
   destination: view/adminhtml/ui_component/_namespace___modulename___entity__form.xml
   label: "Entity admin grid ui component"
   scope: entity
   template: source/view/adminhtml/ui_component/namespace_module_name_entity_form.xml.html.twig
+view/frontend/templates/entity/view.phtml:
+  destination: view/frontend/templates/_entity_/view.phtml
+  label: "Entity frontend view template"
+  scope: entity
+  template: source/view/frontend/templates/entity/view.phtml.html.twig
+view/frontend/templates/entity/list.phtml:
+  destination: view/frontend/templates/_entity_/list.phtml
+  label: "Entity frontend list template"
+  scope: entity
+  template: source/view/frontend/templates/entity/list.phtml.html.twig
