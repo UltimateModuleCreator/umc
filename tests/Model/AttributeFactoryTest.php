@@ -40,6 +40,6 @@ class AttributeFactoryTest extends TestCase
         $this->assertNotSame($attribute1, $attribute2);
         $this->assertInstanceOf(Attribute::class, $attribute1);
         $this->assertInstanceOf(Attribute::class, $attribute2);
-        $this->assertEquals('code', $attribute1->getData('code'));
+        $this->assertEquals('code', $attribute1->getCode());
     }
 }

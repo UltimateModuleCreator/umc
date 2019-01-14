@@ -1,0 +1,47 @@
+{% if entity.getFrontendView() or entity.getFrontendList() %}
+<?php{{ module.getFormattedLicense('php') }}
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }};
+
+use Magento\Framework\UrlInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+
+class Url
+{
+    /**
+     * url builder
+     *
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+    /**
+     * @param UrlInterface $urlBuilder
+     */
+    public function __construct(
+        UrlInterface $urlBuilder
+    ) {
+        $this->urlBuilder = $urlBuilder;
+    }
+{% if (entity.getFrontendList()) %}
+
+    /**
+     * @return string
+     */
+    public function getListUrl()
+    {
+        return $this->urlBuilder->getUrl('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|lower }}/index');
+    }
+{% endif %}
+{% if (entity.getFrontendView()) %}
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @return string
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Url({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
+    {
+        return $this->urlBuilder->getUrl('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|lower }}/view', ['id' => ${{ entity.getNameSingular()|camel }}->getId()]);
+    }
+{% endif %}
+}
+{% endif %}

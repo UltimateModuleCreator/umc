@@ -1,5 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Setup;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Setup;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -36,19 +36,28 @@ class Uninstall implements UninstallInterface
             [
                 'namespace IN (?)' => [
 {% for entity in module.getEntities() %}
-                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|lower }}_listing',
+                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|lower }}_listing',
 {% endfor %}
                 ]
             ]
         );
+{% if module.hasFrontend() %}
+        //remove config data
+        $this->resource->getConnection()->delete(
+            $this->resource->getTableName('core_config_data'),
+            [
+                'path LIKE ?' => '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_%'
+            ]
+        );
+{% endif %}
 {% for entity in module.getEntities() %}
-{% if entity.getData('store') %}
-        if ($setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')) {
-            $setup->getConnection()->dropTable{{ entity.getData('name_singular')|ucfirst }}StoreTable($setup);
+{% if entity.getStore() %}
+        if ($setup->tableExists('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')) {
+            $setup->getConnection()->dropTable{{ entity.getNameSingular()|ucfirst }}StoreTable($setup);
         }
 {% endif %}
-        if ($setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')) {
-            $setup->getConnection()->dropTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}');
+        if ($setup->tableExists('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}')) {
+            $setup->getConnection()->dropTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}');
         }
 {% endfor %}
     }

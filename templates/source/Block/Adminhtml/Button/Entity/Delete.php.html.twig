@@ -1,5 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\{{ entity.getNameSingular()|ucfirst }};
 
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
@@ -35,9 +35,9 @@ class Delete implements ButtonProviderInterface
     public function getButtonData()
     {
         $data = [];
-        if ($this->get{{ entity.getData('name_singular')|ucfirst }}Id()) {
+        if ($this->get{{ entity.getNameSingular()|ucfirst }}Id()) {
             $data = [
-                'label' => __('Delete {{ entity.getData('label_singular') }}'),
+                'label' => __('Delete {{ entity.getLabelSingular() }}'),
                 'class' => 'delete',
                 'on_click' => 'deleteConfirm(\'' . __(
                     'Are you sure you want to do this?'
@@ -49,20 +49,20 @@ class Delete implements ButtonProviderInterface
     }
 
     /**
-     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface | null
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface | null
      */
-    private function get{{ entity.getData('name_singular')|ucfirst }}()
+    private function get{{ entity.getNameSingular()|ucfirst }}()
     {
-        return $this->registry->registry('current_{{ entity.getData('name_singular')|snake }}');
+        return $this->registry->registry('current_{{ entity.getNameSingular()|snake }}');
     }
 
     /**
      * @return int|null
      */
-    private function get{{ entity.getData('name_singular')|ucfirst }}Id()
+    private function get{{ entity.getNameSingular()|ucfirst }}Id()
     {
-        ${{ entity.getData('name_singular')|camel }} = $this->get{{ entity.getData('name_singular')|ucfirst }}();
-        return (${{ entity.getData('name_singular')|camel }}) ? ${{ entity.getData('name_singular')|camel }}->getId() : null;
+        ${{ entity.getNameSingular()|camel }} = $this->get{{ entity.getNameSingular()|ucfirst }}();
+        return (${{ entity.getNameSingular()|camel }}) ? ${{ entity.getNameSingular()|camel }}->getId() : null;
     }
 
     /**
@@ -73,7 +73,7 @@ class Delete implements ButtonProviderInterface
         return $this->url->getUrl(
             '*/*/delete',
             [
-                '{{ entity.getData('name_singular')|snake }}_id' => $this->get{{ entity.getData('name_singular')|camel }}Id()
+                '{{ entity.getNameSingular()|snake }}_id' => $this->get{{ entity.getNameSingular()|camel }}Id()
             ]
         );
     }

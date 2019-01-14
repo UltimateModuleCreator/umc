@@ -30,8 +30,8 @@ class Attributes extends Dropdown implements TypeInterface
         $entity = $this->getAttribute()->getEntity();
         $module = $entity->getModule();
         $sourceModel = [
-            $module->getData('namespace'),
-            $module->getData('module_name'),
+            $module->getNamespace(),
+            $module->getModuleName(),
             'Model',
             'Source',
             'ProductAttribute'

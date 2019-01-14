@@ -1,5 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
 
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;

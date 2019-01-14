@@ -75,7 +75,7 @@ class Save extends AbstractController
             $response['module'] = $module->getExtensionName();
         } catch (\Exception $e) {
             $response['success'] = false;
-            $response['message'] = $e->getMessage();
+            $response['message'] = $e->getMessage() . '<pre>' . print_r($e->getTraceAsString(), true) . '</pre>';
         }
         return new JsonResponse($response);
     }

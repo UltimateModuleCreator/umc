@@ -33,10 +33,10 @@ jQuery.widget('umc.umc', {
             'print', 'private', 'protected', 'public',
             'require', 'require_once', 'return', 'static',
             'switch', 'throw', 'trait', 'try',
-            'unset', 'use', 'var', 'while', 'xor'],
+            'unset', 'use', 'var', 'while', 'xor', 'void'],
         restrictedModuleNames: ['Magento'],
-        restrictedEntityNames: ['resource', 'result', 'setup', 'attribute', 'options', 'system', 'data', 'collection', 'adminhtml'],
-        restrictedAttributeCodes: ['identities', 'namespace', 'default_values', 'created_at', 'updated_at']
+        restrictedEntityNames: ['resource', 'result', 'setup', 'attribute', 'options', 'system', 'data', 'collection', 'adminhtml', 'url', 'config'],
+        restrictedAttributeCodes: ['identities', 'namespace', 'default_values', 'created_at', 'updated_at', 'data']
     },
     _create() {
         var self = this;
@@ -87,8 +87,6 @@ jQuery.widget('umc.umc', {
             self.showEntityPopup(self.getDefaults('entity'), 'Add New Entity');
         });
         $(this.options.moduleForm).find('[data-toggle=tooltip]').tooltip();
-        $(this.options.entityForm).find('[data-toggle=tooltip]').tooltip({placement:'left'});
-        $(this.options.attributeForm).find('[data-toggle=tooltip]').tooltip({placement:'left'});
         $(this.options.moduleForm).find('.select2-container').tooltip({
             title: function () {
                 return $(this).prev().attr("data-original-title")
@@ -116,6 +114,12 @@ jQuery.widget('umc.umc', {
         });
         $(this.element).find('[umc-type=type]').trigger('change');
         this.wrapFormElements(this.options.moduleForm.find('.form-group'));
+        this.wrapFormElements(this.options.entityForm.find('.form-group'));
+        $(this.options.entityForm).find('[data-toggle=tooltip]').tooltip({
+            placement: 'top'
+        });
+        this.wrapFormElements(this.options.attributeForm.find('.form-group'));
+        $(this.options.attributeForm).find('[data-toggle=tooltip]').tooltip({placement:'top'});
         $(this.options.saveEntityTrigger).on('click', function () {
             if (self.options.entityForm.isValid()) {
                 var entityData = self.getFormData($(self.options.entityForm));
@@ -165,7 +169,6 @@ jQuery.widget('umc.umc', {
         });
         this.canAddToLocalStorage = true;
     },
-
     registerAttributes: function(entityId, attributes, increment) {
         for (var j = 0 in attributes) {
             if (attributes.hasOwnProperty(j)) {
@@ -306,6 +309,10 @@ jQuery.widget('umc.umc', {
     showAttributePopup: function(data, title) {
         this.showPopup(this.options.attributePopup, data, title);
         $(this.options.attributePopup).find('[umc-type=type]').trigger('change');
+        var entityId = this.options.attributePopup.attr('data-current-entity-id');
+        var entity = this.storage._entities[entityId];
+        $(this.options.attributePopup).find('[umc-type=frontend-view]').prop('disabled', !parseInt(entity.frontend_view));
+        $(this.options.attributePopup).find('[umc-type=frontend-list]').prop('disabled', !parseInt(entity.frontend_list));
     },
     addUiElement(selector, container, element) {
         var self = this;
@@ -335,6 +342,8 @@ jQuery.widget('umc.umc', {
             self.options.attributePopup.attr('data-current-attribute-id', '');
             self.showAttributePopup(self.getDefaults('attribute'), title);
         })
+        this.initEntityDnd();
+        this.sortEntities();
     },
     addUiAttribute(selector, container, element) {
         var self = this;
@@ -395,14 +404,36 @@ jQuery.widget('umc.umc', {
         });
     },
 
+    initEntityDnd: function() {
+        var self = this;
+        $('[data-role=entity-container]').sortable({
+            handle: ".entity-dnd-link, h3",
+            placeholder: "drag-placeholder",
+            forcePlaceholderSize: true,
+            update: function (event, ui) {
+                self.sortEntities();
+            }
+        });
+    },
+
     sortAttributes: function (container) {
         var self = this;
-        var entityId = ($(container).closest('[data-role=entity-panel]').attr('data-entity-id'));
+        var entityId = $(container).closest('[data-role=entity-panel]').attr('data-entity-id');
         var elements = $(container).children();
         var position = 10;
         for (i = 0; i<elements.length; i++) {
             var attributeId = $(elements[i]).attr('data-attribute-id');
             self.storage._entities[entityId]._attributes[attributeId].position = position;
+            position += 10;
+        }
+    },
+    sortEntities: function () {
+        var self = this;
+        var elements = $('[data-role=entity-container]').children();
+        var position = 10;
+        for (i = 0; i<elements.length; i++) {
+            var entityId = $(elements[i]).attr('data-entity-id');
+            self.storage._entities[entityId].position = position;
             position += 10;
         }
     },

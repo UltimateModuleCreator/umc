@@ -41,6 +41,6 @@ class EntityFactoryTest extends TestCase
         $this->assertNotSame($entity1, $entity2);
         $this->assertInstanceOf(Entity::class, $entity1);
         $this->assertInstanceOf(Entity::class, $entity2);
-        $this->assertEquals('entity', $entity1->getData('name_singular'));
+        $this->assertEquals('entity', $entity1->getNameSingular());
     }
 }

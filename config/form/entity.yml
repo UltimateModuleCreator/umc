@@ -81,4 +81,60 @@ store:
     attr:
       data-validation: validate_required
       title: Selecting "Yes" it will add a multiselect field in the add / edit form for the entity that will allow you to select the associated stores. Similar to CMS blocks and pages
+frontend_list:
+  id: frontend_list
+  type: choice
+  has_default: true
+  options:
+    label: Create Frontend list page
+    choices:
+      Yes: 1
+      No: 0
+    attr:
+      data-validation: validate_required
+      title: If this is set to 'Yes', a page that lists your entities will be created. The page has a toolbar for pagination.
+menu_link:
+  id: menu_link
+  type: choice
+  has_default: true
+  options:
+    label: Menu to Link zone
+    choices:
+      No Link: 0
+      Main Menu: 1
+      Footer Links: 2
+    attr:
+      data-validation: validate_required
+      title: If the entity has a frontend list page you can place the link to it in 2 sections of the website
+
+frontend_view:
+  id: frontend_view
+  type: choice
+  has_default: true
+  options:
+    label: Create Frontend view page
+    choices:
+      Yes: 1
+      No: 0
+    attr:
+      data-validation: validate_required
+      title: If this is set to 'Yes', a page that shows the details of your entity instance will be created.
+seo:
+  id: seo
+  type: choice
+  has_default: true
+  options:
+    label: Add SEO attributes
+    choices:
+      Yes: 1
+      No: 0
+    attr:
+      data-validation: validate_required
+      title: If this is set to 'Yes', 3 extra fields/attributes will be added to your entity, 'meta_title', 'meta_keywords' and 'meta_description'. The values of these fields/attributes will be added used for the details page of your entity.
+position:
+  id: position
+  type: hidden
+  options:
+    required: false
+
 

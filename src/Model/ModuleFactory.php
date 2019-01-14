@@ -20,9 +20,14 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Service\License\ProcessorInterface;
+use App\Util\StringUtil;
 
 class ModuleFactory implements FactoryInterface
 {
+    /**
+     * @var StringUtil
+     */
+    private $stringUtil;
     /**
      * @var ProcessorInterface[]
      */
@@ -37,8 +42,9 @@ class ModuleFactory implements FactoryInterface
      * @param ProcessorInterface[] $licenseFormatter
      * @param array$menuConfig
      */
-    public function __construct(array $licenseFormatter, array $menuConfig)
+    public function __construct(StringUtil $stringUtil, array $licenseFormatter, array $menuConfig)
     {
+        $this->stringUtil = $stringUtil;
         $this->licenseFormatter = $licenseFormatter;
         $this->menuConfig = $menuConfig;
     }
@@ -49,6 +55,6 @@ class ModuleFactory implements FactoryInterface
      */
     public function create(array $data = []) : Module
     {
-        return new Module($this->licenseFormatter, $this->menuConfig, $data);
+        return new Module($this->stringUtil, $this->licenseFormatter, $this->menuConfig, $data);
     }
 }

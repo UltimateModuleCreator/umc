@@ -1,0 +1,2 @@
+        <constraint xsi:type="foreign" referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_{{ attribute.getCode()|upper }}_EAV_ATTRIBUTE_ATTRIBUTE_ID"
+            table="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" column="{{ attribute.getCode() }}" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>

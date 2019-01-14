@@ -1,9 +1,12 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }};
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }};
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\AbstractCollection;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\AbstractCollection;
 
+/**
+ * @api
+ */
 class Collection extends AbstractCollection
 {
 
@@ -15,15 +18,15 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            {{ entity.getData('name_singular')|ucfirst }}::class,
-            \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}::class
+            {{ entity.getNameSingular()|ucfirst }}::class,
+            \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }}::class
         );
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
         $this->_map['fields']['store_id'] = 'store_table.store_id';
-        $this->_map['fields']['{{ entity.getData('name_singular')|snake }}_id'] = 'main_table.{{ entity.getData('name_singular')|snake }}_id';
+        $this->_map['fields']['{{ entity.getNameSingular()|snake }}_id'] = 'main_table.{{ entity.getNameSingular()|snake }}_id';
 {% endif %}
     }
-{% if entity.getAttributesWithTypeConfig('multiple') or entity.getData('store') %}
+{% if entity.getAttributesWithTypeConfig('multiple') or entity.getStore() %}
 
     /**
      * after collection load
@@ -34,7 +37,7 @@ class Collection extends AbstractCollection
         $fields = [
 {{ entity.getAttributesWithTypeConfigString('multiple', 3)|raw }}
         ];
-        /** @var {{ entity.getData('name_singular')|ucfirst }} $item */
+        /** @var {{ entity.getNameSingular()|ucfirst }} $item */
         foreach ($this as $item) {
             foreach ($fields as $field) {
                 if (!is_array($item->getData($field))) {
@@ -43,7 +46,7 @@ class Collection extends AbstractCollection
             }
         }
 {% endif %}
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
         $ids = [];
         foreach ($this as $item) {
             $ids[] = $item->getId();
@@ -51,16 +54,16 @@ class Collection extends AbstractCollection
         if (count($ids)) {
             $connection = $this->getConnection();
             $select = $connection->select()->from(
-                ['store_table' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')]
-            )->where('store_table.{{ entity.getData('name_singular')|snake }}_id IN (?)', $ids);
+                ['store_table' => $this->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')]
+            )->where('store_table.{{ entity.getNameSingular()|snake }}_id IN (?)', $ids);
             $result = $connection->fetchAll($select);
             if ($result) {
                 $storesData = [];
                 foreach ($result as $storeData) {
-                    $storesData[$storeData['{{ entity.getData('name_singular')|snake }}_id']][] = $storeData['store_id'];
+                    $storesData[$storeData['{{ entity.getNameSingular()|snake }}_id']][] = $storeData['store_id'];
                 }
                 foreach ($this as $item) {
-                    $linkedId = $item->getData('{{ entity.getData('name_singular')|snake }}_id');
+                    $linkedId = $item->getData('{{ entity.getNameSingular()|snake }}_id');
                     if (!isset($storesData[$linkedId])) {
                         continue;
                     }
@@ -72,23 +75,25 @@ class Collection extends AbstractCollection
         return parent::_afterLoad();
     }
 {% endif %}
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
 
     /**
      * @param $storeId
+     * @return $this
      */
     public function addStoreFilter($storeId)
     {
         if (!isset($this->joinFields['store'])) {
             $this->getSelect()->join(
                 [
-                    'related_store' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')
+                    'related_store' => $this->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')
                 ],
-                'related_store.{{ entity.getData('name_singular')|snake }}_id = main_table.{{ entity.getData('name_singular')|snake }}_id'
+                'related_store.{{ entity.getNameSingular()|snake }}_id = main_table.{{ entity.getNameSingular()|snake }}_id'
             );
             $this->getSelect()->where('related_store.store_id IN (?)', [$storeId, 0]);
             $this->joinFields['store'] = true;
         }
+        return $this;
     }
 
     /**
@@ -99,11 +104,11 @@ class Collection extends AbstractCollection
     protected function _renderFiltersBefore()
     {
         $this->getSelect()->join(
-            ['store_table' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')],
-            'main_table.{{ entity.getData('name_singular')|snake }}_id = store_table.{{ entity.getData('name_singular')|snake }}_id',
+            ['store_table' => $this->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')],
+            'main_table.{{ entity.getNameSingular()|snake }}_id = store_table.{{ entity.getNameSingular()|snake }}_id',
             []
         )->group(
-            'main_table.{{ entity.getData('name_singular')|snake }}_id'
+            'main_table.{{ entity.getNameSingular()|snake }}_id'
         );
         parent::_renderFiltersBefore();
     }

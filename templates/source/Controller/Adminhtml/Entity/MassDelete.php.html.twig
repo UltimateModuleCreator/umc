@@ -1,7 +1,7 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\AbstractMassAction;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\AbstractMassAction;
 
 class MassDelete extends AbstractMassAction
 {

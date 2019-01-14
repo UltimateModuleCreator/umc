@@ -1,0 +1,141 @@
+{% if (entity.getFrontendList()) %}
+<?php{{ module.getFormattedLicense('php') }}
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\UrlFactory;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Theme\Block\Html\Pager;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory as {{ entity.getNameSingular()|camel|ucfirst }}CollectionFactory;
+{% if entity.hasAttributeType('image') %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\ImageBuilder;
+{% endif %}
+{% if entity.getFrontendView() %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+{% endif %}
+
+/**
+ * @api
+ */
+class List{{ entity.getNameSingular()|camel|ucfirst }} extends Template
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}CollectionFactory
+     */
+    private ${{ entity.getNameSingular()|camel }}CollectionFactory;
+    /**
+     * @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection
+     */
+    private ${{ entity.getNamePlural()|camel }};
+{% if entity.hasAttributeType('image') %}
+    /**
+     * @var ImageBuilder
+     */
+    private $imageBuilder;
+{% endif %}
+{% if entity.getFrontendView() %}
+    /**
+     * @var Url
+     */
+    private $urlModel;
+{% endif %}
+    /**
+     * @param Context $context
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}CollectionFactory ${{ entity.getNameSingular()|camel }}CollectionFactory
+{% if entity.hasAttributeType('image') %}
+     * @param ImageBuilder $imageBuilder
+{% endif %}
+{% if entity.getFrontendView() %}
+     * @param Url $urlModel
+{% endif %}
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        {{ entity.getNameSingular()|camel|ucfirst }}CollectionFactory ${{ entity.getNameSingular()|camel }}CollectionFactory,
+{% if entity.hasAttributeType('image') %}
+        ImageBuilder $imageBuilder,
+{% endif %}
+{% if entity.getFrontendView() %}
+        Url $urlModel,
+{% endif %}
+        array $data = []
+    ) {
+        $this->{{ entity.getNameSingular()|camel }}CollectionFactory = ${{ entity.getNameSingular()|camel }}CollectionFactory;
+{% if entity.hasAttributeType('image') %}
+        $this->imageBuilder = $imageBuilder;
+{% endif %}
+{% if entity.getFrontendView() %}
+        $this->urlModel = $urlModel;
+{% endif %}
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection
+     */
+    public function get{{ entity.getNamePlural()|camel|ucfirst }}()
+    {
+        if (is_null($this->{{ entity.getNamePlural()|camel }})) {
+            $this->{{ entity.getNamePlural()|camel }} = $this->{{ entity.getNameSingular()|camel }}CollectionFactory->create()
+                ->addFieldToFilter('is_active', {{ entity.getNameSingular()|camel|ucfirst }}Interface::STATUS_ENABLED)
+{% if entity.getStore() %}
+                ->addStoreFilter($this->_storeManager->getStore()->getId())
+{% endif %}
+                ->setOrder('{{ entity.getNameAttribute().getCode() }}', 'ASC');
+        }
+        return $this->{{ entity.getNamePlural()|camel }};
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        /** @var \Magento\Theme\Block\Html\Pager $pager */
+        $pager = $this->getLayout()->createBlock(Pager::class, '{{ module.getNamespace()|snake }}.{{ module.getModuleName()|snake }}.{{ entity.getNameSingular()|snake }}.list.pager');
+        $pager->setCollection($this->get{{ entity.getNamePlural()|camel|ucfirst }}());
+        $this->setChild('pager', $pager);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
+    }
+{% if entity.hasAttributeType('image') %}
+
+    /**
+     * @param $entity
+     * @param $imageId
+     * @param array $attributes
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Image
+    */
+    public function getImage($entity, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->setEntity($entity)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
+    }
+{% endif %}
+{% if entity.getFrontendView() %}
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @return string
+    */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Url({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
+    {
+        return $this->urlModel->get{{ entity.getNameSingular()|camel|ucfirst }}Url(${{ entity.getNameSingular()|camel }});
+    }
+{% endif %}
+}
+{% endif %}

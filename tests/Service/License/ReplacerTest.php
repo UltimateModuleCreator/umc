@@ -33,10 +33,8 @@ class ReplacerTest extends TestCase
     {
         /** @var Module | MockObject $module */
         $module = $this->createMock(Module::class);
-        $module->method('getData')->willReturnMap([
-            ['namespace', null, 'ModuleNamespace'],
-            ['module_name', null, 'ModuleName']
-        ]);
+        $module->method('getNamespace')->willReturn('ModuleNamespace');
+        $module->method('getModuleName')->willReturn('ModuleName');
         $replacer = new Replacer();
         $license = '';
         $this->assertEquals('', $replacer->replaceVars($license, $module));

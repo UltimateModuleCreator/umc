@@ -1,45 +1,48 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api;
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
-interface {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+/**
+ * @api
+ */
+interface {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
 {
     /**
-     * @param {{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular') }}
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @param {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }}
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
-    public function save({{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular') }});
+    public function save({{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }});
 
     /**
      * @param $id
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($id);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}SearchResultInterface
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}SearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
-     * @param {{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular') }}
+     * @param {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }}
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete({{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular') }});
+    public function delete({{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }});
 
     /**
-     * @param int ${{ entity.getData('name_singular') }}Id
+     * @param int ${{ entity.getNameSingular() }}Id
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById(${{ entity.getData('name_singular') }}Id);
+    public function deleteById(${{ entity.getNameSingular() }}Id);
 
     /**
      * clear caches instances

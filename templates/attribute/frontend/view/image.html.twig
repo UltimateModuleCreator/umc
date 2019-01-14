@@ -1,0 +1,10 @@
+    <?php if (${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}()) :?>
+    <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
+        <strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')) ?></strong>:
+        <?= $block->getImage(
+            ${{ entity.getNameSingular()|camel }},
+            '{{ entity.getNameSingular()|snake }}_list',
+            ['width' => 100, 'height' => 100, 'type' => '{{ attribute.getCode() }}']
+        )->toHtml(); ?>
+    </div>
+    <?php endif;?>

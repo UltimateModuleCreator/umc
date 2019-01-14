@@ -1,19 +1,19 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
 
 class Edit extends Action
 {
     /**
-     * @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
      */
-    private ${{ entity.getData('name_singular')|camel }}Repository;
+    private ${{ entity.getNameSingular()|camel }}Repository;
     /**
      * @var Registry
      */
@@ -22,53 +22,53 @@ class Edit extends Action
     /**
      * Edit constructor.
      * @param Context $context
-     * @param {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+     * @param {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
      * @param Registry $registry
      */
     public function __construct(
         Context $context,
-        {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository,
+        {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
         Registry $registry
     ) {
-        $this->{{ entity.getData('name_singular')|camel }}Repository = ${{ entity.getData('name_singular')|camel }}Repository;
+        $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
         $this->registry = $registry;
         parent::__construct($context);
     }
 
     /**
-     * get current {{ entity.getData('label_singular') }}
+     * get current {{ entity.getLabelSingular() }}
      *
-     * @return null|\{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface
+     * @return null|\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface
      */
-    private function init{{ entity.getData('name_singular')|ucfirst }}()
+    private function init{{ entity.getNameSingular()|ucfirst }}()
     {
-        ${{ entity.getData('name_singular')|camel }}Id = $this->getRequest()->getParam('{{ entity.getData('name_singular')|snake }}_id');
+        ${{ entity.getNameSingular()|camel }}Id = $this->getRequest()->getParam('{{ entity.getNameSingular()|snake }}_id');
         try {
-            ${{ entity.getData('name_singular')|camel }} = $this->{{ entity.getData('name_singular')|camel }}Repository->get(${{ entity.getData('name_singular')|camel }}Id);
+            ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Repository->get(${{ entity.getNameSingular()|camel }}Id);
         } catch (NoSuchEntityException $e) {
-            ${{ entity.getData('name_singular')|camel }} = null;
+            ${{ entity.getNameSingular()|camel }} = null;
         }
-        $this->registry->register('current_{{ entity.getData('name_singular')|snake }}', ${{ entity.getData('name_singular')|camel }});
-        return ${{ entity.getData('name_singular')|camel }};
+        $this->registry->register('current_{{ entity.getNameSingular()|snake }}', ${{ entity.getNameSingular()|camel }});
+        return ${{ entity.getNameSingular()|camel }};
     }
 
     /**
-     * Edit or create {{ entity.getData('label_singular') }}
+     * Edit or create {{ entity.getLabelSingular() }}
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        ${{ entity.getData('name_singular')|camel }} = $this->init{{ entity.getData('name_singular')|camel|ucfirst }}();
+        ${{ entity.getNameSingular()|camel }} = $this->init{{ entity.getNameSingular()|camel|ucfirst }}();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|camel|lower }}_{{ entity.getData('name_singular')|snake }}');
-        $resultPage->getConfig()->getTitle()->prepend(__('{{ entity.getData('label_plural') }}'));
+        $resultPage->setActiveMenu('{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|snake }}');
+        $resultPage->getConfig()->getTitle()->prepend(__('{{ entity.getLabelPlural() }}'));
 
-        if (${{ entity.getData('name_singular')|camel }} === null) {
-            $resultPage->getConfig()->getTitle()->prepend(__('New {{ entity.getData('label_singular') }}'));
+        if (${{ entity.getNameSingular()|camel }} === null) {
+            $resultPage->getConfig()->getTitle()->prepend(__('New {{ entity.getLabelSingular() }}'));
         } else {
-            $resultPage->getConfig()->getTitle()->prepend(${{ entity.getData('name_singular')|camel }}->get{{ entity.getNameAttribute().getData('code')|camel|ucfirst }}());
+            $resultPage->getConfig()->getTitle()->prepend(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());
         }
         return $resultPage;
     }

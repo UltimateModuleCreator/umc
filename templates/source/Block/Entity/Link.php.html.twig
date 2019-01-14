@@ -1,0 +1,66 @@
+{% if (entity.getMenuLink() == constant('App\\Model\\Entity::MENU_LINK_FOOTER')) %}
+<?php{{ module.getFormattedLicense('php') }}
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\View\Element\Html\Link\Current;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}\Url;
+use Magento\Framework\App\DefaultPathInterface;
+use Magento\Framework\View\Element\Template\Context;
+
+/**
+ * @api
+ */
+class Link extends Current
+{
+    /**
+     * @var Url
+     */
+    private $urlModel;
+
+    /**
+     * Constructor
+     *
+     * @param Context $context
+     * @param DefaultPathInterface $defaultPath
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        DefaultPathInterface $defaultPath,
+        Url $urlModel,
+        array $data = []
+    ) {
+        parent::__construct($context, $defaultPath, $data);
+        $this->urlModel = $urlModel;
+    }
+
+    /**
+     * Get href URL
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->urlModel->getListUrl();
+    }
+
+    /**
+     * Check if link leads to URL equivalent to URL of currently displayed page
+     *
+     * @return bool
+     */
+    public function isCurrent()
+    {
+        return $this->getCurrent() || $this->getRequest()->getFullActionName() == $this->getSpecialLayoutHandle();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSpecialLayoutHandle()
+    {
+        return '{{ module.getNamespace()|snake|lower }}_{{ module.getModuleName()|snake|lower }}_{{ entity.getNameSingular()|camel|lower }}_index';
+    }
+}
+{% endif %}

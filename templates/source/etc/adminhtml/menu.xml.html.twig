@@ -1,20 +1,20 @@
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|lower }}"
-             title="{{ module.getData('menu_text') }}"
-             module="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}"
-             sortOrder="{{ module.getData('sort_order') }}"
-             resource="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|lower }}"
-             {% if module.getData('menu_parent') %}parent="{{ module.getData('menu_parent') }}"{% endif %} />
+        <add id="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}"
+             title="{{ module.getMenuText() }}"
+             module="{{ module.getNamespace() }}_{{ module.getModuleName() }}"
+             sortOrder="{{ module.getSortOrder() }}"
+             resource="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}"
+             {% if module.getMenuParent() %}parent="{{ module.getMenuParent() }}"{% endif %} />
 {% for entity in module.getEntities() %}
-        <add id="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}"
-             title="{{ entity.getData('label_plural') }}"
-             module="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}"
+        <add id="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}"
+             title="{{ entity.getLabelPlural() }}"
+             module="{{ module.getNamespace() }}_{{ module.getModuleName() }}"
              sortOrder="10"
-             action="{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|lower }}/{{ entity.getData('name_singular')|lower }}"
-             resource="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|lower }}_{{ entity.getData('name_singular')|snake }}"
-             parent="{{ module.getData('namespace') }}_{{ module.getData('module_name') }}::{{ module.getData('module_name')|lower }}"
+             action="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|lower }}/{{ entity.getNameSingular()|lower }}"
+             resource="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}"
+             parent="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}"
         />
 {% endfor %}
     </menu>

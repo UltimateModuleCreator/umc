@@ -50,7 +50,7 @@ class TypeFactory
      */
     public function create(Attribute $attribute) : TypeInterface
     {
-        $type = $attribute->getData('type');
+        $type = $attribute->getType();
         if (!isset($this->map[$type]['class'])) {
             throw new \Exception("Attribute type {$type} is not supported");
         }

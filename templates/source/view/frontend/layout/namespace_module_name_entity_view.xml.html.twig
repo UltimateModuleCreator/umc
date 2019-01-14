@@ -1,0 +1,10 @@
+{% if entity.getFrontendView() %}
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    <referenceBlock name="content">
+        <block class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\View{{ entity.getNameSingular()|camel|ucfirst }}" name="{{ module.getNamespace()|snake }}.{{ module.getModuleName()|snake }}.{{ entity.getNameSingular()|snake }}.view" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ entity.getNameSingular()|snake }}/view.phtml" />
+    </referenceBlock>
+    </body>
+</page>
+{% endif %}
