@@ -1,5 +1,6 @@
+{% if module.getMagentoVersion() == '2.2' %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Setup;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Setup;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -21,9 +22,9 @@ class InstallSchema implements InstallSchemaInterface
         $installer = $setup;
         $installer->startSetup();
 {% for entity in module.getEntities() %}
-        $this->create{{ entity.getData('name_singular')|ucfirst }}Table($setup);
-{% if entity.getData('store') %}
-        $this->create{{ entity.getData('name_singular')|ucfirst }}StoreTable($setup);
+        $this->create{{ entity.getNameSingular()|ucfirst }}Table($setup);
+{% if entity.getStore() %}
+        $this->create{{ entity.getNameSingular()|ucfirst }}StoreTable($setup);
 {% endif %}
 {% endfor %}
         $installer->endSetup();
@@ -31,20 +32,20 @@ class InstallSchema implements InstallSchemaInterface
 {% for entity in module.getEntities() %}
 
     /**
-     * install table for {{ entity.getData('label_singular') }}
+     * install table for {{ entity.getLabelSingular() }}
      *
      * @param SchemaSetupInterface $setup
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function create{{ entity.getData('name_singular')|ucfirst }}Table(SchemaSetupInterface $setup)
+    private function create{{ entity.getNameSingular()|ucfirst }}Table(SchemaSetupInterface $setup)
     {
-        if (!$setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')) {
+        if (!$setup->tableExists('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}')) {
             $table = $setup->getConnection()->newTable(
-                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}')
+                $setup->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}')
             )
             ->addColumn(
-                '{{ entity.getData('name_singular')|snake }}_id',
+                '{{ entity.getNameSingular()|snake }}_id',
                 Table::TYPE_INTEGER,
                 null,
                 [
@@ -53,17 +54,49 @@ class InstallSchema implements InstallSchemaInterface
                     'primary'  => true,
                     'unsigned' => true,
                 ],
-                '{{ entity.getData('label_singular')|ucfirst }} ID'
+                '{{ entity.getLabelSingular()|ucfirst }} ID'
             )
 {%  for attribute in entity.getAttributes() %}
             ->addColumn(
-                '{{ attribute.getData('code') }}',
-                Table::{{ attribute.getTypeInstance().getData('sql_type_constant') }},
-                {{ attribute.getTypeInstance().getData('sql_size')|raw }},
+                '{{ attribute.getCode() }}',
+                Table::{{ attribute.getTypeInstance().getSqlTypeConstant() }},
+                {{ attribute.getTypeInstance().getSqlSize()|raw }},
 {{ attribute.getTypeInstance().getAttributeColumnSettingsString()|raw }},
-                '{{ entity.getData('label_singular')|ucfirst }} {{ attribute.getData('label') }}'
+                '{{ entity.getLabelSingular()|ucfirst }} {{ attribute.getLabel() }}'
             )
 {% endfor %}
+{% if entity.getFrontendView() or entity.getFrontendList() %}
+            ->addColumn(
+                'is_active',
+                Table::TYPE_INTEGER,
+                1,
+                [],
+                '{{ entity.getLabelSingular() }} Is Enabled'
+            )
+{% endif %}
+{% if entity.getSeo() %}
+            ->addColumn(
+                'meta_title',
+                Table::TYPE_TEXT,
+                255,
+                [],
+                '{{ entity.getLabelSingular() }} Meta Title'
+            )
+            ->addColumn(
+                'meta_description',
+                Table::TYPE_TEXT,
+                '2M',
+                [],
+                '{{ entity.getLabelSingular() }} Meta Description'
+            )
+            ->addColumn(
+                'meta_keywords',
+                Table::TYPE_TEXT,
+                '2M',
+                [],
+                '{{ entity.getLabelSingular() }} Meta Keywords'
+            )
+{% endif %}
             ->addColumn(
                 'created_at',
                 Table::TYPE_TIMESTAMP,
@@ -72,7 +105,7 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => false,
                     'default' => Table::TIMESTAMP_INIT
                 ],
-                '{{ entity.getData('label_singular')|ucfirst }} Created At'
+                '{{ entity.getLabelSingular()|ucfirst }} Created At'
             )
             ->addColumn(
                 'updated_at',
@@ -82,49 +115,49 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => false,
                     'default' => Table::TIMESTAMP_INIT_UPDATE
                 ],
-                '{{ entity.getData('label_singular')|ucfirst }} Updated At'
+                '{{ entity.getLabelSingular()|ucfirst }} Updated At'
             )
 {%  for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderFk()|raw }}{% endfor %}
-            ->setComment('{{ entity.getData('label_singular')|ucfirst }} Table');
+            ->setComment('{{ entity.getLabelSingular()|ucfirst }} Table');
             $setup->getConnection()->createTable($table);
 {% if entity.getAttributesWithTypeConfig('full_text')|length > 0 %}
             $setup->getConnection()->addIndex(
-                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
+                $setup->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}'),
                 $setup->getIdxName(
-                    $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
+                    $setup->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}'),
                     [
 {{ entity.getAttributesWithTypeConfigString('full_text', 6)|raw }}
                     ],
                     AdapterInterface::INDEX_TYPE_FULLTEXT
                 ),
                 [
-{{ entity.getAttributesWithTypeConfigString('full_text',5)|raw }}
+{{ entity.getAttributesWithTypeConfigString('full_text', 5)|raw }}
                 ],
                 AdapterInterface::INDEX_TYPE_FULLTEXT
             );
 {% endif %}
         }
     }
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
 
     /**
-     * install table for {{ entity.getData('label_singular') }} store link
+     * install table for {{ entity.getLabelSingular() }} store link
      *
      * @param SchemaSetupInterface $setup
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
     */
-    private function create{{ entity.getData('name_singular')|ucfirst }}StoreTable(SchemaSetupInterface $setup)
+    private function create{{ entity.getNameSingular()|ucfirst }}StoreTable(SchemaSetupInterface $setup)
     {
-        if (!$setup->tableExists('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')) {
+        if (!$setup->tableExists('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')) {
             $table = $setup->getConnection()->newTable(
-                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')
+                $setup->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')
             )->addColumn(
-                '{{ entity.getData('name_singular')|snake }}_id',
+                '{{ entity.getNameSingular()|snake }}_id',
                 Table::TYPE_INTEGER,
                 null,
                 ['nullable' => false, 'primary' => true, 'unsigned' => true],
-                '{{ entity.getData('label_singular')|ucfirst }} ID'
+                '{{ entity.getLabelSingular()|ucfirst }} ID'
             )->addColumn(
                 'store_id',
                 Table::TYPE_SMALLINT,
@@ -132,22 +165,22 @@ class InstallSchema implements InstallSchemaInterface
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Store ID'
             )->addIndex(
-                $setup->getIdxName('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store', ['store_id']),
+                $setup->getIdxName('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store', ['store_id']),
                 ['store_id']
             )->addForeignKey(
                 $setup->getFkName(
-                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store',
-                    '{{ entity.getData('name_singular')|snake }}_id',
-                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}',
-                    '{{ entity.getData('name_singular')|snake }}_id'
+                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store',
+                    '{{ entity.getNameSingular()|snake }}_id',
+                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}',
+                    '{{ entity.getNameSingular()|snake }}_id'
                 ),
-                '{{ entity.getData('name_singular')|snake }}_id',
-                $setup->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}'),
-                '{{ entity.getData('name_singular')|snake }}_id',
+                '{{ entity.getNameSingular()|snake }}_id',
+                $setup->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}'),
+                '{{ entity.getNameSingular()|snake }}_id',
                 Table::ACTION_CASCADE
             )->addForeignKey(
                 $setup->getFkName(
-                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store',
+                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store',
                     'store_id',
                     'store',
                     'store_id'
@@ -156,10 +189,11 @@ class InstallSchema implements InstallSchemaInterface
                 $setup->getTable('store'),
                 'store_id',
                 Table::ACTION_CASCADE
-            )->setComment('{{ entity.getData('label_singular')|ucfirst }} To Store Linkage Table');
+            )->setComment('{{ entity.getLabelSingular()|ucfirst }} To Store Linkage Table');
             $setup->getConnection()->createTable($table);
         }
     }
 {% endif %}
 {% endfor %}
 }
+{% endif %}

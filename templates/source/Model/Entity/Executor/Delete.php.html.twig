@@ -1,24 +1,24 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }}\Executor;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}\Executor;
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|camel|ucfirst }}RepositoryInterface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\ExecutorInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterface;
 
 class Delete implements ExecutorInterface
 {
     /**
-     * @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
      */
-    private ${{ entity.getData('name_singular')|camel }}Repository;
+    private ${{ entity.getNameSingular()|camel }}Repository;
 
     /**
      * Delete constructor.
-     * @param {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+     * @param {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
      */
     public function __construct(
-        {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface ${{ entity.getData('name_singular')|camel }}Repository
+        {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
     ) {
-        $this->{{ entity.getData('name_singular')|camel }}Repository = ${{ entity.getData('name_singular')|camel }}Repository;
+        $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
     }
 
     /**
@@ -27,6 +27,6 @@ class Delete implements ExecutorInterface
      */
     public function execute($id)
     {
-        $this->{{ entity.getData('name_singular')|camel }}Repository->deleteById($id);
+        $this->{{ entity.getNameSingular()|camel }}Repository->deleteById($id);
     }
 }

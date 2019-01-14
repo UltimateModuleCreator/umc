@@ -99,7 +99,7 @@ class DownloadTest extends TestCase
     {
         $this->request->expects($this->once())->method('get')->willReturn('download');
         $this->filesystem->expects($this->once())->method('exists')->willReturn(true);
-        $download = new Download($this->requestStack, $this->filesystem, __DIR__.'/../_fixtures');
+        $download = new Download($this->requestStack, $this->filesystem, __DIR__ . '/../_fixtures');
         $download->setContainer($this->container);
         $this->assertInstanceOf(BinaryFileResponse::class, $download->run());
     }
@@ -113,7 +113,7 @@ class DownloadTest extends TestCase
         $this->request->expects($this->once())->method('get')->willReturn('');
         $this->flashBag->expects($this->once())->method('add');
         $this->router->expects($this->once())->method('generate')->willReturn('redirect');
-        $download = new Download($this->requestStack, $this->filesystem, __DIR__.'/../_fixtures');
+        $download = new Download($this->requestStack, $this->filesystem, __DIR__ . '/../_fixtures');
         $download->setContainer($this->container);
         $this->assertInstanceOf(RedirectResponse::class, $download->run());
     }
@@ -128,7 +128,7 @@ class DownloadTest extends TestCase
         $this->filesystem->method('exists')->willReturn(false);
         $this->flashBag->expects($this->once())->method('add');
         $this->router->expects($this->once())->method('generate')->willReturn('redirect');
-        $download = new Download($this->requestStack, $this->filesystem, __DIR__.'/../_fixtures');
+        $download = new Download($this->requestStack, $this->filesystem, __DIR__ . '/../_fixtures');
         $download->setContainer($this->container);
         $this->assertInstanceOf(RedirectResponse::class, $download->run());
     }

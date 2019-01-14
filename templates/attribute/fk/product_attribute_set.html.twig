@@ -1,11 +1,11 @@
             ->addForeignKey(
                 $setup->getFkName(
-                    '{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}',
-                    '{{ attribute.getData('code') }}',
+                    '{{ module.getNamespace()|snake }}_{{ module.getNamespace()|snake }}_{{ entity.getNameSingular()|snake }}',
+                    '{{ attribute.getCode() }}',
                     'eav_attribute_set',
                     'attribute_set_id'
                 ),
-                '{{ attribute.getData('code') }}',
+                '{{ attribute.getCode() }}',
                 $setup->getTable('eav_attribute_set'),
                 'attribute_set_id',
                 Table::ACTION_CASCADE

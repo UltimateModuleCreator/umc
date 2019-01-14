@@ -75,7 +75,7 @@ class Menu
             if (!isset($selected[$index - 1])) {
                 $selected[$index] = $value;
             } else {
-                $selected[$index] = $selected[$index - 1].'/'.$value;
+                $selected[$index] = $selected[$index - 1] . '/' . $value;
             }
         }
         return $selected;
@@ -101,14 +101,14 @@ class Menu
         if (count($activeWhen) > 0) {
             $class .= ' active';
         }
-        $html = '<li'.(($class) ? ' class="'.$class.'"' : '').' id="menu-item-'.$id.'">';
+        $html = '<li' . (($class) ? ' class="' . $class . '"' : '') . ' id="menu-item-' . $id . '">';
         $params = $item['url-params'] ?? [];
         $url = (array_key_exists('url', $item) ? $this->router->generate($item['url'], $params) : '#');
-        $html.= '<a href="'.$url.'">';
+        $html .= '<a href="' . $url . '">';
         if (isset($item['icon'])) {
-            $html .= '<i class="'.$item['icon'].'"></i>';
+            $html .= '<i class="' . $item['icon'] . '"></i>';
         }
-        $html .= '<span>'.$item['label'].'</span>';
+        $html .= '<span>' . $item['label'] . '</span>';
         if ($this->hasChildren($item)) {
             $html .= '<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>';
         }
@@ -116,7 +116,7 @@ class Menu
         if ($this->hasChildren($item)) {
             $html .= '<ul class="treeview-menu">';
             foreach ($item['children'] as $childId => $child) {
-                $html .= $this->renderItem($child, $id.'-'.$childId);
+                $html .= $this->renderItem($child, $id . '-' . $childId);
             }
             $html .= '</ul>';
         }

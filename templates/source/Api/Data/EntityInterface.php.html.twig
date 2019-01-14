@@ -1,21 +1,49 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;
 
-interface {{ entity.getData('name_singular')|ucfirst }}Interface
+interface {{ entity.getNameSingular()|ucfirst }}Interface
 {
-    const {{ entity.getData('name_singular')|snake|upper }}_ID = '{{ entity.getData('name_singular')|snake }}_id';
+    const {{ entity.getNameSingular()|snake|upper }}_ID = '{{ entity.getNameSingular()|snake }}_id';
 {% for attribute in entity.getAttributes() %}
-    const {{ attribute.getData('code')|upper }} = '{{ attribute.getData('code') }}';
+    const {{ attribute.getCode()|upper }} = '{{ attribute.getCode() }}';
 {% endfor %}
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
     /**
      * @var string
      */
     const STORE_ID = 'store_id';
 {% endif %}
+{% if entity.getSeo() %}
+    /**
+     * @var string
+     */
+    const META_TITLE = 'meta_title';
+    /**
+     * @var string
+     */
+    const META_DESCRIPTION = 'meta_description';
+    /**
+     * @var string
+     */
+    const META_KEYWORDS = 'meta_keywords';
+{% endif %}
+{% if entity.getFrontendList() or entity.getFrontendView() %}
+    /**
+     * @var string
+     */
+    const IS_ACTIVE = 'is_active';
+    /**
+     * @var int
+     */
+    const STATUS_ENABLED = 1;
+    /**
+     * @var int
+     */
+    const STATUS_DISABLED = 2;
+{% endif %}
     /**
      * @param int $id
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
     public function setId($id);
 
@@ -26,42 +54,42 @@ interface {{ entity.getData('name_singular')|ucfirst }}Interface
 
     /**
      * @param int $id
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
-    public function set{{ entity.getData('name_singular')|ucfirst }}Id($id);
+    public function set{{ entity.getNameSingular()|ucfirst }}Id($id);
 
     /**
      * @return int
      */
-    public function get{{ entity.getData('name_singular')|ucfirst }}Id();
+    public function get{{ entity.getNameSingular()|ucfirst }}Id();
 
 {% for attribute in entity.getAttributes() %}
     /**
-     * @param {{ attribute.getTypeInstance().getData('type_hint') }} ${{ attribute.getData('code')|camel}}
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
-    public function set{{ attribute.getData('code')|camel|ucfirst }}(${{ attribute.getData('code')|camel}});
+    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}});
 
     /**
-     * @return {{ attribute.getTypeInstance().getData('type_hint') }}
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}
      */
-    public function get{{ attribute.getData('code')|camel|ucfirst }}();
+    public function get{{ attribute.getCode()|camel|ucfirst }}();
 {% endfor %}
 {% for attribute in entity.getAttributes() %}
-{% if attribute.getData('type') == 'image' or attribute.getData('type') == 'file' %}
+{% if attribute.getType() == 'image' or attribute.getType() == 'file' %}
 
     /**
      * @return bool|string
      * @throws LocalizedException
      */
-    public function get{{ attribute.getData('code')|camel|ucfirst }}Url();
+    public function get{{ attribute.getCode()|camel|ucfirst }}Url();
 {% endif %}
 {% endfor %}
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
 
     /**
      * @param int[] $store
-     * @return {{ entity.getData('name_singular')|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
      */
     public function setStoreId(array $store);
 
@@ -69,5 +97,51 @@ interface {{ entity.getData('name_singular')|ucfirst }}Interface
      * @return int[]
      */
     public function getStoreId();
+{% endif %}
+{% if entity.getSeo() %}
+    /**
+     * @param string $metaTitle
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setMetaTitle($metaTitle);
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle();
+
+    /**
+     * @param string $metaDescription
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setMetaDescription($metaDescription);
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription();
+
+    /**
+     * @param string $metaKeywords
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setMetaKeywords($metaKeywords);
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords();
+{% endif %}
+{% if entity.getFrontendList() or entity.getFrontendView() %}
+    /**
+     * @param int $isActive
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setIsActive($isActive);
+
+    /**
+     * @return int
+     */
+    public function getIsActive();
 {% endif %}
 }

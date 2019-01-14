@@ -119,7 +119,7 @@ class EntityGeneratorTest extends TestCase
     {
         $entity = $this->createMock(Entity::class);
         $entity->method('getModule')->willReturn($this->module);
-        $entity->method('getData')->with('name_singular')->willReturn($nameSingular);
+        $entity->method('getNameSingular')->willReturn($nameSingular);
         return $entity;
     }
 }

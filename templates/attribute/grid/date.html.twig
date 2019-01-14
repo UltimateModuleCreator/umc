@@ -1,8 +1,8 @@
-        <column name="{{ attribute.getData('code') }}" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <column name="{{ attribute.getCode() }}" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <filter>dateRange</filter>
                 <editor>
-{% if (attribute.getData('required')) %}
+{% if (attribute.getRequired()) %}
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
@@ -12,8 +12,8 @@
                 <dataType>date</dataType>
                 <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
-                <label translate="true">{{ attribute.getData('label') }}</label>
-{% if attribute.getData('admin_grid') is same as("2") %}
+                <label translate="true">{{ attribute.getLabel() }}</label>
+{% if attribute.getAdminGrid() is same as("2") %}
                     <visible>false</visible>
 {% endif %}
             </settings>

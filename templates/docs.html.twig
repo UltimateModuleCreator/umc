@@ -143,7 +143,6 @@
                     Keep in mind that not everything that is in there is actually an error. False positives will occur. For example, the PSR standrds will report that you are using underscores to prefix method names. This is because you need methods like <code>_beforeSave</code> to make magento work. <br />
                     Also, the EcgM2 standard will report that ther eare methods that start with `before` or `after` that are not public. This is because ECGM2 things these are plugins. Ignore them<br />
                     If you have your own coding standards you can add them the <code>config/services.yaml</code> file as part of the <code>standards</code> argument of the <code>App\Util\CodingStandardsFactory</code> class
-
                 </div>
             </div>
             <div class="panel panel-default" id="release-notes">
@@ -160,6 +159,34 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td colspan="3"><strong>3.0.0-beta1: Ian 14 2019</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Improvement</td>
+                                <td>Support for Magento 2.3</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Feature</td>
+                                <td>Create frontend files for generated entities</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Improvement</td>
+                                <td>Various UI improvements</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Bug fix</td>
+                                <td>Fixed: wrong ACL generated when adding the entity menu as sumbenu of catalog.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5</th>
+                                <td>Refactoring</td>
+                                <td>Moved away from magic getters. </td>
+                            </tr>
                             <tr>
                                 <td colspan="3"><strong>3.0.0-alpha2: Dec 12th 2018</strong></td>
                             </tr>

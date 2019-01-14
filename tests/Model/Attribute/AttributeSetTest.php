@@ -55,27 +55,9 @@ class AttributeSetTest extends TestCase
         $module = $this->createMock(Module::class);
         $this->attribute->method('getEntity')->willReturn($entity);
         $entity->method('getModule')->willReturn($module);
-        $entity->method('getData')->willReturnMap([
-            [
-                'name_singular',
-                null,
-                'entityName'
-            ]
-        ]);
-        $module->method('getData')->willReturnMap(
-            [
-                [
-                    'namespace',
-                    null,
-                    'Namespace'
-                ],
-                [
-                    'module_name',
-                    null,
-                    'ModuleName'
-                ]
-            ]
-        );
+        $entity->method('getNameSingular')->willReturn('entityName');
+        $module->method('getNamespace')->willReturn('Namespace');
+        $module->method('getModuleName')->willReturn('ModuleName');
         $attributeSet = new Attribute\AttributeSet($this->twig, $this->attribute, []);
         $expected = 'Namespace\\ModuleName\\Model\\Source\\ProductAttributeSet';
         $this->assertEquals($expected, $attributeSet->getSourceModel());

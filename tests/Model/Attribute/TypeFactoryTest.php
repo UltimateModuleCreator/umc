@@ -102,7 +102,7 @@ class TypeFactoryTest extends TestCase
     private function getAttributeMock($type)
     {
         $attribute = $this->createMock(Attribute::class);
-        $attribute->method('getData')->willReturn($type);
+        $attribute->method('getType')->willReturn($type);
         return $attribute;
     }
 }

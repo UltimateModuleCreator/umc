@@ -1,11 +1,11 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
 
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 {% endif %}
-class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel
+class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel
 {
     /**
      * Initialize resource model
@@ -14,44 +14,44 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}', '{{ entity.getData('name_singular')|snake }}_id');
+        $this->_init('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}', '{{ entity.getNameSingular()|snake }}_id');
     }
-{% if entity.getData('store') %}
+{% if entity.getStore() %}
 
     /**
      * Get store ids to which specified item is assigned
      *
-     * @param int ${{ entity.getData('name_singular')|camel }}Id
+     * @param int ${{ entity.getNameSingular()|camel }}Id
      * @return array
      */
-    public function lookupStoreIds(${{ entity.getData('name_singular')|camel }}Id)
+    public function lookupStoreIds(${{ entity.getNameSingular()|camel }}Id)
     {
         $connection = $this->getConnection();
 
         $select = $connection->select()
-            ->from(['store_table' => $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store')], 'store_id')
+            ->from(['store_table' => $this->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')], 'store_id')
             ->join(
                 ['main_table' => $this->getMainTable()],
-                'store_table.{{ entity.getData('name_singular')|snake }}_id = main_table.{{ entity.getData('name_singular')|snake }}_id',
+                'store_table.{{ entity.getNameSingular()|snake }}_id = main_table.{{ entity.getNameSingular()|snake }}_id',
                 []
-            )->where('main_table.{{ entity.getData('name_singular')|snake }}_id = :{{ entity.getData('name_singular')|snake }}_id');
-        return $connection->fetchCol($select, ['{{ entity.getData('name_singular')|snake }}_id' => (int)${{ entity.getData('name_singular')|camel }}Id]);
+            )->where('main_table.{{ entity.getNameSingular()|snake }}_id = :{{ entity.getNameSingular()|snake }}_id');
+        return $connection->fetchCol($select, ['{{ entity.getNameSingular()|snake }}_id' => (int)${{ entity.getNameSingular()|camel }}Id]);
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel | \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|camel|ucfirst }} $object
+     * @param \Magento\Framework\Model\AbstractModel | \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} $object
      * @return $this | AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $oldStores = $this->lookupStoreIds($object->getId());
         $newStores = (array)$object->getStoreId();
-        $table  = $this->getTable('{{ module.getData('namespace')|snake }}_{{ module.getData('module_name')|snake }}_{{ entity.getData('name_singular')|snake }}_store');
+        $table  = $this->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store');
         $insert = array_diff($newStores, $oldStores);
         $delete = array_diff($oldStores, $newStores);
         if ($delete) {
             $where = [
-                '{{ entity.getData('name_singular')|snake }}_id = ?' => (int) $object->getId(),
+                '{{ entity.getNameSingular()|snake }}_id = ?' => (int) $object->getId(),
                 'store_id IN (?)' => $delete
             ];
             $this->getConnection()->delete($table, $where);
@@ -61,13 +61,24 @@ class {{ entity.getData('name_singular')|ucfirst }} extends AbstractModel
             $data = [];
             foreach ($insert as $storeId) {
                 $data[] = [
-                    '{{ entity.getData('name_singular')|snake }}_id'  => (int) $object->getId(),
+                    '{{ entity.getNameSingular()|snake }}_id'  => (int) $object->getId(),
                     'store_id' => (int) $storeId
                 ];
             }
             $this->getConnection()->insertMultiple($table, $data);
         }
         return parent::_afterSave($object);
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel | \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} $object
+     * @return $this|AbstractModel
+     */
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
+        parent::_afterLoad($object);
+        $object->setStoreId($this->lookupStoreIds($object->getId()));
+        return $this;
     }
 {% endif %}
 }

@@ -46,7 +46,7 @@ class Php implements ProcessorInterface
      */
     public function process(Module $module): string
     {
-        $license = $this->replacer->replaceVars($module->getData('license'), $module);
+        $license = $this->replacer->replaceVars($module->getLicense(), $module);
         if (!trim($license)) {
             return '';
         }

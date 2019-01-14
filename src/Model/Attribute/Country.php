@@ -31,12 +31,4 @@ class Country extends AbstractType implements TypeInterface
         $names[] = 'multiple_text';
         return $names;
     }
-
-    /**
-     * @return null|string
-     */
-    public function getSourceModel()
-    {
-        return $this->getData('source_model');
-    }
 }

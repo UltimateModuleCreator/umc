@@ -65,7 +65,6 @@ class EntityTest extends TestCase
         $this->assertEquals('dummy', $this->entity->getData('dummy'));
         $this->assertNull($this->entity->getData('non_existent'));
         $this->assertEquals('default', $this->entity->getData('non_existent', 'default'));
-        $this->assertEquals("1", $this->entity->getData('type'));
     }
 
     /**
@@ -116,9 +115,7 @@ class EntityTest extends TestCase
         $attribute1 = $this->createMock(Attribute::class);
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')->willReturnMap([
-            ['is_name', null, 1]
-        ]);
+        $attribute2->method('getIsName')->willReturn(true);
         $this->entity->addAttribute($attribute1);
         $this->entity->addAttribute($attribute2);
         $this->assertEquals($attribute2, $this->entity->getNameAttribute());
@@ -147,14 +144,10 @@ class EntityTest extends TestCase
     {
         /** @var Attribute | MockObject $attribute1 */
         $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getData')->willReturnMap([
-            ['type', null, 'text']
-        ]);
+        $attribute1->method('getType')->willReturn('text');
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')->willReturnMap([
-            ['type', null, 'textarea']
-        ]);
+        $attribute2->method('getType')->willReturn('textarea');
         $entity = new Entity($this->sorter);
         $entity->addAttribute($attribute1);
         $entity->addAttribute($attribute2);
@@ -223,10 +216,7 @@ class EntityTest extends TestCase
 
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')
-            ->willReturnMap([
-                ['code', null, 'attr2']
-            ]);
+        $attribute2->method('getCode')->willReturn('attr2');
         $type2 = $this->createMock(Attribute\TypeInterface::class);
         $type2->method('getData')->willReturnMap([
             ['multiple', null, true]
@@ -251,8 +241,7 @@ class EntityTest extends TestCase
     {
         /** @var Attribute | MockObject $attribute1 */
         $attribute1 = $this->createMock(Attribute::class);
-        $type1 = $this->createMock(Attribute\TypeInterface::class);
-        $type1->method('getData')->with('date')->willReturn('select');
+        $attribute1->method('getType')->willReturn('select');
 
         $entity1 = new Entity($this->sorter);
         $entity1->addAttribute($attribute1);
@@ -261,22 +250,192 @@ class EntityTest extends TestCase
 
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getData')->willReturnMap([
-            [
-                'code',
-                null,
-                'attr2'
-            ],
-            [
-                'type',
-                null,
-                'date'
-            ],
-        ]);
+        $attribute2->method('getCode')->willReturn('attr2');
+        $attribute2->method('getType')->willReturn('date');
         $entity2 = new Entity($this->sorter);
         $entity2->addAttribute($attribute1);
         $entity2->addAttribute($attribute2);
         $this->assertEquals([$attribute2], $entity2->getAttributesWithType('date'));
         $this->assertEquals("                'attr2'", $entity2->getAttributesWithTypeString('date', 4));
+    }
+
+    /**
+     * @covers \App\Model\Entity::getNameSingular
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetNameSingular()
+    {
+        $entity = new Entity($this->sorter, ['name_singular' => 'name']);
+        $this->assertEquals('name', $entity->getNameSingular());
+        $entity = new Entity($this->sorter, ['name_singular' => '']);
+        $this->assertEquals('', $entity->getNameSingular());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getNamePlural
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetNamePlural()
+    {
+        $entity = new Entity($this->sorter, ['name_plural' => 'name']);
+        $this->assertEquals('name', $entity->getNamePlural());
+        $entity = new Entity($this->sorter, ['name_plural' => '']);
+        $this->assertEquals('', $entity->getNamePlural());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getLabelSingular
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetLabelSingular()
+    {
+        $entity = new Entity($this->sorter, ['label_singular' => 'name']);
+        $this->assertEquals('name', $entity->getLabelSingular());
+        $entity = new Entity($this->sorter, ['label_singular' => '']);
+        $this->assertEquals('', $entity->getLabelSingular());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getLabelPlural
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetLabelPlural()
+    {
+        $entity = new Entity($this->sorter, ['label_plural' => 'name']);
+        $this->assertEquals('name', $entity->getLabelPlural());
+        $entity = new Entity($this->sorter, ['label_plural' => '']);
+        $this->assertEquals('', $entity->getLabelPlural());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getAddCreatedToGrid
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetAddCreatedToGrid()
+    {
+        $entity = new Entity($this->sorter, ['add_created_to_grid' => '1']);
+        $this->assertTrue($entity->getAddCreatedToGrid());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getAddCreatedToGrid());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getAddUpdatedToGrid
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetAddUpdatedToGrid()
+    {
+        $entity = new Entity($this->sorter, ['add_updated_to_grid' => '1']);
+        $this->assertTrue($entity->getAddUpdatedToGrid());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getAddUpdatedToGrid());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getSearch
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetSearch()
+    {
+        $entity = new Entity($this->sorter, ['search' => '1']);
+        $this->assertTrue($entity->getSearch());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getSearch());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getStore
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetStore()
+    {
+        $entity = new Entity($this->sorter, ['store' => '1']);
+        $this->assertTrue($entity->getStore());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getStore());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getFrontendList
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGeFrontendList()
+    {
+        $entity = new Entity($this->sorter, ['frontend_list' => '1']);
+        $this->assertTrue($entity->getFrontendList());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getFrontendList());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getFrontendView
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGeFrontendView()
+    {
+        $entity = new Entity($this->sorter, ['frontend_view' => '1']);
+        $this->assertTrue($entity->getFrontendView());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getFrontendView());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getSeo
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetSeo()
+    {
+        $entity = new Entity($this->sorter, ['seo' => '1']);
+        $this->assertTrue($entity->getSeo());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getSeo());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getPosition
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetPosition()
+    {
+        $entity = new Entity($this->sorter, ['position' => '10']);
+        $this->assertEquals(10, $entity->getPosition());
+        $entity = new Entity($this->sorter, []);
+        $this->assertEquals(0, $entity->getPosition());
+    }
+
+    /**
+     * @covers \App\Model\Entity::getMenuLink
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetMenuLink()
+    {
+        $entity = new Entity($this->sorter, []);
+        $this->assertEquals(0, $entity->getMenuLink());
+        $entity = new Entity($this->sorter, ['menu_link' => 1, 'frontend_list' => 1]);
+        $this->assertEquals(1, $entity->getMenuLink());
+        $entity = new Entity($this->sorter, ['menu_link' => 2, 'frontend_list' => 1]);
+        $this->assertEquals(2, $entity->getMenuLink());
+        $entity = new Entity($this->sorter, ['menu_link' => 3, 'frontend_list' => 1]);
+        $this->assertEquals(0, $entity->getMenuLink());
+        $entity = new Entity($this->sorter, ['menu_link' => 1, 'frontend_list' => 0]);
+        $this->assertEquals(0, $entity->getMenuLink());
+    }
+
+    /**
+     * @covers \App\Model\Entity::hasFrontend
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testHasFrontend()
+    {
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->hasFrontend());
+        $entity = new Entity($this->sorter, ['frontend_list' => 1]);
+        $this->assertTrue($entity->hasFrontend());
+        $entity = new Entity($this->sorter, ['frontend_view' => 1]);
+        $this->assertTrue($entity->hasFrontend());
+        $entity = new Entity($this->sorter, ['frontend_list' => 1, 'frontend_view' => 1]);
+        $this->assertTrue($entity->hasFrontend());
+        $entity = new Entity($this->sorter, ['frontend_list' => 0, 'frontend_view' => 0]);
+        $this->assertFalse($entity->hasFrontend());
     }
 }

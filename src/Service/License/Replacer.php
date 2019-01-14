@@ -30,8 +30,8 @@ class Replacer
     public function replaceVars(string $license, Module $module) : string
     {
         $replace = [
-            '{{Namespace}}' => $module->getData('namespace'),
-            '{{Module}}' => $module->getData('module_name'),
+            '{{Namespace}}' => $module->getNamespace(),
+            '{{Module}}' => $module->getModuleName(),
             '{{Y}}' => date('Y')
         ];
         return str_replace(array_keys($replace), array_values($replace), $license);

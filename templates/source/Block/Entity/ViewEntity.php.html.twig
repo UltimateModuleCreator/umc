@@ -1,0 +1,71 @@
+{% if (entity.getFrontendView()) %}
+<?php{{ module.getFormattedLicense('php') }}
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+{% if entity.hasAttributeType('image') %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\ImageBuilder;
+{% endif %}
+
+class View{{ entity.getNameSingular()|camel|ucfirst }} extends Template
+{
+    /**
+     * @var Registry
+     */
+    private $coreRegistry;
+{% if entity.hasAttributeType('image') %}
+    /**
+     * @var ImageBuilder
+     */
+    private $imageBuilder;
+{% endif %}
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param $imageBuilder
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+{% if entity.hasAttributeType('image') %}
+        ImageBuilder $imageBuilder,
+{% endif %}
+        array $data = []
+    ) {
+        $this->coreRegistry = $registry;
+{% if entity.hasAttributeType('image') %}
+        $this->imageBuilder = $imageBuilder;
+{% endif %}
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * get current {{ entity.getLabelSingular() }}
+     *
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}
+     */
+    public function getCurrent{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        return $this->coreRegistry->registry('current_{{ entity.getNameSingular()|snake }}');
+    }
+{% if entity.hasAttributeType('image') %}
+    /**
+     * @param $entity
+     * @param $imageId
+     * @param array $attributes
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Image
+     */
+    public function getImage($entity, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->setEntity($entity)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
+    }
+{% endif %}
+}
+{% endif %}

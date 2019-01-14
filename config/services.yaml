@@ -15,6 +15,9 @@ parameters:
       grid_template: attribute/grid/text.html.twig
       form_template: attribute/form/text.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/text.html.twig
+      frontend_list_template: attribute/frontend/list/text.html.twig
       class: App\Model\Attribute\Text
       can_be_name: true
       can_show_in_grid: true
@@ -25,12 +28,18 @@ parameters:
       sql_size: 'null'
       type_hint: string
       input_type: Text Input
+      has_options: false
+      schema_type: varchar
+      schema_attributes: 'length="255"'
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/select.html.twig
+      schema_fk_template: attribute/schema_fk/product_attribute.html.twig
       fk_template: attribute/fk/product_attribute.html.twig
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       class: App\Model\Attribute\Attributes
       can_be_name: false
       can_show_in_grid: true
@@ -42,12 +51,18 @@ parameters:
       type_hint: int
       multiple_text: 'false'
       input_type: Select
+      has_options: true
+      schema_type: smallint
+      schema_attributes: 'unsigned="true" padding="5"'
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/select.html.twig
       fk_template: attribute/fk/product_attribute_set.html.twig
+      schema_fk_template: attribute/schema_fk/product_attribute_set.html.twig
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       class: App\Model\Attribute\AttributeSet
       can_be_name: false
       can_show_in_grid: true
@@ -59,12 +74,18 @@ parameters:
       type_hint: int
       multiple_text: 'false'
       input_type: Select
+      has_options: true
+      schema_type: smallint
+      schema_attributes: 'unsigned="true" padding="5"'
     country:
       label: Country
       source_model: Magento\Config\Model\Config\Source\Locale\Country
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/select.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'false'
       class: \App\Model\Attribute\Country
       can_be_name: false
@@ -77,12 +98,17 @@ parameters:
       type_hint: string
       grid_filter_type: select
       input_type: Select
+      has_options: true
+      schema_type: varchar
     country_multiselect:
       label: Country Multiselect
       source_model: Magento\Config\Model\Config\Source\Locale\Country
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/select.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'true'
       class: \App\Model\Attribute\CountryMultiselect
       can_be_name: false
@@ -96,11 +122,16 @@ parameters:
       multiple: true
       grid_filter_type: 'false'
       input_type: Multiselect
+      has_options: true
+      schema_type: text
     date:
       label: Date
       grid_template: attribute/grid/date.html.twig
       form_template: attribute/form/date.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/date.html.twig
+      frontend_list_template: attribute/frontend/list/date.html.twig
       class: \App\Model\Attribute\Date
       can_be_name: false
       can_show_in_grid: true
@@ -112,12 +143,17 @@ parameters:
       type_hint: string
       grid_filter_type: dateRange
       input_type: Date
+      has_options: false
+      schema_type: timestamp
     decimal:
       label: Decimal
       grid_filter_type: textRange
       grid_template: attribute/grid/text.html.twig
       form_template: attribute/form/text.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/text.html.twig
+      frontend_list_template: attribute/frontend/list/text.html.twig
       class: \App\Model\Attribute\Decimal
       can_be_name: true
       can_show_in_grid: true
@@ -128,11 +164,17 @@ parameters:
       sql_size: "'12,4'"
       type_hint: float
       input_type: Text Input
+      has_options: false
+      schema_type: decimal
+      schema_attributes: 'scale="4" precision="12"'
     dropdown:
       label: Dropdown
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/select.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'false'
       class: \App\Model\Attribute\Dropdown
       can_be_name: false
@@ -145,11 +187,17 @@ parameters:
       type_hint: int
       grid_filter_type: select
       input_type: Select
+      has_options: true
+      schema_type: int
+      schema_attributes: 'padding="11"'
     file:
       label: File
       grid_template: false
       form_template: attribute/form/file.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/file.html.twig
+      frontend_list_template: attribute/frontend/list/file.html.twig
       class: \App\Model\Attribute\File
       upload_type: file
       can_be_name: false
@@ -161,11 +209,17 @@ parameters:
       sql_size: 255
       type_hint: string
       input_type: File
+      has_options: false
+      schema_type: varchar
+      schema_attributes: 'length="255"'
     image:
       label: Image
       grid_template: false
       form_template: attribute/form/file.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/image.html.twig
+      frontend_list_template: attribute/frontend/list/image.html.twig
       class: \App\Model\Attribute\Image
       upload_type: image
       can_be_name: false
@@ -177,11 +231,17 @@ parameters:
       sql_size: 255
       type_hint: string
       input_type: File
+      has_options: false
+      schema_type: varchar
+      schema_attributes: 'length="255"'
     integer:
       label: Integer
       grid_template: attribute/grid/text.html.twig
       form_template: attribute/form/text.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/text.html.twig
+      frontend_list_template: attribute/frontend/list/text.html.twig
       class: \App\Model\Attribute\Integer
       can_be_name: true
       can_show_in_grid: true
@@ -193,11 +253,17 @@ parameters:
       type_hint: int
       grid_filter_type: textRange
       input_type: Text Input
+      has_options: false
+      schema_type: int
+      schema_attributes: 'padding="11"'
     multiselect:
       label: Multiselect
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/select.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'true'
       class: \App\Model\Attribute\Multiselect
       can_be_name: false
@@ -211,11 +277,16 @@ parameters:
       multiple: true
       grid_filter_type: 'false'
       input_type: Multiselect
+      has_options: true
+      schema_type: text
     textarea:
       label: Textarea (no editor)
       grid_template: attribute/grid/text.html.twig
       form_template: attribute/form/textarea.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/text.html.twig
+      frontend_list_template: attribute/frontend/list/text.html.twig
       class: \App\Model\Attribute\Textarea
       can_be_name: true
       can_show_in_grid: true
@@ -227,11 +298,16 @@ parameters:
       type_hint: string
       grid_filter_type: 'false'
       input_type: Textarea
-    wysisyg:
+      has_options: false
+      schema_type: text
+    wysiwyg:
       label: Wysiwyg
       grid_template: false
       form_template: attribute/form/wysiwyg.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/wysiwyg.html.twig
+      frontend_list_template: attribute/frontend/list/wysiwyg.html.twig
       class: \App\Model\Attribute\Wysiwyg
       can_be_name: false
       can_show_in_grid: false
@@ -243,11 +319,16 @@ parameters:
       type_hint: string
       grid_filter_type: 'false'
       input_type: Textarea
+      has_options: false
+      schema_type: mediumtext
     yesno:
       label: Yes/No
       grid_template: attribute/grid/select.html.twig
       form_template: attribute/form/yesno.html.twig
       fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
       source_model: Magento\Config\Model\Config\Source\Yesno
       class: \App\Model\Attribute\Yesno
       can_be_name: false
@@ -260,6 +341,9 @@ parameters:
       type_hint: int
       grid_filter_type: select
       input_type: Checkbox (toggle)
+      has_options: true
+      schema_type: smallint
+      schema_attributes: 'padding="2"'
 
   menu_type_config:
     '':
@@ -292,11 +376,19 @@ parameters:
     'Magento_Catalog::catalog':
       label: 'Catalog (Magento_Catalog::catalog)'
     'Magento_Catalog::catalog_products':
-      label: '|--- Catalog->Products (Magento_Catalog::catalog_products)'
+      label: '|--- Catalog->Products (Magento_Catalog::products)'
       parent: Magento_Catalog::catalog
+      acl:
+        - Magento_Catalog::catalog
+        - Magento_Catalog::catalog_inventory
+        - Magento_Catalog::products
     'Magento_Catalog::catalog_categories':
-      label: '|--- Catalog->Categories (Magento_Catalog::catalog_categories)'
+      label: '|--- Catalog->Categories (Magento_Catalog::categories)'
       parent: Magento_Catalog::catalog
+      acl:
+        - Magento_Catalog::catalog
+        - Magento_Catalog::catalog_inventory
+        - Magento_Catalog::products
     'Magento_Customer::customer':
       label: 'Customers (Magento_Customer::customer)'
     'Magento_Customer::customer_manage':

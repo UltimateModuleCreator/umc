@@ -1,0 +1,54 @@
+{% if module.getVersion() != '2.2' %}
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+{% for entity in module.getEntities() %}
+    <table name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Table">
+        <column xsi:type="smallint" name="{{ entity.getNameSingular()|snake }}_id" padding="6" unsigned="false" nullable="false" identity="true"  comment="{{ entity.getLabelSingular()|ucfirst }} ID"/>
+{%  for attribute in entity.getAttributes() %}
+        <column xsi:type="{{ attribute.getTypeInstance().getSchemaType() }}" name="{{ attribute.getCode() }}" {{ attribute.getTypeInstance().getAttributeColumnSettingsStringXml()|raw }} comment="{{ entity.getLabelSingular()|ucfirst }} {{ attribute.getLabel() }}"/>
+{% endfor %}
+{% if entity.getFrontendView() or entity.getFrontendList() %}
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="{{ entity.getLabelSingular()|ucfirst }} Is Active"/>
+{% endif %}
+{% if entity.getSeo() %}
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Title"/>
+        <column xsi:type="text" name="meta_keywords" nullable="true" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Keywords"/>
+        <column xsi:type="text" name="meta_description" nullable="true" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Description"/>
+{% endif %}
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="{{ entity.getLabelSingular()|ucfirst }} Created at"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="{{ entity.getLabelSingular()|ucfirst }} Updated At"/>
+{% if entity.getAttributesWithTypeConfig('full_text')|length > 0 %}
+        <index referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_FULLTEXT" indexType="fulltext">
+{%  for attribute in entity.getAttributes() %}
+{% if attribute.getTypeInstance().getFullText() %}
+            <column name="{{ attribute.getCode() }}" />
+{% endif %}
+{% endfor %}
+        </index>
+{%  for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderSchemaFk()|raw }}{% endfor %}
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="{{ entity.getNameSingular()|snake }}_id"/>
+        </constraint>
+{% endif %}
+    </table>
+{% if entity.getStore() %}
+    <table name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Store Link Table">
+        <column xsi:type="smallint" name="{{ entity.getNameSingular()|snake }}_id" padding="6" unsigned="false" nullable="false" identity="false"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="{{ entity.getNameSingular()|snake }}_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_STORE_{{ entity.getNameSingular()|snake|upper }}_ID_{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_ID" table="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store"
+                    column="{{ entity.getNameSingular()|snake }}_id" referenceTable="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" referenceColumn="{{ entity.getNameSingular()|snake }}_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_STORE_STORE_STORE_ID" table="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+{% endif %}
+{% endfor %}
+</schema>
+{% endif %}
