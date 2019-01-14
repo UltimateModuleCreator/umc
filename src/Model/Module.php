@@ -38,6 +38,8 @@ class Module extends AbstractModel
     const MAGENTO_VERSION_2_2 = '2.2';
     const MAGENTO_VERSION_2_3 = '2.3';
     const DEFAULT_MAGENTO_VERSION = self::MAGENTO_VERSION_2_2;
+    const COMPOSER_PHP_VERSION_2_2 = '~7.0.13|~7.1.0';
+    const COMPOSER_PHP_VERSION_2_3 = '~7.1.3||~7.2.0';
     /**
      * @var array
      */
@@ -45,6 +47,11 @@ class Module extends AbstractModel
         self::NAMESPACE, self::MODULE_NAME, self::VERSION, self::MENU_PARENT,
         self::SORT_ORDER, self::MENU_TEXT, self::LICENSE,
         self::FRONT_KEY, self::CONFIG_TAB, self::CONFIG_TAB_POSITION, self::MAGENTO_VERSION
+    ];
+
+    private $composerPhpVersion = [
+        self::MAGENTO_VERSION_2_2 => self::COMPOSER_PHP_VERSION_2_2,
+        self::MAGENTO_VERSION_2_3 => self::COMPOSER_PHP_VERSION_2_3
     ];
     /**
      * @var Entity[]
@@ -336,5 +343,13 @@ class Module extends AbstractModel
                 }
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getComposerPhpVersion() : string
+    {
+        return $this->composerPhpVersion[$this->getMagentoVersion()];
     }
 }

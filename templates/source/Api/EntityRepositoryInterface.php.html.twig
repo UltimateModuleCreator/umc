@@ -4,6 +4,9 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * @api
+ */
 interface {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
 {
     /**

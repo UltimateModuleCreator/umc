@@ -16,6 +16,9 @@
 {% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
             <module name="Magento_Widget" />
 {% endif %}
+{% if module.hasFrontend() %}
+            <module name="Magento_Theme" />
+{% endif %}
         </sequence>
     </module>
 </config>

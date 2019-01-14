@@ -536,4 +536,18 @@ class ModuleTest extends TestCase
         $module->addEntity($entity2);
         $this->assertTrue($module->hasFooterMenu());
     }
+
+    /**
+     * @covers \App\Model\Module::getComposerPhpVersion
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetComposerPhpVersion()
+    {
+        $module = new Module($this->stringUtil, [], []);
+        $this->assertEquals(Module::COMPOSER_PHP_VERSION_2_2, $module->getComposerPhpVersion());
+        $module = new Module($this->stringUtil, [], [], ['magento_version' => Module::MAGENTO_VERSION_2_2]);
+        $this->assertEquals(Module::COMPOSER_PHP_VERSION_2_2, $module->getComposerPhpVersion());
+        $module = new Module($this->stringUtil, [], [], ['magento_version' => Module::MAGENTO_VERSION_2_3]);
+        $this->assertEquals(Module::COMPOSER_PHP_VERSION_2_3, $module->getComposerPhpVersion());
+    }
 }

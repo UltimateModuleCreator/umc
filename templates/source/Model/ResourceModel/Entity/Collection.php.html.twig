@@ -4,6 +4,9 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Resourc
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }};
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\AbstractCollection;
 
+/**
+ * @api
+ */
 class Collection extends AbstractCollection
 {
 
