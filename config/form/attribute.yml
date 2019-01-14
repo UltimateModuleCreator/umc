@@ -58,6 +58,32 @@ position:
   type: hidden
   options:
     required: false
+show_in_list:
+  id: show_in_list
+  type: choice
+  has_default: true
+  options:
+    label: Show in frontend list page
+    attr:
+      data-validation: validate_required
+      umc-type: frontend-list
+      title: "This allows you to display the attribute in the entity list page on frontend"
+    choices:
+      Yes: 1
+      No: 0
+show_in_view:
+  id: show_in_view
+  type: choice
+  has_default: true
+  options:
+    label: Show in frontend view page
+    attr:
+      data-validation: validate_required
+      umc-type: frontend-view
+      title: "This allows you to display the attribute in the entity view page on frontend"
+    choices:
+      Yes: 1
+      No: 0
 admin_grid:
   id: admin_grid
   type: choice

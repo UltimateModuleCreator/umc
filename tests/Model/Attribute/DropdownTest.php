@@ -53,35 +53,11 @@ class DropdownTest extends TestCase
         /** @var Module | MockObject $module */
         $module = $this->createMock(Module::class);
         $attribute->method('getEntity')->willReturn($entity);
-        $attribute->method('getData')->willReturnMap([
-            [
-                'code',
-                null,
-                'attribute_code'
-            ]
-        ]);
+        $attribute->method('getCode')->willReturn('attribute_code');
         $entity->method('getModule')->willReturn($module);
-        $entity->method('getData')->willReturnMap([
-            [
-                'name_singular',
-                null,
-                'entityName'
-            ]
-        ]);
-        $module->method('getData')->willReturnMap(
-            [
-                [
-                    'namespace',
-                    null,
-                    'Namespace'
-                ],
-                [
-                    'module_name',
-                    null,
-                    'ModuleName'
-                ]
-            ]
-        );
+        $entity->method('getNameSingular')->willReturn('entityName');
+        $module->method('getNamespace')->willReturn('Namespace');
+        $module->method('getModuleName')->willReturn('ModuleName');
         $dropdown = new Attribute\Dropdown($twig, $attribute, []);
         $expected = 'Namespace\\ModuleName\\Model\\EntityName\\Source\\AttributeCode';
         $this->assertEquals($expected, $dropdown->getSourceModel());

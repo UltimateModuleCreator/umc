@@ -1,5 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -9,15 +9,15 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}InterfaceFactory;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}SearchResultInterfaceFactory;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|ucfirst }}RepositoryInterface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }} as {{ entity.getData('name_singular')|ucfirst }}ResourceModel;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}\Collection;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}\CollectionFactory as {{ entity.getData('name_singular')|ucfirst }}CollectionFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}InterfaceFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}SearchResultInterfaceFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} as {{ entity.getNameSingular()|ucfirst }}ResourceModel;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }}\Collection;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }}\CollectionFactory as {{ entity.getNameSingular()|ucfirst }}CollectionFactory;
 
-class {{ entity.getData('name_singular')|ucfirst }}Repository implements {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface
+class {{ entity.getNameSingular()|ucfirst }}Repository implements {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
 {
     /**
      * Cached instances
@@ -27,25 +27,25 @@ class {{ entity.getData('name_singular')|ucfirst }}Repository implements {{ enti
     protected $instances = [];
 
     /**
-     * {{ entity.getData('label_singular')|ucfirst }} resource model
+     * {{ entity.getLabelSingular()|ucfirst }} resource model
      *
-     * @var {{ entity.getData('name_singular')|ucfirst }}ResourceModel
+     * @var {{ entity.getNameSingular()|ucfirst }}ResourceModel
      */
     protected $resource;
 
     /**
-     * {{ entity.getData('label_singular')|ucfirst }} collection factory
+     * {{ entity.getLabelSingular()|ucfirst }} collection factory
      *
-     * @var {{ entity.getData('name_singular')|ucfirst }}CollectionFactory
+     * @var {{ entity.getNameSingular()|ucfirst }}CollectionFactory
      */
-    protected ${{ entity.getData('name_singular')|camel }}CollectionFactory;
+    protected ${{ entity.getNameSingular()|camel }}CollectionFactory;
 
     /**
-     * {{ entity.getData('label_singular')|ucfirst }} interface factory
+     * {{ entity.getLabelSingular()|ucfirst }} interface factory
      *
-     * @var {{ entity.getData('name_singular')|ucfirst }}InterfaceFactory
+     * @var {{ entity.getNameSingular()|ucfirst }}InterfaceFactory
      */
-    protected ${{ entity.getData('name_singular')|camel }}InterfaceFactory;
+    protected ${{ entity.getNameSingular()|camel }}InterfaceFactory;
 
     /**
      * Data Object Helper
@@ -57,89 +57,89 @@ class {{ entity.getData('name_singular')|ucfirst }}Repository implements {{ enti
     /**
      * Search result factory
      *
-     * @var {{ entity.getData('name_singular')|ucfirst }}SearchResultInterfaceFactory
+     * @var {{ entity.getNameSingular()|ucfirst }}SearchResultInterfaceFactory
      */
     protected $searchResultsFactory;
 
     /**
      * constructor
-     * @param {{ entity.getData('name_singular')|ucfirst }}ResourceModel $resource
-     * @param {{ entity.getData('name_singular')|ucfirst }}CollectionFactory ${{ entity.getData('name_singular')|camel }}CollectionFactory
-     * @param {{ entity.getData('name_singular')|ucfirst }}nterfaceFactory ${{ entity.getData('name_singular')|camel }}InterfaceFactory
+     * @param {{ entity.getNameSingular()|ucfirst }}ResourceModel $resource
+     * @param {{ entity.getNameSingular()|ucfirst }}CollectionFactory ${{ entity.getNameSingular()|camel }}CollectionFactory
+     * @param {{ entity.getNameSingular()|ucfirst }}nterfaceFactory ${{ entity.getNameSingular()|camel }}InterfaceFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param {{ entity.getData('name_singular')|ucfirst }}SearchResultInterfaceFactory $searchResultsFactory
+     * @param {{ entity.getNameSingular()|ucfirst }}SearchResultInterfaceFactory $searchResultsFactory
      */
     public function __construct(
-        {{ entity.getData('name_singular')|ucfirst }}ResourceModel $resource,
-        {{ entity.getData('name_singular')|ucfirst }}CollectionFactory ${{ entity.getData('name_singular')|camel }}CollectionFactory,
-        {{ entity.getData('name_singular')|ucfirst }}InterfaceFactory ${{ entity.getData('name_singular')|camel }}InterfaceFactory,
+        {{ entity.getNameSingular()|ucfirst }}ResourceModel $resource,
+        {{ entity.getNameSingular()|ucfirst }}CollectionFactory ${{ entity.getNameSingular()|camel }}CollectionFactory,
+        {{ entity.getNameSingular()|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}InterfaceFactory,
         DataObjectHelper $dataObjectHelper,
-        {{ entity.getData('name_singular')|ucfirst }}SearchResultInterfaceFactory $searchResultsFactory
+        {{ entity.getNameSingular()|ucfirst }}SearchResultInterfaceFactory $searchResultsFactory
     ) {
         $this->resource             = $resource;
-        $this->{{ entity.getData('name_singular')|camel }}CollectionFactory = ${{ entity.getData('name_singular')|camel }}CollectionFactory;
-        $this->{{ entity.getData('name_singular')|camel }}InterfaceFactory  = ${{ entity.getData('name_singular')|camel }}InterfaceFactory;
+        $this->{{ entity.getNameSingular()|camel }}CollectionFactory = ${{ entity.getNameSingular()|camel }}CollectionFactory;
+        $this->{{ entity.getNameSingular()|camel }}InterfaceFactory  = ${{ entity.getNameSingular()|camel }}InterfaceFactory;
         $this->dataObjectHelper     = $dataObjectHelper;
         $this->searchResultsFactory = $searchResultsFactory;
     }
 
     /**
-     * Save {{ entity.getData('label_singular')|ucfirst }}.
+     * Save {{ entity.getLabelSingular()|ucfirst }}.
      *
-     * @param \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }}
-     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface
+     * @param \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save({{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }})
+    public function save({{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
     {
-        /** @var {{ entity.getData('name_singular')|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getData('name_singular')|camel }} */
+        /** @var {{ entity.getNameSingular()|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getNameSingular()|camel }} */
         try {
-            $this->resource->save(${{ entity.getData('name_singular')|camel }});
+            $this->resource->save(${{ entity.getNameSingular()|camel }});
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__(
-                'Could not save the {{ entity.getData('label_singular')|ucfirst }}: %1',
+                'Could not save the {{ entity.getLabelSingular()|ucfirst }}: %1',
                 $exception->getMessage()
             ));
         }
-        return ${{ entity.getData('name_singular')|camel }};
+        return ${{ entity.getNameSingular()|camel }};
     }
 
     /**
-     * Retrieve {{ entity.getData('label_singular')|ucfirst }}
+     * Retrieve {{ entity.getLabelSingular()|ucfirst }}
      *
-     * @param int ${{ entity.getData('name_singular')|camel }}Id
-     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface
+     * @param int ${{ entity.getNameSingular()|camel }}Id
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get(${{ entity.getData('name_singular')|camel }}Id)
+    public function get(${{ entity.getNameSingular()|camel }}Id)
     {
-        if (!isset($this->instances[${{ entity.getData('name_singular')|camel }}Id])) {
-            /** @var {{ entity.getData('name_singular')|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getData('name_singular')|camel }} */
-            ${{ entity.getData('name_singular')|camel }} = $this->{{ entity.getData('name_singular')|camel }}InterfaceFactory->create();
-            $this->resource->load(${{ entity.getData('name_singular')|camel }}, ${{ entity.getData('name_singular')|camel }}Id);
-            if (!${{ entity.getData('name_singular')|camel }}->getId()) {
-                throw new NoSuchEntityException(__('Requested {{ entity.getData('label_singular')|ucfirst }} doesn\'t exist'));
+        if (!isset($this->instances[${{ entity.getNameSingular()|camel }}Id])) {
+            /** @var {{ entity.getNameSingular()|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getNameSingular()|camel }} */
+            ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}InterfaceFactory->create();
+            $this->resource->load(${{ entity.getNameSingular()|camel }}, ${{ entity.getNameSingular()|camel }}Id);
+            if (!${{ entity.getNameSingular()|camel }}->getId()) {
+                throw new NoSuchEntityException(__('Requested {{ entity.getLabelSingular()|ucfirst }} doesn\'t exist'));
             }
-            $this->instances[${{ entity.getData('name_singular')|camel }}Id] = ${{ entity.getData('name_singular')|camel }};
+            $this->instances[${{ entity.getNameSingular()|camel }}Id] = ${{ entity.getNameSingular()|camel }};
         }
-        return $this->instances[${{ entity.getData('name_singular')|camel }}Id];
+        return $this->instances[${{ entity.getNameSingular()|camel }}Id];
     }
 
     /**
-     * Retrieve {{ entity.getData('label_plural')|ucfirst }} matching the specified criteria.
+     * Retrieve {{ entity.getLabelPlural()|ucfirst }} matching the specified criteria.
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}SearchResultInterface
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}SearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}SearchResultInterface $searchResults */
+        /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}SearchResultInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
 
-        /** @var \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\ResourceModel\{{ entity.getData('name_singular')|ucfirst }}\Collection $collection */
-        $collection = $this->{{ entity.getData('name_singular')|camel }}CollectionFactory->create();
+        /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }}\Collection $collection */
+        $collection = $this->{{ entity.getNameSingular()|camel }}CollectionFactory->create();
 
         //Add filters from root filter group to the collection
         /** @var \Magento\Framework\Api\Search\FilterGroup $group */
@@ -157,47 +157,47 @@ class {{ entity.getData('name_singular')|ucfirst }}Repository implements {{ enti
                 );
             }
         } else {
-            $collection->addOrder('main_table.' . {{ entity.getData('name_singular')|ucfirst }}Interface::{{ entity.getData('name_singular')|upper }}_ID, SortOrder::SORT_ASC);
+            $collection->addOrder('main_table.' . {{ entity.getNameSingular()|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, SortOrder::SORT_ASC);
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
-        /** @var {{ entity.getData('name_singular')|ucfirst }}Interface[] ${{ entity.getData('name_plural')|camel }} */
-        ${{ entity.getData('name_plural')|camel }} = [];
-        /** @var \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|ucfirst }} ${{ entity.getData('name_singular')|camel }} */
-        foreach ($collection as ${{ entity.getData('name_singular')|camel }}) {
-            /** @var {{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }}DataObject */
-            ${{ entity.getData('name_singular')|camel }}DataObject = $this->{{ entity.getData('name_singular')|camel }}InterfaceFactory->create();
+        /** @var {{ entity.getNameSingular()|ucfirst }}Interface[] ${{ entity.getNamePlural()|camel }} */
+        ${{ entity.getNamePlural()|camel }} = [];
+        /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }} ${{ entity.getNameSingular()|camel }} */
+        foreach ($collection as ${{ entity.getNameSingular()|camel }}) {
+            /** @var {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}DataObject */
+            ${{ entity.getNameSingular()|camel }}DataObject = $this->{{ entity.getNameSingular()|camel }}InterfaceFactory->create();
             $this->dataObjectHelper->populateWithArray(
-                ${{ entity.getData('name_singular')|camel }}DataObject,
-                ${{ entity.getData('name_singular')|camel }}->getData(),
-                {{ entity.getData('name_singular')|ucfirst }}Interface::class
+                ${{ entity.getNameSingular()|camel }}DataObject,
+                ${{ entity.getNameSingular()|camel }}->getData(),
+                {{ entity.getNameSingular()|ucfirst }}Interface::class
             );
-            ${{ entity.getData('name_plural')|camel }}[] = ${{ entity.getData('name_singular')|camel }}DataObject;
+            ${{ entity.getNamePlural()|camel }}[] = ${{ entity.getNameSingular()|camel }}DataObject;
         }
         $searchResults->setTotalCount($collection->getSize());
-        return $searchResults->setItems(${{ entity.getData('name_plural')|camel }});
+        return $searchResults->setItems(${{ entity.getNamePlural()|camel }});
     }
 
     /**
-     * Delete {{ entity.getData('label_singular')|ucfirst }}
+     * Delete {{ entity.getLabelSingular()|ucfirst }}
      *
-     * @param {{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }}
+     * @param {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete({{ entity.getData('name_singular')|ucfirst }}Interface ${{ entity.getData('name_singular')|camel }})
+    public function delete({{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
     {
-        /** @var {{ entity.getData('name_singular')|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getData('name_singular')|camel }} */
-        $id = ${{ entity.getData('name_singular')|camel }}->getId();
+        /** @var {{ entity.getNameSingular()|ucfirst }}Interface|\Magento\Framework\Model\AbstractModel ${{ entity.getNameSingular()|camel }} */
+        $id = ${{ entity.getNameSingular()|camel }}->getId();
         try {
             unset($this->instances[$id]);
-            $this->resource->delete(${{ entity.getData('name_singular')|camel }});
+            $this->resource->delete(${{ entity.getNameSingular()|camel }});
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new StateException(
-                __('Unable to remove{{ entity.getData('label_singular')|ucfirst }} %1', $id)
+                __('Unable to remove{{ entity.getLabelSingular()|ucfirst }} %1', $id)
             );
         }
         unset($this->instances[$id]);
@@ -205,17 +205,17 @@ class {{ entity.getData('name_singular')|ucfirst }}Repository implements {{ enti
     }
 
     /**
-     * Delete {{ entity.getData('label_singular')|ucfirst }} by ID.
+     * Delete {{ entity.getLabelSingular()|ucfirst }} by ID.
      *
-     * @param int ${{ entity.getData('name_singular')|camel }}Id
+     * @param int ${{ entity.getNameSingular()|camel }}Id
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById(${{ entity.getData('name_singular')|camel }}Id)
+    public function deleteById(${{ entity.getNameSingular()|camel }}Id)
     {
-        ${{ entity.getData('name_singular')|camel }} = $this->get(${{ entity.getData('name_singular')|camel }}Id);
-        return $this->delete(${{ entity.getData('name_singular')|camel }});
+        ${{ entity.getNameSingular()|camel }} = $this->get(${{ entity.getNameSingular()|camel }}Id);
+        return $this->delete(${{ entity.getNameSingular()|camel }});
     }
 
     /**

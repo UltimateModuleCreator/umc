@@ -1,7 +1,7 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Test\Unit\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\ExecutorInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
@@ -11,7 +11,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\TestCase;
 use Magento\Backend\App\Action\Context;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Delete;
 
 class DeleteTest extends TestCase
 {
@@ -71,7 +71,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete::execute()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Delete::execute()
      */
     public function testExecute()
     {
@@ -84,7 +84,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete::execute() with no valid id
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Delete::execute() with no valid id
      */
     public function testExecuteNoId()
     {
@@ -97,7 +97,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete::execute() with no valid id
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Delete::execute() with no valid id
      */
     public function testExecuteNoSuchEntityException()
     {
@@ -111,7 +111,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete::execute() with no valid id
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Delete::execute() with no valid id
      */
     public function testExecuteLocalizedException()
     {
@@ -125,7 +125,7 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Delete::execute() with no valid id
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Delete::execute() with no valid id
      */
     public function testExecuteException()
     {

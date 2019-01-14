@@ -1,12 +1,12 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Ui\Provider\CollectionProviderInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Provider\CollectionProviderInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\ExecutorInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterface;
 
 abstract class AbstractMassAction extends Action
 {

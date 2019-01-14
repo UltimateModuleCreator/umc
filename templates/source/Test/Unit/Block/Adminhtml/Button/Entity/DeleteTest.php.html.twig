@@ -1,11 +1,11 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Test\Unit\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Block\Adminhtml\Button\{{ entity.getNameSingular()|ucfirst }};
 
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\TestCase;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\Data\{{ entity.getData('name_singular')|ucfirst }}Interface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }}\Delete;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\{{ entity.getNameSingular()|ucfirst }}\Delete;
 
 class DeleteTest extends TestCase
 {
@@ -33,9 +33,9 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }}\Delete::getButtonData()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\{{ entity.getNameSingular()|ucfirst }}\Delete::getButtonData()
      */
-    public function testButtonDataNo{{ entity.getData('name_singular')|ucfirst }}()
+    public function testButtonDataNo{{ entity.getNameSingular()|ucfirst }}()
     {
         $this->registry->method('registry')->willReturn(null);
         $this->url->expects($this->exactly(0))->method('getUrl');
@@ -43,25 +43,25 @@ class DeleteTest extends TestCase
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }}\Delete::getButtonData()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\{{ entity.getNameSingular()|ucfirst }}\Delete::getButtonData()
      */
-    public function testButtonDataNo{{ entity.getData('name_singular')|ucfirst }}Id()
+    public function testButtonDataNo{{ entity.getNameSingular()|ucfirst }}Id()
     {
-        ${{ entity.getData('name_singular')|camel }} = $this->createMock({{ entity.getData('name_singular')|ucfirst }}Interface::class);
-        ${{ entity.getData('name_singular')|camel }}->method('getId')->willReturn(null);
-        $this->registry->method('registry')->willReturn(${{ entity.getData('name_singular')|camel }});
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|ucfirst }}Interface::class);
+        ${{ entity.getNameSingular()|camel }}->method('getId')->willReturn(null);
+        $this->registry->method('registry')->willReturn(${{ entity.getNameSingular()|camel }});
         $this->url->expects($this->exactly(0))->method('getUrl');
         $this->assertEquals([], $this->button->getButtonData());
     }
 
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Block\Adminhtml\Button\{{ entity.getData('name_singular')|ucfirst }}\Delete::getButtonData()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\{{ entity.getNameSingular()|ucfirst }}\Delete::getButtonData()
      */
     public function testButtonData()
     {
-        ${{ entity.getData('name_singular')|camel }} = $this->createMock({{ entity.getData('name_singular')|ucfirst }}Interface::class);
-        ${{ entity.getData('name_singular')|camel }}->method('getId')->willReturn(2);
-        $this->registry->method('registry')->willReturn(${{ entity.getData('name_singular')|camel }});
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|ucfirst }}Interface::class);
+        ${{ entity.getNameSingular()|camel }}->method('getId')->willReturn(2);
+        $this->registry->method('registry')->willReturn(${{ entity.getNameSingular()|camel }});
         $this->url->expects($this->once())->method('getUrl');
         $data = $this->button->getButtonData();
         $this->assertArrayHasKey('on_click', $data);

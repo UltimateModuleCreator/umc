@@ -23,6 +23,22 @@ use App\Util\Sorter;
 
 class Entity extends AbstractModel
 {
+    const LABEL_SINGULAR = 'label_singular';
+    const LABEL_PLURAL = 'label_plural';
+    const NAME_SINGULAR = 'name_singular';
+    const NAME_PLURAL = 'name_plural';
+    const ADD_CREATED_TO_GRID = 'add_created_to_grid';
+    const ADD_UPDATED_TO_GRID = 'add_updated_to_grid';
+    const SEARCH = 'search';
+    const STORE = 'store';
+    const FRONTEND_LIST = 'frontend_list';
+    const FRONTEND_VIEW = 'frontend_view';
+    const SEO = 'seo';
+    const POSITION = 'position';
+    const MENU_LINK = 'menu_link';
+    const MENU_LINK_NO_LINK = 0;
+    const MENU_LINK_MAIN_MENU = 1;
+    const MENU_LINK_FOOTER = 2;
     /**
      * @var Sorter
      */
@@ -47,9 +63,9 @@ class Entity extends AbstractModel
      * @var array
      */
     protected $propertyNames = [
-        'label_singular', 'label_plural', 'name_singular', 'name_plural',
-        'type', 'is_tree', 'add_created_to_grid',
-        'add_updated_to_grid', 'search', 'store'
+        self::LABEL_SINGULAR, self::LABEL_PLURAL, self::NAME_SINGULAR, self::NAME_PLURAL,
+        self::ADD_CREATED_TO_GRID, self::ADD_UPDATED_TO_GRID, self::SEARCH, self::STORE,
+        self::FRONTEND_LIST, self::FRONTEND_VIEW, self::SEO, self::POSITION, self::MENU_LINK
     ];
     /**
      * @var Attribute[]
@@ -100,17 +116,99 @@ class Entity extends AbstractModel
     }
 
     /**
-     * Temprorary. MVP won't support EAV entities but let's create support for entity types
-     * @param $key
-     * @param null|string $default
-     * @return string|null
+     * @return null|string
      */
-    public function getData(string $key, ?string $default = null) : ?string
+    public function getLabelSingular() : ?string
     {
-        if ($key === 'type') {
-            return "1";
-        }
-        return parent::getData($key, $default);
+        return $this->getData(self::LABEL_SINGULAR);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLabelPlural() : ?string
+    {
+        return $this->getData(self::LABEL_PLURAL);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNameSingular() : ?string
+    {
+        return $this->getData(self::NAME_SINGULAR);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNamePlural() : ?string
+    {
+        return $this->getData(self::NAME_PLURAL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAddCreatedToGrid() : bool
+    {
+        return (bool)$this->getData(self::ADD_CREATED_TO_GRID);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAddUpdatedToGrid() : bool
+    {
+        return (bool)$this->getData(self::ADD_UPDATED_TO_GRID);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSearch() : bool
+    {
+        return (bool)$this->getData(self::SEARCH);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getStore() : bool
+    {
+        return (bool)$this->getData(self::STORE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFrontendList() : bool
+    {
+        return (bool)$this->getData(self::FRONTEND_LIST);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFrontendView() : bool
+    {
+        return (bool)$this->getData(self::FRONTEND_VIEW);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSeo() : bool
+    {
+        return (bool)$this->getData(self::SEO);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition() : int
+    {
+        return (int)$this->getData(self::POSITION);
     }
 
     /**
@@ -119,7 +217,7 @@ class Entity extends AbstractModel
     public function getNameAttribute() : ?Attribute
     {
         foreach ($this->getAttributes() as $attribute) {
-            if ($attribute->getData('is_name')) {
+            if ($attribute->getIsName()) {
                 return $attribute;
             }
         }
@@ -148,7 +246,7 @@ class Entity extends AbstractModel
     public function hasAttributeType($type) : bool
     {
         foreach ($this->getAttributes() as $attribute) {
-            if ($attribute->getData('type') == $type) {
+            if ($attribute->getType() === $type) {
                 return true;
             }
         }
@@ -161,12 +259,14 @@ class Entity extends AbstractModel
      */
     public function getAttributesWithTypeConfig(string $typeConfig) : array
     {
-        return array_values(array_filter(
-            $this->getAttributes(),
-            function (Attribute $item) use ($typeConfig) {
-                return $item->getTypeInstance()->getData($typeConfig);
-            }
-        ));
+        return array_values(
+            array_filter(
+                $this->getAttributes(),
+                function (Attribute $item) use ($typeConfig) {
+                    return $item->getTypeInstance()->getData($typeConfig);
+                }
+            )
+        );
     }
 
     /**
@@ -175,12 +275,14 @@ class Entity extends AbstractModel
      */
     public function getAttributesWithType(string $type) : array
     {
-        return array_values(array_filter(
-            $this->getAttributes(),
-            function (Attribute $item) use ($type) {
-                return $item->getData('type') === $type;
-            }
-        ));
+        return array_values(
+            array_filter(
+                $this->getAttributes(),
+                function (Attribute $item) use ($type) {
+                    return $item->getType() === $type;
+                }
+            )
+        );
     }
 
     /**
@@ -217,7 +319,7 @@ class Entity extends AbstractModel
     {
         return array_map(
             function (Attribute $item) {
-                return $item->getData('code');
+                return $item->getCode();
             },
             $attributes
         );
@@ -232,5 +334,26 @@ class Entity extends AbstractModel
     {
         $pad = str_repeat(' ', 4 * $tabs);
         return (count($codes)) ? $pad . "'" . implode("'," . PHP_EOL . $pad . "'", $codes) . "'" : '';
+    }
+
+    /**
+     * @return int
+     */
+    public function getMenuLink() : int
+    {
+        if (!$this->getFrontendList()) {
+            return self::MENU_LINK_NO_LINK;
+        }
+        $menuLink = (int)$this->getData(self::MENU_LINK);
+        $allowed = [self::MENU_LINK_NO_LINK, self::MENU_LINK_MAIN_MENU, self::MENU_LINK_FOOTER];
+        return (in_array($menuLink, $allowed)) ? $menuLink : self::MENU_LINK_NO_LINK;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFrontend()
+    {
+        return $this->getFrontendList() || $this->getFrontendView();
     }
 }

@@ -94,6 +94,32 @@ class AttributeGeneratorTest extends TestCase
      * @covers \App\Service\Generator\AttributeGenerator::generateContent()
      * @covers \App\Service\Generator\AttributeGenerator::processDestination()
      * @covers \App\Service\Generator\AttributeGenerator::__construct()
+     */
+    public function testGenerateContentWithImage()
+    {
+        $this->twig->expects($this->exactly(3))->method('render')->willReturn(base64_encode('content'));
+        $expected = [
+            'path/FirstEntity/Code1' => 'content',
+            'path/FirstEntity/Code2' => 'content',
+            'path/SecondEntity/Code3' => 'content'
+        ];
+        $this->assertEquals(
+            $expected,
+            $this->generator->generateContent(
+                $this->module,
+                [
+                    'template' => 'template',
+                    'destination' => 'path/_Entity_/_Code_',
+                    'is_image' => true
+                ]
+            )
+        );
+    }
+
+    /**
+     * @covers \App\Service\Generator\AttributeGenerator::generateContent()
+     * @covers \App\Service\Generator\AttributeGenerator::processDestination()
+     * @covers \App\Service\Generator\AttributeGenerator::__construct()
      * with empty generated content
      */
     public function testGenerateContentWithEmptyContent()
@@ -123,7 +149,7 @@ class AttributeGeneratorTest extends TestCase
     private function getEntityMock($nameSingular, $attributeCodes)
     {
         $entity = $this->createMock(Entity::class);
-        $entity->method('getData')->with('name_singular')->willReturn($nameSingular);
+        $entity->method('getNameSingular')->willReturn($nameSingular);
         $self = $this;
         $attributes = array_map(
             function ($item) use ($self, $entity) {
@@ -143,7 +169,7 @@ class AttributeGeneratorTest extends TestCase
     private function getAttributeMock($code, $entity)
     {
         $attribute = $this->createMock(Attribute::class);
-        $attribute->method('getData')->with('code')->willReturn($code);
+        $attribute->method('getCode')->willReturn($code);
         $attribute->method('getEntity')->willReturn($entity);
         return $attribute;
     }

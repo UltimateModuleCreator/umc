@@ -1,8 +1,8 @@
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\Uploader;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 
 class UploaderPool
 {

@@ -1,0 +1,19 @@
+{% if module.hasFrontend()  %}
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}>
+{% for entity in module.getEntities() %}
+{% if entity.getFrontendView() or entity.getFrontendList() %}
+            <{{ entity.getNameSingular()|snake }}>
+                <breadcrumbs>1</breadcrumbs>
+{% if entity.getFrontendList() %}
+                <meta_title>{{ entity.getLabelPlural() }}</meta_title>
+{% endif %}
+            </{{ entity.getNameSingular()|snake }}>
+{% endif %}
+{% endfor %}
+        </{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}>
+    </default>
+</config>
+{% endif %}

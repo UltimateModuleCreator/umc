@@ -21,6 +21,8 @@ namespace App\Tests\Model;
 
 use App\Model\Module;
 use App\Model\ModuleFactory;
+use App\Util\StringUtil;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class ModuleFactoryTest extends TestCase
@@ -31,12 +33,14 @@ class ModuleFactoryTest extends TestCase
      */
     public function testCreate()
     {
-        $factory = new ModuleFactory([], []);
+        /** @var StringUtil | MockObject $stringUtils */
+        $stringUtils = $this->createMock(StringUtil::class);
+        $factory = new ModuleFactory($stringUtils, [], []);
         $module1 = $factory->create(['namespace' => 'Namespace']);
         $module2 = $factory->create();
         $this->assertNotSame($module1, $module2);
         $this->assertInstanceOf(Module::class, $module1);
         $this->assertInstanceOf(Module::class, $module2);
-        $this->assertEquals('Namespace', $module1->getData('namespace'));
+        $this->assertEquals('Namespace', $module1->getNamespace());
     }
 }

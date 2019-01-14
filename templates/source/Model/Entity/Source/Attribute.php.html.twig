@@ -1,10 +1,10 @@
-{% if attribute.getTypeInstance().getData('can_have_options') %}
+{% if attribute.getTypeInstance().getCanHaveOptions() %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Model\{{ entity.getData('name_singular')|camel|ucfirst }}\Source;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
-class {{ attribute.getData('code')|camel|ucfirst }} implements ArrayInterface
+class {{ attribute.getCode()|camel|ucfirst }} implements ArrayInterface
 {
 {% for name,settings in attribute.getProcessedOptions() %}
     const {{ name }} = {{ settings.value }};

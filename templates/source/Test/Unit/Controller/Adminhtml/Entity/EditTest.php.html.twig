@@ -1,5 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Test\Unit\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -8,14 +8,14 @@ use Magento\Framework\View\Page\Title;
 use PHPUnit\Framework\TestCase;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Backend\App\Action\Context;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Api\{{ entity.getData('name_singular')|ucfirst }}RepositoryInterface;
-use {{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Edit;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Edit;
 use Magento\Framework\View\Page\Config;
 
 class EditTest extends TestCase
 {
     /**
-     * @covers \{{ module.getData('namespace') }}\{{ module.getData('module_name') }}\Controller\Adminhtml\{{ entity.getData('name_singular')|ucfirst }}\Edit::execute()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Edit::execute()
      */
     public function testExecute()
     {
@@ -24,8 +24,8 @@ class EditTest extends TestCase
         $resultFactory->method('create')->willReturn($page);
         $request = $this->createMock(RequestInterface::class);
         $request->expects($this->once())->method('getParam');
-        /** @var {{ entity.getData('name_singular')|ucfirst }}RepositoryInterface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getData('name_singular')|camel }}Repository */
-        ${{ entity.getData('name_singular')|camel }}Repository = $this->createMock({{ entity.getData('name_singular')|ucfirst }}RepositoryInterface::class);
+        /** @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getNameSingular()|camel }}Repository */
+        ${{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|ucfirst }}RepositoryInterface::class);
         /** @var Registry | \PHPUnit_Framework_MockObject_MockObject $registry */
         $registry = $this->createMock(Registry::class);
         /** @var Context | \PHPUnit_Framework_MockObject_MockObject $context */
@@ -39,7 +39,7 @@ class EditTest extends TestCase
         $title = $this->createMock(Title::class);
         $title->expects($this->exactly(2))->method('prepend');
         $pageConfig->method('getTitle')->willReturn($title);
-        $controller = new Edit($context, ${{ entity.getData('name_singular')|camel }}Repository, $registry);
+        $controller = new Edit($context, ${{ entity.getNameSingular()|camel }}Repository, $registry);
         $this->assertEquals($page, $controller->execute());
     }
 }

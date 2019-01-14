@@ -35,7 +35,7 @@ class PhpTest extends TestCase
     {
         /** @var MOdule | MockObject $module */
         $module = $this->createMock(Module::class);
-        $module->method('getData')->willReturn('string');
+        $module->method('getLicense')->willReturn('string');
         /** @var Replacer | MockObject $replacer */
         $replacer = $this->createMock(Replacer::class);
         $license = "This is the license for/**/<!----> Namespace_ModuleName for the year 2018\n" .
@@ -57,7 +57,7 @@ class PhpTest extends TestCase
     {
         /** @var MOdule | MockObject $module */
         $module = $this->createMock(Module::class);
-        $module->method('getData')->willReturn('string');
+        $module->method('getLicense')->willReturn('string');
         /** @var Replacer | MockObject $replacer */
         $replacer = $this->createMock(Replacer::class);
         $replacer->method('replaceVars')->willReturn('');

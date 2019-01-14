@@ -70,7 +70,14 @@ class AttributeGenerator implements GeneratorInterface
                     ]
                 );
                 if (trim($content)) {
-                    $result[$destination] = str_replace("\n\r", PHP_EOL, $content);
+                    if (isset($fileConfig['is_image']) && $fileConfig['is_image']) {
+                        $content = @base64_decode(trim($content));
+                        if ($content) {
+                            $result[$destination] = $content;
+                        }
+                    } else {
+                        $result[$destination] = str_replace("\n\r", PHP_EOL, $content);
+                    }
                 }
             }
         }
@@ -86,8 +93,10 @@ class AttributeGenerator implements GeneratorInterface
     {
         $entity = $attribute->getEntity();
         $replace = [
-            '_Entity_' =>  ucfirst($entity->getData('name_singular')),
-            '_Code_' => ucfirst($this->stringUtil->camel($attribute->getData('code')))
+            '_Entity_' =>  ucfirst($entity->getNameSingular()),
+            '_Code_' => ucfirst($this->stringUtil->camel($attribute->getCode())),
+            '_entity_' => $this->stringUtil->snake($entity->getNameSingular()),
+            '_code_' => $this->stringUtil->snake($attribute->getCode())
         ];
         return str_replace(array_keys($replace), array_values($replace), $destination);
     }

@@ -1,6 +1,6 @@
 {
-  "name": "{{module.getData('namespace')|lower}}/module-{{ module.getData('module_name')|hyphen }}",
-  "description": "{{ module.getData('namespace') }}_{{ module.getData('module_name') }} magento 2 extension",
+  "name": "{{module.getNamespace()|lower}}/module-{{ module.getModuleName()|hyphen }}",
+  "description": "{{ module.getNamespace() }}_{{ module.getModuleName() }} magento 2 extension",
   "require": {
     "php": "~7.0.13|~7.1.0",
     "magento/module-backend": "*",
@@ -14,10 +14,13 @@
     "magento/module-media-storage": "*",
     "magento/module-store": "*",
 {% endif %}
+{% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
+    "magento/module-widget": "*",
+{% endif %}
     "magento/framework": "*.*"
   },
   "type": "magento2-module",
-  "version": "{{ module.getData('version') }}",
+  "version": "{{ module.getVersion() }}",
   "license": [
     "OSL-3.0",
     "AFL-3.0"
@@ -27,7 +30,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "{{ module.getData('namespace') }}\\{{ module.getData('module_name') }}\\": ""
+      "{{ module.getNamespace() }}\\{{ module.getModuleName() }}\\": ""
     }
   }
 }

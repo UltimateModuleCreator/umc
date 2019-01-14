@@ -55,27 +55,9 @@ class AttributesTest extends TestCase
         $module = $this->createMock(Module::class);
         $this->attribute->method('getEntity')->willReturn($entity);
         $entity->method('getModule')->willReturn($module);
-        $entity->method('getData')->willReturnMap([
-            [
-                'name_singular',
-                null,
-                'entityName'
-            ]
-        ]);
-        $module->method('getData')->willReturnMap(
-            [
-                [
-                    'namespace',
-                    null,
-                    'Namespace'
-                ],
-                [
-                    'module_name',
-                    null,
-                    'ModuleName'
-                ]
-            ]
-        );
+        $entity->method('getNameSingular')->willReturn('entityName');
+        $module->method('getNamespace')->willReturn('Namespace');
+        $module->method('getModuleName')->willReturn('ModuleName');
         $attributes = new Attribute\Attributes($this->twig, $this->attribute, []);
         $expected = 'Namespace\\ModuleName\\Model\\Source\\ProductAttribute';
         $this->assertEquals($expected, $attributes->getSourceModel());

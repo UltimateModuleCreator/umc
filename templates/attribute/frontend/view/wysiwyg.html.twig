@@ -1,0 +1,6 @@
+    <?php if (${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}()) :?>
+    <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
+        <strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')) ?></strong>:
+        <?= ${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}Html();?>
+    </div>
+    <?php endif;?>
