@@ -8,6 +8,9 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Helper\Image as ImageHelper;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Helper\ImageFactory as HelperFactory;
 
+/**
+ * @api
+ */
 class ImageBuilder
 {
     /**
@@ -43,13 +46,13 @@ class ImageBuilder
      * @param HelperFactory $helperFactory
      * @param ImageFactory $imageFactory
      * @param Uploader $uploader
-     * @param $entityCode
+     * @param string $entityCode
      */
     public function __construct(
         HelperFactory $helperFactory,
         ImageFactory $imageFactory,
         Uploader $uploader,
-        $entityCode
+        string $entityCode
     ) {
         $this->helperFactory = $helperFactory;
         $this->imageFactory  = $imageFactory;

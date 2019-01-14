@@ -10,6 +10,9 @@ use Magento\Framework\View\Element\Template\Context;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\ImageBuilder;
 {% endif %}
 
+/**
+ * @api
+ */
 class View{{ entity.getNameSingular()|camel|ucfirst }} extends Template
 {
     /**
@@ -46,7 +49,7 @@ class View{{ entity.getNameSingular()|camel|ucfirst }} extends Template
     /**
      * get current {{ entity.getLabelSingular() }}
      *
-     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function getCurrent{{ entity.getNameSingular()|camel|ucfirst }}()
     {

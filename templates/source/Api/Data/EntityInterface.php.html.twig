@@ -1,6 +1,9 @@
 <?php{{ module.getFormattedLicense('php') }}
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;
 
+/**
+ * @api
+ */
 interface {{ entity.getNameSingular()|ucfirst }}Interface
 {
     const {{ entity.getNameSingular()|snake|upper }}_ID = '{{ entity.getNameSingular()|snake }}_id';

@@ -2,7 +2,7 @@
   "name": "{{module.getNamespace()|lower}}/module-{{ module.getModuleName()|hyphen }}",
   "description": "{{ module.getNamespace() }}_{{ module.getModuleName() }} magento 2 extension",
   "require": {
-    "php": "~7.0.13|~7.1.0",
+    "php": "{{module.getComposerPhpVersion()}}",
     "magento/module-backend": "*",
     "magento/module-config": "*",
     "magento/module-ui": "*",
@@ -17,10 +17,15 @@
 {% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
     "magento/module-widget": "*",
 {% endif %}
+{% if module.hasFrontend() %}
+    "magento/module-theme": "*",
+{% endif %}
     "magento/framework": "*.*"
   },
   "type": "magento2-module",
+{% if module.getVersion() == constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
   "version": "{{ module.getVersion() }}",
+{% endif %}
   "license": [
     "OSL-3.0",
     "AFL-3.0"

@@ -35,6 +35,9 @@
                         <a class="nav-link" href="#release-notes">Release Notes</a>
                     </li>
                     <li>
+                        <a class="nav-link" href="#known-issues">Known issues</a>
+                    </li>
+                    <li>
                         <a class="nav-link" href="#contribute">Contributing to the UMC</a>
                     </li>
                 </ul>
@@ -141,7 +144,7 @@
                     This is not prevented by the UMC, but you will find in the arvhive that is generated with the module 3 files. All pf them start with <code>PHPCS_</code>. (these files are not useful for the proper fuctioning of the extension you create)<br/>
                     These files contain the report after running php code sniffer on the generated code with the PSR2, PSR12 and the EcgM2 standards. <br />
                     Keep in mind that not everything that is in there is actually an error. False positives will occur. For example, the PSR standrds will report that you are using underscores to prefix method names. This is because you need methods like <code>_beforeSave</code> to make magento work. <br />
-                    Also, the EcgM2 standard will report that ther eare methods that start with `before` or `after` that are not public. This is because ECGM2 things these are plugins. Ignore them<br />
+                    Also, the EcgM2 standard will report that ther eare methods that start with <code>before</code> or </code>after</code> that are not public. This is because ECGM2 things these are plugins. Ignore them<br />
                     If you have your own coding standards you can add them the <code>config/services.yaml</code> file as part of the <code>standards</code> argument of the <code>App\Util\CodingStandardsFactory</code> class
                 </div>
             </div>
@@ -217,6 +220,18 @@
                     </table>
                 </div>
             </div>
+            <div class="panel panel-default" id="known-issues">
+                <div class="panel-heading">
+                    <h3>Known Issues</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li>Static tests will report a duplication for the Image builder class to the catalog image builder class. This is because the image builder is a duplicate of the catalog image builder. Working on a cleaner solution, but it might take a while since this is not top priority.</li>
+                        <li>Default values may not work for the select and multiselect attributes. This is a magento issue.</li>
+                        <li>The i18n file is not generated. You can do that after installing the module by creating the folder i18n inside your module and running this command: <code>`bin/magento i18n:collect-phrases app/code/[Namespace]/[Module]/ -o app/code/[Namespace]/[Module]/i18n/en_US.csv</code> (replace <code>[Namespace]</code> and <code>[Module]</code> with the real module name)</li>
+                    </ul>
+                </div>
+            </div>
             <div class="panel panel-default" id="contribute">
                 <div class="panel-heading">
                     <h3>Contributing to the UMC</h3>
@@ -229,6 +244,7 @@
                     </ul>
                 </div>
             </div>
+
         </div>
     </div>
 {% endblock %}
