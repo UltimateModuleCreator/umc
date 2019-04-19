@@ -15,6 +15,13 @@
         <column xsi:type="text" name="meta_keywords" nullable="true" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Keywords"/>
         <column xsi:type="text" name="meta_description" nullable="true" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Description"/>
 {% endif %}
+{% if entity.getIsTree() %}
+        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Parent {{ entity.getLabelSingular()|ucfirst }} ID"/>
+        <column xsi:type="varchar" name="path" nullable="false" length="255" comment="{{ entity.getLabelSingular()|ucfirst }} Tree Path"/>
+        <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" comment="{{ entity.getLabelSingular()|ucfirst }} Position"/>
+        <column xsi:type="int" name="level" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="{{ entity.getLabelSingular()|ucfirst }} Tree Level"/>
+        <column xsi:type="int" name="children_count" padding="11" unsigned="false" nullable="false" identity="false" comment="{{ entity.getLabelSingular()|ucfirst }} Child Count"/>
+{% endif %}
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="{{ entity.getLabelSingular()|ucfirst }} Created at"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="{{ entity.getLabelSingular()|ucfirst }} Updated At"/>
 {% if entity.getAttributesWithTypeConfig('full_text')|length > 0 %}
@@ -29,6 +36,14 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="{{ entity.getNameSingular()|snake }}_id"/>
         </constraint>
+{% endif %}
+{% if entity.getIsTree() %}
+        <index referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_LEVEL" indexType="btree">
+            <column name="level"/>
+        </index>
+        <index referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_PATH" indexType="btree">
+            <column name="path"/>
+        </index>
 {% endif %}
     </table>
 {% if entity.getStore() %}

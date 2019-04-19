@@ -1,0 +1,78 @@
+{% if module.getMagentoVersion() == '2.2' %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Setup;
+
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+{% for entity in module.getEntities() %}
+{% if entity.getIsTree() %}
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory;
+{% endif %}
+{% endfor %}
+
+class InstallData implements InstallDataInterface
+{
+{% for entity in module.getEntities() %}
+{% if entity.getIsTree() %}
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory
+     */
+    private ${{ entity.getNameSingular()|camel }}Factory;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     */
+    private {{ entity.getNameSingular()|camel }}Repository;
+{% endif %}
+{% endfor %}
+    /**
+{% for entity in module.getEntities() %}
+{% if entity.getIsTree() %}
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}Factory
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface  ${{ entity.getNameSingular()|camel }}Repository
+{% endif %}
+{% endfor %}
+     */
+    public function __construct(
+{% for entity in module.getEntities() %}
+{% if entity.getIsTree() %}
+        {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}Factory,
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface  ${{ entity.getNameSingular()|camel }}Repository{% if not loop.last %},
+{% else %}
+
+{% endif %}
+{% endif %}
+{% endfor %}
+    ) {
+{% for entity in module.getEntities() %}
+{% if entity.getIsTree() %}
+        $this->{{ entity.getNameSingular()|camel }}Factory = ${{ entity.getNameSingular()|camel }}Factory;
+        $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
+{% endif %}
+{% endfor %}
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+{% for entity in module.getEntities() %}
+{% if entity.getIsTree() %}
+        // Create RootNode
+        ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Factory->create();
+        ${{ entity.getNameSingular()|camel }}->set{{ entity.getNameAttribute().getCode()|camel|ucfirst }}('ROOT')
+            ->setId({{ entity.getNameSingular()|camel|ucfirst }}Interface::TREE_ROOT_ID)
+            ->setPath({{ entity.getNameSingular()|camel|ucfirst }}Interface::TREE_ROOT_ID)
+            ->setLevel(0)
+            ->setPosition(0)
+            ->setChildrenCount(0)
+            ->setInitialSetupFlag(true)
+        $this->{{ entity.getNameSingular()|camel }}Repository->save(${{ entity.getNameSingular()|camel }});
+{% endif %}
+{% endfor %}
+    }
+}
+{% endif %}

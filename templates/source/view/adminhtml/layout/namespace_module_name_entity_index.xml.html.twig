@@ -1,3 +1,4 @@
+{% if not entity.getIsTree() %}
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
@@ -6,3 +7,4 @@
     </referenceContainer>
     </body>
 </page>
+{% endif %}

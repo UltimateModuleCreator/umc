@@ -13,11 +13,14 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 {% if entity.hasAttributeType('date') %}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\DateFilter;
 {% endif %}
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpPostActionInterface;
+{% endif %}
 
-/**
- * Class InlineEdit
- */
-class InlineEdit extends Action
+class InlineEdit extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpPostActionInterface
+{% else %}
+
+{% endif %}
 {
     /**
      * {{ entity.getLabelSingular()|ucfirst }} repository

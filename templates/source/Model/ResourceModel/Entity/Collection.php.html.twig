@@ -113,4 +113,33 @@ class Collection extends AbstractCollection
         parent::_renderFiltersBefore();
     }
 {% endif %}
+{% if entity.getIsTree() %}
+    /**
+     * Add Id filter
+     *
+     * @param array ${{ entity.getNameSingular()|camel }}Ids
+     * @return $this
+     */
+    public function addIdFilter(${{ entity.getNameSingular()|camel }}Ids)
+    {
+        if (is_array(${{ entity.getNameSingular()|camel }}Ids)) {
+            if (empty(${{ entity.getNameSingular()|camel }}Ids)) {
+                $condition = '';
+            } else {
+                $condition = ['in' => ${{ entity.getNameSingular()|camel }}Ids];
+            }
+        } elseif (is_numeric(${{ entity.getNameSingular()|camel }}Ids)) {
+            $condition = ${{ entity.getNameSingular()|camel }}Ids;
+        } elseif (is_string(${{ entity.getNameSingular()|camel }}Ids)) {
+            $ids = explode(',', ${{ entity.getNameSingular()|camel }}Ids);
+            if (empty($ids)) {
+                $condition = ${{ entity.getNameSingular()|camel }}Ids;
+            } else {
+                $condition = ['in' => $ids];
+            }
+        }
+        $this->addFieldToFilter('{{ entity.getNameSingular()|snake }}_id', $condition);
+        return $this;
+    }
+{% endif %}
 }

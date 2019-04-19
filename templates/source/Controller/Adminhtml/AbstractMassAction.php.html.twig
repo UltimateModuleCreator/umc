@@ -7,8 +7,14 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterface;
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpPostActionInterface;
+{% endif %}
 
-abstract class AbstractMassAction extends Action
+abstract class AbstractMassAction extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpPostActionInterface
+{% else %}
+
+{% endif %}
 {
 
     /**

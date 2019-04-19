@@ -178,6 +178,11 @@ Plugin/Block/TopmenuPlugin.php:
   label: "Frontned Top menu block plugin"
   scope: module
   template: source/Plugin/Block/TopmenuPlugin.php.html.twig
+Setup/InstallData.php:
+  destination: Setup/InstallData.php
+  label: "Install Data file"
+  scope: module
+  template: source/Setup/InstallData.php.html.twig
 Setup/Uninstall.php:
   destination: Setup/Uninstall.php
   label: "Uninstall script"

@@ -1,9 +1,50 @@
 <?php{{ module.getFormattedLicense('php') }}
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
 
+{% if entity.getIsTree() %}
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+{% else  %}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\AbstractIndex;
+{% endif %}
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpGetActionInterface;
+{% endif %}
 
-class Index extends AbstractIndex
+class Index extends {% if entity.getIsTree() %}Action {% else %}AbstractIndex{% endif %}{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpGetActionInterface
+{% else %}
+
+{% endif %}
 {
+{% if entity.getIsTree() %}
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
 
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     */
+    public function __construct(
+        Context $context,
+        ForwardFactory $resultForwardFactory
+    ) {
+        parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
+    }
+
+    /**
+     * index action
+     *
+     * @return \Magento\Backend\Model\View\Result\Forward
+     */
+    public function execute()
+    {
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('edit');
+    }
+{% endif %}
 }

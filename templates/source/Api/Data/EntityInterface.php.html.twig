@@ -44,6 +44,28 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
      */
     const STATUS_DISABLED = 2;
 {% endif %}
+{% if entity.getIsTree() %}
+    /**
+     * @var string
+     */
+    const PATH = 'path';
+    /**
+     * @var string
+     */
+    const LEVEL = 'level';
+    /**
+     * @var string
+     */
+    const POSITION = 'position';
+    /**
+     * @var int
+     */
+    const PARENT_ID = 'parent_id';
+    /*
+     * @var int
+     */
+    const TREE_ROOT_ID = 1;
+{% endif %}
     /**
      * @param int $id
      * @return {{ entity.getNameSingular()|ucfirst }}Interface
@@ -146,5 +168,50 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
      * @return int
      */
     public function getIsActive();
+{% endif %}
+{% if entity.getIsTree() %}
+    /**
+     * @param int $position
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setPosition($position);
+
+    /**
+     * @return int
+     */
+    public function getPosition();
+
+    /**
+     * @param int $level
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setLevel($level);
+
+    /**
+     * @return int
+     */
+    public function getLevel();
+
+    /**
+     * @param string $path
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setPath($path);
+
+    /**
+     * @return string
+     */
+    public function getPath();
+
+    /**
+     * @param int $parentId
+     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     */
+    public function setParentId($parentId);
+
+    /**
+     * @return int
+     */
+    public function getParentId();
 {% endif %}
 }

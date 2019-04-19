@@ -220,6 +220,7 @@ jQuery.widget('umc.umc', {
         if ($.inArray(data.code.toLowerCase(), this.options.reservedKeywords) !== -1 || $.inArray(data.code.toLowerCase(), this.options.restrictedAttributeCodes) !== -1) {
             errors.push('"' + data.code +'"  cannot be used as an attribute code');
         }
+        var entityIsTree = entity.is_tree;
         for (var i in entityAttributes) {
             if (entityAttributes.hasOwnProperty(i)) {
                 var attribute = entityAttributes[i];
@@ -229,6 +230,12 @@ jQuery.widget('umc.umc', {
                 if (isName && attribute.is_name === "1" && parseInt(attribute.id) !== parseInt(data.id)) {
                     errors.push("There is already an attribute that behaves as name for entity: " + entity.label_singular + ". It is " + attribute.label);
                 }
+            }
+        }
+        if (entityIsTree === "1") {
+            var code = attribute.code.toLowerCase();
+            if (code === "position" || code === "level" || code === "path") {
+                errors.push("An attribute with the code " + code + "will be automatically added to the tree entities.")
             }
         }
         if (errors.length > 0) {

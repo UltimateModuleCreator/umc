@@ -7,8 +7,14 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpGetActionInterface;
+{% endif %}
 
-class Edit extends Action
+class Edit extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpGetActionInterface
+{% else %}
+
+{% endif %}
 {
     /**
      * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface

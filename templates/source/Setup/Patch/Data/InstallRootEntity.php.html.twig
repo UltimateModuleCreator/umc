@@ -1,0 +1,76 @@
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') and entity.getIsTree() %}
+<?php{{ module.getFormattedLicense('php') }}
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName }}\Setup\Patch\Data;
+
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory;
+
+class InstallRoot{{ entity.getNameSingular()|camel|ucfirst }} implements DataPatchInterface, PatchVersionInterface
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory
+     */
+    private ${{ entity.getNameSingular()|camel }}Factory;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     */
+    private ${{ entity.getNameSingular()|camel }}Repository;
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}Factory
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface  ${{ entity.getNameSingular()|camel }}Repository
+     */
+    public function __construct(
+        {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}Factory,
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface  ${{ entity.getNameSingular()|camel }}Repository
+    ) {
+        $this->{{ entity.getNameSingular()|camel }}Factory = ${{ entity.getNameSingular()|camel }}Factory;
+        $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply()
+    {
+        // Create RootNode
+        ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Factory->create();
+        ${{ entity.getNameSingular()|camel }}->set{{ entity.getNameAttribute().getCode()|camel|ucfirst }}('ROOT')
+            ->setId({{ entity.getNameSingular()|camel|ucfirst }}Interface::TREE_ROOT_ID)
+            ->setPath({{ entity.getNameSingular()|camel|ucfirst }}Interface::TREE_ROOT_ID)
+            ->setLevel(0)
+            ->setPosition(0)
+            ->setChildrenCount(0)
+            ->setInitialSetupFlag(true);
+        $this->{{ entity.getNameSingular()|camel }}Repository->save(${{ entity.getNameSingular()|camel }});
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getVersion()
+    {
+        return '{{ module.getVersion() }}';
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function getAliases()
+    {
+        return [];
+    }
+}
+{% endif %}

@@ -71,7 +71,7 @@ class Save extends AbstractController
             $this->builder->buildModule($module);
             $response['success'] = true;
             $response['message'] = "You have created the module " . $module->getExtensionName();
-            $response['link'] = $this->generateUrl('download', ['module' => $module->getExtensionName()]);
+            $response['link'] = $this->generateUrl('download', ['module' => $module->getFileName()]);
             $response['module'] = $module->getExtensionName();
         } catch (\Exception $e) {
             $response['success'] = false;

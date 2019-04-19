@@ -1,0 +1,17 @@
+{% if entity.getIsTree() %}
+<?php{{ module.getFormattedLicense('php') }}
+/* @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\Edit $block */
+?>
+<div data-id="information-dialog-{{ entity.getNameSingular()|hyphen }}" class="messages" style="display: none;">
+    <div class="message message-notice">
+        <div><?= /* @escapeNotVerified */ __('This operation can take a long time') ?></div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "{{ module.getNamespace() }}_{{ module.getModuleName }}/js/{{ entity.getNameSingular()|camel }}/form": {"refreshUrl": "<?= /* @escapeNotVerified */ $block->getRefreshPathUrl() ?>"}
+        }
+    }
+</script>
+{% endif %}

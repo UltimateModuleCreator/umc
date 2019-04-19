@@ -4,6 +4,9 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminht
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+{% if entity.getIsTree() %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
+{% endif %}
 
 class Delete implements ButtonProviderInterface
 {
@@ -35,7 +38,7 @@ class Delete implements ButtonProviderInterface
     public function getButtonData()
     {
         $data = [];
-        if ($this->get{{ entity.getNameSingular()|ucfirst }}Id()) {
+        if ($this->get{{ entity.getNameSingular()|ucfirst }}Id(){% if entity.getIsTree() %} && $this->get{{ entity.getNameSingular()|ucfirst }}Id() != {{ entity.getNameSingular()|ucfirst }}Interface::TREE_ROOT_ID{% endif %}) {
             $data = [
                 'label' => __('Delete {{ entity.getLabelSingular() }}'),
                 'class' => 'delete',
@@ -59,7 +62,7 @@ class Delete implements ButtonProviderInterface
     /**
      * @return int|null
      */
-    private function get{{ entity.getNameSingular()|ucfirst }}Id()
+    private function get{{ entity.getNameSingular()|camel|ucfirst }}Id()
     {
         ${{ entity.getNameSingular()|camel }} = $this->get{{ entity.getNameSingular()|ucfirst }}();
         return (${{ entity.getNameSingular()|camel }}) ? ${{ entity.getNameSingular()|camel }}->getId() : null;
@@ -73,7 +76,7 @@ class Delete implements ButtonProviderInterface
         return $this->url->getUrl(
             '*/*/delete',
             [
-                '{{ entity.getNameSingular()|snake }}_id' => $this->get{{ entity.getNameSingular()|camel }}Id()
+                '{{ entity.getNameSingular()|snake }}_id' => $this->get{{ entity.getNameSingular()|camel|ucfirst }}Id()
             ]
         );
     }

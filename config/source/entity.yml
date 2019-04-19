@@ -48,6 +48,11 @@ Model/ResourceModel/Entity/Collection.php:
   label: "Entity collection resource model"
   scope: entity
   template: source/Model/ResourceModel/Entity/Collection.php.html.twig
+Model/ResourceModel/Entity/Tree.php:
+  destination: Model/ResourceModel/_Entity_/Tree.php
+  label: "Entity tree resource model"
+  scope: entity
+  template: source/Model/ResourceModel/Entity/Tree.php.html.twig
 Model/Search/Entity.php:
   destination: Model/Search/_Entity_.php
   label: "Entity admin search model"
@@ -118,11 +123,26 @@ Ui/Component/Listing/Column/EntityActions.php:
   label: "Entity Grid actions"
   scope: entity
   template: source/Ui/Component/Listing/Column/EntityActions.php.html.twig
-Block/Adminhtml/Button/Entity//Delete.php:
+Block/Adminhtml/Button/Entity/Delete.php:
   destination: Block/Adminhtml/Button/_Entity_/Delete.php
   label: "Entity Delete button"
   scope: entity
   template: source/Block/Adminhtml/Button/Entity/Delete.php.html.twig
+Block/Adminhtml/Entity/AbstractEntity.php:
+  destination: Block/Adminhtml/_Entity_/Abstract_Entity_.php
+  label: "Entity abstract admin block"
+  scope: entity
+  template: source/Block/Adminhtml/Entity/AbstractEntity.php.html.twig
+Block/Adminhtml/Entity/Tree.php:
+  destination: Block/Adminhtml/_Entity_/Tree.php
+  label: "Entity tree block"
+  scope: entity
+  template: source/Block/Adminhtml/Entity/Tree.php.html.twig
+Block/Adminhtml/Entity/Edit.php:
+  destination: Block/Adminhtml/_Entity_/Edit.php
+  label: "Entity tree edit block"
+  scope: entity
+  template: source/Block/Adminhtml/Entity/Edit.php.html.twig
 Block/Entity/ListEntity.php:
   destination: Block/_Entity_/List_Entity_.php
   label: "Entity list block"
@@ -138,6 +158,11 @@ Block/Entity/ViewEntity.php:
   label: "Entity view block"
   scope: entity
   template: source/Block/Entity/ViewEntity.php.html.twig
+Setup/Patch/Data/InstallRootEntity.php:
+  destination: Setup/Patch/Data/InstallRoot_Entity_.php
+  label: "Tree entity install root patch"
+  scope: entity
+  template: source/Setup/Patch/Data/InstallRootEntity.php.html.twig
 view/admminhtml/layout/namespace_module_entity_edit.xml:
   destination: view/adminhtml/layout/_namespace___modulename___entity__edit.xml
   label: "Entity admin edit layout handle"
@@ -178,3 +203,24 @@ view/frontend/templates/entity/list.phtml:
   label: "Entity frontend list template"
   scope: entity
   template: source/view/frontend/templates/entity/list.phtml.html.twig
+view/adminhtml/web/js/entity/edit-tree.js:
+  destination: view/adminhtml/web/js/_entity_/edit-tree.js
+  label: "Edit tree js template"
+  scope: entity
+  template: source/view/adminhtml/web/js/entity/edit-tree.js.html.twig
+view/adminhtml/web/js/entity/form.js:
+  destination: view/adminhtml/web/js/_entity_/form.js
+  label: "Edit tree entity form"
+  scope: entity
+  template: source/view/adminhtml/web/js/entity/form.js.html.twig
+view/adminhtml/templates/entity/tree.phtml:
+  destination: view/adminhtml/templates/_entity_/tree.phtml
+  label: "Entity Tree admin template"
+  scope: entity
+  template: source/view/adminhtml/templates/entity/tree.phtml.html.twig
+view/adminhtml/templates/entity/edit.phtml:
+  destination: view/adminhtml/templates/_entity_/edit.phtml
+  label: "Entity Tree admin template"
+  scope: entity
+  template: source/view/adminhtml/templates/entity/edit.phtml.html.twig
+

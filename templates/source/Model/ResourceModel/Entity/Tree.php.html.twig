@@ -1,0 +1,365 @@
+{% if entity.getIsTree() %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\Data\Tree\Dbp;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}Resource;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+
+/**
+ * @api
+ */
+class Tree extends Dbp
+{
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * Cllection
+     *
+     * @var Collection
+     */
+    protected $collection;
+{% if entity.hasFrontend() %}
+    /**
+     * Inactive ids
+     *
+     * @var array
+     */
+    protected $inactiveIds = null;
+{% endif %}
+    /**
+     * @var ResourceConnection
+     */
+    protected $coreResource;
+    /**
+     * Cache
+     *
+     * @var CacheInterface
+     */
+    protected $cache;
+
+    /**
+     * {{ entity.getLabelSingular() }} resource
+     *
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Resource
+     */
+    protected ${{ entity.getNameSingular()|camel }}Resource;
+{% if entity.hasFrontend() %}
+    /**
+     * @var array
+     */
+    protected $inactiveItems;
+{% endif %}
+
+    /**
+     * Tree constructor.
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Resource ${{ entity.getNameSingular()|camel }}Resource
+     * @param CacheInterface $cache
+     * @param ResourceConnection $resource
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        {{ entity.getNameSingular()|camel|ucfirst }}Resource ${{ entity.getNameSingular()|camel }}Resource,
+        CacheInterface $cache,
+        ResourceConnection $resource,
+        CollectionFactory $collectionFactory
+    ) {
+        $this->{{ entity.getNameSingular()|camel }}Resource = ${{ entity.getNameSingular()|camel }}Resource;
+        $this->cache = $cache;
+        $this->coreResource = $resource;
+        parent::__construct(
+            $resource->getConnection(),
+            $resource->getTableName('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}'),
+            [
+                Dbp::ID_FIELD => '{{ entity.getNameSingular()|snake }}_id',
+                Dbp::PATH_FIELD => 'path',
+                Dbp::ORDER_FIELD => 'position',
+                Dbp::LEVEL_FIELD => 'level'
+            ]
+        );
+        $this->collectionFactory = $collectionFactory;
+    }
+
+    /**
+     * Add data to collection
+     *
+     * @param Collection $collection
+     * @param boolean $sorted
+     * @param array $exclude
+     * @param boolean $toLoad
+{% if entity.hasFrontend() %}
+     * @param boolean $onlyActive
+{% endif %}
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function addCollectionData(
+        $collection = null,
+        $sorted = false,
+        $exclude = [],
+        $toLoad = true{% if entity.hasFrontend() %},
+        $onlyActive = false
+{% else %}
+
+{% endif %}
+    ) {
+        if ($collection === null) {
+            $collection = $this->getCollection($sorted);
+        } else {
+            $this->setCollection($collection);
+        }
+
+        if (!is_array($exclude)) {
+            $exclude = [$exclude];
+        }
+
+        $nodeIds = [];
+        foreach ($this->getNodes() as $node) {
+            if (!in_array($node->getId(), $exclude)) {
+                $nodeIds[] = $node->getId();
+            }
+        }
+        $collection->addIdFilter($nodeIds);
+{% if entity.hasFrontend() %}
+        if ($onlyActive) {
+            $disabledIds = $this->getDisabledIds($collection, $nodeIds);
+            if ($disabledIds) {
+                $collection->addFieldToFilter('{{entity.getNameSingular()|snake}}_id', ['nin' => $disabledIds]);
+            }
+            $collection->addFieldToFilter('is_active', 1);
+        }
+{% endif %}
+        if ($toLoad) {
+            $collection->load();
+            foreach ($collection as ${{ entity.getNameSingular()|camel }}) {
+                if ($this->getNodeById(${{ entity.getNameSingular()|camel }}->getId())) {
+                    $this->getNodeById(${{ entity.getNameSingular()|camel }}->getId())->addData(${{ entity.getNameSingular()|camel }}->getData());
+                }
+            }
+            foreach ($this->getNodes() as $node) {
+                if (!$collection->getItemById($node->getId()) && $node->getParent()) {
+                    $this->removeNode($node);
+                }
+            }
+        }
+
+        return $this;
+    }
+{% if entity.hasFrontend() %}
+
+    /**
+     * Retrieve inactive {{ entity.getLabelPlural()|lower }} ids
+     *
+     * @return array
+     */
+    public function getInactiveIds()
+    {
+        if (!is_array($this->inactiveIds)) {
+            $this->inactiveIds = [];
+        }
+        return $this->inactiveIds;
+    }
+
+    /**
+     * Return disabled {{ entity.getLabelPlural()|lower }} ids
+     *
+     * @param Collection $collection
+     * @param array $allIds
+     * @return array
+     */
+    protected function getDisabledIds($collection, $allIds)
+    {
+        $this->inactiveItems = $this->getInactiveIds();
+        $this->inactiveItems = array_merge($this->getInactiveItemIds($collection), $this->inactiveItems);
+
+        $disabledIds = [];
+
+        foreach ($allIds as $id) {
+            $parents = $this->getNodeById($id)->getPath();
+            foreach ($parents as $parent) {
+                if (!$this->getItemIsActive($parent->getId())) {
+                    $disabledIds[] = $id;
+                    continue;
+                }
+            }
+        }
+        return $disabledIds;
+    }
+
+    /**
+     * Retrieve inactive {{ entity.getLabelSingular()|lower }} item ids
+     *
+     * @param Collection $collection
+     * @return array
+     */
+    protected function getInactiveItemIds($collection)
+    {
+        $filter = $collection->getAllIdsSql();
+        $table = $this->coreResource->getTable('{{module.getNamespace()|snake}}_{{module.getModuleName()|snake}}_{{entity.getNameSingular()|snake}}');
+        $bind = array(
+            'cond' => 0,
+        );
+        $select = $this->_conn->select()
+            ->from(['d' => $table], array('d.{{entity.getNameSingular()|snake}}_id'))
+            ->where('d.{{entity.getNameSingular()|snake}}_id IN (?)', new \Zend_Db_Expr($filter))
+            ->where('is_active = :cond');
+        return $this->conn->fetchCol($select, $bind);
+    }
+
+    /**
+     * Check is {{ entity.getLabelSingular()|lower }} items active
+     *
+     * @param int $id
+     * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    protected function getItemIsActive($id)
+    {
+        if (!in_array($id, $this->inactiveItems)) {
+            return true;
+        }
+        return false;
+    }
+{% endif %}
+    /**
+     * Get {{ entity.getLabelPlural()|lower }} collection
+     *
+     * @param boolean $sorted
+     * @return Collection
+     */
+    public function getCollection($sorted = false)
+    {
+        if ($this->collection === null) {
+            $this->collection = $this->getDefaultCollection($sorted);
+        }
+        return $this->collection;
+    }
+
+    /**
+     * Clean unneeded collection
+     *
+     * @param Collection|array $object
+     * @return void
+     */
+    protected function clean($object)
+    {
+        if (is_array($object)) {
+            foreach ($object as $obj) {
+                $this->clean($obj);
+            }
+        }
+        unset($object);
+    }
+
+    /**
+     * @param Collection $collection
+     * @return $this
+     */
+    public function setCollection($collection)
+    {
+        if ($this->collection !== null) {
+            $this->clean($this->collection);
+        }
+        $this->collection = $collection;
+        return $this;
+    }
+
+    /**
+     * @param boolean $sorted
+     * @return Collection
+     */
+    protected function getDefaultCollection($sorted = false)
+    {
+        $collection = $this->collectionFactory->create();
+        if ($sorted) {
+            if (is_string($sorted)) {
+                $collection->addOrder($sorted);
+            } else {
+                $collection->addOrder('{{ entity.getNameAttribute().getCode()}}');
+            }
+        }
+        return $collection;
+    }
+
+    /**
+     * Executing parents move method and cleaning cache after it
+     *
+     * @param mixed ${{ entity.getNameSingular()|camel }}
+     * @param mixed $newParent
+     * @param mixed $prevNode
+     * @return void
+     */
+    public function move(${{ entity.getNameSingular()|camel }}, $newParent, $prevNode = null)
+    {
+        $this->{{ entity.getNameSingular()|camel }}Resource->move(${{ entity.getNameSingular()|camel }}->getId(), $newParent->getId());
+        parent::move(${{ entity.getNameSingular()|camel }}, $newParent, $prevNode);
+
+        $this->afterMove();
+    }
+
+    /**
+     * Move tree after
+     *
+     * @return $this
+     */
+    protected function afterMove()
+    {
+        $this->cache->clean([\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::CACHE_TAG]);
+        return $this;
+    }
+
+    /**
+     * Load array of {{ entity.getLabelSingular() }} parents
+     *
+     * @param string $path
+     * @param bool $addCollectionData
+     * @param bool $withRootNode
+     * @return array
+     */
+    public function loadBreadcrumbsArray($path, $withRootNode = false)
+    {
+        $pathIds = explode('/', $path);
+        if (!$withRootNode) {
+            array_shift($pathIds);
+        }
+        $result = [];
+        if (!empty($pathIds)) {
+            $select = clone $this->_select;
+            $select->where(
+                'e.{{ entity.getNameSingular()|snake }}_id IN(?)',
+                $pathIds
+            )->order(
+                $this->_conn->getLengthSql('e.path') . ' ' . Select::SQL_ASC
+            );
+            $result = $this->_conn->fetchAll($select);
+        }
+        return $result;
+    }
+
+    /**
+     * Get real existing {{ entity.getLabelSingular()|lower }} ids by specified ids
+     *
+     * @param array $ids
+     * @return array
+     */
+    public function getExistingIdsBySpecifiedIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+        if (!is_array($ids)) {
+            $ids = [$ids];
+        }
+        $select = $this->_conn->select()->from($this->_table, ['{{ entity.getNameSingular()|snake }}_id'])->where('{{ entity.getNameSingular()|snake }}_id IN (?)', $ids);
+        return $this->_conn->fetchCol($select);
+    }
+}
+{% endif %}

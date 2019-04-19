@@ -4,8 +4,14 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Ad
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpGetActionInterface;
+{% endif %}
 
-abstract class AbstractIndex extends Action
+abstract class AbstractIndex extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpGetActionInterface
+{% else %}
+
+{% endif %}
 {
     /**
      * @var string

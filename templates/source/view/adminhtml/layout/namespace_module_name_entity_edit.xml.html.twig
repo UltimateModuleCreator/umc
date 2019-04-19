@@ -1,8 +1,28 @@
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="{% if entity.getIsTree() %}admin-2columns-left{% else %}admin-1column{% endif %}" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+{% if entity.getIsTree() %}
+    <update handle="styles"/>
+    <head>
+        <link src="{{ module.getNamespace() }}_{{ module.getModuleName() }}::js/{{ entity.getNameSingular()|camel|lower }}/edit-tree.js"/>
+    </head>
+{% endif %}
     <body>
-    <referenceContainer name="content">
-        <uiComponent name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_form"/>
-    </referenceContainer>
+{% if entity.getIsTree() %}
+        <referenceContainer name="left" htmlTag="div" />
+        <referenceContainer name="left">
+            <block class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\Tree" name="{{ entity.getNameSingular()|snake }}.tree" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ entity.getNameSingular()|camel|lower }}/tree.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <uiComponent name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_form"/>
+            <block class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\Edit" name="{{ entity.getNameSingular()|snake }}.edit" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ entity.getNameSingular()|camel|lower }}/edit.phtml" />
+        </referenceContainer>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="{{ entity.getNameSingular()|snake }}_page_head_components" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::js/components.phtml"/>
+        </referenceBlock>
+{% else %}
+        <referenceContainer name="content">
+            <uiComponent name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_form"/>
+        </referenceContainer>
+{% endif %}
     </body>
 </page>

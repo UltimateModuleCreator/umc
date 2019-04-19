@@ -68,16 +68,16 @@ class Builder
      */
     public function buildModule(Module $module) : void
     {
-        $moduleName = $module->getExtensionName();
+        $fileName = $module->getFileName();
         $writer = $this->writerFactory->create($this->basePath);
         $files = $this->generator->generateModule($module);
-        $writer->writeFiles($files, $moduleName);
-        $csFiles = $this->codingStandardsFactory->create($this->basePath . $moduleName)->run();
-        $writer->writeFiles($csFiles, $moduleName);
-        $this->archiverFactory->create($this->basePath)->createZip($this->basePath . $moduleName, $moduleName);
+        $writer->writeFiles($files, $fileName);
+        $csFiles = $this->codingStandardsFactory->create($this->basePath . $fileName)->run();
+        $writer->writeFiles($csFiles, $fileName);
+        $this->archiverFactory->create($this->basePath)->createZip($this->basePath . $fileName, $fileName);
         $configWriter = $this->writerFactory->create($this->configFilePath);
         $configWriter->writeFiles([
-            $moduleName . '.yml' => $this->yamlLoader->arrayToYaml($module->toArray())
+            $fileName . '.yml' => $this->yamlLoader->arrayToYaml($module->toArray())
         ]);
     }
 }

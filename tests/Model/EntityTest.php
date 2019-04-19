@@ -438,4 +438,16 @@ class EntityTest extends TestCase
         $entity = new Entity($this->sorter, ['frontend_list' => 0, 'frontend_view' => 0]);
         $this->assertFalse($entity->hasFrontend());
     }
+
+    /**
+     * @covers \App\Model\Entity::getIsTree
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetIsTree()
+    {
+        $entity = new Entity($this->sorter, ['is_tree' => '1']);
+        $this->assertTrue($entity->getIsTree());
+        $entity = new Entity($this->sorter, []);
+        $this->assertFalse($entity->getIsTree());
+    }
 }

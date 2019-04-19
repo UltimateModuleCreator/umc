@@ -15,8 +15,14 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.get
 {% if entity.getStore() %}
 use Magento\Store\Model\StoreManagerInterface;
 {% endif %}
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpGetActionInterface;
+{% endif %}
 
-class View extends Action
+class View extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpGetActionInterface
+{% else %}
+
+{% endif %}
 {
     /**
      * @var string

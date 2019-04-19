@@ -31,6 +31,19 @@ label_plural:
     attr:
       data-validation: validate_required
       title: "This is the plural form of the label above. It will be used for lists. (For example: 'Posts'). Try to use English words for this label. It's not mandatory, but it makes the taxonomy more readable. I recommend the first letter to be uppercase."
+is_tree:
+  id: is_tree
+  type: choice
+  has_default: true
+  options:
+    label: Entity Behaves as tree
+    choices:
+      Yes: 1
+      No: 0
+    attr:
+      data-validation: validate_required
+      title: Selecting yes, will make the entities behave in a very similar way with the Magento categories.
+
 add_created_to_grid:
   id: add_created_to_grid
   type: choice

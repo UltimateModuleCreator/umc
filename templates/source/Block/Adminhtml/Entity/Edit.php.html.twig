@@ -1,0 +1,22 @@
+{% if entity.getIsTree() %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @api
+ */
+class Edit extends Template
+{
+    /**
+     * Return URL for refresh input element 'path' in form
+     *
+     * @return string
+     */
+    public function getRefreshPathUrl()
+    {
+        return $this->getUrl('*/*/refreshPath', ['_current' => true]);
+    }
+}
+{% endif %}

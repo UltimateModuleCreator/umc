@@ -6,8 +6,14 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpPostActionInterface;
+{% endif %}
 
-class Upload extends Action
+class Upload extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpPostActionInterface
+{% else %}
+
+{% endif %}
 {
     /**
      * Uploader model

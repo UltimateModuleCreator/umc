@@ -36,6 +36,7 @@ class Entity extends AbstractModel
     const SEO = 'seo';
     const POSITION = 'position';
     const MENU_LINK = 'menu_link';
+    const IS_TREE  = 'is_tree';
     const MENU_LINK_NO_LINK = 0;
     const MENU_LINK_MAIN_MENU = 1;
     const MENU_LINK_FOOTER = 2;
@@ -65,7 +66,8 @@ class Entity extends AbstractModel
     protected $propertyNames = [
         self::LABEL_SINGULAR, self::LABEL_PLURAL, self::NAME_SINGULAR, self::NAME_PLURAL,
         self::ADD_CREATED_TO_GRID, self::ADD_UPDATED_TO_GRID, self::SEARCH, self::STORE,
-        self::FRONTEND_LIST, self::FRONTEND_VIEW, self::SEO, self::POSITION, self::MENU_LINK
+        self::FRONTEND_LIST, self::FRONTEND_VIEW, self::SEO, self::POSITION, self::MENU_LINK,
+        self::IS_TREE
     ];
     /**
      * @var Attribute[]
@@ -355,5 +357,13 @@ class Entity extends AbstractModel
     public function hasFrontend()
     {
         return $this->getFrontendList() || $this->getFrontendView();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsTree() : bool
+    {
+        return (bool)$this->getData(self::IS_TREE);
     }
 }

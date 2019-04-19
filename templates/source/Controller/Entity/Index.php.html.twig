@@ -7,8 +7,14 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpGetActionInterface;
+{% endif %}
 
-class Index extends Action
+class Index extends Action{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpGetActionInterface
+{% else %}
+
+{% endif %}
 {
 {% if entity.getSeo() %}
     /**

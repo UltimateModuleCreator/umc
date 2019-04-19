@@ -9,11 +9,15 @@
     </argument>
     <settings>
         <buttons>
+{% if not entity.getIsTree() %}
             <button name="back" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\Back"/>
+{% endif %}
             <button name="delete" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\{{ entity.getNameSingular()|camel|ucfirst }}\Delete"/>
             <button name="reset" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\Reset"/>
             <button name="save" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\Save"/>
+{% if not entity.getIsTree() %}
             <button name="save_and_continue" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button\SaveAndContinue"/>
+{% endif %}
         </buttons>
         <namespace>{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_form</namespace>
         <dataScope>data</dataScope>
@@ -41,6 +45,28 @@
         <settings>
             <label translate="true">{{ entity.getLabelSingular()|ucfirst }} Information</label>
         </settings>
+{% if entity.getIsTree() %}
+        <field name="parent_id" formElement="hidden">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+        <field name="path" formElement="hidden">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+{% endif %}
         <field name="{{ entity.getNameSingular()|snake }}_id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

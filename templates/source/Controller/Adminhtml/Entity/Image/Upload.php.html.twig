@@ -4,7 +4,13 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Ad
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\Upload as GenericUpload;
 
-class Upload extends GenericUpload
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpPostActionInterface;
+{% endif %}
+class Upload extends GenericUpload{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpPostActionInterface
+{% else %}
+
+{% endif %}
 {
 
 }

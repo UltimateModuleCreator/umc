@@ -352,4 +352,12 @@ class Module extends AbstractModel
     {
         return $this->composerPhpVersion[$this->getMagentoVersion()];
     }
+
+    /**
+     * @return string
+     */
+    public function getFileName() : string
+    {
+        return $this->getExtensionName(). '-' . $this->getVersion().'-magento-v'.$this->getMagentoVersion();
+    }
 }

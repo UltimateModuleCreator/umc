@@ -1,0 +1,218 @@
+{% if entity.getIsTree() %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\Data\Tree\Node;
+use Magento\Backend\Block\Template;
+use Magento\Framework\Registry;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Tree;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use Magento\Backend\Block\Template\Context;
+
+/**
+ * @api
+ */
+class Abstract{{ entity.getNameSingular()|camel|ucfirst }} extends Template
+{
+    /**
+     * @var Registry
+     */
+    protected $registry;
+
+    /**
+     * @var Tree
+     */
+    protected $tree;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Tree $Tree
+     * @param Registry $registry
+     * @param CollectionFactory $collectionFactory
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Tree $tree,
+        Registry $registry,
+        CollectionFactory $collectionFactory,
+        array $data = []
+    ) {
+        $this->tree = $tree;
+        $this->registry = $registry;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Retrieve current {{ entity.getLabelSingular()|lower }} instance
+     *
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        return $this->registry->registry('{{ entity.getNameSingular()|snake }}');
+    }
+
+    /**
+     * @return int
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Id()
+    {
+        if ($this->get{{ entity.getNameSingular()|camel|ucfirst }}()) {
+            return $this->get{{ entity.getNameSingular()|camel|ucfirst }}()->getId();
+        }
+        return {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID;
+    }
+
+    /**
+     * @return string
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Path()
+    {
+        if ($this->get{{ entity.getNameSingular()|camel|ucfirst }}()) {
+            return $this->get{{ entity.getNameSingular()|camel|ucfirst }}()->getPath();
+        }
+        return {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID;
+    }
+
+    /**
+     * @param mixed|null $parentNode
+     * @param int $recursionLevel
+     * @return Node|array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getRoot($parentNode = null, $recursionLevel = 3)
+    {
+        if ($parentNode !== null && $parentNode->getId()) {
+            return $this->getNode($parentNode, $recursionLevel);
+        }
+        $root = $this->registry->registry('root');
+        if ($root === null) {
+            $rootId = {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID;
+
+            $tree = $this->tree->load(null, $recursionLevel);
+
+            if ($this->get{{ entity.getNameSingular()|camel|ucfirst }}()) {
+                $tree->loadEnsuredNodes($this->get{{ entity.getNameSingular()|camel|ucfirst }}(), $tree->getNodeById($rootId));
+            }
+
+            $tree->addCollectionData($this->get{{ entity.getNameSingular()|camel|ucfirst }}Collection());
+
+            $root = $tree->getNodeById($rootId);
+
+            if ($root && $rootId != {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+            } elseif ($root && $root->getId() == {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID) {
+                $root->setName(__('Root'));
+            }
+
+            $this->registry->register('root', $root);
+        }
+
+        return $root;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Collection()
+    {
+        $collection = $this->getData('{{ entity.getNameSingular()|snake }}_collection');
+        if ($collection === null) {
+            $this->setData('{{ entity.getNameSingular()|snake }}', $this->collectionFactory->create());
+        }
+        return $collection;
+    }
+
+    /**
+     * Get and register {{ entity.getLabelPlural()|lower }} root by specified {{ entity.getLabelPlural()|lower }} IDs
+     *
+     * IDs can be arbitrary set of any {{ entity.getLabelPlural()|lower }} ids.
+     * Tree with minimal required nodes (all parents and neighbours) will be built.
+     * If ids are empty, default tree with depth = 2 will be returned.
+     *
+     * @param array $ids
+     * @return mixed
+     */
+    public function getRootByIds($ids)
+    {
+        $root = $this->registry->registry('root');
+        if (null === $root) {
+            $ids = $this->tree->getExisting{{ entity.getNameSingular()|camel|ucfirst }}IdsBySpecifiedIds($ids);
+            $tree = $this->tree->loadByIds($ids);
+            $rootId = {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID;
+            $root = $tree->getNodeById($rootId);
+            if ($root && $rootId != {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+            } elseif ($root && $root->getId() == {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID) {
+                $root->setName(__('Root'));
+            }
+
+            $tree->addCollectionData($this->get{{ entity.getNameSingular()|camel|ucfirst }}Collection());
+            $this->registry->register('root', $root);
+        }
+        return $root;
+    }
+
+    /**
+     * @param mixed $parentNode
+     * @param int $recursionLevel
+     * @return Node
+     */
+    public function getNode($parentNode, $recursionLevel = 2)
+    {
+        $nodeId = $parentNode->getId();
+        $node = $this->tree->loadNode($nodeId);
+        $node->loadChildren($recursionLevel);
+
+        if ($node && $nodeId != {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID) {
+            $node->setIsVisible(true);
+        } elseif ($node && $node->getId() == {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID) {
+            $node->setName(__('Root'));
+        }
+
+        $this->tree->addCollectionData($this->get{{ entity.getNameSingular()|camel|ucfirst }}Collection());
+
+        return $node;
+    }
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getSaveUrl(array $args = [])
+    {
+        $params = ['_current' => false, '_query' => false];
+        $params = array_merge($params, $args);
+        return $this->getUrl('*/*/save', $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditUrl()
+    {
+        return $this->getUrl(
+            '*/*/edit',
+            ['_query' => false, 'id' => null, 'parent' => null]
+        );
+    }
+
+    /**
+     * Return ids of root {{ entity.getLabelPlural()|lower }} as array
+     *
+     * @return array
+     */
+    public function getRootIds()
+    {
+        return [{{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID];
+    }
+}
+{% endif %}

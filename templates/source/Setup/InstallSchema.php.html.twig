@@ -74,6 +74,43 @@ class InstallSchema implements InstallSchemaInterface
                 '{{ entity.getLabelSingular() }} Is Enabled'
             )
 {% endif %}
+{% if entity.getIsTree() %}
+            ->addColumn(
+                'parent_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Parent {{ entity.getLabelSingular() }} ID'
+            )
+            ->addColumn(
+                'path',
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => false],
+                '{{ entity.getLabelSingular() }} Tree Path'
+            )
+            ->addColumn(
+                'position',
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false],
+                '{{ entity.getLabelSingular() }} Position'
+            )
+            ->addColumn(
+                'level',
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'default' => '0'],
+                '{{ entity.getLabelSingular() }} Tree Level'
+            )
+            ->addColumn(
+                'children_count',
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false],
+                '{{ entity.getLabelSingular() }} Child Count'
+            )
+{% endif %}
 {% if entity.getSeo() %}
             ->addColumn(
                 'meta_title',
@@ -117,6 +154,22 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 '{{ entity.getLabelSingular()|ucfirst }} Updated At'
             )
+{% if entity.getIsTree() %}
+            ->addIndex(
+                $installer->getIdxName(
+                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}',
+                    ['level']
+                ),
+                ['level']
+            )
+            ->addIndex(
+                $installer->getIdxName(
+                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}',
+                    ['path']
+                ),
+                ['path']
+            )
+{% endif %}
 {%  for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderFk()|raw }}{% endfor %}
             ->setComment('{{ entity.getLabelSingular()|ucfirst }} Table');
             $setup->getConnection()->createTable($table);

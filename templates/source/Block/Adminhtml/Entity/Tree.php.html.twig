@@ -1,0 +1,374 @@
+{% if entity.getIsTree() %}
+<?php{{ module.getFormattedLicense('php') }}
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\DB\Helper;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Tree as TreeResourceModel;
+use Magento\Backend\Block\Widget\Button;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+
+/**
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Tree extends Abstract{{ entity.getNameSingular()|camel|ucfirst }}
+{
+    /**
+     * @var Session
+     */
+    protected $backendSession;
+
+    /**
+     * @var Helper
+     */
+    protected $resourceHelper;
+
+    /**
+     * @var EncoderInterface
+     */
+    protected $jsonEncoder;
+
+    /**
+     * @param Context $context
+     * @param TreeResourceModel $tree
+     * @param Registry $registry
+     * @param CollectionFactory $collectionFactory
+     * @param EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Magento\Backend\Model\Auth\Session $backendSession
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        TreeResourceModel $tree,
+        Registry $registry,
+        CollectionFactory $collectionFactory,
+        EncoderInterface $jsonEncoder,
+        Helper $resourceHelper,
+        Session $backendSession,
+        array $data = []
+    ) {
+        $this->jsonEncoder = $jsonEncoder;
+        $this->resourceHelper = $resourceHelper;
+        $this->backendSession = $backendSession;
+        parent::__construct($context, $tree, $registry, $collectionFactory, $data);
+    }
+
+    /**
+     * @return void
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setUseAjax(0);
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $addUrl = $this->getUrl("*/*/add", ['_current' => false, 'id' => null, '_query' => false]);
+        $this->addChild(
+            'add_sub_button',
+            Button::class,
+            [
+                'label' => __('Add Child {{ entity.getLabelSingular() }}'),
+                'onclick' => "addNew('" . $addUrl . "', false)",
+                'class' => 'add',
+                'id' => 'add_sub_button',
+            ]
+        );
+
+        $this->addChild(
+            'add_root_button',
+            Button::class,
+            [
+                'label' => __('Add Root {{ entity.getLabelSingular() }}'),
+                'onclick' => "addNew('" . $addUrl . "', true)",
+                'class' => 'add',
+                'id' => 'add_root_button'
+            ]
+        );
+        return parent::_prepareLayout();
+    }
+
+    /**
+     * Retrieve list of {{ entity.getLabelPlural()|lower }} with name containing $namePart and their parents
+     *
+     * @param string $namePart
+     * @return string
+     */
+    public function getSuggestedJson($namePart)
+    {
+
+        /* @var $collection Collection */
+        $collection = $this->collectionFactory->create();
+
+        $matchingNamesCollection = clone $collection;
+        $escapedNamePart = $this->resourceHelper->addLikeEscape(
+            $namePart,
+            ['position' => 'any']
+        );
+        $matchingNamesCollection->addAttributeToFilter(
+            '{{ entity.getNameAttribute().getCode() }}',
+            ['like' => $escapedNamePart]
+        )->addFieldToFilter(
+            '{{ entity.getNameSingular()|snake }}_id',
+            ['neq' => {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID]
+        );
+
+        $shownIds = [];
+        foreach ($matchingNamesCollection as ${{ entity.getNameSingular()|camel}}) {
+            foreach (explode('/', ${{ entity.getNameSingular()|camel}}->getPath()) as $parentId) {
+                $shownIds[$parentId] = 1;
+            }
+        }
+
+        $collection->addFieldToFilter(
+            '{{ entity.getNameSingular()|snake }}_id',
+            ['in' => array_keys($shownIds)]
+        );
+
+        $byId = [
+            {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID => [
+                'id' => {{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID,
+                'children' => [],
+            ],
+        ];
+        foreach ($collection as ${{ entity.getNameSingular()|camel}}) {
+            foreach ([${{ entity.getNameSingular()|camel}}->getId(), $category->getParentId()] as ${{ entity.getNameSingular()|camel}}Id) {
+                if (!isset($byId[${{ entity.getNameSingular()|camel}}Id])) {
+                    $byId[${{ entity.getNameSingular()|camel}}Id] = ['id' => ${{ entity.getNameSingular()|camel}}Id, 'children' => []];
+                }
+            }
+            $byId[${{ entity.getNameSingular()|camel}}->getId()]['is_active'] = {% if entity.hasFrontend() %}${{ entity.getNameSingular()|camel}}->getIsActive() {% else %} true {% endif %};
+            $byId[${{ entity.getNameSingular()|camel}}->getId()]['label'] = ${{ entity.getNameSingular()|camel}}->get{{ entity.getNameAttribute().getCode() }}();
+            $byId[${{ entity.getNameSingular()|camel}}->getParentId()]['children'][] = & $byId[${{ entity.getNameSingular()|camel}}->getId()];
+        }
+
+        return $this->jsonEncoder->encode($cbyId[{{ entity.getNameSingular()|camel|ucfirst }}::TREE_ROOT_ID]['children']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddRootButtonHtml()
+    {
+        return $this->getChildHtml('add_root_button');
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddSubButtonHtml()
+    {
+        return $this->getChildHtml('add_sub_button');
+    }
+
+    /**
+     * @return string
+     */
+    public function getExpandButtonHtml()
+    {
+        return $this->getChildHtml('expand_button');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCollapseButtonHtml()
+    {
+        return $this->getChildHtml('collapse_button');
+    }
+
+    /**
+     * @param bool|null $expanded
+     * @return string
+     */
+    public function getLoadTreeUrl($expanded = null)
+    {
+        $params = ['_current' => true, 'id' => null];
+        if ($expanded === null && $this->backendSession->getIs{{ module.getNamespace()|camel|ucfirst }}{{ entity.getNameSingular()|camel|ucfirst }}TreeWasExpanded() || $expanded == true) {
+            $params['expand_all'] = true;
+        }
+        return $this->getUrl('*/*/{{ entity.getNamePlural()|camel|lower }}Json', $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getNodesUrl()
+    {
+        return $this->getUrl('*/*/jsonTree');
+    }
+
+    /**
+     * @return string
+     */
+    public function getSwitchTreeUrl()
+    {
+        return $this->getUrl(
+            '*/*/tree',
+            ['_current' => true, '_query' => false, 'id' => null, 'parent' => null]
+        );
+    }
+
+    /**
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsWasExpanded()
+    {
+        return $this->backendSession->getIs{{ module.getNamespace()|camel|ucfirst }}{{ entity.getNameSingular()|camel|ucfirst }}TreeWasExpanded();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMoveUrl()
+    {
+        return $this->getUrl('*/*/move');
+    }
+
+    /**
+     * @param mixed|null $parenNode
+     * @return array
+     */
+    public function getTree($parenNode = null)
+    {
+        $rootArray = $this->getNodeJson($this->getRoot($parenNode));
+        $tree = isset($rootArray['children']) ? $rootArray['children'] : [];
+        return $tree;
+    }
+
+    /**
+     * @param mixed|null $parenNode
+     * @return string
+     */
+    public function getTreeJson($parenNode = null)
+    {
+        $rootArray = $this->getNodeJson($this->getRoot($parenNode));
+        $json = $this->jsonEncoder->encode(isset($rootArray['children']) ? $rootArray['children'] : []);
+        return $json;
+    }
+
+    /**
+     * Get JSON of array of {{ entity.getLabelPlural()|lower }}, that are breadcrumbs for specified {{ entity.getLabelSingular()|lower }} path
+     *
+     * @param string $path
+     * @param string $javascriptVarName
+     * @return string
+     */
+    public function getBreadcrumbsJavascript($path, $javascriptVarName)
+    {
+        if (empty($path)) {
+            return '';
+        }
+
+        ${{ entity.getNamePlural()|camel }} = $this->tree->loadBreadcrumbsArray($path);
+        if (empty(${{ entity.getNamePlural()|camel }})) {
+            return '';
+        }
+        foreach (${{ entity.getNamePlural()|camel }} as $key => ${{ entity.getNameSingular()|camel }}) {
+            ${{ entity.getNamePlural()|camel }}[$key] = $this->getNodeJson(${{ entity.getNameSingular()|camel }});
+        }
+        return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->jsonEncoder->encode(
+                ${{ entity.getNamePlural()|camel }}
+            ) . ';' . '$("add_sub_button").show();' . '});</script>';
+    }
+
+    /**
+     * Get JSON of a tree node or an associative array
+     *
+     * @param Node|array $node
+     * @param int $level
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function getNodeJson($node, $level = 0)
+    {
+        // create a node from data array
+        if (is_array($node)) {
+            $node = new Node($node, '{{ entity.getNameSingular()|snake }}_id', new \Magento\Framework\Data\Tree());
+        }
+
+        $item = [];
+        $item['text'] = $this->buildNodeName($node);
+
+        $item['id'] = $node->getId();
+        $item['path'] = $node->getData('path');
+
+        $item['cls'] = 'folder ' . {% if entity.hasFrontend() %}($node->getIsActive() ? 'active-category' : 'no-active-category') {% else %} 'active-category' {% endif %};
+        $item['allowDrop'] = true;
+        $item['allowDrag'] = true;
+
+        if ((int)$node->getChildrenCount() > 0) {
+            $item['children'] = [];
+        }
+
+        $isParent = $this->isParentSelected($node);
+
+        if ($node->hasChildren()) {
+            $item['children'] = [];
+            if (!($this->getUseAjax() && $node->getLevel() > 1 && !$isParent)) {
+                foreach ($node->getChildren() as $child) {
+                    $item['children'][] = $this->getNodeJson($child, $level + 1);
+                }
+            }
+        }
+
+        if ($isParent || $node->getLevel() < 2) {
+            $item['expanded'] = true;
+        }
+
+        return $item;
+    }
+
+    /**
+     * Get category name
+     *
+     * @param \Magento\Framework\DataObject $node
+     * @return string
+     */
+    public function buildNodeName($node)
+    {
+        $result = $this->escapeHtml($node->getName());
+        return $result;
+    }
+
+    /**
+     * @param Node|array $node
+     * @return bool
+     */
+    protected function isParentSelected($node)
+    {
+        if ($node && $this->get{{ entity.getNameSingular()|camel|ucfirst }}()) {
+            $pathIds = $this->get{{ entity.getNameSingular()|camel|ucfirst }}()->getPathIds();
+            if (in_array($node->getId(), $pathIds)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if page loaded by outside link to edit
+     *
+     * @return boolean
+     */
+    public function isClearEdit()
+    {
+        return (bool)$this->getRequest()->getParam('clear');
+    }
+}
+{% endif %}

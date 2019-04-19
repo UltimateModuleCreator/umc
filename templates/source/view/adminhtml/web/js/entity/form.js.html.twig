@@ -1,0 +1,54 @@
+{% if entity.getIsTree() %}
+{{ module.getFormattedLicense('php') }}
+define([
+    'jquery',
+    'Magento_Ui/js/modal/alert'
+], function ($, alert) {
+    'use strict';
+
+    return function (config) {
+        var {{ entity.getNameSingular()|camel }}Form = {
+            options: {
+                {{ entity.getNameSingular()|camel }}IdSelector: 'input[name="id"]',
+                {{ entity.getNameSingular()|camel }}PathSelector: 'input[name="path"]',
+                {{ entity.getNameSingular()|camel }}ParentSelector: 'input[name="parent"]',
+                refreshUrl: config.refreshUrl
+            },
+
+            /**
+             * Sending ajax to server to refresh field 'path'
+             * @protected
+             */
+            refreshPath: function () {
+                if (!$(this.options.{{ entity.getNameSingular()|camel }}IdSelector)) {
+                    return false;
+                }
+                $.ajax({
+                    url: this.options.refreshUrl,
+                    method: 'GET',
+                    showLoader: true
+                }).done(this._refreshPathSuccess.bind(this));
+            },
+
+            /**
+             * Refresh field 'path' on ajax success
+             * @param {Object} data
+             * @private
+             */
+            _refreshPathSuccess: function (data) {
+                if (data.error) {
+                    alert({
+                        content: data.message
+                    });
+                } else {
+                    $(this.options.{{ entity.getNameSingular()|camel }}IdSelector).val(data.id).change();
+                    $(this.options.{{ entity.getNameSingular()|camel }}PathSelector).val(data.path).change();
+                    $(this.options.{{ entity.getNameSingular()|camel }}ParentSelector).val(data.parentId).change();
+                }
+            }
+        };
+
+        $('body').on('{{ entity.getNameSingular()|camel }}Move.tree', $.proxy({{ entity.getNameSingular()|camel }}Form.refreshPath.bind({{ entity.getNameSingular()|camel }}Form), this));
+    };
+});
+{% endif %}

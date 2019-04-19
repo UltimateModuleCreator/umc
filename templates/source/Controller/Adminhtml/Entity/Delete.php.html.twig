@@ -2,8 +2,14 @@
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\AbstractDelete;
+{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %}
+use Magento\Framework\App\Action\HttpPostActionInterface;
+{% endif %}
 
-class Delete extends AbstractDelete
+class Delete extends AbstractDelete{% if module.getMagentoVersion() != constant('App\\Model\\Module::MAGENTO_VERSION_2_2') %} implements HttpPostActionInterface
+{% else %}
+
+{% endif %}
 {
 
 }

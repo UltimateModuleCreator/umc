@@ -53,7 +53,7 @@ class ModuleGenerator implements GeneratorInterface
             return [];
         }
         return [
-             $destination => str_replace('\n\r', PHP_EOL, $content)
+            $destination => str_replace('\n\r', PHP_EOL, $content)
         ];
     }
 
