@@ -16,8 +16,8 @@ use Magento\Framework\Option\ArrayInterface;
 {% endif %}
 
 /**
- * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Page _getResource()
- * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Page getResource()
+ * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} _getResource()
+ * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} getResource()
  */
 class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|ucfirst }}Interface
 {
