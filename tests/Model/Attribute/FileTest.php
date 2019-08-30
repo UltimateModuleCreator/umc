@@ -28,8 +28,8 @@ class FileTest extends TestCase
      */
     public function testGetPropertyNames()
     {
-        /** @var \Twig_Environment | MockObject $twig */
-        $twig = $this->createMock(\Twig_Environment::class);
+        /** @var \Twig\Environment | MockObject $twig */
+        $twig = $this->createMock(\Twig\Environment::class);
         /** @var Attribute | MockObject $attribute */
         $attribute = $this->createMock(Attribute::class);
         $file = new Attribute\File($twig, $attribute, []);

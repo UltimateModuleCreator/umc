@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 class AttributeSetTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | Attribute
+     * @var \Twig\Environment | Attribute
      */
     private $twig;
     /**
@@ -40,7 +40,7 @@ class AttributeSetTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->attribute = $this->createMock(Attribute::class);
     }
 

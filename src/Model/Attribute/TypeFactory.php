@@ -28,16 +28,16 @@ class TypeFactory
      */
     private $map = [];
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
 
     /**
      * TypeFactory constructor.
      * @param array $map
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
-    public function __construct(array $map, \Twig_Environment $twig)
+    public function __construct(array $map, \Twig\Environment $twig)
     {
         $this->map = $map;
         $this->twig = $twig;

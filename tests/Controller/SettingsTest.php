@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Router;
 class SettingsTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var \Twig\Environment | MockObject
      */
     private $twig;
     /**
@@ -54,7 +54,7 @@ class SettingsTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->settingsModel = $this->createMock(\App\Model\Settings::class);
         $this->router = $this->createMock(Router::class);
         $this->router->expects($this->once())->method('generate')->willReturn('route');

@@ -32,7 +32,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 class EditTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var \Twig\Environment | MockObject
      */
     private $twig;
     /**
@@ -77,7 +77,7 @@ class EditTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->twig->expects($this->once())->method('render')->with($this->equalTo('template'));
         $this->router = $this->createMock(Router::class);
         $this->router->expects($this->once())->method('generate')->willReturn('route');

@@ -29,7 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 class FilesTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var \Twig\Environment | MockObject
      */
     private $twig;
     /**
@@ -46,7 +46,7 @@ class FilesTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->reader = $this->createMock(Reader::class);
     }
 

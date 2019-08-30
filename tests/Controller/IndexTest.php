@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Container;
 class IndexTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var \Twig\Environment | MockObject
      */
     private $twig;
     /**
@@ -44,7 +44,7 @@ class IndexTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->moduleList = $this->createMock(ModuleList::class);
     }
 

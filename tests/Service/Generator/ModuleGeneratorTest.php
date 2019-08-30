@@ -27,7 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 class ModuleGeneratorTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var \Twig\Environment | MockObject
      */
     private $twig;
     /**
@@ -44,7 +44,7 @@ class ModuleGeneratorTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->module = $this->createMock(Module::class);
         $this->generator = new ModuleGenerator($this->twig);
     }

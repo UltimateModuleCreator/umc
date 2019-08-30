@@ -47,17 +47,17 @@ class AbstractType extends AbstractModel implements TypeInterface
      */
     protected $attribute;
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
 
     /**
      * AbstractType constructor.
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param Attribute $attribute
      * @param array $data
      */
-    public function __construct(\Twig_Environment $twig, Attribute $attribute, array $data = [])
+    public function __construct(\Twig\Environment $twig, Attribute $attribute, array $data = [])
     {
         $this->attribute = $attribute;
         $this->twig = $twig;

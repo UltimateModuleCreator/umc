@@ -24,15 +24,15 @@ use App\Model\Module;
 class ModuleGenerator implements GeneratorInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
 
     /**
      * Module constructor.
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(\Twig\Environment $twig)
     {
         $this->twig = $twig;
     }

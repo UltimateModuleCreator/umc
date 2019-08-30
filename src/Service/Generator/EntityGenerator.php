@@ -26,7 +26,7 @@ use App\Util\StringUtil;
 class EntityGenerator implements GeneratorInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
     /**
@@ -36,10 +36,10 @@ class EntityGenerator implements GeneratorInterface
 
     /**
      * EntityGenerator constructor.
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param StringUtil $stringUtil
      */
-    public function __construct(\Twig_Environment $twig, StringUtil $stringUtil)
+    public function __construct(\Twig\Environment $twig, StringUtil $stringUtil)
     {
         $this->twig = $twig;
         $this->stringUtil = $stringUtil;

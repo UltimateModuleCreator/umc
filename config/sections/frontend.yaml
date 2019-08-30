@@ -1,0 +1,5 @@
+frontend:
+  label: Frontend
+  mandatory: false
+  depends:
+    - backend

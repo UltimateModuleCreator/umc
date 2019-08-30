@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 class Settings extends AbstractController
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
     /**
@@ -37,11 +37,11 @@ class Settings extends AbstractController
 
     /**
      * Settings constructor.
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param string $template
      * @param \App\Model\Settings $settingsModel
      */
-    public function __construct(\Twig_Environment $twig, string $template, \App\Model\Settings $settingsModel)
+    public function __construct(\Twig\Environment $twig, string $template, \App\Model\Settings $settingsModel)
     {
         $this->twig = $twig;
         $this->template = $template;

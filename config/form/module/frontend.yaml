@@ -1,0 +1,35 @@
+front_key:
+  id: front_key
+  type: text
+  options:
+    label: Frontend URL Key
+    attr:
+      title: This is the url key for the module in case you add any entities that support frontend. Leave empty to autogenerate
+sort: 70
+config_tab:
+  id: config_tab
+  type: text
+  options:
+    label: Store -> Config tab name.
+    attr:
+      title: If at least one entity has frontend files then a section in Stores->Configuration will be created. Fill in the tab name here. Leave empty to use the namespace.
+  sort: 80
+config_tab_position:
+  id: config_tab_position
+  type: text
+  options:
+    label: Stores -> Configuration tab position
+    attr:
+      data-validation: validate_number
+      title: If at least one entity has frontend files then a section in System->Configuration will be created. Fill in the tab position. The higher the number the lower it will appear in the list.
+  sorr: 90
+license:
+  id: license
+  type: textarea
+  has_default: true
+  options:
+    label: License
+    required: false
+    attr:
+      title: The text you put here will be added at the top of (almost) each file in the module you create. Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year. If you don't want any License text on your files just leave this field empty.
+  sort:100

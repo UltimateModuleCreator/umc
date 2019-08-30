@@ -11,9 +11,6 @@
     "psr/log": {
         "version": "1.0.2"
     },
-    "psr/simple-cache": {
-        "version": "1.0.1"
-    },
     "squizlabs/php_codesniffer": {
         "version": "3.0",
         "recipe": {
@@ -28,6 +25,9 @@
     },
     "symfony/cache": {
         "version": "v4.1.4"
+    },
+    "symfony/cache-contracts": {
+        "version": "v1.1.5"
     },
     "symfony/config": {
         "version": "v4.1.4"
@@ -52,6 +52,9 @@
     },
     "symfony/event-dispatcher": {
         "version": "v4.1.4"
+    },
+    "symfony/event-dispatcher-contracts": {
+        "version": "v1.1.5"
     },
     "symfony/filesystem": {
         "version": "v4.1.4"
@@ -92,6 +95,9 @@
     "symfony/intl": {
         "version": "v4.1.4"
     },
+    "symfony/mime": {
+        "version": "v4.3.1"
+    },
     "symfony/options-resolver": {
         "version": "v4.1.4"
     },
@@ -107,8 +113,17 @@
     "symfony/polyfill-intl-icu": {
         "version": "v1.9.0"
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.11.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.9.0"
+    },
+    "symfony/polyfill-php72": {
+        "version": "v1.11.0"
+    },
+    "symfony/polyfill-php73": {
+        "version": "v1.11.0"
     },
     "symfony/process": {
         "version": "v4.1.4"
@@ -125,6 +140,25 @@
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
     },
+    "symfony/service-contracts": {
+        "version": "v1.1.5"
+    },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "2ad9d2545bce8ca1a863e50e92141f0b9d87ffcd"
+        },
+        "files": [
+            "config/packages/translation.yaml",
+            "translations/.gitignore"
+        ]
+    },
+    "symfony/translation-contracts": {
+        "version": "v1.1.5"
+    },
     "symfony/twig-bridge": {
         "version": "v4.1.4"
     },
@@ -136,6 +170,9 @@
             "version": "3.3",
             "ref": "f75ac166398e107796ca94cc57fa1edaa06ec47f"
         }
+    },
+    "symfony/var-exporter": {
+        "version": "v4.3.1"
     },
     "symfony/yaml": {
         "version": "v4.1.4"

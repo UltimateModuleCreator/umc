@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 class YesnoTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var \Twig\Environment | MockObject
      */
     private $twig;
     /**
@@ -38,7 +38,7 @@ class YesnoTest extends TestCase
      */
     protected function setUp()
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(\Twig\Environment::class);
         $this->attribute = $this->createMock(Attribute::class);
     }
 
