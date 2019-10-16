@@ -114,7 +114,7 @@ class View extends Action
         }
         $resultPage->getConfig()->getTitle()->set($title);
 {% else %}
-        $resultPage->getConfig()->getTitle()->set(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }});
+        $resultPage->getConfig()->getTitle()->set(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());
 {% endif %}
         $pageMainTitle = $resultPage->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle && $pageMainTitle instanceof \Magento\Theme\Block\Html\Title) {
