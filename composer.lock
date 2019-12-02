@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "4b62ceef5cc57aae1af9ebd6fb10899a",
-    "content-hash": "6a444046bfb217fb9213fa70a81c5ccd",
+    "content-hash": "56629e07df73fdba51d4892bdfbe7573",
     "packages": [
         {
             "name": "magento-ecg/coding-standard",
@@ -39,7 +38,7 @@
             ],
             "description": "A set of PHP_CodeSniffer rules and sniffs.",
             "homepage": "https://github.com/magento-ecg/coding-standard",
-            "time": "2017-06-30 19:00:28"
+            "time": "2017-06-30T19:00:28+00:00"
         },
         {
             "name": "psr/cache",
@@ -85,7 +84,7 @@
                 "psr",
                 "psr-6"
             ],
-            "time": "2016-08-06 20:24:11"
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/container",
@@ -134,20 +133,20 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14 16:28:37"
+            "time": "2017-02-14T16:28:37+00:00"
         },
         {
             "name": "psr/log",
-            "version": "1.0.2",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +155,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -181,55 +180,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
-        },
-        {
-            "name": "psr/simple-cache",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/simple-cache.git",
-                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
-                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\SimpleCache\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interfaces for simple caching",
-            "keywords": [
-                "cache",
-                "caching",
-                "psr",
-                "psr-16",
-                "simple-cache"
-            ],
-            "time": "2017-10-23 01:57:42"
+            "time": "2019-11-01T11:05:21+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -280,7 +231,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-07-26 23:47:18"
+            "time": "2018-07-26T23:47:18+00:00"
         },
         {
             "name": "symfony/asset",
@@ -336,45 +287,54 @@
             ],
             "description": "Symfony Asset Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26 09:10:45"
+            "time": "2018-07-26T09:10:45+00:00"
         },
         {
             "name": "symfony/cache",
-            "version": "v4.1.4",
+            "version": "v4.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "b8440ff4635c6631aca21a09ab72e0b7e3a6cb7a"
+                "reference": "2a7bcc592adcaab9efc165bbced5a91fe905fad4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/b8440ff4635c6631aca21a09ab72e0b7e3a6cb7a",
-                "reference": "b8440ff4635c6631aca21a09ab72e0b7e3a6cb7a",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/2a7bcc592adcaab9efc165bbced5a91fe905fad4",
+                "reference": "2a7bcc592adcaab9efc165bbced5a91fe905fad4",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3",
                 "psr/cache": "~1.0",
                 "psr/log": "~1.0",
-                "psr/simple-cache": "^1.0"
+                "symfony/cache-contracts": "^1.1",
+                "symfony/service-contracts": "^1.1",
+                "symfony/var-exporter": "^4.2"
             },
             "conflict": {
+                "doctrine/dbal": "<2.5",
+                "symfony/dependency-injection": "<3.4",
                 "symfony/var-dumper": "<3.4"
             },
             "provide": {
                 "psr/cache-implementation": "1.0",
-                "psr/simple-cache-implementation": "1.0"
+                "psr/simple-cache-implementation": "1.0",
+                "symfony/cache-implementation": "1.0"
             },
             "require-dev": {
                 "cache/integration-tests": "dev-master",
                 "doctrine/cache": "~1.6",
-                "doctrine/dbal": "~2.4",
-                "predis/predis": "~1.0"
+                "doctrine/dbal": "~2.5",
+                "predis/predis": "~1.1",
+                "psr/simple-cache": "^1.0",
+                "symfony/config": "~4.2",
+                "symfony/dependency-injection": "~3.4|~4.1",
+                "symfony/var-dumper": "^4.1.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -405,7 +365,65 @@
                 "caching",
                 "psr6"
             ],
-            "time": "2018-08-27 09:36:56"
+            "time": "2019-12-01T10:50:31+00:00"
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "v1.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache-contracts.git",
+                "reference": "af50d14ada9e4e82cfabfabdc502d144f89be0a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/af50d14ada9e4e82cfabfabdc502d144f89be0a1",
+                "reference": "af50d14ada9e4e82cfabfabdc502d144f89be0a1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "psr/cache": "^1.0"
+            },
+            "suggest": {
+                "symfony/cache-implementation": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Cache\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to caching",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "time": "2019-10-04T21:43:27+00:00"
         },
         {
             "name": "symfony/config",
@@ -468,7 +486,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-08 06:37:38"
+            "time": "2018-08-08T06:37:38+00:00"
         },
         {
             "name": "symfony/console",
@@ -536,7 +554,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26 11:24:31"
+            "time": "2018-07-26T11:24:31+00:00"
         },
         {
             "name": "symfony/debug",
@@ -592,7 +610,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-03 11:13:38"
+            "time": "2018-08-03T11:13:38+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -663,7 +681,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-08 11:48:58"
+            "time": "2018-08-08T11:48:58+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -726,7 +744,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26 09:10:45"
+            "time": "2018-07-26T09:10:45+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -776,7 +794,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-18 16:52:46"
+            "time": "2018-08-18T16:52:46+00:00"
         },
         {
             "name": "symfony/finder",
@@ -825,7 +843,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26 11:24:31"
+            "time": "2018-07-26T11:24:31+00:00"
         },
         {
             "name": "symfony/flex",
@@ -872,7 +890,7 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
-            "time": "2018-08-21 07:51:18"
+            "time": "2018-08-21T07:51:18+00:00"
         },
         {
             "name": "symfony/form",
@@ -953,7 +971,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-24 10:22:26"
+            "time": "2018-08-24T10:22:26+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -1069,7 +1087,7 @@
             ],
             "description": "Symfony FrameworkBundle",
             "homepage": "https://symfony.com",
-            "time": "2018-08-17 12:07:19"
+            "time": "2018-08-17T12:07:19+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -1123,7 +1141,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-27 17:47:02"
+            "time": "2018-08-27T17:47:02+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -1210,7 +1228,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-28 06:17:42"
+            "time": "2018-08-28T06:17:42+00:00"
         },
         {
             "name": "symfony/inflector",
@@ -1268,7 +1286,7 @@
                 "symfony",
                 "words"
             ],
-            "time": "2018-07-26 08:55:25"
+            "time": "2018-07-26T08:55:25+00:00"
         },
         {
             "name": "symfony/intl",
@@ -1343,7 +1361,7 @@
                 "l10n",
                 "localization"
             ],
-            "time": "2018-08-01 08:24:03"
+            "time": "2018-08-01T08:24:03+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -1397,7 +1415,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2018-07-26 08:55:25"
+            "time": "2018-07-26T08:55:25+00:00"
         },
         {
             "name": "symfony/polyfill-intl-icu",
@@ -1455,7 +1473,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06 14:22:27"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1514,7 +1532,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06 14:22:27"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/process",
@@ -1563,7 +1581,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-03 11:13:38"
+            "time": "2018-08-03T11:13:38+00:00"
         },
         {
             "name": "symfony/property-access",
@@ -1630,7 +1648,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2018-08-24 10:22:26"
+            "time": "2018-08-24T10:22:26+00:00"
         },
         {
             "name": "symfony/routing",
@@ -1707,7 +1725,65 @@
                 "uri",
                 "url"
             ],
-            "time": "2018-08-03 07:58:40"
+            "time": "2018-08-03T07:58:40+00:00"
+        },
+        {
+            "name": "symfony/service-contracts",
+            "version": "v1.1.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/service-contracts.git",
+                "reference": "ffc7f5692092df31515df2a5ecf3b7302b3ddacf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/ffc7f5692092df31515df2a5ecf3b7302b3ddacf",
+                "reference": "ffc7f5692092df31515df2a5ecf3b7302b3ddacf",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "psr/container": "^1.0"
+            },
+            "suggest": {
+                "symfony/service-implementation": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Service\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to writing services",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "time": "2019-10-14T12:27:06+00:00"
         },
         {
             "name": "symfony/twig-bridge",
@@ -1797,7 +1873,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-08-14 15:48:59"
+            "time": "2018-08-14T15:48:59+00:00"
         },
         {
             "name": "symfony/twig-bundle",
@@ -1871,7 +1947,67 @@
             ],
             "description": "Symfony TwigBundle",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26 09:10:45"
+            "time": "2018-07-26T09:10:45+00:00"
+        },
+        {
+            "name": "symfony/var-exporter",
+            "version": "v4.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-exporter.git",
+                "reference": "e566070effe60b8d16b99e958cdbd92aa2e470cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/e566070effe60b8d16b99e958cdbd92aa2e470cb",
+                "reference": "e566070effe60b8d16b99e958cdbd92aa2e470cb",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "symfony/var-dumper": "^4.1.1|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\VarExporter\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "A blend of var_export() + serialize() to turn any serializable data structure to plain PHP code",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "clone",
+                "construct",
+                "export",
+                "hydrate",
+                "instantiate",
+                "serialize"
+            ],
+            "time": "2019-12-01T08:39:58+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1930,7 +2066,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-18 16:52:46"
+            "time": "2018-08-18T16:52:46+00:00"
         },
         {
             "name": "twig/extensions",
@@ -1985,7 +2121,7 @@
                 "i18n",
                 "text"
             ],
-            "time": "2018-05-22 13:26:07"
+            "time": "2018-05-22T13:26:07+00:00"
         },
         {
             "name": "twig/twig",
@@ -2052,7 +2188,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-07-13 07:18:09"
+            "time": "2018-07-13T07:18:09+00:00"
         }
     ],
     "packages-dev": [
@@ -2111,7 +2247,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2018-07-26 11:24:31"
+            "time": "2018-07-26T11:24:31+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -2177,7 +2313,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-08-27 17:47:02"
+            "time": "2018-08-27T17:47:02+00:00"
         }
     ],
     "aliases": [],
@@ -2189,7 +2325,8 @@
         "php": "^7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "ext-json": "*"
     },
     "platform-dev": []
 }
