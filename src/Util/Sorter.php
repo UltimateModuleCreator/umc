@@ -3,6 +3,9 @@ namespace App\Util;
 
 use App\Model\AbstractModel;
 
+/**
+ * @deprecated
+ */
 class Sorter
 {
     /**

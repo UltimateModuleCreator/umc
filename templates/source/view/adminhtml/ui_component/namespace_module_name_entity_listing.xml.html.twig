@@ -183,30 +183,22 @@
         </settings>
     </column>
 {% endif %}
-{% if entity.getAddCreatedToGrid() %}
-        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
-            <settings>
-                <filter>dateRange</filter>
-                <dataType>date</dataType>
-                <label translate="true">Created </label>
-{% if entity.getAddCreatedToGrid() is same as("2") %}
-                    <visible>false</visible>
-{% endif %}
-            </settings>
-        </column>
-{% endif %}
-{% if entity.getAddUpdatedToGrid() %}
-        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
-            <settings>
-                <filter>dateRange</filter>
-                <dataType>date</dataType>
-                <label translate="true">Modified</label>
-{% if entity.getAddUpdatedToGrid() is same as("2") %}
-                <visible>false</visible>
-{% endif %}
-            </settings>
-        </column>
-{% endif %}
+    <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <settings>
+            <filter>dateRange</filter>
+            <dataType>date</dataType>
+            <label translate="true">Created</label>
+            <visible>false</visible>
+        </settings>
+    </column>
+    <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <settings>
+            <filter>dateRange</filter>
+            <dataType>date</dataType>
+            <label translate="true">Modified</label>
+            <visible>false</visible>
+        </settings>
+    </column>
 {% if entity.getStore() %}
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
             <settings>
@@ -216,7 +208,7 @@
             </settings>
         </column>
 {% endif %}
-        <actionsColumn name="actions" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Column\{{ entity.getNameSingular()|ucfirst }}Actions">
+        <actionsColumn name="actions" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Column\{{ entity.getNameSingular()|camel|ucfirst }}Actions">
             <settings>
                 <indexField>{{ entity.getNameSingular()|snake }}_id</indexField>
                 <resizeEnabled>false</resizeEnabled>

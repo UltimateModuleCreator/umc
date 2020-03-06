@@ -1,4 +1,22 @@
 <?php
+
+/**
+ * UMC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Model\Module;
@@ -70,11 +88,11 @@ class Builder
     {
         $moduleName = $module->getExtensionName();
         $writer = $this->writerFactory->create($this->basePath);
-        $files = $this->generator->generateModule($module);
-        $writer->writeFiles($files, $moduleName);
-        $csFiles = $this->codingStandardsFactory->create($this->basePath . $moduleName)->run();
-        $writer->writeFiles($csFiles, $moduleName);
-        $this->archiverFactory->create($this->basePath)->createZip($this->basePath . $moduleName, $moduleName);
+//        $files = $this->generator->generateModule($module);
+//        $writer->writeFiles($files, $moduleName);
+//        $csFiles = $this->codingStandardsFactory->create($this->basePath . $moduleName)->run();
+//        $writer->writeFiles($csFiles, $moduleName);
+//        $this->archiverFactory->create($this->basePath)->createZip($this->basePath . $moduleName, $moduleName);
         $configWriter = $this->writerFactory->create($this->configFilePath);
         $configWriter->writeFiles([
             $moduleName . '.yml' => $this->yamlLoader->arrayToYaml($module->toArray())

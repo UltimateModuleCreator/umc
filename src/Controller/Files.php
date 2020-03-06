@@ -55,7 +55,8 @@ class Files extends AbstractController
         return $this->render(
             $this->template,
             [
-                'files' => $this->reader->getFiles()
+                'files' => $this->reader->getFiles(),
+                'selectedMenu' => 'files'
             ]
         );
     }

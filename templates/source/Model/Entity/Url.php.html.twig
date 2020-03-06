@@ -1,7 +1,8 @@
 {% if entity.getFrontendView() or entity.getFrontendList() %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\UrlInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;

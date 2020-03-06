@@ -1,5 +1,7 @@
 {% if entity.getFrontendView() %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\App\Action\Action;
@@ -8,10 +10,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\View\Result\Page;
-use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Url as UrlModel;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}Registry;
 {% if entity.getStore() %}
 use Magento\Store\Model\StoreManagerInterface;
 {% endif %}
@@ -28,9 +30,9 @@ class View extends Action
     protected ${{ entity.getNameSingular()|camel }}Repository;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Registry
      */
-    protected $coreRegistry;
+    protected $registry;
 
     /**
      * @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Url
@@ -50,7 +52,7 @@ class View extends Action
     /**
      * @param Context $context
      * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
-     * @param Registry $coreRegistry
+     * @param Registry $registry
      * @param UrlModel $urlModel
 {% if entity.getStore() %}
      * @param StoreManagerInterface $storeManager
@@ -60,7 +62,7 @@ class View extends Action
     public function __construct(
         Context $context,
         {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
-        Registry $coreRegistry,
+        {{ entity.getNameSingular()|camel|ucfirst }}Registry $registry,
         UrlModel $urlModel,
 {% if entity.getStore() %}
         StoreManagerInterface $storeManager,
@@ -68,7 +70,7 @@ class View extends Action
         ScopeConfigInterface $scopeConfig
     ) {
         $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
-        $this->coreRegistry = $coreRegistry;
+        $this->registry = $registry;
         $this->urlModel = $urlModel;
 {% if entity.getStore() %}
         $this->storeManager = $storeManager;
@@ -102,7 +104,7 @@ class View extends Action
             return $resultForward;
         }
 
-        $this->coreRegistry->register('current_{{ entity.getNameSingular()|snake }}', ${{ entity.getNameSingular()|camel }});
+        $this->registry->set(${{ entity.getNameSingular()|camel }});
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 {% if entity.getSeo() %}

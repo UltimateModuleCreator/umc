@@ -4,11 +4,12 @@
         <meta charset="UTF-8">
         <title>{% block title %}Magento Ultimate Module Creator{% endblock %}</title>
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" />
-            <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}" />
+            <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.css') }}" />
             <link rel="stylesheet" href="{{ asset('select2/select2.css') }}" />
             <link rel="stylesheet" href="{{ asset('select2/select2-bootstrap.css') }}" />
-            <link rel="stylesheet" href="{{ asset('gentelella/css/custom.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('switch/lc_switch.css') }}" />
+            <link rel="stylesheet" href="{{ asset('gentelella/css/custom.css') }}" />
             <link rel="stylesheet" href="{{ asset('umc/umc.css') }}" />
         {% endblock %}
     </head>
@@ -24,14 +25,7 @@
                         <a href="#" class="site_title"><i class="fa fa-puzzle-piece"></i> <span>UMC</span></a>
                     </div>
                     <div class="clearfix"></div>
-                    <!-- sidebar menu -->
-                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                        <div class="menu_section">
-                            <h3>Menu</h3>
-                            {{ appMenu().render() | raw }}
-                        </div>
-                    </div>
-                    <!-- /sidebar menu -->
+                    {% include 'menu.html.twig' %}
                 </div>
             </div>
             <!-- page content -->
@@ -52,7 +46,7 @@
             <!-- /page content -->
             <!-- footer content -->
             <footer>
-                <div class="pull-right">
+                <div class="float-right">
                     <a href="https://github.com/UltimateModuleCreator/umc" target="_blank">Ultimate Module Creator v{{ appVersion() }}</a><br />
                     Ui provided by <a href="https://colorlib.com">Colorlib</a> Gentelella - Bootstrap Admin Template
                 </div>
@@ -67,7 +61,13 @@
     <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.js') }}"> </script>
     <script type="text/javascript">
         $.widget.bridge('uitooltip', $.ui.tooltip);
+        {% if selectedMenu is defined %}
+        $(document).ready(function () {
+            $('[data-role=menu-{{ selectedMenu }}]').addClass('active');
+        });
+        {% endif %}
     </script>
+    <script type="text/javascript" src="{{ asset('bootstrap/js/popper.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"> </script>
     {% endblock %}
     </body>

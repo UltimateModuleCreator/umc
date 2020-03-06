@@ -1,48 +1,50 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api;
 
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
  * @api
  */
-interface {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
+interface {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
 {
     /**
-     * @param {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }}
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular() }}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    public function save({{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }});
+    public function save({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular() }});
 
     /**
      * @param $id
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($id);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}SearchResultInterface
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
-     * @param {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }}
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular() }}
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete({{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular() }});
+    public function delete({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular() }});
 
     /**
-     * @param int ${{ entity.getNameSingular() }}Id
+     * @param int ${{ entity.getNameSingular()|camel }}Id
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById(${{ entity.getNameSingular() }}Id);
+    public function deleteById(${{ entity.getNameSingular()|camel }}Id);
 
     /**
      * clear caches instances

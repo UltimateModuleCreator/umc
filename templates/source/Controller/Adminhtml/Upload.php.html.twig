@@ -1,5 +1,7 @@
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
@@ -14,11 +16,11 @@ class Upload extends Action
      *
      * @var Uploader
      */
-    protected $uploader;
+    private $uploader;
     /**
      * @var string
      */
-    protected $aclResource;
+    private $aclResource;
 
     /**
      * Upload constructor.

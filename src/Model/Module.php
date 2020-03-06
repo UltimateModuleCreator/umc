@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -19,40 +20,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Service\Form\OptionProvider\FrontendMenuLink;
 use App\Service\License\ProcessorInterface;
 use App\Util\StringUtil;
 
-class Module extends AbstractModel
+class Module
 {
-    const NAMESPACE = 'namespace';
-    const MODULE_NAME = 'module_name';
-    const VERSION  = 'version';
-    const MENU_PARENT = 'menu_parent';
-    const SORT_ORDER = 'sort_order';
-    const MENU_TEXT = 'menu_text';
-    const LICENSE = 'license';
-    const FRONT_KEY = 'front_key';
-    const CONFIG_TAB = 'config_tab';
-    const CONFIG_TAB_POSITION = 'config_tab_position';
-    const MAGENTO_VERSION = 'magento_version';
-    const MAGENTO_VERSION_2_2 = '2.2';
-    const MAGENTO_VERSION_2_3 = '2.3';
-    const DEFAULT_MAGENTO_VERSION = self::MAGENTO_VERSION_2_2;
-    const COMPOSER_PHP_VERSION_2_2 = '~7.0.13|~7.1.0';
-    const COMPOSER_PHP_VERSION_2_3 = '~7.1.3||~7.2.0';
-    /**
-     * @var array
-     */
-    protected $propertyNames = [
-        self::NAMESPACE, self::MODULE_NAME, self::VERSION, self::MENU_PARENT,
-        self::SORT_ORDER, self::MENU_TEXT, self::LICENSE,
-        self::FRONT_KEY, self::CONFIG_TAB, self::CONFIG_TAB_POSITION, self::MAGENTO_VERSION
-    ];
 
-    private $composerPhpVersion = [
-        self::MAGENTO_VERSION_2_2 => self::COMPOSER_PHP_VERSION_2_2,
-        self::MAGENTO_VERSION_2_3 => self::COMPOSER_PHP_VERSION_2_3
-    ];
     /**
      * @var Entity[]
      */
@@ -69,139 +43,206 @@ class Module extends AbstractModel
      * @var StringUtil
      */
     private $stringUtil;
+    /**
+     * @var EntityFactory
+     */
+    private $entityFactory;
+    /**
+     * @var string
+     */
+    private $namespace;
+    /**
+     * @var string
+     */
+    private $moduleName;
+    /**
+     * @var string
+     */
+    private $menuText;
+    /**
+     * @var string
+     */
+    private $menuParent;
+    /**
+     * @var int
+     */
+    private $sortOrder;
+    /**
+     * @var string
+     */
+    private $configTab;
+    /**
+     * @var int
+     */
+    private $configTabPosition;
+    /**
+     * @var string
+     */
+    private $frontKey;
+    /**
+     * @var string
+     */
+    private $license;
+    /**
+     * @var bool
+     */
+    private $umcCrud;
+    /**
+     * @var bool[]
+     */
+    private $flags = [];
+    /**
+     * @var array
+     */
+    private $cacheData = [];
 
     /**
      * Module constructor.
+     * @param StringUtil $stringUtil
+     * @param EntityFactory $entityFactory
      * @param array $licenseFormatter
      * @param array $menuConfig
      * @param array $data
      */
     public function __construct(
         StringUtil $stringUtil,
+        EntityFactory $entityFactory,
         array $licenseFormatter,
         array $menuConfig,
         array $data = []
     ) {
         $this->stringUtil = $stringUtil;
+        $this->entityFactory = $entityFactory;
         $this->licenseFormatter = $licenseFormatter;
         $this->menuConfig = $menuConfig;
-        parent::__construct($data);
+        $this->namespace = (string)($data['namespace'] ?? '');
+        $this->moduleName = (string)($data['module_name'] ?? '');
+        $this->menuText = (string)($data['menu_text'] ?? '');
+        $this->menuParent = (string)($data['menu_parent'] ?? '');
+        $this->sortOrder = (int)($data['namespace'] ?? 0);
+        $this->configTab = (string)($data['config_tab'] ?? '');
+        $this->configTabPosition = (int)($data['config_tab_position'] ?? '');
+        $this->frontKey = (string)($data['front_key'] ?? '');
+        $this->license = (string)($data['license'] ?? '');
+        $this->umcCrud = (bool)($data['umc_crud'] ?? false);
+        foreach (($data['_entities'] ?? []) as $entity) {
+            $this->entities[] = $this->entityFactory->create($this, $entity);
+        }
     }
 
     /**
      * @return Entity[]
      */
-    public function getEntities() : array
+    public function getEntities(): array
     {
         return $this->entities;
     }
 
     /**
-     * @param Entity $entity
+     * @return string
      */
-    public function addEntity(Entity $entity) : void
+    public function getNamespace(): string
     {
-        $entity->setModule($this);
-        $this->entities[] = $entity;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNamespace() : ?string
-    {
-        return $this->getData(self::NAMESPACE);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getModuleName() : ?string
-    {
-        return $this->getData(self::MODULE_NAME);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getVersion() : ?string
-    {
-        return $this->getData(self::VERSION);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getMenuParent() : ?string
-    {
-        return $this->getData(self::MENU_PARENT);
-    }
-
-    /**
-     * @return int
-     */
-    public function getSortOrder() : int
-    {
-        return (int)$this->getData(self::SORT_ORDER);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getMenuText() : ?string
-    {
-        return $this->getData(self::MENU_TEXT);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getLicense() : ?string
-    {
-        return $this->getData(self::LICENSE);
+        return $this->namespace;
     }
 
     /**
      * @return string
      */
-    public function getFrontKey() : string
+    public function getModuleName(): string
     {
-        $key = $this->getData(self::FRONT_KEY);
-        return ($key)
-            ? $key
-            : $this->stringUtil->snake($this->getNamespace()) . '_' . $this->stringUtil->snake($this->getModuleName());
+        return $this->moduleName;
     }
 
     /**
      * @return null|string
      */
-    public function getConfigTab() : ?string
+    public function getMenuParent(): string
     {
-        $configTab = $this->getData(self::CONFIG_TAB);
-        return $configTab ? $configTab : $this->getModuleName();
+        return $this->menuParent;
     }
 
     /**
      * @return int
      */
-    public function getConfigTabPosition() : int
+    public function getSortOrder(): int
     {
-        return (int)$this->getData(self::CONFIG_TAB_POSITION);
+        return $this->sortOrder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuText(): string
+    {
+        return $this->menuText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLicense(): string
+    {
+        return $this->license;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrontKey(): string
+    {
+        return ($this->frontKey)
+            ? $this->frontKey
+            : $this->stringUtil->snake($this->getNamespace()) . '_' . $this->stringUtil->snake($this->getModuleName());
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigTab(): string
+    {
+        return $this->configTab ? $this->configTab : $this->getModuleName();
+    }
+
+    /**
+     * @return int
+     */
+    public function getConfigTabPosition(): int
+    {
+        return $this->configTabPosition;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUmcCrud(): bool
+    {
+        return $this->umcCrud;
     }
 
     /**
      * @return array
      */
-    public function getAdditionalToArray() : array
+    public function toArray(): array
     {
-        $result = [];
-        $result['_entities'] = array_map(
-            function (Entity $item) {
-                return $item->toArray();
-            },
-            $this->getEntities()
-        );
-        return $result;
+        return [
+            'namespace' => $this->namespace,
+            'module_name' => $this->moduleName,
+            'menu_text' => $this->menuText,
+            'menu_parent' => $this->menuParent,
+            'sort_order' => $this->sortOrder,
+            'config_tab' => $this->configTab,
+            'config_tab_position' => $this->configTabPosition,
+            'front_key' => $this->frontKey,
+            'license' => $this->license,
+            'umc_crud' => $this->umcCrud,
+            '_entities' => array_map(
+                function (Entity $entity) {
+                    return $entity->toArray();
+                },
+                $this->getEntities()
+            )
+        ];
     }
 
     /**
@@ -235,12 +276,17 @@ class Module extends AbstractModel
      */
     public function hasAttributeType($type) : bool
     {
+        if (isset($this->flags['attribute_type'][$type])) {
+            return $this->flags['attribute_type'][$type];
+        }
         foreach ($this->getEntities() as $entity) {
             if ($entity->hasAttributeType($type)) {
-                return true;
+                $this->flags['attribute_type'][$type] = true;
+                return $this->flags['attribute_type'][$type];
             }
         }
-        return false;
+        $this->flags['attribute_type'][$type] = false;
+        return $this->flags['attribute_type'][$type];
     }
 
     /**
@@ -256,7 +302,8 @@ class Module extends AbstractModel
      */
     public function getSearchableEntities() : array
     {
-        return $this->getEntitiesWithProperty('search');
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['search'];
     }
 
     /**
@@ -264,6 +311,9 @@ class Module extends AbstractModel
      */
     public function getAclMenuParents() : array
     {
+        if (isset($this->cacheData['menu_parents'])) {
+            return $this->cacheData['menu_parents'];
+        }
         $menuParent = $this->getMenuParent();
         $parents = [];
         while ($menuParent != '') {
@@ -274,12 +324,14 @@ class Module extends AbstractModel
             $parents[] = $menuParent;
             $menuParent = $this->menuConfig[$menuParent]['parent'] ?? '';
         };
-        return array_reverse($parents);
+        $this->cacheData['menu_parents'] = array_reverse($parents);
+        return $this->cacheData['menu_parents'];
     }
 
     /**
      * @param $property
      * @return array
+     * @deprecated
      */
     public function getEntitiesWithProperty($property) : array
     {
@@ -296,21 +348,68 @@ class Module extends AbstractModel
     /**
      * @return bool
      */
-    public function hasFrontend() : bool
+    public function hasFrontend(): bool
     {
-        return !!count($this->getEntitiesWithProperty(Entity::FRONTEND_VIEW))
-            || !!count($this->getEntitiesWithProperty(Entity::FRONTEND_LIST));
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['frontend']) > 0;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getMagentoVersion() : string
+    public function getFrontendViewEntities(): array
     {
-        $version = $this->getData(self::MAGENTO_VERSION);
-        return in_array($version, [self::MAGENTO_VERSION_2_2, self::MAGENTO_VERSION_2_3])
-            ? $version
-            : self::DEFAULT_MAGENTO_VERSION;
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['frontend_view'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getFrontendListEntities(): array
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['frontend_list'];
+    }
+
+    /**
+     * loop once through the entities to check different settings
+     */
+    private function initEntityCacheData()
+    {
+        if (isset($this->cacheData['entity'])) {
+            return;
+        }
+        $this->cacheData = [
+            'entity' => [
+                'frontend_view' => [],
+                'frontend_list' => [],
+                'frontend' => [],
+                'search' => [],
+                'main_menu' => [],
+                'footer_links' => []
+            ]
+        ];
+        foreach ($this->getEntities() as $entity) {
+            if ($entity->isFrontendView()) {
+                $this->cacheData['entity']['frontend_view'][] = $entity;
+            }
+            if ($entity->isFrontendList()) {
+                $this->cacheData['entity']['frontend_list'][] = $entity;
+            }
+            if ($entity->isFrontendView() || $entity->isFrontendList()) {
+                $this->cacheData['entity']['frontend'][] = $entity;
+            }
+            if ($entity->isSearch() || $entity->isSearch()) {
+                $this->cacheData['entity']['search'][] = $entity;
+            }
+            if ($entity->getMenuLink() === FrontendMenuLink::MAIN_MENU) {
+                $this->cacheData['entity']['main_menu'][] = $entity;
+            }
+            if ($entity->getMenuLink() === FrontendMenuLink::FOOTER) {
+                $this->cacheData['entity']['footer_links'][] = $entity;
+            }
+        }
     }
 
     /**
@@ -318,7 +417,7 @@ class Module extends AbstractModel
      */
     public function hasTopMenu() : bool
     {
-        return (bool)count($this->getMenuEntities(Entity::MENU_LINK_MAIN_MENU));
+        return count($this->getMainMenuEntities()) > 0;
     }
 
     /**
@@ -326,30 +425,40 @@ class Module extends AbstractModel
      */
     public function hasFooterMenu() : bool
     {
-        return (bool)count($this->getMenuEntities(Entity::MENU_LINK_FOOTER));
+        return count($this->getFooterLinksEntities()) > 0;
     }
 
     /**
-     * @param $menuId
      * @return array
      */
-    public function getMenuEntities($menuId) : array
+    public function getMainMenuEntities(): array
     {
-        return array_values(
-            array_filter(
-                $this->getEntities(),
-                function (Entity $entity) use ($menuId) {
-                    return $entity->getMenuLink() === $menuId;
-                }
-            )
-        );
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['main_menu'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getFooterLinksEntities(): array
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['footer_links'];
     }
 
     /**
      * @return string
      */
-    public function getComposerPhpVersion() : string
+    public function getMockObjectUse(): string
     {
-        return $this->composerPhpVersion[$this->getMagentoVersion()];
+        return "\n" . 'use PHPUnit\Framework\MockObject\MockObject;';
+    }
+
+    /**
+     * @return string
+     */
+    public function getMockObjectClass(): string
+    {
+        return "MockObject";
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -19,30 +20,46 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Attribute\AttributeTypeFactory;
 use App\Model\Attribute\TypeFactory;
 
-class AttributeFactory implements FactoryInterface
+class AttributeFactory
 {
     /**
      * @var TypeFactory
      */
     private $typeFactory;
+    /**
+     * @var OptionFactory
+     */
+    private $optionFactory;
+    /**
+     * @var SerializedFactory
+     */
+    private $serializedFactory;
 
     /**
      * AttributeFactory constructor.
-     * @param TypeFactory $typeFactory
+     * @param AttributeTypeFactory $typeFactory
+     * @param OptionFactory $optionFactory
+     * @param SerializedFactory $serilizedFactory
      */
-    public function __construct(TypeFactory $typeFactory)
-    {
+    public function __construct(
+        AttributeTypeFactory $typeFactory,
+        OptionFactory $optionFactory,
+        SerializedFactory $serilizedFactory
+    ) {
         $this->typeFactory = $typeFactory;
+        $this->optionFactory = $optionFactory;
+        $this->serializedFactory = $serilizedFactory;
     }
 
     /**
      * @param array $data
      * @return Attribute | AbstractModel
      */
-    public function create(array $data = []) : Attribute
+    public function create(Entity $entity, array $data = []) : Attribute
     {
-        return new Attribute($this->typeFactory, $data);
+        return new Attribute($this->typeFactory, $this->optionFactory, $this->serializedFactory, $entity, $data);
     }
 }

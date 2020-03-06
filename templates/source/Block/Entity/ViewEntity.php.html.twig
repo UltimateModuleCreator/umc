@@ -1,9 +1,10 @@
 {% if (entity.getFrontendView()) %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }};
 
-use Magento\Framework\Registry;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 {% if entity.hasAttributeType('image') %}
@@ -16,9 +17,9 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\ImageBuilder;
 class View{{ entity.getNameSingular()|camel|ucfirst }} extends Template
 {
     /**
-     * @var Registry
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Registry
      */
-    private $coreRegistry;
+    private $registry;
 {% if entity.hasAttributeType('image') %}
     /**
      * @var ImageBuilder
@@ -27,19 +28,19 @@ class View{{ entity.getNameSingular()|camel|ucfirst }} extends Template
 {% endif %}
     /**
      * @param Context $context
-     * @param Registry $registry
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Registry $registry
      * @param $imageBuilder
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Registry $registry,
+        {{ entity.getNameSingular()|camel|ucfirst }}Registry $registry,
 {% if entity.hasAttributeType('image') %}
         ImageBuilder $imageBuilder,
 {% endif %}
         array $data = []
     ) {
-        $this->coreRegistry = $registry;
+        $this->registry = $registry;
 {% if entity.hasAttributeType('image') %}
         $this->imageBuilder = $imageBuilder;
 {% endif %}
@@ -53,7 +54,7 @@ class View{{ entity.getNameSingular()|camel|ucfirst }} extends Template
      */
     public function getCurrent{{ entity.getNameSingular()|camel|ucfirst }}()
     {
-        return $this->coreRegistry->registry('current_{{ entity.getNameSingular()|snake }}');
+        return $this->registry->get();
     }
 {% if entity.hasAttributeType('image') %}
     /**

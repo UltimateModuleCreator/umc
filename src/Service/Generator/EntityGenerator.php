@@ -75,7 +75,7 @@ class EntityGenerator implements GeneratorInterface
     private function processDestination(string $destination, Entity $entity) : string
     {
         $replace = [
-            '_Entity_' =>  ucfirst($entity->getNameSingular()),
+            '_Entity_' =>  ucfirst($this->stringUtil->camel($entity->getNameSingular())),
             '_entity_' =>  strtolower($this->stringUtil->camel((string)$entity->getNameSingular())),
             '_namespace_' => $this->stringUtil->snake((string)$entity->getModule()->getNamespace()),
             '_modulename_' => strtolower($this->stringUtil->camel(

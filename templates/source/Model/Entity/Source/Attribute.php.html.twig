@@ -1,5 +1,7 @@
 {% if attribute.getTypeInstance().getCanHaveOptions() %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Source;
 
 use Magento\Framework\Option\ArrayInterface;

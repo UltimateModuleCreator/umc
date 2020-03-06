@@ -1,4 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
@@ -14,9 +15,8 @@ class Save implements ButtonProviderInterface
      * Save constructor.
      * @param string $label
      */
-    public function __construct(
-        $label = null
-    ) {
+    public function __construct($label = null)
+    {
         $this->label = $label;
     }
 
@@ -39,12 +39,12 @@ class Save implements ButtonProviderInterface
     }
 
     /**
-     * @return \Magento\Framework\Phrase|null|string
+     * @return string
      */
     private function getLabel()
     {
         if ($this->label === null) {
-            return __('Save');
+            return __('Save')->render();
         }
         return $this->label;
     }

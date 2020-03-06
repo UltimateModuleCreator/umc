@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,206 +16,198 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Util\Sorter;
+use App\Service\Form\OptionProvider\FrontendMenuLink;
+use App\Util\StringUtil;
 
-class Entity extends AbstractModel
+class Entity
 {
-    const LABEL_SINGULAR = 'label_singular';
-    const LABEL_PLURAL = 'label_plural';
-    const NAME_SINGULAR = 'name_singular';
-    const NAME_PLURAL = 'name_plural';
-    const ADD_CREATED_TO_GRID = 'add_created_to_grid';
-    const ADD_UPDATED_TO_GRID = 'add_updated_to_grid';
-    const SEARCH = 'search';
-    const STORE = 'store';
-    const FRONTEND_LIST = 'frontend_list';
-    const FRONTEND_VIEW = 'frontend_view';
-    const SEO = 'seo';
-    const POSITION = 'position';
-    const MENU_LINK = 'menu_link';
-    const MENU_LINK_NO_LINK = 0;
-    const MENU_LINK_MAIN_MENU = 1;
-    const MENU_LINK_FOOTER = 2;
     /**
-     * @var Sorter
+     * @var StringUtil
      */
-    private $sorter;
+    private $stringUtil;
+    /**
+     * @var AttributeFactory
+     */
+    private $attributeFactory;
+    /**
+     * @var string
+     */
+    private $labelSingular;
+    /**
+     * @var string
+     */
+    private $labelPlural;
+    /**
+     * @var string
+     */
+    private $nameSingular;
+    /**
+     * @var string
+     */
+    private $namePlural;
     /**
      * @var bool
      */
-    private $needsAttributeSort = false;
-
+    private $search;
     /**
-     * Entity constructor.
-     * @param Sorter $sorter
-     * @param array $data
+     * @var bool
      */
-    public function __construct(Sorter $sorter, array $data = [])
-    {
-        $this->sorter = $sorter;
-        parent::__construct($data);
-    }
-
+    private $store;
     /**
-     * @var array
+     * @var bool
      */
-    protected $propertyNames = [
-        self::LABEL_SINGULAR, self::LABEL_PLURAL, self::NAME_SINGULAR, self::NAME_PLURAL,
-        self::ADD_CREATED_TO_GRID, self::ADD_UPDATED_TO_GRID, self::SEARCH, self::STORE,
-        self::FRONTEND_LIST, self::FRONTEND_VIEW, self::SEO, self::POSITION, self::MENU_LINK
-    ];
+    private $frontendList;
+    /**
+     * @var bool
+     */
+    private $frontendView;
+    /**
+     * @var bool
+     */
+    private $seo;
+    /**
+     * @var int
+     */
+    private $menuLink;
     /**
      * @var Attribute[]
      */
     private $attributes = [];
-
     /**
      * @var Module
      */
     private $module;
 
     /**
+     * Entity constructor.
+     * @param StringUtil $stringUtil
+     * @param AttributeFactory $attributeFactory
+     * @param Module $module
+     * @param array $data
+     */
+    public function __construct(
+        StringUtil $stringUtil,
+        AttributeFactory $attributeFactory,
+        Module $module,
+        array $data = []
+    ) {
+        $this->module = $module;
+        $this->stringUtil = $stringUtil;
+        $this->attributeFactory = $attributeFactory;
+        $this->nameSingular = (string)($data['name_singular'] ?? '');
+        $this->namePlural = (string)($data['name_plural'] ?? '');
+        $this->labelSingular = (string)($data['label_singular'] ?? '');
+        $this->labelPlural = (string)($data['label_plural'] ?? '');
+        $this->search = (bool)($data['search'] ?? false);
+        $this->frontendList = (bool)($data['frontend_list'] ?? false);
+        $this->frontendView = (bool)($data['frontend_view'] ?? false);
+        $this->seo = (bool)($data['seo'] ?? false);
+        $this->menuLink = (int)($data['menu_link'] ?? FrontendMenuLink::NONE);
+        $this->attributes = array_map(
+            function (array $attribute) {
+                return $this->attributeFactory->create($this, $attribute);
+            },
+            $data['_attributes'] ?? []
+        );
+    }
+
+    /**
      * @return Attribute[]
      */
     public function getAttributes(): array
     {
-        if ($this->needsAttributeSort) {
-            $this->attributes = $this->sorter->sort($this->attributes);
-            $this->needsAttributeSort = false;
-        }
         return $this->attributes;
-    }
-
-    /**
-     * @param Attribute $attribute
-     */
-    public function addAttribute(Attribute $attribute)
-    {
-        $attribute->setEntity($this);
-        $this->attributes[] = $attribute;
-        $this->needsAttributeSort = true;
     }
 
     /**
      * @return Module
      */
-    public function getModule(): ?Module
+    public function getModule(): Module
     {
         return $this->module;
     }
 
     /**
-     * @param Module $module
+     * @return null|string
      */
-    public function setModule(Module $module) : void
+    public function getLabelSingular(): string
     {
-        $this->module = $module;
+        return $this->getLabelSingular();
     }
 
     /**
      * @return null|string
      */
-    public function getLabelSingular() : ?string
+    public function getLabelPlural(): string
     {
-        return $this->getData(self::LABEL_SINGULAR);
+        return $this->labelPlural;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getLabelPlural() : ?string
+    public function getNameSingular(): string
     {
-        return $this->getData(self::LABEL_PLURAL);
+        return $this->nameSingular;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getNameSingular() : ?string
+    public function getNamePlural(): string
     {
-        return $this->getData(self::NAME_SINGULAR);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNamePlural() : ?string
-    {
-        return $this->getData(self::NAME_PLURAL);
+        return $this->namePlural;
     }
 
     /**
      * @return bool
      */
-    public function getAddCreatedToGrid() : bool
+    public function isSearch(): bool
     {
-        return (bool)$this->getData(self::ADD_CREATED_TO_GRID);
+        return $this->search;
     }
 
     /**
      * @return bool
      */
-    public function getAddUpdatedToGrid() : bool
+    public function isStore(): bool
     {
-        return (bool)$this->getData(self::ADD_UPDATED_TO_GRID);
+        return $this->store;
     }
 
     /**
      * @return bool
      */
-    public function getSearch() : bool
+    public function isFrontendList(): bool
     {
-        return (bool)$this->getData(self::SEARCH);
+        return $this->frontendList;
     }
 
     /**
      * @return bool
      */
-    public function getStore() : bool
+    public function isFrontendView(): bool
     {
-        return (bool)$this->getData(self::STORE);
+        return $this->frontendView;
     }
 
     /**
      * @return bool
      */
-    public function getFrontendList() : bool
+    public function isSeo(): bool
     {
-        return (bool)$this->getData(self::FRONTEND_LIST);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getFrontendView() : bool
-    {
-        return (bool)$this->getData(self::FRONTEND_VIEW);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSeo() : bool
-    {
-        return (bool)$this->getData(self::SEO);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPosition() : int
-    {
-        return (int)$this->getData(self::POSITION);
+        return $this->seo;
     }
 
     /**
      * @return Attribute|null
      */
-    public function getNameAttribute() : ?Attribute
+    public function getNameAttribute(): ?Attribute
     {
         foreach ($this->getAttributes() as $attribute) {
             if ($attribute->getIsName()) {
@@ -227,23 +220,32 @@ class Entity extends AbstractModel
     /**
      * @return array
      */
-    protected function getAdditionalToArray(): array
+    public function toArray(): array
     {
-        $result = [];
-        $result['_attributes'] = array_map(
-            function (Attribute $item) {
-                return $item->toArray();
-            },
-            $this->getAttributes()
-        );
-        return $result;
+        return [
+            'name_singular' => $this->nameSingular,
+            'name_plural' => $this->namePlural,
+            'label_singular' => $this->labelSingular,
+            'label_plural' => $this->labelPlural,
+            'search' => $this->search,
+            'frontend_list' => $this->frontendList,
+            'frontend_view' => $this->frontendView,
+            'seo' => $this->seo,
+            'menu_link' => $this->menuLink,
+            '_attributes' => array_map(
+                function (Attribute $attribute) {
+                    return $attribute->toArray();
+                },
+                $this->getAttributes()
+            )
+        ];
     }
 
     /**
      * @param $type
      * @return bool
      */
-    public function hasAttributeType($type) : bool
+    public function hasAttributeType($type): bool
     {
         foreach ($this->getAttributes() as $attribute) {
             if ($attribute->getType() === $type) {
@@ -256,8 +258,9 @@ class Entity extends AbstractModel
     /**
      * @param string $typeConfig
      * @return Attribute[]
+     * @deprecated
      */
-    public function getAttributesWithTypeConfig(string $typeConfig) : array
+    public function getAttributesWithTypeConfig(string $typeConfig): array
     {
         return array_values(
             array_filter(
@@ -272,8 +275,9 @@ class Entity extends AbstractModel
     /**
      * @param string $typeConfig
      * @return Attribute[]
+     * @deprecated
      */
-    public function getAttributesWithType(string $type) : array
+    public function getAttributesWithType(string $type): array
     {
         return array_values(
             array_filter(
@@ -289,8 +293,9 @@ class Entity extends AbstractModel
      * @param string $typeConfig
      * @param int $tabs
      * @return string
+     * @deprecated
      */
-    public function getAttributesWithTypeConfigString(string $typeConfig, int $tabs = 0) : string
+    public function getAttributesWithTypeConfigString(string $typeConfig, int $tabs = 0): string
     {
         return $this->arrayToPrintString(
             $this->getAttributeCodes($this->getAttributesWithTypeConfig($typeConfig)),
@@ -302,8 +307,9 @@ class Entity extends AbstractModel
      * @param string $type
      * @param int $tabs
      * @return string
+     * @deprecated
      */
-    public function getAttributesWithTypeString(string $type, int $tabs = 0) : string
+    public function getAttributesWithTypeString(string $type, int $tabs = 0): string
     {
         return $this->arrayToPrintString(
             $this->getAttributeCodes($this->getAttributesWithType($type)),
@@ -315,7 +321,7 @@ class Entity extends AbstractModel
      * @param Attribute[] $attributes
      * @return array
      */
-    private function getAttributeCodes(array $attributes) : array
+    private function getAttributeCodes(array $attributes): array
     {
         return array_map(
             function (Attribute $item) {
@@ -330,7 +336,7 @@ class Entity extends AbstractModel
      * @param int $tabs
      * @return string
      */
-    private function arrayToPrintString($codes, $tabs = 0) : string
+    private function arrayToPrintString($codes, $tabs = 0): string
     {
         $pad = str_repeat(' ', 4 * $tabs);
         return (count($codes)) ? $pad . "'" . implode("'," . PHP_EOL . $pad . "'", $codes) . "'" : '';
@@ -339,21 +345,38 @@ class Entity extends AbstractModel
     /**
      * @return int
      */
-    public function getMenuLink() : int
+    public function getMenuLink(): int
     {
-        if (!$this->getFrontendList()) {
-            return self::MENU_LINK_NO_LINK;
+        if (!$this->isFrontendList()) {
+            return FrontendMenuLink::NONE;
         }
-        $menuLink = (int)$this->getData(self::MENU_LINK);
-        $allowed = [self::MENU_LINK_NO_LINK, self::MENU_LINK_MAIN_MENU, self::MENU_LINK_FOOTER];
-        return (in_array($menuLink, $allowed)) ? $menuLink : self::MENU_LINK_NO_LINK;
+        return $this->menuLink;
     }
 
     /**
      * @return bool
      */
-    public function hasFrontend()
+    public function isFrontend(): bool
     {
-        return $this->getFrontendList() || $this->getFrontendView();
+        return $this->isFrontendList() || $this->isFrontendView();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainTableName(): string
+    {
+        $parts = [];
+        $parts[] = $this->getModule()->getModuleName();
+        $parts[] = $this->getNameSingular();
+        return $this->stringUtil->camel(implode('_', $parts));
+    }
+
+    /**
+     * @return string
+     */
+    public function getStoreTableName(): string
+    {
+        return $this->getMainTableName() . '_store';
     }
 }

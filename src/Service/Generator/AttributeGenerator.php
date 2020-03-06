@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Service\Generator;
@@ -51,9 +53,9 @@ class AttributeGenerator implements GeneratorInterface
      * @param Module $module
      * @param array $fileConfig
      * @return array
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function generateContent(Module $module, array $fileConfig) : array
     {

@@ -1,5 +1,7 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}\Executor;
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Executor;
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterface;
@@ -7,16 +9,16 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterfa
 class Delete implements ExecutorInterface
 {
     /**
-     * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
      */
     private ${{ entity.getNameSingular()|camel }}Repository;
 
     /**
      * Delete constructor.
-     * @param {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
      */
     public function __construct(
-        {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
     ) {
         $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
     }

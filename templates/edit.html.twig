@@ -1,155 +1,271 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <h3 data-role="umc-title">{{ title }}</h3>
-    <div data-role="umc">
-        {{ form_start(forms.module) }}
-        <div class="panel panel-default col-lg-12">
-            <div class="panel-body">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-lg-9"><h3>Module Information</h3></div>
-                            <div class="col-lg-3">
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
+    <form id="umc" method="post" action="{{ path('save') }}">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-lg-9"><h3>Module Information</h3></div>
+                    <div class="col-lg-3">
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li class="float-right">
+                                <a class="collapse-link">
+                                    <i data-bind="class: collapseClass, click: togglePanel"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="panel-body">{{ form_widget(forms.module) }}</div>
                 </div>
             </div>
+            <div class="card-body" data-bind="visible: panelVisible">
+                {% include 'form/elements/form.html.twig' with {form: forms.module} %}
+            </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <div class="row">
                     <div class="col-lg-9"><h3>Entities</h3></div>
                     <div class="col-lg-3">
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        </ul>
+                        {% include 'form/group-toolbox.html.twig' with {label: "entities", child: "_entities"} %}
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <div data-role="entity-container">
+            <div class="card-body" data-bind="visible: visibleChildrenContainer._entities">
+                <div data-bind="foreach: children._entities, sortableListEntities: children._entities">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="sort-handle">
+                                <a title="Sort Entities"><i class="fa fa-2x fa-grip-vertical"></i></a>
+                                <h2 data-bind="html: panelTitle"></h2>
+                            </div>
+                            {% include 'form/toolbox.html.twig' with {childName: "_entities"} %}
+                        </div>
+                        <div class="card-body" data-bind="visible: panelVisible()">
+                            <div class="card">
+                                <div class="card-header"><h4>Entity Data</h4></div>
+                                <div class="card-body">
+                                    {% include 'form/elements/form.html.twig' with {form: forms.entity} %}
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-lg-9"><h4>Attributes for <span data-bind="text: panelTitle"></span></h4></div>
+                                        <div class="col-lg-3">
+                                            {% include 'form/group-toolbox.html.twig' with {label: "attributes", child: "_attributes"} %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body" data-bind="visible: visibleChildrenContainer._attributes">
+                                    <div data-bind="foreach: children._attributes, sortableListAttributes: children._attributes">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="sort-handle">
+                                                    <a title="Sort Attributes"><i class="fa fa-2x fa-grip-vertical"></i></a>
+                                                    <h2>
+                                                        <span data-bind="html: $parent.panelTitle()"></span>
+                                                        <span class="fa fa-arrow-right"></span>
+                                                        <span data-bind="html: panelTitle"></span>
+                                                    </h2>
+                                                </div>
+                                                {% include 'form/toolbox.html.twig' with {childName: "_attributes"} %}
+                                            </div>
+                                            <div class="card-body" data-bind="visible: panelVisible">
+                                                {% include 'form/elements/form.html.twig' with {form: forms.attribute} %}
+                                                <div class="row" data-bind="visible: hasOptions">
+                                                    <div class="col-lg-12">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <div class="row">
+                                                                    <div class="col-lg-9">
+                                                                        <h4>Options for
+                                                                            <span data-bind="html: $parent.panelTitle()"></span>
+                                                                            <span class="fa fa-arrow-right"></span>
+                                                                            <span data-bind="html: panelTitle()"></span>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        {% include 'form/group-toolbox.html.twig' with {label: "options", child: "_options", toggleAll: false} %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body" data-bind="visible: visibleChildrenContainer._options">
+                                                                <div data-bind="foreach: children._options, sortableListOptions: children._options">
+                                                                    <div class="col-lg-3">
+                                                                        <div class="card">
+                                                                            <div class="card-header">
+                                                                                <div class="sort-handle">
+                                                                                    <a title="Sort options"><i class="fa fa-2x fa-grip-vertical"></i></a>
+                                                                                    <h2 data-bind="html: panelTitle"></h2>
+                                                                                </div>
 
-                </div>
-            </div>
-            <div class="panel-footer">
-                <button type="button" data-role="add-entity" class="btn btn-primary btn">Add Entity</button>
-            </div>
-        </div>
-        <div class="panel panel-default col-lg-12 no-padding">
-            <div class="panel-heading">
-                <button type="button" data-role="save" class="btn btn-danger btn">Save Module</button>
-            </div>
-        </div>
-        {{ form_end(forms.module) }}
-    </div>
-    <div id="entity-short" style="display: none;">
-        <div class="panel panel-default" data-role="entity-panel" data-entity-id="__id__">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-9"><h3>__title__</h3></div>
-                    <div class="col-lg-3">
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li class="pull-right">
-                                <a class="delete-link"><i class="fa fa-trash"></i></a>
-                            </li>
-                            <li class="pull-right">
-                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="pull-right">
-                                <a class="edit-link"><i class="fa fa-edit"></i></a>
-                            </li>
-                            <li class="pull-right">
-                                <a class="entity-dnd-link" title="Sort Entities"><i class="fa fa-arrows"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <h3>Attributes</h3>
-                <div data-role="attribute-container-__id__"></div>
-            </div>
-            <div class="panel-footer">
-                <button type="button" data-role="add-attribute" class="btn btn-primary btn">Add Attribute</button>
-            </div>
-        </div>
-    </div>
-    <div id="attribute-short" style="display: none;">
-        <div class="panel panel-default no-padding" data-role="entity-panel" data-entity-id="__entity_id__" data-attribute-id="__id__">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <h3>__title__</h3>
-                    </div>
-                    <div class="col-lg-3">
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li class="pull-right">
-                                <a class="delete-link" title="Delete attribute"><i class="fa fa-trash"></i></a>
-                            </li>
-                            <li class="pull-right">
-                                <a class="edit-link" title="Edit Attribute"><i class="fa fa-edit"></i></a>
-                            </li>
-                            <li class="pull-right">
-                                <a class="dnd-link" title="Sort Attributes"><i class="fa fa-arrows"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal" tabindex="-1" role="dialog" id="entity-modal" data-current-entity-id="">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-lg-11"><h5 class="modal-title"></h5></div>
-                        <div class="col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span class="fa fa-close"></span>
-                            </button>
+                                                                                {% include 'form/toolbox.html.twig' with {toggle: false, childName: "_options"} %}
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                {% include 'form/elements/form.html.twig' with {form: forms.option} %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <button type="button" class="btn btn-primary" data-bind="click: function (data, event) {addChild(UMC.defaults.option || {}, '_options')}">Add Option</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" data-bind="visible: hasSerialized">
+                                                    <div class="col-lg-12">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <div class="row">
+                                                                    <div class="col-lg-9">
+                                                                        <h4>Serialized fields for
+                                                                            <i>
+                                                                                <span data-bind="html: $parent.panelTitle()"></span>
+                                                                                <span class="fa fa-arrow-right"></span>
+                                                                                <span data-bind="html: panelTitle()"></span>
+                                                                            </i>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        {% include 'form/group-toolbox.html.twig' with {label: "serialized fields", child: "_serialized"} %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body"  data-bind="visible: visibleChildrenContainer._serialized">
+                                                                <div data-bind="foreach: children._serialized, sortableListSerialized: children._serialized">
+                                                                    <div class="col-lg-12">
+                                                                        <div class="card">
+                                                                            <div class="card-header">
+                                                                                <div class="sort-handle">
+                                                                                    <a title="Sort fields"><i class="fa fa-2x fa-grip-vertical"></i></a>
+                                                                                    <h2>
+                                                                                        <i>
+                                                                                            <span data-bind="html: $parents[1].panelTitle()"></span>
+                                                                                            <span class="fa fa-arrow-right"></span>
+                                                                                            <span data-bind="html: $parent.panelTitle()"></span>
+                                                                                            <span class="fa fa-arrow-right"></span>
+                                                                                            <span data-bind="html: panelTitle"></span>
+                                                                                        </i>
+                                                                                    </h2>
+                                                                                </div>
+                                                                                {% include 'form/toolbox.html.twig' with {childName: '_serialized'} %}
+                                                                            </div>
+                                                                            <div class="card-body" data-bind="visible: panelVisible">
+                                                                                {% include 'form/elements/form.html.twig' with {form: forms.serialized} %}
+                                                                                <div class="row" data-bind="visible: hasOptions">
+                                                                                    <div class="col-lg-12">
+                                                                                        <div class="card">
+                                                                                            <div class="card-header">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-lg-9">
+                                                                                                        <h4>
+                                                                                                            Options for
+                                                                                                            <i>
+                                                                                                                <span data-bind="html: $parents[1].panelTitle()"></span>
+                                                                                                                <span class="fa fa-arrow-right"></span>
+                                                                                                                <span data-bind="html: $parent.panelTitle()"></span>
+                                                                                                                <span class="fa fa-arrow-right"></span>
+                                                                                                                <span data-bind="html: panelTitle()"></span>
+                                                                                                            </i>
+                                                                                                        </h4>
+                                                                                                    </div>
+                                                                                                    <div class="col-lg-3">
+                                                                                                        {% include 'form/group-toolbox.html.twig' with {label: "options", child: "_options", toggleAll: false} %}
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="card-body" data-bind="visible: visibleChildrenContainer._options">
+                                                                                                <div data-bind="foreach: children._options, sortableListOptions: children._options">
+                                                                                                    <div class="col-lg-3">
+                                                                                                        <div class="card">
+                                                                                                            <div class="card-header">
+                                                                                                                <div class="sort-handle">
+                                                                                                                    <a title="Sort Options"><i class="fa fa-2x fa-grip-vertical"></i></a>
+                                                                                                                    <h2 data-bind="html: panelTitle"></h2>
+                                                                                                                </div>
+
+                                                                                                                {% include 'form/toolbox.html.twig' with {toggle: false, childName: "_options"} %}
+                                                                                                            </div>
+                                                                                                            <div class="card-body">
+                                                                                                                {% include 'form/elements/form.html.twig' with {form: forms.option} %}
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="card-footer">
+                                                                                                <button type="button" class="btn btn-primary" data-bind="click: function ({}, event) {addChild(UMC.defaults.option || {}, '_options')}">Add Option</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <span class="btn-group">
+                                                                    <button type="button" class="btn btn-primary" data-bind="click: function (data, event) {addChild(UMC.defaults.serialized || {}, '_serialized')}">Add Field</button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <span class="dropdown-menu">
+                                                                        {% for groupKey, group in serialized_attribute_config %}
+                                                                            <span>{{ groupKey }}</span>
+                                                                            {% for key, item in group %}
+                                                                            <a class="dropdown-item" data-bind="click: function (data, event) {
+                                                                                addChild(Object.assign(UMC.defaults.serialized || {}, {type: '{{ key }}'}), '_serialized')
+                                                                            }">{{ item.label }}</a>
+                                                                        {% endfor %}
+                                                                            <div class="dropdown-divider"></div>
+                                                                        {% endfor %}
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="btn-group">
+                                        <button type="button" class="btn btn-primary" data-bind="click: function (data, event) {addChild(UMC.defaults.attribute || {}, '_attributes')}">Add attribute</button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <span class="dropdown-menu">
+                                            {% for groupKey, group in attribute_config %}
+                                                <span>{{ groupKey }}</span>
+                                                {% for key, item in group %}
+                                                <a class="dropdown-item" data-bind="click: function (data, event) {
+                                                        addChild(Object.assign(UMC.defaults.attribute || {}, {type: '{{ key }}'}), '_attributes')
+                                                    }">{{ item.label }}</a>
+                                                {% endfor %}
+                                                <div class="dropdown-divider"></div>
+                                            {% endfor %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-body">
-                    {{ form(forms.entity) }}
+            <div class="card-footer">
+                <div class="float-left">
+                    <button type="button" data-bind="click: function (data, event) {addChild(UMC.defaults.entity || {}, '_entities')}" class="btn btn-primary btn">Add Entity</button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-role="save-entity">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div class="float-right">
+                    <button type="button" data-role="save" class="btn btn-danger btn" data-bind="{click: submitForm}">Save Module</button>
                 </div>
+                <div class="clearfix"></div>
             </div>
         </div>
-    </div>
-    <div class="modal" tabindex="-1" role="dialog" id="attribute-modal" data-current-entity-id="" data-current-attribute-id="">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-lg-11"><h5 class="modal-title"></h5></div>
-                        <div class="col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span class="fa fa-close"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    {{ form(forms.attribute) }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-role="save-attribute">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal" tabindex="-1" role="dialog" id="response-modal">
+        <div class="modal" tabindex="-1" role="dialog" id="response-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -166,39 +282,48 @@
             </div>
         </div>
     </div>
+    </form>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('ko/ko.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>
-    <script type="text/javascript">
-        $.fn.select2.defaults.set( "theme", "bootstrap" );
-    </script>
+    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
     <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            var storageData = null;
-            try {
-                storageData = JSON.parse(localStorage.umc);
-            } catch (e) {}
-            var data = {{ data|json_encode|raw }};
-            if (storageData && {{ is_new_mode }}) {
-                console.log(storageData);
-                if (confirm("It looks like you previously started creating a module. Do you want to continue?\n 'OK' to continue editing where you left off,\n 'Cancel' to start over!")) {
-                    data = storageData;
-                } else {
-                    delete localStorage.umc;
-                }
-            }
-            $('[data-role=umc]').umc({
-                data: data,
-                attrConfig: {{ attribute_config|raw }},
-                defaults: {{ defaults|json_encode|raw }},
-                submitAction: '{{ submit_action }}'
-            });
-            $.validate({
-                lang: 'en'
-            });
-        });
+        $.validate();
+        if (typeof UMC === "undefined") {
+            UMC = {}
+        }
+        UMC.config = {{ uiConfig|json_encode|raw }};
+        UMC.defaults = {{ defaults|json_encode|raw }};
+        ko.applyBindings(new UMC.Module({{ data|json_encode|raw }}));
     </script>
+    {#<script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>#}
+    {#<script type="text/javascript">#}
+        {#jQuery(document).ready(function ($) {#}
+            {#var storageData = null;#}
+            {#try {#}
+                {#storageData = JSON.parse(localStorage.umc);#}
+            {#} catch (e) {}#}
+            {#var data = {{ data|json_encode|raw }};#}
+            {#if (storageData && {{ is_new_mode }}) {#}
+                {#console.log(storageData);#}
+                {#if (confirm("It looks like you previously started creating a module. Do you want to continue?\n 'OK' to continue editing where you left off,\n 'Cancel' to start over!")) {#}
+                    {#data = storageData;#}
+                {#} else {#}
+                    {#delete localStorage.umc;#}
+                {#}#}
+            {#}#}
+            {#$('[data-role=umc]').umc({#}
+                {#data: data,#}
+                {#attrConfig: {{ attribute_config|raw }},#}
+                {#defaults: {{ defaults|json_encode|raw }},#}
+                {#submitAction: '{{ submit_action }}'#}
+            {#});#}
+            {#$.validate({#}
+                {#lang: 'en'#}
+            {#});#}
+        {#});#}
+    {#</script>#}
 {% endblock %}

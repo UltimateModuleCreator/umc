@@ -1,6 +1,6 @@
 {% if module.hasAttributeType('image') and module.hasFrontend() %}
 <?php{{ module.getFormattedLicense('php') }}
-
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;

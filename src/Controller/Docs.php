@@ -48,7 +48,10 @@ class Docs extends AbstractController
     public function run() : Response
     {
         return $this->render(
-            $this->template
+            $this->template,
+            [
+                'selectedMenu' => 'docs'
+            ]
         );
     }
 }

@@ -1,0 +1,17 @@
+<ul class="nav navbar-right panel_toolbox">
+    {% if toggle is not defined or toggle %}
+    <li class="float-right">
+        <a data-bind="click: togglePanel">
+            <i data-bind="class: collapseClass"></i>
+        </a>
+    </li>
+    {% endif %}
+    {% if (delete is not defined or delete)  and childName is defined %}
+    <li class="float-right">
+        <a data-bind="click: function (data, event) {$parent.removeChild(data, '{{ childName }}')}">
+            <i class="fa fa-2x fa-trash"></i>
+        </a>
+    </li>
+    {% endif %}
+</ul>
+<div class="clearfix"></div>

@@ -23,6 +23,11 @@ Model/EntityRepository.php:
   label: "Entity repository model"
   scope: entity
   template: source/Model/EntityRepository.php.html.twig
+Model/EntityRegistry.php:
+  destination: Model/_Entity_Registry.php
+  label: "Entity registry model"
+  scope: entity
+  template: source/Model/EntityRegistry.php.html.twig
 Model/Entity/Executor/Delete.php:
   destination: Model/_Entity_/Executor/Delete.php
   label: "Entity mass action delete executor"

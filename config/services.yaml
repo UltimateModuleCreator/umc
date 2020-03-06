@@ -31,6 +31,7 @@ parameters:
       has_options: false
       schema_type: varchar
       schema_attributes: 'length="255"'
+      can_be_serialized: true
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
@@ -54,6 +55,31 @@ parameters:
       has_options: true
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
+      can_be_serialized: true
+    product_attribute_multiselect:
+      label: Product Attribute Multiselect
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
+      multiple_text: 'true'
+      class: App\Model\Attribute\AttributesMultiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+      has_options: true
+      schema_type: text
+      can_be_serialized: true
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
@@ -77,6 +103,31 @@ parameters:
       has_options: true
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
+      can_be_serialized: true
+    product_attribute_set_multiselect:
+      label: Product Attribute Set Multiselect
+      grid_template: attribute/grid/select.html.twig
+      form_template: attribute/form/select.html.twig
+      fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/select.html.twig
+      frontend_list_template: attribute/frontend/list/select.html.twig
+      multiple_text: 'true'
+      class: App\Model\Attribute\AttributeSetMultiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+      has_options: true
+      schema_type: text
+      can_be_serialized: true
     country:
       label: Country
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -100,6 +151,7 @@ parameters:
       input_type: Select
       has_options: true
       schema_type: varchar
+      can_be_serialized: true
     country_multiselect:
       label: Country Multiselect
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -124,6 +176,7 @@ parameters:
       input_type: Multiselect
       has_options: true
       schema_type: text
+      can_be_serialized: true
     date:
       label: Date
       grid_template: attribute/grid/date.html.twig
@@ -145,6 +198,7 @@ parameters:
       input_type: Date
       has_options: false
       schema_type: timestamp
+      can_be_serialized: true
     decimal:
       label: Decimal
       grid_filter_type: textRange
@@ -167,6 +221,7 @@ parameters:
       has_options: false
       schema_type: decimal
       schema_attributes: 'scale="4" precision="12"'
+      can_be_serialized: true
     dropdown:
       label: Dropdown
       grid_template: attribute/grid/select.html.twig
@@ -190,6 +245,7 @@ parameters:
       has_options: true
       schema_type: int
       schema_attributes: 'padding="11"'
+      can_be_serialized: true
     file:
       label: File
       grid_template: false
@@ -212,6 +268,7 @@ parameters:
       has_options: false
       schema_type: varchar
       schema_attributes: 'length="255"'
+      can_be_serialized: false
     image:
       label: Image
       grid_template: false
@@ -234,6 +291,7 @@ parameters:
       has_options: false
       schema_type: varchar
       schema_attributes: 'length="255"'
+      can_be_serialized: false
     integer:
       label: Integer
       grid_template: attribute/grid/text.html.twig
@@ -256,6 +314,7 @@ parameters:
       has_options: false
       schema_type: int
       schema_attributes: 'padding="11"'
+      can_be_serialized: true
     multiselect:
       label: Multiselect
       grid_template: attribute/grid/select.html.twig
@@ -279,6 +338,7 @@ parameters:
       input_type: Multiselect
       has_options: true
       schema_type: text
+      can_be_serialized: true
     textarea:
       label: Textarea (no editor)
       grid_template: attribute/grid/text.html.twig
@@ -300,6 +360,7 @@ parameters:
       input_type: Textarea
       has_options: false
       schema_type: text
+      can_be_serialized: true
     wysiwyg:
       label: Wysiwyg
       grid_template: false
@@ -321,6 +382,7 @@ parameters:
       input_type: Textarea
       has_options: false
       schema_type: mediumtext
+      can_be_serialized: true
     yesno:
       label: Yes/No
       grid_template: attribute/grid/select.html.twig
@@ -344,6 +406,31 @@ parameters:
       has_options: true
       schema_type: smallint
       schema_attributes: 'padding="2"'
+      can_be_serialized: true
+    serialized:
+      label: Serialized
+      grid_template: ''
+      form_template: attribute/form/serialized.html.twig
+      fk_template: false
+      schema_fk_template: false
+      frontend_view_template: attribute/frontend/view/serialized.html.twig
+      frontend_list_template: attribute/frontend/list/serialized.html.twig
+      multiple_text: 'false'
+      class: \App\Model\Attribute\Serialized
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: false
+      sql_type_constant: TYPE_TEXT
+      sql_size: "'64k'"
+      type_hint: string
+      multiple: false
+      grid_filter_type: 'false'
+      input_type: Serialized Fields
+      has_options: false
+      schema_type: text
+      can_be_serialized: false
 
   menu_type_config:
     '':
@@ -681,60 +768,7 @@ parameters:
       label: '|---|--- System -> Other Settings -> Manage Encryption Key (Magento_EncryptionKey::system_crypt_key)'
       parent: Magento_Backend::system_other_settings
 
-  form_type_map:
-    text:
-      type: \Symfony\Component\Form\Extension\Core\Type\TextType
-    textarea:
-      type: \Symfony\Component\Form\Extension\Core\Type\TextareaType
-    number:
-      type: \Symfony\Component\Form\Extension\Core\Type\NumberType
-    choice:
-      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
-    radio:
-      type: \Symfony\Component\Form\Extension\Core\Type\RadioType
-    attribute_type:
-      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
-      choice_config: '%attribute_type_config%'
-      group: 'input_type'
-      sort: true
-    menu:
-      choice_config: '%menu_type_config%'
-      type: \Symfony\Component\Form\Extension\Core\Type\ChoiceType
-    hidden:
-      type: \Symfony\Component\Form\Extension\Core\Type\HiddenType
 
-  app_menu_config:
-    index:
-      label: Module List
-      icon: 'fa fa-list'
-      active:
-        - index
-        - ''
-      url: index
-    edit:
-      label: Create Module
-      icon: 'fa fa-edit'
-      active:
-      - edit
-      url: edit
-    files:
-      label: Files
-      icon: 'fa fa-file'
-      active:
-      - files
-      url: files
-    settings:
-      label: Settings
-      icon: 'fa fa-gears'
-      active:
-      - settings
-      url: settings
-    docs:
-      label: Docs
-      icon: 'fa fa-book'
-      active:
-      - docs
-      url: docs
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -770,16 +804,6 @@ services:
         $template: 'edit.html.twig'
         $basePath: '%module_list_path%/'
         $attributeConfig: '%attribute_type_config%'
-        $formConfig:
-          module:
-            class: App\Form\ModuleType
-            name: umc
-          entity:
-            class: App\Form\EntityType
-            name: entity
-          attribute:
-            class: App\Form\AttributeType
-            name: attribute
     App\Controller\Files:
       arguments:
         $template: 'files.html.twig'
@@ -793,48 +817,14 @@ services:
       arguments:
         $path: '%module_list_path%/'
 
-    App\Form\BaseType:
+    App\Service\Form\Loader:
       arguments:
-        $type: ''
-        $fieldTransformer: '@App\Form\Field\BaseTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: ''
-    App\Form\ModuleType:
-      arguments:
-        $type: '%form_config_path%/module.yml'
-        $fieldTransformer: '@App\Form\Field\BaseTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: 'module'
-    App\Form\EntityType:
-      arguments:
-        $type: '%form_config_path%/entity.yml'
-        $fieldTransformer: '@App\Form\Field\BaseTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: 'entity'
-    App\Form\AttributeType:
-      arguments:
-        $type: '%form_config_path%/attribute.yml'
-        $fieldTransformer: '@App\Form\Field\BaseTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: 'attribute'
-    App\Form\Settings\ModuleType:
-      arguments:
-        $type: '%form_config_path%/module.yml'
-        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: 'module'
-    App\Form\Settings\EntityType:
-      arguments:
-        $type: '%form_config_path%/entity.yml'
-        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: 'entity'
-    App\Form\Settings\AttributeType:
-      arguments:
-        $type: '%form_config_path%/attribute.yml'
-        $fieldTransformer: '@App\Form\Field\SettingsTransformer'
-        $typeMap: '%form_type_map%'
-        $dataKey: 'attribute'
+        $fileMap:
+          module: '%form_config_path%/module.yml'
+          entity: '%form_config_path%/entity.yml'
+          attribute: '%form_config_path%/attribute.yml'
+          option: '%form_config_path%/option.yml'
+          serialized: '%form_config_path%/serialized.yml'
 
     App\Service\Source\Reader:
       arguments:
@@ -860,17 +850,18 @@ services:
           entity: '@App\Service\Generator\EntityGenerator'
           attribute: '@App\Service\Generator\AttributeGenerator'
 
+    App\Service\Form\OptionProviderPool:
+      arguments:
+        $providers:
+          attribute_type: '@App\Service\Form\OptionProvider\AttributeType'
+          serialized_field_type: '@App\Service\Form\OptionProvider\SerializedType'
+          frontend_menu_link: '@App\Service\Form\OptionProvider\FrontendMenuLink'
+          admin_menu: '@App\Service\Form\OptionProvider\AdminMenu'
     App\Util\CodingStandardsFactory:
       arguments:
         $standards: [PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
         $phpcsPath: '%kernel.root_dir%/../vendor/squizlabs/php_codesniffer/bin/phpcs'
 
-    App\Service\ModuleLoader:
-      arguments:
-        $factories:
-          module : '@App\Model\ModuleFactory'
-          entity : '@App\Model\EntityFactory'
-          attribute : '@App\Model\AttributeFactory'
     App\Model\ModuleFactory:
       arguments:
         $licenseFormatter:
@@ -886,9 +877,9 @@ services:
         $path: '%defaults_path%'
         $file: '%defaults_file%'
 
-    App\Service\Menu:
+    App\Model\Attribute\AttributeTypeFactory:
       arguments:
-        $config: '%app_menu_config%'
+        $typeMap: '%attribute_type_config%'
 
     App\Twig\SnakeCase:
       tags: ['twig.extension']
@@ -899,6 +890,4 @@ services:
     App\Twig\Hyphen:
       tags: ['twig.extension']
     App\Twig\Version:
-      tags: ['twig.extension']
-    App\Twig\Menu:
       tags: ['twig.extension']

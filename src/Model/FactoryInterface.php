@@ -18,6 +18,11 @@
 declare(strict_types=1);
 
 namespace App\Model;
+/**
+ * Interface FactoryInterface
+ * @package App\Model
+ * @deprecated
+ */
 
 interface FactoryInterface
 {

@@ -1,0 +1,65 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Component\Listing\{{ entity.getNameSingular()|camel|ucfirst }}ActionsTest;
+
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Column\{{ entity.getNameSingular()|camel|ucfirst }}Actions;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\TestCase;{{ module.getMockObjectUse() }}
+
+class LocationActionsTest extends TestCase
+{
+    /**
+     * @var UrlInterface | {{ module.getMockObjectClass() }}
+     */
+    private $urlBuilder;
+    /**
+     * @var ObjectManager
+     */
+    private $om;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Actions
+     */
+    private $column;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->om = new ObjectManager($this);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->column = $this->om->getObject(
+            {{ entity.getNameSingular()|camel|ucfirst }}Actions::class,
+            [
+                'urlBuilder' => $this->urlBuilder,
+                'data' => ['name' => 'column']
+            ]
+        );
+}
+
+    /**
+     * @covers \Ibg\StoreLocator\Ui\Component\Listing\Column\LocationActions::prepareDataSource
+     * @covers \Ibg\StoreLocator\Ui\Component\Listing\Column\LocationActions::__construct
+     */
+    public function testPrepareDataSource()
+    {
+        $this->urlBuilder->method('getUrl')->willReturn('url');
+        $data = [
+            'data' => [
+                'items' => [
+                    ['{{ entity.getNameSingular()|snake }}_id' => 1],
+                    ['{{ entity.getNameSingular()|snake }}_id' => 2],
+                    ['dummy'],
+                ]
+            ]
+        ];
+        $result = $this->column->prepareDataSource($data);
+        $this->assertArrayHasKey('edit', $result['data']['items'][0]['column']);
+        $this->assertArrayHasKey('delete', $result['data']['items'][0]['column']);
+        $this->assertArrayHasKey('edit', $result['data']['items'][1]['column']);
+        $this->assertArrayHasKey('delete', $result['data']['items'][1]['column']);
+        $this->assertArrayNotHasKey('edit', $result['data']['items'][2]);
+        $this->assertArrayNotHasKey('delete', $result['data']['items'][2]);
+    }
+}

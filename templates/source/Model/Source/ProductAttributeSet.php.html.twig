@@ -1,5 +1,7 @@
 {% if module.hasAttributeType('product_attribute_set') %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Source;
 
 use Magento\Framework\Option\ArrayInterface;

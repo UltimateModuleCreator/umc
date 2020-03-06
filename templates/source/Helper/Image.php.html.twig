@@ -1,5 +1,6 @@
 {% if module.hasAttributeType('image') and module.hasFrontend() %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Helper;
 
@@ -141,7 +142,7 @@ class Image extends AbstractHelper
      * @param Repository $assetRepo
      * @param ConfigInterface $viewConfig
      * @param Uploader $uploader
-     * @param $entityCode
+     * @param string $entityCode
      */
     public function __construct(
         Context $context,

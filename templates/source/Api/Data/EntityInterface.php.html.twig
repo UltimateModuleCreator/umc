@@ -1,52 +1,33 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;
 
 /**
  * @api
  */
-interface {{ entity.getNameSingular()|ucfirst }}Interface
+interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
 {
     const {{ entity.getNameSingular()|snake|upper }}_ID = '{{ entity.getNameSingular()|snake }}_id';
 {% for attribute in entity.getAttributes() %}
     const {{ attribute.getCode()|upper }} = '{{ attribute.getCode() }}';
 {% endfor %}
 {% if entity.getStore() %}
-    /**
-     * @var string
-     */
     const STORE_ID = 'store_id';
 {% endif %}
 {% if entity.getSeo() %}
-    /**
-     * @var string
-     */
     const META_TITLE = 'meta_title';
-    /**
-     * @var string
-     */
     const META_DESCRIPTION = 'meta_description';
-    /**
-     * @var string
-     */
     const META_KEYWORDS = 'meta_keywords';
 {% endif %}
 {% if entity.getFrontendList() or entity.getFrontendView() %}
-    /**
-     * @var string
-     */
     const IS_ACTIVE = 'is_active';
-    /**
-     * @var int
-     */
     const STATUS_ENABLED = 1;
-    /**
-     * @var int
-     */
-    const STATUS_DISABLED = 2;
+    const STATUS_DISABLED = 0;
 {% endif %}
     /**
      * @param int $id
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setId($id);
 
@@ -57,19 +38,19 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
 
     /**
      * @param int $id
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    public function set{{ entity.getNameSingular()|ucfirst }}Id($id);
+    public function set{{ entity.getNameSingular()|camel|ucfirst }}Id($id);
 
     /**
      * @return int
      */
-    public function get{{ entity.getNameSingular()|ucfirst }}Id();
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Id();
 
 {% for attribute in entity.getAttributes() %}
     /**
      * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}});
 
@@ -79,7 +60,7 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
     public function get{{ attribute.getCode()|camel|ucfirst }}();
 {% endfor %}
 {% for attribute in entity.getAttributes() %}
-{% if attribute.getType() == 'image' or attribute.getType() == 'file' %}
+{% if attribute.isUpload() %}
 
     /**
      * @return bool|string
@@ -92,7 +73,7 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
 
     /**
      * @param int[] $store
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setStoreId(array $store);
 
@@ -104,7 +85,7 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
 {% if entity.getSeo() %}
     /**
      * @param string $metaTitle
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setMetaTitle($metaTitle);
 
@@ -115,7 +96,7 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
 
     /**
      * @param string $metaDescription
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setMetaDescription($metaDescription);
 
@@ -126,7 +107,7 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
 
     /**
      * @param string $metaKeywords
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setMetaKeywords($metaKeywords);
 
@@ -138,7 +119,7 @@ interface {{ entity.getNameSingular()|ucfirst }}Interface
 {% if entity.getFrontendList() or entity.getFrontendView() %}
     /**
      * @param int $isActive
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setIsActive($isActive);
 

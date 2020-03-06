@@ -1,15 +1,15 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
+declare(strict_types=1);
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
 
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} as {{ entity.getNameSingular()|ucfirst }}ResourceModel;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Reflection\DataObjectProcessor;
 {% if entity.hasAttributeType('date') %}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\DateFilter;
 {% endif %}
@@ -21,61 +21,45 @@ class InlineEdit extends Action
 {
     /**
      * {{ entity.getLabelSingular()|ucfirst }} repository
-     * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
      */
-    protected ${{ entity.getNameSingular()|snake }}Repository;
+    private ${{ entity.getNameSingular()|snake }}Repository;
     /**
      * Data object processor
-     * @var DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-    /**
-     * Data object helper
      * @var DataObjectHelper
      */
-    protected $dataObjectHelper;
-    /**
-     * JSON Factory
-     * @var JsonFactory
-     */
-    protected $jsonFactory;
+    private $dataObjectHelper;
 {% if entity.hasAttributeType('date') %}
     /**
      * Date inputs filter
      * @var DateFilter
      */
-    protected $dateFilter;
+    private $dateFilter;
 {% endif %}
     /**
      * {{ entity.getLabelSingular()|ucfirst }} resource model
-     * @var {{ entity.getNameSingular()|ucfirst }}ResourceModel
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel
      */
-    protected ${{ entity.getNameSingular()|camel }}ResourceModel;
+    private ${{ entity.getNameSingular()|camel }}ResourceModel;
 
     /**
      * constructor
      * @param Context $context
      * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param DataObjectHelper $dataObjectHelper
-     * @param JsonFactory $jsonFactory
      * @param {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel ${{ entity.getNameSingular()|camel }}ResourceModel
      */
     public function __construct(
         Context $context,
         {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
-        DataObjectProcessor $dataObjectProcessor,
         DataObjectHelper $dataObjectHelper,
-        JsonFactory $jsonFactory,
 {% if entity.hasAttributeType('date') %}
         DateFilter $dateFilter,
 {% endif %}
         {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel ${{ entity.getNameSingular()|camel }}ResourceModel
     ) {
         $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->jsonFactory = $jsonFactory;
 {% if entity.hasAttributeType('date')%}
         $this->dateFilter = $dateFilter;
 {% endif %}
@@ -89,7 +73,7 @@ class InlineEdit extends Action
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->jsonFactory->create();
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $error = false;
         $messages = [];
 
@@ -102,7 +86,7 @@ class InlineEdit extends Action
         }
 
         foreach (array_keys($postItems) as ${{ entity.getNameSingular()|camel }}Id) {
-            /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}|\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }} */
+            /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} */
             try {
                 ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Repository->get((int)${{ entity.getNameSingular()|camel }}Id);
                 ${{ entity.getNameSingular()|camel }}Data = $postItems[${{ entity.getNameSingular()|camel }}Id];
@@ -114,13 +98,20 @@ class InlineEdit extends Action
                     ]
                 );
 {% endif %}
-                $this->dataObjectHelper->populateWithArray(${{ entity.getNameSingular()|camel }}, ${{ entity.getNameSingular()|camel }}Data, {{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
-                $this->{{ entity.getNameSingular()|camel }}ResourceModel->saveAttribute(${{ entity.getNameSingular()|camel }}, array_keys(${{ entity.getNameSingular()|camel }}Data));
+                $this->dataObjectHelper->populateWithArray(
+                    ${{ entity.getNameSingular()|camel }},
+                    ${{ entity.getNameSingular()|camel }}Data,
+                    {{ entity.getNameSingular()|camel|ucfirst }}Interface::class
+                );
+                $this->{{ entity.getNameSingular()|camel }}ResourceModel->saveAttribute(
+                    ${{ entity.getNameSingular()|camel }},
+                    array_keys(${{ entity.getNameSingular()|camel }}Data)
+                );
             } catch (LocalizedException $e) {
-                $messages[] = $this->getErrorWith{{ entity.getNameSingular()|camel|ucfirst }}Id(${{ entity.getNameSingular()|camel }}, $e->getMessage());
-                $error = true;
-            } catch (\RuntimeException $e) {
-                $messages[] = $this->getErrorWith{{ entity.getNameSingular()|camel|ucfirst }}Id(${{ entity.getNameSingular()|camel }}, $e->getMessage());
+                $messages[] = $this->getErrorWith{{ entity.getNameSingular()|camel|ucfirst }}Id(
+                    ${{ entity.getNameSingular()|camel }}->getId(),
+                    $e->getMessage()
+                );
                 $error = true;
             } catch (\Exception $e) {
                 $messages[] = $this->getErrorWith{{ entity.getNameSingular()|camel|ucfirst }}Id(
@@ -140,12 +131,12 @@ class InlineEdit extends Action
     /**
      * Add {{ entity.getLabelSingular()|ucfirst }} id to error message
      *
-     * @param \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @param \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWith{{ entity.getNameSingular()|camel|ucfirst }}Id({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}, $errorText)
+    protected function getErrorWith{{ entity.getNameSingular()|camel|ucfirst }}Id(int ${{ entity.getNameSingular()|camel }}Id, $errorText)
     {
-        return '[{{ entity.getLabelSingular()|ucfirst }} ID: ' . ${{ entity.getNameSingular()|camel }}->getId() . '] ' . $errorText;
+        return '[{{ entity.getLabelSingular()|ucfirst }} ID: ' . ${{ entity.getNameSingular()|camel }}Id . '] ' . $errorText;
     }
 }

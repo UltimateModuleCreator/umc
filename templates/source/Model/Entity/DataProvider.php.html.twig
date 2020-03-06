@@ -1,5 +1,7 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }};
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -27,7 +29,7 @@ class DataProvider extends AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param {{ entity.getNameSingular()|ucfirst }}CollectionFactory $collectionFactory
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}CollectionFactory $collectionFactory
      * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
@@ -36,7 +38,7 @@ class DataProvider extends AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        {{ entity.getNameSingular()|ucfirst }}CollectionFactory $collectionFactory,
+        {{ entity.getNameSingular()|camel|ucfirst }}CollectionFactory $collectionFactory,
         DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = []
@@ -57,11 +59,11 @@ class DataProvider extends AbstractDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }} ${{ entity.getNameSingular()|camel }} */
+        /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} ${{ entity.getNameSingular()|camel }} */
         foreach ($items as ${{ entity.getNameSingular()|camel }}) {
             $this->loadedData[${{ entity.getNameSingular()|camel }}->getId()] = ${{ entity.getNameSingular()|camel }}->getData();
 {% for attribute in entity.getAttributes() %}
-{% if attribute.getType() == 'image' or attribute.getType() == 'file' %}
+{% if attribute.isUpload() %}
             if (isset($this->loadedData[${{ entity.getNameSingular()|camel }}->getId()]['{{ attribute.getCode() }}'])) {
                 ${{ attribute.getCode()|camel }} = [];
                 ${{ attribute.getCode()|camel }}[0]['name'] = ${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}();

@@ -1,9 +1,10 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
 use Magento\Framework\Model\AbstractModel;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} as {{ entity.getNameSingular()|ucfirst }}ResourceModel;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
 {% if (entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())) or ( entity.hasAttributeType('file') or entity.hasAttributeType('image')) %}
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Exception\LocalizedException;
@@ -16,10 +17,10 @@ use Magento\Framework\Option\ArrayInterface;
 {% endif %}
 
 /**
- * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} _getResource()
- * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }} getResource()
+ * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} _getResource()
+ * @method \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} getResource()
  */
-class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|ucfirst }}Interface
+class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|camel|ucfirst }}Interface
 {
     /**
      * Cache tag
@@ -31,6 +32,7 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      * Cache tag
      *
      * @var string
+     * phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore,PSR12.Classes.PropertyDeclaration.Underscore
      */
     protected $_cacheTag = self::CACHE_TAG;
     /**
@@ -45,6 +47,7 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      * @var string
      */
     protected $_eventObject = '{{ entity.getNameSingular()|snake }}';
+    //phpcs:enable
 {% if entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
     /**
      * Uploader pool
@@ -100,10 +103,10 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
         array $data = []
     ) {
 {% if  entity.hasAttributeType('file') or entity.hasAttributeType('image') %}
-        $this->outputProcessor = $outputProcessor;
+        $this->uploaderPool = $uploaderPool;
 {% endif %}
 {% if entity.hasAttributeType('wysiwyg') and (entity.getFrontendView() or entity.getFrontendList())  %}
-        $this->uploaderPool = $uploaderPool;
+    $this->outputProcessor = $outputProcessor;
 {% endif %}
 {% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
         $this->optionProviders = $optionProviders;
@@ -115,10 +118,12 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      * Initialize resource model
      *
      * @return void
+     * phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
      */
     protected function _construct()
     {
-        $this->_init({{ entity.getNameSingular()|ucfirst }}ResourceModel::class);
+        $this->_init({{ entity.getNameSingular()|camel|ucfirst }}ResourceModel::class);
+        //phpcs:enable
     }
 
     /**
@@ -136,30 +141,30 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      *
      * @return array
      */
-    public function get{{ entity.getNameSingular()|ucfirst }}Id()
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Id()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID);
     }
 
     /**
      * set {{ entity.getLabelSingular() }} id
      *
      * @param  int ${{ entity.getNameSingular()|camel }}Id
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    public function set{{ entity.getNameSingular()|ucfirst }}Id(${{ entity.getNameSingular()|camel }}Id)
+    public function set{{ entity.getNameSingular()|camel|ucfirst }}Id(${{ entity.getNameSingular()|camel }}Id)
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, ${{ entity.getNameSingular()|camel }}Id);
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, ${{ entity.getNameSingular()|camel }}Id);
     }
 {% for attribute in entity.getAttributes() %}
 
     /**
      * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}})
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
     }
 
     /**
@@ -167,17 +172,18 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      */
     public function get{{ attribute.getCode()|camel|ucfirst }}()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::{{ attribute.getCode()|upper}});
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}});
     }
 {% endfor %}
 {% if entity.getStore() %}
+
     /**
      * @param array $storeId
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setStoreId(array $storeId)
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::STORE_ID, $storeId);
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::STORE_ID, $storeId);
     }
 
     /**
@@ -185,18 +191,18 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
     */
     public function getStoreId()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::STORE_ID);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::STORE_ID);
     }
 {% endif %}
 {% if entity.getSeo() %}
 
     /**
      * @param string $metaTitle
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setMetaTitle($metaTitle)
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::META_TITLE, $metaTitle);
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_TITLE, $metaTitle);
     }
 
     /**
@@ -204,16 +210,16 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      */
     public function getMetaTitle()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::META_TITLE);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_TITLE);
     }
 
     /**
      * @param string $metaDescription
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setMetaDescription($metaDescription)
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::META_DESCRIPTION, $metaDescription);
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_DESCRIPTION, $metaDescription);
     }
 
     /**
@@ -221,16 +227,16 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      */
     public function getMetaDescription()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::META_DESCRIPTION);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_DESCRIPTION);
     }
 
     /**
      * @param string $metaKeywords
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setMetaKeywords($metaKeywords)
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::META_KEYWORDS, $metaKeywords);
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_KEYWORDS, $metaKeywords);
     }
 
     /**
@@ -238,18 +244,18 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      */
     public function getMetaKeywords()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::META_KEYWORDS);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_KEYWORDS);
     }
 {% endif %}
 {% if entity.getFrontendList() or entity.getFrontendView() %}
 
     /**
      * @param int $isActive
-     * @return {{ entity.getNameSingular()|ucfirst }}Interface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function setIsActive($isActive)
     {
-        return $this->setData({{ entity.getNameSingular()|ucfirst }}Interface::IS_ACTIVE, $isActive);
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::IS_ACTIVE, $isActive);
     }
 
     /**
@@ -257,11 +263,11 @@ class {{ entity.getNameSingular()|ucfirst }} extends AbstractModel implements {{
      */
     public function getIsActive()
     {
-        return $this->getData({{ entity.getNameSingular()|ucfirst }}Interface::IS_ACTIVE);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::IS_ACTIVE);
     }
 {% endif %}
 {% for attribute in entity.getAttributes() %}
-{% if attribute.getType() == 'image' or attribute.getType() == 'file' %}
+{% if attribute.isUpload() %}
 
     /**
      * @return bool|string

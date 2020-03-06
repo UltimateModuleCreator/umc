@@ -1,0 +1,19 @@
+<ul class="nav navbar-right panel_toolbox">
+    {% if toggleAll is not defined or toggleAll %}
+    <li class="float-right">
+        <a title="Collapse {{ label }} section">
+            <i class="fa fa-2x fa-bars" data-bind="click: collapseAllChildren('{{ child }}')"></i>
+        </a>
+    </li>
+    <li class="float-right">
+        <a title="Expand all {{ label }}">
+            <i class="fa fa-2x fa-stream" data-bind="click: expandAllChildren('{{ child }}')"></i>
+        </a>
+    </li>
+    {% endif %}
+    <li class="float-right">
+        <a title="Collapse all {{ label }}">
+            <i data-bind="click: toggleChildContainer('{{ child }}'), attr: {class: visibleChildrenContainerClass.{{ child }}}"></i>
+        </a>
+    </li>
+</ul>

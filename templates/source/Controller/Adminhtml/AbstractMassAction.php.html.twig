@@ -1,4 +1,6 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Provider\CollectionProviderInterface;
@@ -8,36 +10,32 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\ExecutorInterface;
 
-abstract class AbstractMassAction extends Action
+class AbstractMassAction extends Action
 {
-
     /**
      * Mass Action filter
      * @var Filter
      */
-    protected $filter;
-
+    private $filter;
     /**
      * Collection provider
      * @var CollectionProviderInterface
      */
-    protected $collectionProvider;
-
+    private $collectionProvider;
     /**
      * Action success message
      * @var string
      */
-    protected $successMessage;
-
+    private $successMessage;
     /**
      * Action error message
      * @var string
      */
-    protected $errorMessage;
+    private $errorMessage;
     /**
      * @var ExecutorInterface
      */
-    protected $executor;
+    private $executor;
 
     /**
      * constructor

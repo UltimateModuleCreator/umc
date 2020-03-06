@@ -239,6 +239,14 @@ class AbstractType extends AbstractModel implements TypeInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isUpload(): bool
+    {
+        return $this->getUploadType() !== null;
+    }
+
+    /**
      * @return null|string
      */
     public function getSqlTypeConstant() : ?string

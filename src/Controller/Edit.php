@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,10 +14,13 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Service\Form\Loader;
+use App\Util\OptionGroup;
 use App\Util\YamlLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -49,18 +53,9 @@ class Edit extends AbstractController
      */
     private $settingsModel;
     /**
-     * @var array
+     * @var Loader
      */
-    private $formConfig;
-    /**
-     * @var array
-     */
-    private $configProps = [
-        'can_be_name',
-        'can_show_in_grid',
-        'can_have_options',
-        'can_be_required'
-    ];
+    private $formLoader;
 
     /**
      * Edit constructor.
@@ -70,57 +65,53 @@ class Edit extends AbstractController
      * @param \App\Model\Settings $settingsModel
      * @param string $basePath
      * @param array $attributeConfig
-     * @param array $formConfig
      */
     public function __construct(
         string $template,
         RequestStack $requestStack,
         YamlLoader $yamlLoader,
         \App\Model\Settings $settingsModel,
+        Loader $formLoader,
         string $basePath,
-        array $attributeConfig,
-        array $formConfig
+        array $attributeConfig
     ) {
         $this->template = $template;
         $this->requestStack = $requestStack;
         $this->yamlLoader = $yamlLoader;
         $this->settingsModel = $settingsModel;
+        $this->formLoader = $formLoader;
         $this->basePath = $basePath;
         $this->attributeConfig = $attributeConfig;
-        $this->formConfig = $formConfig;
     }
 
     /**
      * @return Response
+     * @throws \Exception
      */
     public function run() : Response
     {
         $moduleName = $this->requestStack->getCurrentRequest()->get('module');
-        $defaults = $this->settingsModel->getSettings(true);
+        $defaults = $this->settingsModel->getSettingsSplit(true);
         if ($moduleName) {
             try {
                 $data = $this->yamlLoader->load($this->basePath . basename($moduleName) . '.yml');
-                $entities = $data['_entities'] ?? [];
-                unset($data['_entities']);
-                $data = [
-                    'module' => $data,
-                    '_entities' => $entities
-                ];
             } catch (\Exception $e) {
-                $data = [
-                    'module' => $defaults['module'] ?? []
-                ];
+                $data = [];
             }
         } else {
-            $data = [
-                'module' => $defaults['module'] ?? []
-            ];
+            $data = [];
         }
+        if (empty($data)) {
+            $data = $defaults['module'] ?? [];
+        }
+        $formsConfig = $this->formLoader->getForms();
         $forms = [];
-        foreach ($this->formConfig as $key => $config) {
-            $forms[$key] = $this->createForm($config['class'], [], ['attr' => ['name' => $config['name']]])
-                ->createView();
+        foreach ($formsConfig as $key => $form) {
+            if (isset($form['rows'])) {
+                $forms[$key] = $form['rows'];
+            }
         }
+
         $isNewMode = true;
         if (isset($data['module']['namespace']) && isset($data['module']['module_name'])) {
             $title = 'Edit: ' . (($data['module']['namespace']) ?? '') . '_' . (($data['module']['module_name']) ?? '');
@@ -134,27 +125,56 @@ class Edit extends AbstractController
                 'forms' => $forms,
                 'data' => $data,
                 'title' => $title,
-                'attribute_config' => $this->getAttributeConfig(),
-                'defaults' => $defaults,
+                'attribute_config' => $this->getGroupedAttributeConfig($formsConfig['attribute']['rows']),
+                'serialized_attribute_config' => $this->getGroupedAttributeConfig($formsConfig['serialized']['rows']),
                 'is_new_mode' => (int)$isNewMode,
-                'submit_action' => $this->generateUrl('save')
+                'uiConfig' => $this->getUiConfig($formsConfig),
+                'defaults' => $defaults,
+                'selectedMenu' => 'edit'
             ]
         );
     }
 
     /**
-     * @return false|string
+     * @param $forms
+     * @return array
      */
-    private function getAttributeConfig() : string
+    private function getUiConfig($forms): array
     {
-        $config = [];
-        foreach ($this->attributeConfig as $type => $settings) {
-            $attrConfig = [];
-            foreach ($this->configProps as $prop) {
-                $attrConfig[$prop] = $settings[$prop];
-            }
-            $config[$type] = $attrConfig;
+        $uiConfig = [];
+        foreach ($forms as $key => $form) {
+            $uiConfig[$key] = [
+                'fields' => array_reduce(
+                    $form['rows'],
+                    function ($all, $row) {
+                        return array_merge(
+                            $all,
+                            array_keys($row)
+                        );
+                    },
+                    []
+                ),
+                'panel' => $form['panel'],
+                'children' => $form['children']
+
+            ];
         }
-        return json_encode($config);
+        return $uiConfig;
+    }
+
+    /**
+     * @param $rows
+     * @return array
+     */
+    private function getGroupedAttributeConfig($rows): array
+    {
+        foreach ($rows as $row) {
+            foreach ($row as $key => $field) {
+                if ($key === 'type') {
+                    return $field['options'];
+                }
+            }
+        }
+        return [];
     }
 }

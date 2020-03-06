@@ -1,4 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
@@ -6,7 +7,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 
-class {{ entity.getNameSingular()|ucfirst }}Actions extends Column
+class {{ entity.getNameSingular()|camel|ucfirst }}Actions extends Column
 {
     /**
      * Url path  to edit
@@ -24,7 +25,7 @@ class {{ entity.getNameSingular()|ucfirst }}Actions extends Column
      * Url builder
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * constructor
@@ -54,7 +55,8 @@ class {{ entity.getNameSingular()|ucfirst }}Actions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            $deleteMessage = __('Are you sure you want to delete the {{ entity.getLabelSingular()|ucfirst }} "${ $.$data.{{ entity.getNameAttribute().getCode() }} }" ?');
+            foreach ($dataSource['data']['items'] as &$item) {
                 if (isset($item['{{ entity.getNameSingular()|snake }}_id'])) {
                     $item[$this->getData('name')] = [
                         'edit' => [
@@ -76,7 +78,7 @@ class {{ entity.getNameSingular()|ucfirst }}Actions extends Column
                             'label' => __('Delete'),
                             'confirm' => [
                                 'title' => __('Delete "${ $.$data.{{ entity.getNameAttribute().getCode() }} }"'),
-                                'message' => __('Are you sure you want to delete the {{ entity.getLabelSingular()|ucfirst }} "${ $.$data.{{ entity.getNameAttribute().getCode() }} }" ?')
+                                'message' => $deleteMessage
                             ]
                         ]
                     ];

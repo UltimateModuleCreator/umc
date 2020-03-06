@@ -20,30 +20,36 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Util\Sorter;
+use App\Util\StringUtil;
 
-class EntityFactory implements FactoryInterface
+class EntityFactory
 {
     /**
-     * @var Sorter
+     * @var AttributeFactory
      */
-    private $sorter;
+    private $attributeFactory;
+    /**
+     * @var StringUtil
+     */
+    private $stringUtil;
 
     /**
      * EntityFactory constructor.
      * @param Sorter $sorter
+     * @param StringUtil $stringUtil
      */
-    public function __construct(Sorter $sorter)
+    public function __construct(AttributeFactory $attributeFactory, StringUtil $stringUtil)
     {
-        $this->sorter = $sorter;
+        $this->attributeFactory = $attributeFactory;
+        $this->stringUtil = $stringUtil;
     }
-
 
     /**
      * @param array $data
      * @return Entity | AbstractModel
      */
-    public function create(array $data = []) : Entity
+    public function create(Module $module, array $data = []): Entity
     {
-        return new Entity($this->sorter, $data);
+        return new Entity($this->stringUtil, $this->attributeFactory, $module, $data);
     }
 }

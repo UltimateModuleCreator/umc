@@ -1,11 +1,13 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
 
-abstract class AbstractNewAction extends Action
+class AbstractNewAction extends Action
 {
     /**
      * @return Forward

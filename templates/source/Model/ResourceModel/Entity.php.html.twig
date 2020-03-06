@@ -1,4 +1,6 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
 
 {% if entity.getStore() %}
@@ -14,7 +16,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}', '{{ entity.getNameSingular()|snake }}_id');
+        $this->_init('{{ entity.getMainTableName() }}', '{{ entity.getNameSingular()|snake }}_id');
     }
 {% if entity.getStore() %}
 
@@ -29,7 +31,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel
         $connection = $this->getConnection();
 
         $select = $connection->select()
-            ->from(['store_table' => $this->getTable('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store')], 'store_id')
+            ->from(['store_table' => $this->getTable('{{ entity.getStoreTableName() }}')], 'store_id')
             ->join(
                 ['main_table' => $this->getMainTable()],
                 'store_table.{{ entity.getNameSingular()|snake }}_id = main_table.{{ entity.getNameSingular()|snake }}_id',
@@ -41,6 +43,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel
     /**
      * @param \Magento\Framework\Model\AbstractModel | \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} $object
      * @return $this | AbstractDb
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -79,6 +82,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel
         parent::_afterLoad($object);
         $object->setStoreId($this->lookupStoreIds($object->getId()));
         return $this;
+        //phpcs:enasble
     }
 {% endif %}
 }

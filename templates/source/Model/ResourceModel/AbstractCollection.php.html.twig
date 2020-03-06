@@ -1,4 +1,6 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
 
 use Magento\Framework\Api\Search\AggregationInterface;
@@ -21,6 +23,11 @@ abstract class AbstractCollection extends DbAbstractCollection implements Search
      * @var array
      */
     protected $joinFields = [];
+    /**
+     * Aggregations
+     * @var AggregationInterface
+     */
+    protected $aggregations;
 
     /**
      * AbstractCollection constructor.
@@ -69,12 +76,6 @@ abstract class AbstractCollection extends DbAbstractCollection implements Search
         $countSelect->reset(\Zend_Db_Select::GROUP);
         return $countSelect;
     }
-
-    /**
-     * Aggregations
-     * @var AggregationInterface
-     */
-    protected $aggregations;
 
     /**
      * @return AggregationInterface

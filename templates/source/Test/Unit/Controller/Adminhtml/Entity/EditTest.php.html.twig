@@ -1,5 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -8,14 +8,14 @@ use Magento\Framework\View\Page\Title;
 use PHPUnit\Framework\TestCase;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Backend\App\Action\Context;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Edit;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\Edit;
 use Magento\Framework\View\Page\Config;
 
 class EditTest extends TestCase
 {
     /**
-     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\Edit::execute()
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\Edit::execute()
      */
     public function testExecute()
     {
@@ -24,8 +24,8 @@ class EditTest extends TestCase
         $resultFactory->method('create')->willReturn($page);
         $request = $this->createMock(RequestInterface::class);
         $request->expects($this->once())->method('getParam');
-        /** @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getNameSingular()|camel }}Repository */
-        ${{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|ucfirst }}RepositoryInterface::class);
+        /** @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface | \PHPUnit_Framework_MockObject_MockObject ${{ entity.getNameSingular()|camel }}Repository */
+        ${{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);
         /** @var Registry | \PHPUnit_Framework_MockObject_MockObject $registry */
         $registry = $this->createMock(Registry::class);
         /** @var Context | \PHPUnit_Framework_MockObject_MockObject $context */

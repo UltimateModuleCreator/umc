@@ -1,5 +1,6 @@
 {% if (entity.getFrontendList()) %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }};
 

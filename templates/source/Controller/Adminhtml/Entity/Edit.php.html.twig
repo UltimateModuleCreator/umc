@@ -1,34 +1,36 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }};
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}Registry;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
 
 class Edit extends Action
 {
     /**
-     * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
      */
     private ${{ entity.getNameSingular()|camel }}Repository;
     /**
-     * @var Registry
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Registry
      */
     private $registry;
 
     /**
      * Edit constructor.
      * @param Context $context
-     * @param {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
-     * @param Registry $registry
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Registry $registry
      */
     public function __construct(
         Context $context,
-        {{ entity.getNameSingular()|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
-        Registry $registry
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
+        {{ entity.getNameSingular()|camel|ucfirst }}Registry $registry
     ) {
         $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
         $this->registry = $registry;
@@ -38,9 +40,9 @@ class Edit extends Action
     /**
      * get current {{ entity.getLabelSingular() }}
      *
-     * @return null|\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|ucfirst }}Interface
+     * @return null|\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    private function init{{ entity.getNameSingular()|ucfirst }}()
+    private function init{{ entity.getNameSingular()|camel|ucfirst }}()
     {
         ${{ entity.getNameSingular()|camel }}Id = $this->getRequest()->getParam('{{ entity.getNameSingular()|snake }}_id');
         try {
@@ -48,7 +50,7 @@ class Edit extends Action
         } catch (NoSuchEntityException $e) {
             ${{ entity.getNameSingular()|camel }} = null;
         }
-        $this->registry->register('current_{{ entity.getNameSingular()|snake }}', ${{ entity.getNameSingular()|camel }});
+        $this->registry->set(${{ entity.getNameSingular()|camel }});
         return ${{ entity.getNameSingular()|camel }};
     }
 

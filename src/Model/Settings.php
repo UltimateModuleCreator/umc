@@ -92,6 +92,24 @@ class Settings
     }
 
     /**
+     * @param bool $reload
+     * @return array
+     */
+    public function getSettingsSplit($reload = false): array
+    {
+        $settings = $this->getSettings($reload);
+        $split = [];
+        foreach ($settings as $key => $value) {
+            $parts = explode('_', $key, 2);
+            $entity = $parts[0];
+            $field = $parts[1];
+            $split[$entity] = $split[$entity] ?? [];
+            $split[$entity][$field] = $value;
+        }
+        return $split;
+    }
+
+    /**
      * @param array $settings
      */
     public function setSettings(array $settings): void

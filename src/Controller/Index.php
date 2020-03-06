@@ -51,7 +51,8 @@ class Index extends AbstractController
         return $this->render(
             $this->template,
             [
-                'modules' => $this->moduleList->getModules()
+                'modules' => $this->moduleList->getModules(),
+                'selectedMenu' => 'index'
             ]
         );
     }

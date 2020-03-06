@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Model;
@@ -24,6 +26,10 @@ use App\Util\StringUtil;
 
 class ModuleFactory implements FactoryInterface
 {
+    /**
+     * @var EntityFactory
+     */
+    private $entityFactory;
     /**
      * @var StringUtil
      */
@@ -39,12 +45,19 @@ class ModuleFactory implements FactoryInterface
 
     /**
      * ModuleFactory constructor.
-     * @param ProcessorInterface[] $licenseFormatter
-     * @param array$menuConfig
+     * @param StringUtil $stringUtil
+     * @param EntityFactory $entityFactory
+     * @param array $licenseFormatter
+     * @param array $menuConfig
      */
-    public function __construct(StringUtil $stringUtil, array $licenseFormatter, array $menuConfig)
-    {
+    public function __construct(
+        StringUtil $stringUtil,
+        EntityFactory $entityFactory,
+        array $licenseFormatter,
+        array $menuConfig
+    ) {
         $this->stringUtil = $stringUtil;
+        $this->entityFactory = $entityFactory;
         $this->licenseFormatter = $licenseFormatter;
         $this->menuConfig = $menuConfig;
     }
@@ -53,8 +66,8 @@ class ModuleFactory implements FactoryInterface
      * @param array $data
      * @return Module | AbstractModel
      */
-    public function create(array $data = []) : Module
+    public function create(array $data = []): Module
     {
-        return new Module($this->stringUtil, $this->licenseFormatter, $this->menuConfig, $data);
+        return new Module($this->stringUtil, $this->entityFactory, $this->licenseFormatter, $this->menuConfig, $data);
     }
 }

@@ -1,4 +1,5 @@
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
@@ -9,8 +10,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\Registry;
 {% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\UploaderPool;
 {% endif %}
@@ -26,86 +25,70 @@ class Save extends Action
 {
     /**
      * {{ entity.getLabelSingular()|ucfirst }} factory
-     * @var {{ entity.getNameSingular()|ucfirst }}InterfaceFactory
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory
      */
-    protected ${{ entity.getNameSingular()|camel }}Factory;
-    /**
-     * Data Object Processor
-     * @var DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
+    private ${{ entity.getNameSingular()|camel }}Factory;
     /**
      * Data Object Helper
      * @var DataObjectHelper
      */
-    protected $dataObjectHelper;
+    private $dataObjectHelper;
     /**
      * Data Persistor
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    private $dataPersistor;
 {% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
     /**
      * Uploader pool
      * @var UploaderPool
      */
-    protected $uploaderPool;
+    private $uploaderPool;
 {% endif %}
 {% if entity.hasAttributeType('date') %}
     /**
      * Date inputs filter
      * @var DateFilter
      */
-    protected $dateFilter;
+    private $dateFilter;
 {% endif %}
     /**
-     * Core registry
-     * @var Registry
-     */
-    protected $registry;
-    /**
      * {{ entity.getLabelSingular()|ucfirst }} repository
-     * @var {{ entity.getNameSingular()|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
      */
-    protected ${{ entity.getNameSingular()|snake }}Repository;
+    private ${{ entity.getNameSingular()|snake }}Repository;
 
     /**
      * Save constructor.
      * @param Context $context
      * @param {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}Factory
      * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param DataObjectHelper $dataObjectHelper
-     * @param DataPersistorInterface $dataPersistor
 {% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
      * @param UploaderPool $uploaderPool
 {% endif %}
 {% if entity.hasAttributeType('date') %}
      * @param DateFilter $dateFilter
 {% endif %}
-     * @param Registry $registry
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         Context $context,
         {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory ${{ entity.getNameSingular()|camel }}Factory,
         {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
-        DataObjectProcessor $dataObjectProcessor,
         DataObjectHelper $dataObjectHelper,
-        DataPersistorInterface $dataPersistor,
 {% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
         UploaderPool $uploaderPool,
 {% endif %}
 {% if entity.hasAttributeType('date') %}
         DateFilter $dateFilter,
 {% endif %}
-        Registry $registry
+        DataPersistorInterface $dataPersistor
     ) {
         $this->{{ entity.getNameSingular()|camel }}Factory = ${{ entity.getNameSingular()|camel }}Factory;
         $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataPersistor = $dataPersistor;
-        $this->registry = $registry;
 {% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
         $this->uploaderPool = $uploaderPool;
 {% endif %}
@@ -122,7 +105,7 @@ class Save extends Action
      */
     public function execute()
     {
-        /** @var {{ entity.getNameSingular()|ucfirst }}Interface ${{ entity.getNameSingular()|snake }} */
+        /** @var {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|snake }} */
         ${{ entity.getNameSingular()|camel }} = null;
         $postData = $this->getRequest()->getPostValue();
         $data = $postData;
@@ -149,7 +132,11 @@ class Save extends Action
             $data['{{ attribute.getCode()|snake }}'] = ${{ attribute.getCode()|camel }};
 {% endif %}
 {% endfor %}
-            $this->dataObjectHelper->populateWithArray(${{ entity.getNameSingular()|camel }}, $data, {{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+            $this->dataObjectHelper->populateWithArray(
+                ${{ entity.getNameSingular()|camel }},
+                $data,
+                {{ entity.getNameSingular()|camel|ucfirst }}Interface::class
+            );
             $this->{{ entity.getNameSingular()|camel }}Repository->save(${{ entity.getNameSingular()|camel }});
             $this->messageManager->addSuccessMessage(__('You saved the {{ entity.getLabelSingular() }}'));
             $this->dataPersistor->clear('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Tests\Controller;
@@ -21,11 +23,12 @@ use App\Controller\Docs;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use Twig\Environment;
 
 class DocsTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var Environment | MockObject
      */
     private $twig;
     /**
@@ -36,9 +39,9 @@ class DocsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(Environment::class);
     }
     /**
      * @covers \App\Controller\Docs::run()

@@ -1,5 +1,6 @@
 {% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
@@ -11,7 +12,7 @@ class UploaderPool
      *
      * @var array
      */
-    protected $uploaders = [];
+    private $uploaders = [];
 
     /**
      * constructor

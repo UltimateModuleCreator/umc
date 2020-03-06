@@ -19,10 +19,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Attribute\AttributeTypeFactory;
 use App\Model\Attribute\TypeFactory;
 use App\Model\Attribute\TypeInterface;
 
-class Attribute extends AbstractModel
+class Attribute
 {
     const OPTIONS_DELIMITER = "\n";
     const CODE = 'code';
@@ -43,7 +44,7 @@ class Attribute extends AbstractModel
      */
     private $typeInstance;
     /**
-     * @var TypeFactory
+     * @var AttributeTypeFactory
      */
     private $typeFactory;
     /**
@@ -51,52 +52,256 @@ class Attribute extends AbstractModel
      */
     private $entity;
     /**
+     * @var OptionFactory
+     */
+    private $optionFactory;
+    /**
+     * @var SerializedFactory
+     */
+    private $serializedFactory;
+    /**
      * @var array
      */
     private $processedOptions;
+    /**
+     * @var string
+     */
+    private $code;
+    /**
+     * @var string
+     */
+    private $label;
+    /**
+     * @var string
+     */
+    private $type;
+    /**
+     * @var bool
+     */
+    private $isName;
+    /**
+     * @var bool
+     */
+    private $required;
+    /**
+     * @var bool
+     */
+    private $showInList;
+    /**
+     * @var bool
+     */
+    private $showInView;
+    /**
+     * @var bool
+     */
+    private $adminGrid;
+    /**
+     * @var bool
+     */
+    private $adminGridHidden;
+    /**
+     * @var bool
+     */
+    private $adminGridFilter;
+    /**
+     * @var string
+     */
+    private $note;
+    /**
+     * @var string
+     */
+    private $tooltip;
+    /**
+     * @var string
+     */
+    private $defaultValue;
+    /**
+     * @var Option[]
+     */
+    private $options;
+    /**
+     * @var Serialized[]
+     */
+    private $serialized;
 
     /**
      * Attribute constructor.
-     * @param TypeFactory $typeFactory
+     * @param AttributeTypeFactory $typeFactory
+     * @param OptionFactory $optionFactory
+     * @param SerializedFactory $serializedFactory
+     * @param Entity $entity
      * @param array $data
      */
-    public function __construct(TypeFactory $typeFactory, array $data = [])
-    {
+    public function __construct(
+        AttributeTypeFactory $typeFactory,
+        OptionFactory $optionFactory,
+        SerializedFactory $serializedFactory,
+        Entity $entity,
+        array $data = []
+    ) {
         $this->typeFactory = $typeFactory;
-        parent::__construct($data);
+        $this->optionFactory = $optionFactory;
+        $this->serializedFactory = $serializedFactory;
+        $this->entity = $entity;
+        $this->code = (string)($data['code'] ?? '');
+        $this->label = (string)($data['label'] ?? '');
+        $this->type = (string)($data['type'] ?? 'text');
+        $this->isName = (bool)($data['is_name'] ?? '');
+        $this->required = (bool)($data['required'] ?? false);
+        $this->showInList = (bool)($data['show_in_list'] ?? false);
+        $this->showInView = (bool)($data['show_in_view'] ?? false);
+        $this->adminGrid = (bool)($data['admin_grid'] ?? false);
+        $this->adminGridHidden = (bool)($data['admin_grid_hidden'] ?? false);
+        $this->adminGridFilter = (bool)($data['admin_grid_filter'] ?? false);
+        $this->note = (string)($data['note'] ?? '');
+        $this->tooltip = (string)($data['tooltip'] ?? '');
+        $this->defaultValue = (string)($data['default_value'] ?? '');
+        $this->options = array_map(
+            function ($option) {
+                return $this->optionFactory->create($this, $option);
+            },
+            $data['_options'] ?? []
+        );
+        $this->serialized = array_map(
+            function ($serialized) {
+                return $this->serializedFactory->create($this, $serialized);
+            },
+            $data['_serialized'] ?? []
+        );
     }
-
-    /**
-     * @var array
-     */
-    protected $propertyNames = [
-        'code', 'label', 'type', 'is_name', 'required',
-        'options', 'position', 'note', 'admin_grid',
-        'admin_grid_filter', 'default_value',
-        'show_in_list', 'show_in_view'
-    ];
 
     /**
      * @return Entity
      */
-    public function getEntity() : Entity
+    public function getEntity(): Entity
     {
         return $this->entity;
     }
 
     /**
-     * @param Entity $entity
+     * @return string
      */
-    public function setEntity(Entity $entity) : void
+    public function getCode(): string
     {
-        $this->entity = $entity;
+        return $this->code;
     }
 
     /**
-     * @return TypeInterface
-     * @throws \Exception
+     * @return string
      */
-    public function getTypeInstance() : TypeInterface
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isName(): bool
+    {
+        return $this->isName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequired(): bool
+    {
+        return $this->required && $this->getTypeInstance()->isCanBeRequired();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowInList(): bool
+    {
+        return $this->getEntity()->isFrontendList() && $this->showInList;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowInView(): bool
+    {
+        return $this->getEntity()->isFrontendView() && $this->showInView;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminGrid(): bool
+    {
+        return $this->adminGrid && $this->getTypeInstance()->isCanShowInAdminGrid();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminGridHidden(): bool
+    {
+        return $this->isAdminGrid() && $this->adminGridHidden;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminGridFilter(): bool
+    {
+        return $this->isAdminGrid() && $this->adminGridFilter && $this->getTypeInstance()->isCanFilterInAdminGrid();
+    }
+
+    /**
+     * @return string
+     */
+    public function getNote(): string
+    {
+        return $this->note;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooltip(): string
+    {
+        return $this->tooltip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultValue(): string
+    {
+        return $this->getTypeInstance()->getDefaultValue();
+    }
+
+    /**
+     * @return Option[]
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @return Serialized[]
+     */
+    public function getSerialized(): array
+    {
+        return $this->serialized;
+    }
+
+    /**
+     * @return AttributeType
+     */
+    public function getTypeInstance() : AttributeType
     {
         if ($this->typeInstance === null) {
             $this->typeInstance = $this->typeFactory->create($this);
@@ -105,111 +310,8 @@ class Attribute extends AbstractModel
     }
 
     /**
-     * @return null|string
-     */
-    public function getCode() : ?string
-    {
-        return $this->getData(self::CODE);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getLabel() : ?string
-    {
-        return $this->getData(self::LABEL);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getType() : ?string
-    {
-        return $this->getData(self::TYPE);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsName() : bool
-    {
-        return (bool)$this->getData(self::IS_NAME);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getRequired() : bool
-    {
-        return (bool)$this->getData(self::REQUIRED);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getOptions() : ?string
-    {
-        return $this->getData(self::OPTIONS);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPosition() : int
-    {
-        return (int)$this->getData(self::POSITION);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getNote() : ?string
-    {
-        return $this->getData(self::NOTE);
-    }
-
-    /**
-     * @return int
-     */
-    public function getAdminGrid() : int
-    {
-        return (int)$this->getData(self::ADMIN_GRID);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getAdminGridFilter() : bool
-    {
-        return (bool)$this->getAdminGrid() && (bool)$this->getData(self::ADMIN_GRID_FILTER);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDefaultValue() : ?string
-    {
-        return $this->getData(self::DEFAULT_VALUE);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getShowInList() : bool
-    {
-        return $this->getEntity()->getFrontendList() && $this->getData(self::SHOW_IN_LIST);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getShowInView() : bool
-    {
-        return $this->getEntity()->getFrontendView() && $this->getData(self::SHOW_IN_VIEW);
-    }
-
-    /**
      * @return array
+     * @deprecated
      */
     public function getProcessedOptions() : array
     {
@@ -253,5 +355,47 @@ class Attribute extends AbstractModel
             $processed = '_' . $processed;
         }
         return $processed;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpload(): bool
+    {
+        return $this->getTypeInstance()->isUpload();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'label' => $this->label,
+            'type' => $this->type,
+            'is_name' => $this->isName,
+            'required' => $this->required,
+            'show_in_list' => $this->showInList,
+            'show_in_view' => $this->showInView,
+            'admin_grid' => $this->adminGrid,
+            'admin_grid_hidden' => $this->adminGridHidden,
+            'admin_grid_filter' => $this->adminGridFilter,
+            'note' => $this->note,
+            'tooltip' => $this->tooltip,
+            'default_value' => $this->defaultValue,
+            '_options' => array_map(
+                function (Option $option) {
+                    return $option->toArray();
+                },
+                $this->getOptions()
+            ),
+            '_serialized' => array_map(
+                function (Serialized $serialized) {
+                    return $serialized->toArray();
+                },
+                $this->getSerialized()
+            ),
+        ];
     }
 }

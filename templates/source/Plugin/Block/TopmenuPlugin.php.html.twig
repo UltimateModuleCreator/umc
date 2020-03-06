@@ -1,5 +1,6 @@
 {% if module.hasTopMenu() %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Plugin\Block;
 
@@ -59,7 +60,7 @@ class TopmenuPlugin
     /**
      * @return array
      */
-    protected function getNodeAsArray($entity)
+    private function getNodeAsArray($entity)
     {
         if (!isset($entity['label'])) {
             return null;

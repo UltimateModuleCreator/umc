@@ -25,6 +25,9 @@ use App\Model\Entity;
 use App\Model\FactoryInterface;
 use App\Model\Module;
 
+/**
+ * @deprecated
+ */
 class ModuleLoader
 {
     /**

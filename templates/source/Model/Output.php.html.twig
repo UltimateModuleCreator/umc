@@ -1,6 +1,6 @@
 {% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
 <?php{{ module.getFormattedLicense('php') }}
-
+declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 class Output
@@ -8,7 +8,8 @@ class Output
     /**
      * @var \Zend_Filter_Interface
      */
-    protected $templateProcessor;
+    private $templateProcessor;
+
     /**
      * @param \Zend_Filter_Interface $templateProcessor
      */

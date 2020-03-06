@@ -11,7 +11,7 @@
                 <item name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">{{ entity.getLabelPlural() }}</item>
                     <item name="node_id" xsi:type="string">{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}</item>
-                    <item name="url_model" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }}\Url</item>
+                    <item name="url_model" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Url</item>
                     <item name="active_handles" xsi:type="array">
                         <item name="index" xsi:type="string">{{ module.getNamespace()|snake|lower }}_{{ module.getModuleName()|snake|lower }}_{{ entity.getNameSingular()|camel|lower }}_index</item>
 {% if entity.getFrontendView() %}

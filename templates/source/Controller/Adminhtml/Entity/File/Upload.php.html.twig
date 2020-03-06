@@ -1,6 +1,8 @@
 {% if entity.hasAttributeType('file') %}
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|ucfirst }}\File;
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\File;
 
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\Upload as GenericUpload;
 

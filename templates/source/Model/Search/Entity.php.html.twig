@@ -1,5 +1,7 @@
 {% if (entity.getSearch()) %}
 <?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Search;
 
 use Magento\Framework\DataObject;
@@ -16,12 +18,12 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
      *
      * @var Data
      */
-    protected $adminhtmlData = null;
+    private $adminhtmlData;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @param CollectionFactory $collectionFactory

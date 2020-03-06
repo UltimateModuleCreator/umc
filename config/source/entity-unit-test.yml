@@ -18,3 +18,8 @@ Test/Unit/Model/Entity/Executor/DeleteTest.php:
   label: "Entity delete executor unit test"
   scope: entity
   template: source/Test/Unit/Model/Entity/Executor/DeleteTest.php.html.twig
+Test/Unit/Ui/Component/Listing/Column/EntityActionsTest.php:
+  destination: Test/Unit/Ui/Component/Listing/Column/_Entity_ActionsTest.php:
+  label: "Entity actions column unit test"
+  scope: entity
+  template: source/Test/Unit/Ui/Component/Listing/Column/EntityActionsTest.php.html.twig

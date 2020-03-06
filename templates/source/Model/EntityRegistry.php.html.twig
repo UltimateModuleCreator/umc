@@ -1,0 +1,30 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
+
+use {{ module.getNamespace }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+
+class {{ entity.getNameSingular()|camel|ucfirst }}Registry
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Interface|null
+     */
+    private ${{ entity.getNameSingular()|camel }};
+
+    /**
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface|null
+     */
+    public function get(): ?{{ entity.getNameSingular()|camel|ucfirst }}Interface
+    {
+        return $this->{{ entity.getNameSingular()|camel }};
+    }
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface|null ${{ entity.getNameSingular()|camel }}
+     */
+    public function set(?{{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}): void
+    {
+        $this->{{ entity.getNameSingular()|camel }} = ${{ entity.getNameSingular()|camel }};
+    }
+}

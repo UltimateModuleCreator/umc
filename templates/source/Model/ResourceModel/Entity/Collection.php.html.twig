@@ -1,7 +1,8 @@
 <?php{{ module.getFormattedLicense('php') }}
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }};
+declare(strict_types=1);
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }};
 
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|ucfirst }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\AbstractCollection;
 
 /**
@@ -9,27 +10,29 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel
  */
 class Collection extends AbstractCollection
 {
-
     /**
      * Define resource model
      *
      * @return void
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
      */
     protected function _construct()
     {
         $this->_init(
-            {{ entity.getNameSingular()|ucfirst }}::class,
-            \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|ucfirst }}::class
+            {{ entity.getNameSingular()|camel|ucfirst }}::class,
+            \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}::class
         );
 {% if entity.getStore() %}
         $this->_map['fields']['store_id'] = 'store_table.store_id';
         $this->_map['fields']['{{ entity.getNameSingular()|snake }}_id'] = 'main_table.{{ entity.getNameSingular()|snake }}_id';
 {% endif %}
+        //phpcs: enable
     }
 {% if entity.getAttributesWithTypeConfig('multiple') or entity.getStore() %}
 
     /**
      * after collection load
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
      */
     protected function _afterLoad()
     {
@@ -37,7 +40,7 @@ class Collection extends AbstractCollection
         $fields = [
 {{ entity.getAttributesWithTypeConfigString('multiple', 3)|raw }}
         ];
-        /** @var {{ entity.getNameSingular()|ucfirst }} $item */
+        /** @var {{ entity.getNameSingular()|camel|ucfirst }} $item */
         foreach ($this as $item) {
             foreach ($fields as $field) {
                 if (!is_array($item->getData($field))) {
@@ -73,6 +76,7 @@ class Collection extends AbstractCollection
         }
 {% endif %}
         return parent::_afterLoad();
+        //phpcs:enable
     }
 {% endif %}
 {% if entity.getStore() %}
@@ -100,6 +104,7 @@ class Collection extends AbstractCollection
      * Join store relation table
      *
      * @return void
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
      */
     protected function _renderFiltersBefore()
     {
@@ -111,6 +116,7 @@ class Collection extends AbstractCollection
             'main_table.{{ entity.getNameSingular()|snake }}_id'
         );
         parent::_renderFiltersBefore();
+        //phpcs:enable
     }
 {% endif %}
 }

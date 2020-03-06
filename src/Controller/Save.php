@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\ModuleFactory;
 use App\Service\Builder;
 use App\Service\ModuleLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,24 +37,24 @@ class Save extends AbstractController
      */
     private $builder;
     /**
-     * @var ModuleLoader
+     * @var ModuleFactory
      */
-    private $moduleLoader;
+    private $moduleFactory;
 
     /**
      * Save constructor.
      * @param RequestStack $requestStack
      * @param Builder $builder
-     * @param ModuleLoader $moduleLoader
+     * @param ModuleFactory $moduleFactory
      */
     public function __construct(
         RequestStack $requestStack,
         Builder $builder,
-        ModuleLoader $moduleLoader
+        ModuleFactory $moduleFactory
     ) {
         $this->requestStack = $requestStack;
         $this->builder = $builder;
-        $this->moduleLoader = $moduleLoader;
+        $this->moduleFactory = $moduleFactory;
     }
 
     /**
@@ -64,10 +65,7 @@ class Save extends AbstractController
         try {
             $response = [];
             $data = $this->requestStack->getCurrentRequest()->get('data');
-            $moduleData = $data['module'] ?? [];
-            $entityData = $data['_entities'] ?? [];
-            $moduleData['_entities'] = $entityData;
-            $module = $this->moduleLoader->loadModule($moduleData);
+            $module = $this->moduleFactory->create($data);
             $this->builder->buildModule($module);
             $response['success'] = true;
             $response['message'] = "You have created the module " . $module->getExtensionName();

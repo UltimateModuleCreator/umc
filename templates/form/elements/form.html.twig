@@ -1,0 +1,9 @@
+{% for row in form %}
+    <div class="row">
+        {% for field in row %}
+        <div class="col-lg-{{ field.col }}">
+            {% include 'form/elements/'~ field.type ~ '.html.twig' with {element: field} %}
+        </div>
+        {% endfor %}
+    </div>
+{% endfor %}

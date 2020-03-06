@@ -29,10 +29,6 @@ use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 class EntityTest extends TestCase
 {
     /**
-     * @var Sorter | MockObject
-     */
-    private $sorter;
-    /**
      * @var Entity
      */
     private $entity;
@@ -48,11 +44,9 @@ class EntityTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->sorter = $this->createMock(Sorter::class);
-        $this->sorter->method('sort')->willReturnArgument(0);
-        $this->entity = new Entity($this->sorter, $this->data);
+        $this->entity = new Entity($this->data);
     }
 
     /**
