@@ -1,0 +1,47 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api;
+
+use {{ entity.getInterface() }};
+use Magento\Framework\Api\SearchCriteriaInterface;
+
+/**
+ * @api
+ */
+interface {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+{
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function save({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }});
+
+    /**
+     * @param $id
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function get($id);
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function delete({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }});
+
+    /**
+     * @param int ${{ entity.getPk()|camel }}
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteById(${{ entity.getPk()|camel }});
+
+    /**
+     * clear caches instances
+     * @return void
+     */
+    public function clear();
+}

@@ -47,6 +47,8 @@ class ModuleGenerator implements GeneratorInterface
      */
     public function generateContent(Module $module, array $fileConfig) : array
     {
+        $fileConfig = $this->processFileConfig($fileConfig);
+
         $destination = $this->processDestination($fileConfig['destination'], $module);
         $content = $this->twig->render($fileConfig['template'], ['module' => $module]);
         if (!trim($content)) {
@@ -55,6 +57,20 @@ class ModuleGenerator implements GeneratorInterface
         return [
              $destination => str_replace('\n\r', PHP_EOL, $content)
         ];
+    }
+
+    /**
+     * @param array $fileConfig
+     * @return array
+     */
+    private function processFileConfig(array $fileConfig): array
+    {
+        if (!isset($fileConfig['source'])) {
+            throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
+        }
+        $fileConfig['template'] = $fileConfig['template'] ?? 'source/' . $fileConfig['source'] . '.html.twig';
+        $fileConfig['destination'] = $fileConfig['destination'] ?? $fileConfig['source'];
+        return $fileConfig;
     }
 
     /**

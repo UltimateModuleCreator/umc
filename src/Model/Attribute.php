@@ -20,25 +20,11 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Model\Attribute\AttributeTypeFactory;
-use App\Model\Attribute\TypeFactory;
 use App\Model\Attribute\TypeInterface;
+use App\Util\StringUtil;
 
 class Attribute
 {
-    const OPTIONS_DELIMITER = "\n";
-    const CODE = 'code';
-    const LABEL = 'label';
-    const TYPE = 'type';
-    const IS_NAME = 'is_name';
-    const REQUIRED = 'required';
-    const OPTIONS = 'options';
-    const POSITION = 'position';
-    const NOTE = 'note';
-    const ADMIN_GRID = 'admin_grid';
-    const ADMIN_GRID_FILTER = 'admin_grid_filter';
-    const DEFAULT_VALUE = 'default_value';
-    const SHOW_IN_LIST = 'show_in_list';
-    const SHOW_IN_VIEW = 'show_in_view';
     /**
      * @var TypeInterface
      */
@@ -123,12 +109,17 @@ class Attribute
      * @var Serialized[]
      */
     private $serialized;
+    /**
+     * @var StringUtil
+     */
+    private $stringUtil;
 
     /**
      * Attribute constructor.
      * @param AttributeTypeFactory $typeFactory
      * @param OptionFactory $optionFactory
      * @param SerializedFactory $serializedFactory
+     * @param StringUtil $stringUtil
      * @param Entity $entity
      * @param array $data
      */
@@ -136,12 +127,14 @@ class Attribute
         AttributeTypeFactory $typeFactory,
         OptionFactory $optionFactory,
         SerializedFactory $serializedFactory,
+        StringUtil $stringUtil,
         Entity $entity,
         array $data = []
     ) {
         $this->typeFactory = $typeFactory;
         $this->optionFactory = $optionFactory;
         $this->serializedFactory = $serializedFactory;
+        $this->stringUtil = $stringUtil;
         $this->entity = $entity;
         $this->code = (string)($data['code'] ?? '');
         $this->label = (string)($data['label'] ?? '');
@@ -239,7 +232,7 @@ class Attribute
      */
     public function isAdminGrid(): bool
     {
-        return $this->adminGrid && $this->getTypeInstance()->isCanShowInAdminGrid();
+        return $this->adminGrid && $this->getTypeInstance()->isCanShowInGrid();
     }
 
     /**
@@ -255,7 +248,7 @@ class Attribute
      */
     public function isAdminGridFilter(): bool
     {
-        return $this->isAdminGrid() && $this->adminGridFilter && $this->getTypeInstance()->isCanFilterInAdminGrid();
+        return $this->isAdminGrid() && $this->adminGridFilter && $this->getTypeInstance()->isCanFilterInGrid();
     }
 
     /**
@@ -277,6 +270,14 @@ class Attribute
     /**
      * @return string
      */
+    public function getRawDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * @return string
+     */
     public function getDefaultValue(): string
     {
         return $this->getTypeInstance()->getDefaultValue();
@@ -287,7 +288,16 @@ class Attribute
      */
     public function getOptions(): array
     {
-        return $this->options;
+        return $this->isManualOptions() ? $this->options : [];
+    }
+
+    /**
+     * @return bool
+     * TODO: refactor this to use type instance
+     */
+    public function isSerialized(): bool
+    {
+        return $this->type === 'serialized';
     }
 
     /**
@@ -295,7 +305,21 @@ class Attribute
      */
     public function getSerialized(): array
     {
-        return $this->serialized;
+        return $this->isSerialized() ? $this->serialized : [];
+    }
+
+    /**
+     * @return Serialized[]
+     * //TODO: refactor to loop only one throught all serialized
+     */
+    public function getSerializedWithOptions(): array
+    {
+        return array_filter(
+            $this->serialized,
+            function (Serialized $serialized) {
+                return $serialized->isManualOptions();
+            }
+        );
     }
 
     /**
@@ -366,6 +390,75 @@ class Attribute
     }
 
     /**
+     * @return bool
+     * TODO: refactor this to use type instance methods
+     */
+    public function isManualOptions(): bool
+    {
+        return $this->type === 'dropdown' || $this->type === 'multiselect';
+    }
+
+    /**
+     * @return string
+     * //TODO: refactor this to loop only once
+     */
+    public function getOptionType(): string
+    {
+        foreach ($this->getOptions() as $option) {
+            if (!is_numeric($option->getValue())) {
+                return 'string';
+            }
+        }
+        return 'number';
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionSourceVirtualType(): string
+    {
+        $parts = [
+            $this->getEntity()->getModule()->getModuleName(),
+            $this->getEntity()->getNameSingular(),
+            'Source',
+            $this->getCode()
+        ];
+        return $this->stringUtil->glueClassParts($parts, '');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDataProcessorRequired(): bool
+    {
+        return $this->getTypeInstance()->isDataProcessorRequired();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMultiple(): bool
+    {
+        return $this->getTypeInstance()->isMultiple();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductAttribute(): bool
+    {
+        return $this->getTypeInstance()->isProductAttribute();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductAttributeSet(): bool
+    {
+        return $this->getTypeInstance()->isProductAttributeSet();
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -388,13 +481,13 @@ class Attribute
                 function (Option $option) {
                     return $option->toArray();
                 },
-                $this->getOptions()
+                $this->options
             ),
             '_serialized' => array_map(
                 function (Serialized $serialized) {
                     return $serialized->toArray();
                 },
-                $this->getSerialized()
+                $this->serialized
             ),
         ];
     }

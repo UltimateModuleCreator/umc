@@ -1,24 +1,48 @@
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 {% for entity in module.getEntities() %}
-    <preference for="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}Repository"/>
-    <preference for="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}"/>
-    <preference for="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="{{ entity.getRepoInterface() }}" type="{{ entity.getRepoModel() }}"/>
+    <preference for="{{ entity.getListRepoInterface() }}" type="{{ entity.getListRepoModel() }}"/>
+    <preference for="{{ entity.getInterface() }}" type="{{ entity.getModel() }}"/>
+    <preference for="{{ entity.getSearchResultsInterface() }}" type="Magento\Framework\Api\SearchResults"/>
 {% endfor %}
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+{% for entity in module.getEntities() %}
+                <item name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">{{ entity.getMainTableName() }}</item>
+                    <item name="identifierField" xsi:type="string">{{ entity.getPk() }}</item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
 {% if module.hasSearchableEntities() %}
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
         <arguments>
             <argument name="searchModules" xsi:type="array">
 {% for entity in module.getSearchableEntities() %}
                 <item name="{{ module.getNamespace()|snake }}_{{module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" xsi:type="array">
-                    <item name="class" xsi:type="string">{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\Search\{{ entity.getNameSingular()|camel|ucfirst }}</item>
-                    <item name="acl" xsi:type="string">{{ module.getNamespace() }}\{{module.getModuleName() }}::{{module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}</item>
+                    <item name="class" xsi:type="string">{{ entity.getSearchModel() }}</item>
+                    <item name="acl" xsi:type="string">{{ entity.getAclName() }}</item>
                 </item>
 {% endfor %}
             </argument>
         </arguments>
     </type>
 {% endif %}
+    <!-- configure resource models -->
+{% for entity in module.getEntities() %}
+    <type name="{{ entity.getResourceModel() }}">
+        <arguments>
+{% if entity.isStore() %}
+            <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+{% endif %}
+            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
+        </arguments>
+    </type>
+{% endfor %}
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
@@ -29,119 +53,119 @@
         </arguments>
     </type>
 {% for entity in module.getEntities() %}
-    <type name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
+    <type name="{{ entity.getCollectionModel() }}">
         <arguments>
-            <argument name="model" xsi:type="string">{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}</argument>
-            <argument name="resourceModel" xsi:type="string">{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}</argument>
-            <argument name="idFieldName" xsi:type="string">{{ entity.getNameSingular()|snake }}_id</argument>
-            <argument name="eventPrefix" xsi:type="string">{{ module.getNamespace()|snake }}_{{module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_collection</argument>
+            <argument name="model" xsi:type="string">{{ entity.getModel() }}</argument>
+            <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
+            <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
+            <argument name="eventPrefix" xsi:type="string">{{ entity.getEventPrefix()}}_collection</argument>
             <argument name="eventObject" xsi:type="string">{{ entity.getNameSingular()|snake }}_collection</argument>
+            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
+{% if entity.isStore() %}
+                <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+{% endif %}
         </arguments>
     </type>
-    <virtualType name="{{ module.getNamespace() }}{{module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
+    <virtualType name="{{ module.getNamespace() }}{{module.getModuleName()|camel|ucfirst }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
         <arguments>
             <argument name="model" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\Document</argument>
-            <argument name="resourceModel" xsi:type="string">{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}</argument>
-            <argument name="idFieldName" xsi:type="string">{{ entity.getNameSingular()|snake }}_id</argument>
-            <argument name="eventPrefix" xsi:type="string">{{ module.getNamespace()|snake }}_{{module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_collection</argument>
+            <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
+            <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
+            <argument name="eventPrefix" xsi:type="string">{{ entity.getEventPrefix() }}_collection</argument>
             <argument name="eventObject" xsi:type="string">{{ entity.getNameSingular()|snake }}_collection</argument>
+            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
+{% if entity.isStore() %}
+                <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+{% endif %}
         </arguments>
     </virtualType>
-{% if entity.hasAttributeType('image') %}
-    <virtualType name="{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}ImageUploader" type="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader">
-        <arguments>
-            <argument name="baseTmpPath" xsi:type="const">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\UploadPath::{{ entity.getNameSingular()|snake|upper }}_IMAGE_TMP_PATH</argument>
-            <argument name="basePath" xsi:type="const">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\UploadPath::{{ entity.getNameSingular()|snake|upper }}_IMAGE_PATH</argument>
-            <argument name="allowedExtensions" xsi:type="array">
-                <item name="jpg" xsi:type="string">jpg</item>
-                <item name="jpeg" xsi:type="string">jpeg</item>
-                <item name="gif" xsi:type="string">gif</item>
-                <item name="png" xsi:type="string">png</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\Image\Upload">
-        <arguments>
-            <argument name="uploader" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}ImageUploader</argument>
-            <argument name="aclResource" xsi:type="string">{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}</argument>
-        </arguments>
-    </type>
-{% endif %}
-{% if entity.hasAttributeType('file') %}
-    <virtualType name="{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}FileUploader" type="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader">
-        <arguments>
-            <argument name="baseTmpPath" xsi:type="const">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\UploadPath::{{ entity.getNameSingular()|snake|upper }}_FILE_TMP_PATH</argument>
-            <argument name="basePath" xsi:type="const">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\UploadPath::{{ entity.getNameSingular()|snake|upper }}_FILE_PATH</argument>
-            <argument name="allowedExtensions" xsi:type="array"/>
-        </arguments>
-    </virtualType>
-    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }}\File\Upload">
-        <arguments>
-            <argument name="uploader" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}FileUploader</argument>
-            <argument name="aclResource" xsi:type="string">{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}</argument>
-        </arguments>
-    </type>
-{% endif %}
-{% if entity.hasAttributeType('image') or entity.hasAttributeType('file')%}
-    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\UploaderPool">
-        <arguments>
-{% if entity.hasAttributeType('image') or entity.hasAttributeType('file') %}
-            <argument name="uploaders" xsi:type="array">
-{% if entity.hasAttributeType('image') %}
-                <item name="image" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}ImageUploader</item>
-{% endif %}
-{% if entity.hasAttributeType('file') %}
-                <item name="file" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}FileUploader</item>
-{% endif %}
-            </argument>
-{% endif %}
-        </arguments>
-    </type>
-{% endif %}
-{% if entity.getAttributesWithTypeConfig('has_options')|length and entity.hasFrontend() %}
-    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}">
-        <arguments>
-            <argument name="optionProviders" xsi:type="array">
-{% for attribute in entity.getAttributesWithTypeConfig('has_options') %}
-                <item name="{{ attribute.getCode() }}" xsi:type="object">{{ attribute.getTypeInstance().getSourceModel() }}</item>
 {% endfor %}
-            </argument>
-        </arguments>
-    </type>
-{% endif %}
-{% if entity.hasAttributeType('image') and (entity.getFrontendView() or entity.getFrontendList()) %}
-    <virtualType name="{{ module.getNamespace() }}{{ module.getModuleName }}{{ entity.getNameSingular()|camel|ucfirst }}ImageModel">
-        <arguments>
-            <argument name="uploader" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}ImageUploader</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="{{ module.getNamespace() }}{{ module.getModuleName }}Block{{ entity.getNameSingular()|camel|ucfirst }}ImageBuilder" type="{{ module.getNamespace() }}\{{ module.getModuleName }}\Block\ImageBuilder">
-        <arguments>
-            <argument name="entityCode" xsi:type="string">{{ entity.getNameSingular()|snake }}</argument>
-            <argument name="uploader" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}ImageUploader</argument>
-        </arguments>
-    </virtualType>
-{% if entity.getFrontendView()  and entity.hasAttributeType('image') %}
-    <type name="{{ module.getNamespace() }}\{{ module.getModuleName }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\View{{ entity.getNameSingular()|camel|ucfirst }}">
-        <arguments>
-            <argument name="imageBuilder" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName }}Block{{ entity.getNameSingular()|camel|ucfirst }}ImageBuilder</argument>
-        </arguments>
-    </type>
-{% endif %}
-{% if entity.getFrontendList() and entity.hasAttributeType('image') %}
-    <type name="{{ module.getNamespace() }}\{{ module.getModuleName }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}">
-        <arguments>
-            <argument name="imageBuilder" xsi:type="object">{{ module.getNamespace() }}{{ module.getModuleName }}Block{{ entity.getNameSingular()|camel|ucfirst }}ImageBuilder</argument>
-        </arguments>
-    </type>
-{% endif %}
-{% endif %}
-{% endfor %}
-{% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
+{% if module.hasAttributeType('wysiwyg') and module.isFrontend() %}
     <type name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\Output">
         <arguments>
             <argument name="templateProcessor" xsi:type="object">Magento\Widget\Model\Template\Filter</argument>
         </arguments>
     </type>
 {% endif %}
+{% for entity in module.getStoreEntities() %}
+    <virtualType name="{{ entity.getStoreHandler('Read') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\ReadHandler">
+        <arguments>
+            <argument name="resource" xsi:type="object">{{ entity.getResourceModel() }}</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="{{ entity.getStoreHandler('Save') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\SaveHandler">
+        <arguments>
+            <argument name="resource" xsi:type="object">{{ entity.getResourceModel() }}</argument>
+            <argument name="entityType" xsi:type="string">{{ entity.getInterface() }}</argument>
+            <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% if module.isStore() %}
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+{% for entity in module.getStoreEntities() %}
+                <item name="{{ entity.getInterface() }}" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">{{ entity.getStoreHandler('Read') }}</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">{{ entity.getStoreHandler('Save') }}</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">{{ entity.getStoreHandler('Save') }}</item>
+                    </item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+{% for entity in module.getImageEntities() %}
+    <virtualType name="{{ entity.getUploadInfoModel('File') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\FileInfo">
+        <arguments>
+            <argument name="filePath" xsi:type="string">{{ entity.getUploadFolder('file') }}</argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% for entity in module.getFileEntities() %}
+    <virtualType name="{{ entity.getUploadInfoModel('File') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\FileInfo">
+        <arguments>
+            <argument name="filePath" xsi:type="string">{{ entity.getUploadFolder('file') }}</argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% for entity in module.getEntities() %}
+{% for attribute in entity.getOptionAttributes() %}
+    <virtualType name="{{ attribute.getOptionSourceVirtualType() }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+{% for option in attribute.getOptions() %}
+                <item name="{{ option.getValue() }}" xsi:type="array">
+                    <item name="value" xsi:type="{{ attribute.getOptionType() }}">{{ option.getValue() }}</item>
+                    <item name="label" xsi:type="string" translatable="true">{{ option.getLabel() }}</item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% for attribute in entity.getSerializedAttributes() %}
+{% for serialized in attribute.getSerializedWithOptions() %}
+    <virtualType name="{{ serialized.getOptionSourceVirtualType() }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                {% for option in serialized.getOptions() %}
+                    <item name="{{ option.getValue() }}" xsi:type="array">
+                        <item name="value" xsi:type="{{ attribute.getOptionType() }}">{{ option.getValue() }}</item>
+                        <item name="label" xsi:type="string" translatable="true">{{ option.getLabel() }}</item>
+                    </item>
+                {% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% endfor %}
+{% endfor %}
 </config>

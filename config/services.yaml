@@ -14,11 +14,10 @@ parameters:
       grid_filter_type: text
       grid_template: attribute/grid/text.html.twig
       form_template: attribute/form/text.html.twig
-      fk_template: false
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/text.html.twig
       frontend_list_template: attribute/frontend/list/text.html.twig
-      class: App\Model\Attribute\Text
+#      class: App\Model\Attribute\Text
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
@@ -32,6 +31,7 @@ parameters:
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: true
+      data_processor_required: false
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
@@ -41,7 +41,7 @@ parameters:
       fk_template: attribute/fk/product_attribute.html.twig
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
-      class: App\Model\Attribute\Attributes
+#      class: App\Model\Attribute\Attributes
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -56,6 +56,7 @@ parameters:
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
       can_be_serialized: true
+      data_processor_required: false
     product_attribute_multiselect:
       label: Product Attribute Multiselect
       grid_template: attribute/grid/select.html.twig
@@ -65,7 +66,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'true'
-      class: App\Model\Attribute\AttributesMultiselect
+#      class: App\Model\Attribute\AttributesMultiselect
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -80,6 +81,7 @@ parameters:
       has_options: true
       schema_type: text
       can_be_serialized: true
+      data_processor_required: true
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
@@ -89,7 +91,7 @@ parameters:
       schema_fk_template: attribute/schema_fk/product_attribute_set.html.twig
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
-      class: App\Model\Attribute\AttributeSet
+#      class: App\Model\Attribute\AttributeSet
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -104,6 +106,7 @@ parameters:
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
       can_be_serialized: true
+      data_processor_required: false
     product_attribute_set_multiselect:
       label: Product Attribute Set Multiselect
       grid_template: attribute/grid/select.html.twig
@@ -113,7 +116,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'true'
-      class: App\Model\Attribute\AttributeSetMultiselect
+#      class: App\Model\Attribute\AttributeSetMultiselect
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -128,6 +131,7 @@ parameters:
       has_options: true
       schema_type: text
       can_be_serialized: true
+      data_processor_required: true
     country:
       label: Country
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -138,7 +142,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'false'
-      class: \App\Model\Attribute\Country
+#      class: \App\Model\Attribute\Country
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -152,6 +156,7 @@ parameters:
       has_options: true
       schema_type: varchar
       can_be_serialized: true
+      data_processor_required: false
     country_multiselect:
       label: Country Multiselect
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -162,7 +167,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'true'
-      class: \App\Model\Attribute\CountryMultiselect
+#      class: \App\Model\Attribute\CountryMultiselect
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -177,6 +182,7 @@ parameters:
       has_options: true
       schema_type: text
       can_be_serialized: true
+      data_processor_required: true
     date:
       label: Date
       grid_template: attribute/grid/date.html.twig
@@ -185,7 +191,7 @@ parameters:
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/date.html.twig
       frontend_list_template: attribute/frontend/list/date.html.twig
-      class: \App\Model\Attribute\Date
+#      class: \App\Model\Attribute\Date
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -199,6 +205,7 @@ parameters:
       has_options: false
       schema_type: timestamp
       can_be_serialized: true
+      data_processor_required: true
     decimal:
       label: Decimal
       grid_filter_type: textRange
@@ -222,6 +229,7 @@ parameters:
       schema_type: decimal
       schema_attributes: 'scale="4" precision="12"'
       can_be_serialized: true
+      data_processor_required: false
     dropdown:
       label: Dropdown
       grid_template: attribute/grid/select.html.twig
@@ -231,7 +239,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'false'
-      class: \App\Model\Attribute\Dropdown
+#      class: \App\Model\Attribute\Dropdown
       can_be_name: false
       can_show_in_grid: true
       can_have_options: true
@@ -246,6 +254,7 @@ parameters:
       schema_type: int
       schema_attributes: 'padding="11"'
       can_be_serialized: true
+      data_processor_required: false
     file:
       label: File
       grid_template: false
@@ -254,7 +263,7 @@ parameters:
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/file.html.twig
       frontend_list_template: attribute/frontend/list/file.html.twig
-      class: \App\Model\Attribute\File
+#      class: \App\Model\Attribute\File
       upload_type: file
       can_be_name: false
       can_show_in_grid: false
@@ -269,6 +278,7 @@ parameters:
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: false
+      data_processor_required: true
     image:
       label: Image
       grid_template: false
@@ -277,7 +287,7 @@ parameters:
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/image.html.twig
       frontend_list_template: attribute/frontend/list/image.html.twig
-      class: \App\Model\Attribute\Image
+#      class: \App\Model\Attribute\Image
       upload_type: image
       can_be_name: false
       can_show_in_grid: false
@@ -292,6 +302,7 @@ parameters:
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: false
+      data_processor_required: true
     integer:
       label: Integer
       grid_template: attribute/grid/text.html.twig
@@ -300,7 +311,7 @@ parameters:
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/text.html.twig
       frontend_list_template: attribute/frontend/list/text.html.twig
-      class: \App\Model\Attribute\Integer
+#      class: \App\Model\Attribute\Integer
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
@@ -315,6 +326,7 @@ parameters:
       schema_type: int
       schema_attributes: 'padding="11"'
       can_be_serialized: true
+      data_processor_required: false
     multiselect:
       label: Multiselect
       grid_template: attribute/grid/select.html.twig
@@ -324,7 +336,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       multiple_text: 'true'
-      class: \App\Model\Attribute\Multiselect
+#      class: \App\Model\Attribute\Multiselect
       can_be_name: false
       can_show_in_grid: true
       can_have_options: true
@@ -339,6 +351,7 @@ parameters:
       has_options: true
       schema_type: text
       can_be_serialized: true
+      data_processor_required: true
     textarea:
       label: Textarea (no editor)
       grid_template: attribute/grid/text.html.twig
@@ -347,7 +360,7 @@ parameters:
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/text.html.twig
       frontend_list_template: attribute/frontend/list/text.html.twig
-      class: \App\Model\Attribute\Textarea
+#      class: \App\Model\Attribute\Textarea
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
@@ -361,6 +374,7 @@ parameters:
       has_options: false
       schema_type: text
       can_be_serialized: true
+      data_processor_required: false
     wysiwyg:
       label: Wysiwyg
       grid_template: false
@@ -369,7 +383,7 @@ parameters:
       schema_fk_template: false
       frontend_view_template: attribute/frontend/view/wysiwyg.html.twig
       frontend_list_template: attribute/frontend/list/wysiwyg.html.twig
-      class: \App\Model\Attribute\Wysiwyg
+#      class: \App\Model\Attribute\Wysiwyg
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
@@ -383,6 +397,7 @@ parameters:
       has_options: false
       schema_type: mediumtext
       can_be_serialized: true
+      data_processor_required: false
     yesno:
       label: Yes/No
       grid_template: attribute/grid/select.html.twig
@@ -392,7 +407,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/select.html.twig
       frontend_list_template: attribute/frontend/list/select.html.twig
       source_model: Magento\Config\Model\Config\Source\Yesno
-      class: \App\Model\Attribute\Yesno
+#      class: \App\Model\Attribute\Yesno
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -407,6 +422,7 @@ parameters:
       schema_type: smallint
       schema_attributes: 'padding="2"'
       can_be_serialized: true
+      data_processor_required: false
     serialized:
       label: Serialized
       grid_template: ''
@@ -416,7 +432,7 @@ parameters:
       frontend_view_template: attribute/frontend/view/serialized.html.twig
       frontend_list_template: attribute/frontend/list/serialized.html.twig
       multiple_text: 'false'
-      class: \App\Model\Attribute\Serialized
+      class: \App\Model\AttributeTypeSerialized
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
@@ -431,6 +447,7 @@ parameters:
       has_options: false
       schema_type: text
       can_be_serialized: false
+      data_processor_required: true
 
   menu_type_config:
     '':
@@ -831,8 +848,8 @@ services:
         $files:
           - '%kernel.root_dir%/../config/source/module.yml'
           - '%kernel.root_dir%/../config/source/entity.yml'
-          - '%kernel.root_dir%/../config/source/attribute.yml'
-          - '%kernel.root_dir%/../config/source/entity-unit-test.yml'
+#          - '%kernel.root_dir%/../config/source/attribute.yml'
+#          - '%kernel.root_dir%/../config/source/entity-unit-test.yml'
 
     App\Service\Builder:
       arguments:
@@ -848,7 +865,7 @@ services:
         $contentGenerators:
           module: '@App\Service\Generator\ModuleGenerator'
           entity: '@App\Service\Generator\EntityGenerator'
-          attribute: '@App\Service\Generator\AttributeGenerator'
+#          attribute: '@App\Service\Generator\AttributeGenerator'
 
     App\Service\Form\OptionProviderPool:
       arguments:
@@ -859,7 +876,7 @@ services:
           admin_menu: '@App\Service\Form\OptionProvider\AdminMenu'
     App\Util\CodingStandardsFactory:
       arguments:
-        $standards: [PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
+        $standards: [PSR1, PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
         $phpcsPath: '%kernel.root_dir%/../vendor/squizlabs/php_codesniffer/bin/phpcs'
 
     App\Model\ModuleFactory:

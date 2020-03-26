@@ -48,7 +48,7 @@ class Php implements ProcessorInterface
     {
         $license = $this->replacer->replaceVars($module->getLicense(), $module);
         if (!trim($license)) {
-            return '';
+            return PHP_EOL;
         }
         $key = md5($license);
         if (!isset($this->cache[$key])) {
@@ -67,7 +67,7 @@ class Php implements ProcessorInterface
                 $license = str_replace('-->', '', $license);
             }
             $lines = explode("\n", $license);
-            $top = "\n";
+            $top = $eol . $eol;
             $processed = $top . '/**' . $eol;
             foreach ($lines as $line) {
                 $processed .= rtrim(' * ' . trim($line)) . $eol;

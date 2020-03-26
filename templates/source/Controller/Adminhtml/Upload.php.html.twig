@@ -1,77 +1,56 @@
-{% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
+{% if not module.isUmcCrud() and module.isUpload() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Controller\Adminhtml;
 
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\Uploader;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 
 class Upload extends Action
 {
     /**
      * Uploader model
-     *
      * @var Uploader
      */
     private $uploader;
-    /**
-     * @var string
-     */
-    private $aclResource;
 
     /**
-     * Upload constructor.
+     * constructor
      * @param Context $context
      * @param Uploader $uploader
-     * @param string $aclResource
      */
     public function __construct(
         Context $context,
-        Uploader $uploader,
-        $aclResource
+        Uploader $uploader
     ) {
         $this->uploader = $uploader;
-        $this->aclResource = $aclResource;
         parent::__construct($context);
     }
 
     /**
-     * Upload file controller action
-     *
-     * @return \Magento\Framework\Controller\Result\Json
-     */
+    * @return \Magento\Framework\Controller\ResultInterface
+    */
     public function execute()
     {
         try {
-            $uploadResult = $this->uploader->saveFileToTmpDir($this->getRequest()->getParam('field'));
-
-            $uploadResult['cookie'] = [
-                'name' => $this->_getSession()->getName(),
-                'value' => $this->_getSession()->getSessionId(),
-                'lifetime' => $this->_getSession()->getCookieLifetime(),
-                'path' => $this->_getSession()->getCookiePath(),
-                'domain' => $this->_getSession()->getCookieDomain(),
-            ];
+            $result = $this->uploader->saveFileToTmpDir($this->getFieldName());
         } catch (\Exception $e) {
-            $uploadResult = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+            $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
-        /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $result->setData($uploadResult);
-        return $result;
+        $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $response->setData($result);
+        return $response;
     }
 
     /**
-     * Check admin permissions for this controller
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
+    * @return string
+    */
+    protected function getFieldName()
     {
-        return $this->_authorization->isAllowed($this->aclResource);
+        return $this->getRequest()->getParam('field');
     }
 }
 {% endif %}

@@ -26,7 +26,8 @@ use App\Util\StringUtil;
 
 class Module
 {
-
+    public const UMC_VENDOR = 'Umc';
+    public const UMC_MODULE = 'Crud';
     /**
      * @var Entity[]
      */
@@ -119,7 +120,7 @@ class Module
         $this->moduleName = (string)($data['module_name'] ?? '');
         $this->menuText = (string)($data['menu_text'] ?? '');
         $this->menuParent = (string)($data['menu_parent'] ?? '');
-        $this->sortOrder = (int)($data['namespace'] ?? 0);
+        $this->sortOrder = (int)($data['sort_order'] ?? 0);
         $this->configTab = (string)($data['config_tab'] ?? '');
         $this->configTabPosition = (int)($data['config_tab_position'] ?? '');
         $this->frontKey = (string)($data['front_key'] ?? '');
@@ -240,7 +241,7 @@ class Module
                 function (Entity $entity) {
                     return $entity->toArray();
                 },
-                $this->getEntities()
+                $this->entities
             )
         ];
     }
@@ -263,16 +264,101 @@ class Module
     }
 
     /**
+     * @param string $separator
      * @return string
      */
-    public function getExtensionName() : string
+    public function getExtensionName($separator = '_') : string
     {
-        return $this->getNamespace() . '_' . $this->getModuleName();
+        $parts = [$this->getNamespace(), $this->getModuleName()];
+        return implode(
+            $separator,
+            array_map(
+                function (string $text) {
+                    return $this->stringUtil->ucfirst(
+                        $this->stringUtil->camel($text)
+                    );
+                },
+                $parts
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getComposerExtensionName(): string
+    {
+        return $this->stringUtil->hyphen($this->getNamespace()) . '/module-' .
+            $this->stringUtil->hyphen($this->getModuleName());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getModuleDependencies(): array
+    {
+        if (isset($this->cacheData['module']['dependencies'])) {
+            return $this->cacheData['module']['dependencies'];
+        }
+        $dependencies = [
+            "Magento_Backend",
+            "Magento_Ui",
+            "Magento_Config"
+        ];
+        if ($this->isUmcCrud()) {
+            $dependencies[] = 'Umc_Crud';
+        }
+        $dependencies = array_reduce(
+            $this->entities,
+            function ($all, Entity $entity) {
+                return array_merge($all, $entity->getModuleDependencies());
+            },
+            $dependencies
+        );
+        $this->cacheData['module']['dependencies'] = array_unique($dependencies);
+        return $this->cacheData['module']['dependencies'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getComposerDependencies(): array
+    {
+        if (isset($this->cacheData['module']['composer_dependencies'])) {
+            return $this->cacheData['module']['composer_dependencies'];
+        }
+        $dependencies = [
+            "magento/module-backend",
+            "magento/module-config",
+            "magento/module-ui",
+            "magento/framework"
+        ];
+        if ($this->isUmcCrud()) {
+            $dependencies[] = 'umc/module-crud';
+        }
+        $dependencies = array_reduce(
+            $this->entities,
+            function ($all, Entity $entity) {
+                return array_merge($all, $entity->getComposerDependencies());
+            },
+            $dependencies
+        );
+        $this->cacheData['module']['composer_dependencies'] = array_unique($dependencies);
+        return $this->cacheData['module']['composer_dependencies'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAclName(): string
+    {
+        return $this->getExtensionName() . '::' . $this->stringUtil->snake($this->getModuleName());
     }
 
     /**
      * @param $type
      * @return bool
+     * @deprecated
      */
     public function hasAttributeType($type) : bool
     {
@@ -348,7 +434,7 @@ class Module
     /**
      * @return bool
      */
-    public function hasFrontend(): bool
+    public function isFrontend(): bool
     {
         $this->initEntityCacheData();
         return count($this->cacheData['entity']['frontend']) > 0;
@@ -373,6 +459,30 @@ class Module
     }
 
     /**
+     * @return bool
+     */
+    public function isUpload(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['with_upload']) > 0;
+    }
+
+    public function isStore(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->getStoreEntities()) > 0;
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getStoreEntities()
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['store'];
+    }
+
+    /**
      * loop once through the entities to check different settings
      */
     private function initEntityCacheData()
@@ -387,7 +497,14 @@ class Module
                 'frontend' => [],
                 'search' => [],
                 'main_menu' => [],
-                'footer_links' => []
+                'footer_links' => [],
+                'with_upload' => [],
+                'store' => [],
+                'image' => [],
+                'file' => [],
+                'product_attribute' => [],
+                'option_attribute' => [],
+                'multiple_attributes' => []
             ]
         ];
         foreach ($this->getEntities() as $entity) {
@@ -409,7 +526,103 @@ class Module
             if ($entity->getMenuLink() === FrontendMenuLink::FOOTER) {
                 $this->cacheData['entity']['footer_links'][] = $entity;
             }
+            if ($entity->isUpload()) {
+                $this->cacheData['entity']['with_upload'][] = $entity;
+            }
+            if ($entity->isStore()) {
+                $this->cacheData['entity']['store'][] = $entity;
+            }
+            if ($entity->hasAttributeType('image')) {
+                $this->cacheData['entity']['image'][] = $entity;
+            }
+            if ($entity->hasAttributeType('file')) {
+                $this->cacheData['entity']['file'][] = $entity;
+            }
+            if ($entity->isProductAttribute()) {
+                $this->cacheData['entity']['product_attribute'][] = $entity;
+            }
+            if ($entity->isProductAttributeSet()) {
+                $this->cacheData['entity']['product_attribute_set'][] = $entity;
+            }
+            if ($entity->hasOptionAttributes()) {
+                $this->cacheData['entity']['option_attribute'][] = $entity;
+            }
+            if ($entity->hasMultipleAttributes()) {
+                $this->cacheData['entity']['multiple_attributes'][] = $entity;
+            }
+            if ($entity->hasSerializedDataProcessor()) {
+                $this->cacheData['entity']['serialized'][] = $entity;
+            }
+            if ($entity->hasDateDataProcessor()) {
+                $this->cacheData['entity']['date_attributes'][] = $entity;
+            }
+            if ($entity->hasDataProcessor()) {
+                $this->cacheData['entity']['data_processor'][] = $entity;
+            }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMultipleAttributes(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['multiple_attributes']) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDataProcessor(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['data_processor']) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDateAttributes(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['date_attributes']) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSerializedAttributes(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['serialized']) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductAttribute(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['product_attribute']) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductAttributeSet(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['product_attribute_set']) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOptionAttribute(): bool
+    {
+        $this->initEntityCacheData();
+        return count($this->cacheData['entity']['option_attribute']) > 0;
     }
 
     /**
@@ -426,6 +639,24 @@ class Module
     public function hasFooterMenu() : bool
     {
         return count($this->getFooterLinksEntities()) > 0;
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getFileEntities(): array
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['file'];
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getImageEntities(): array
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['image'];
     }
 
     /**
@@ -460,5 +691,45 @@ class Module
     public function getMockObjectClass(): string
     {
         return "MockObject";
+    }
+
+    /**
+     * @return string
+     */
+    public function getUmcCrudNamespace(): string
+    {
+        return $this->isUmcCrud() ? self::UMC_VENDOR : $this->getNamespace();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUmcModuleName(): string
+    {
+        return $this->isUmcCrud() ? self::UMC_MODULE : $this->getModuleName();
+    }
+
+    /**
+     * @return string
+     * //TODO: memoize result
+     */
+    public function getNullSaveDataProcessor(): string
+    {
+        $parts = [
+            $this->getUmcCrudNamespace(),
+            $this->getUmcModuleName(),
+            'Ui',
+            'SaveDataProcessor',
+            'NullProcessor'
+        ];
+        return $this->stringUtil->glueClassParts($parts);
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminRoutePrefix(): string
+    {
+        return $this->stringUtil->snake($this->getModuleName());
     }
 }

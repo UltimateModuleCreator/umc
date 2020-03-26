@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
 {% for entity in module.getEntities() %}
-    <table name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Table">
-        <column xsi:type="smallint" name="{{ entity.getNameSingular()|snake }}_id" padding="6" unsigned="false" nullable="false" identity="true"  comment="{{ entity.getLabelSingular()|ucfirst }} ID"/>
+    <table name="{{ entity.getMainTableName() }}" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Table">
+        <column xsi:type="smallint" name="{{ entity.getPk() }}" padding="6" unsigned="false" nullable="false" identity="true"  comment="{{ entity.getLabelSingular()|ucfirst }} ID"/>
 {%  for attribute in entity.getAttributes() %}
         <column xsi:type="{{ attribute.getTypeInstance().getSchemaType() }}" name="{{ attribute.getCode() }}" {{ attribute.getTypeInstance().getAttributeColumnSettingsStringXml()|raw }} comment="{{ entity.getLabelSingular()|ucfirst }} {{ attribute.getLabel() }}"/>
 {% endfor %}
@@ -31,7 +31,7 @@
 {% endif %}
     </table>
 {% if entity.getStore() %}
-    <table name="{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_store" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Store Link Table">
+    <table name="{{ entity.getStoreTableName() }}" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Store Link Table">
         <column xsi:type="smallint" name="{{ entity.getNameSingular()|snake }}_id" padding="6" unsigned="false" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>

@@ -51,7 +51,12 @@ class AttributeTypeFactory
      */
     public function create(Attribute $attribute): AttributeType
     {
-        $class = $data['class'] ?? self::DEFAULT_TYPE_CLASS;
-        return new $class($attribute, $this->typeMap[$attribute->getType()] ?? []);
+        $type = $attribute->getType();
+        if (!isset($this->typeMap[$type])) {
+            throw new \InvalidArgumentException("There is no config for attribute type {$type}");
+        }
+        $config = $this->typeMap[$type];
+        $class = $config['class'] ?? self::DEFAULT_TYPE_CLASS;
+        return new $class($attribute, $config);
     }
 }

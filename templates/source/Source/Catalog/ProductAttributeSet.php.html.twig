@@ -1,0 +1,70 @@
+{% if not module.isUmcCrud() and module.isProductAttributeSet() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Source\Catalog;
+
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Catalog\Api\AttributeSetRepositoryInterface;
+
+class ProductAttributeSet implements ArrayInterface
+{
+    /**
+     * @var AttributeSetRepositoryInterface
+     */
+    private $attributeSetRepository;
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+    /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+    /**
+     * @var array
+     */
+    private $options;
+
+    /**
+     * AttributeSetId constructor.
+     * @param AttributeSetRepositoryInterface $attributeRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
+     */
+    public function __construct(
+        AttributeSetRepositoryInterface $attributeSetRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SortOrderBuilder $sortOrderBuilder
+    ) {
+        $this->attributeSetRepository = $attributeSetRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->sortOrderBuilder = $sortOrderBuilder;
+    }
+
+    /**
+     * to option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        if ($this->options === null) {
+            $this->options = [];
+            $this->sortOrderBuilder->setField('attribute_set_name');
+            $this->sortOrderBuilder->setAscendingDirection();
+            $this->searchCriteriaBuilder->addSortOrder($this->sortOrderBuilder->create());
+            $attributeSets = $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create())->getItems();
+            foreach ($attributeSets as $set) {
+                $this->options[] = [
+                    'label' => $set->getAttributeSetName(),
+                    'value' => $set->getAttributeSetId()
+                ];
+            }
+        }
+        return $this->options;
+    }
+}
+{% endif %}

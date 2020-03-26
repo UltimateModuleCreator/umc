@@ -21,20 +21,27 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Util\StringUtil;
+
 class SerializedFactory
 {
     /**
      * @var SerializedOptionFactory
      */
     private $optionFactory;
+    /**
+     * @var StringUtil
+     */
+    private $stringUtil;
 
     /**
      * SerializedFactory constructor.
      * @param SerializedOptionFactory $optionFactory
      */
-    public function __construct(SerializedOptionFactory $optionFactory)
+    public function __construct(SerializedOptionFactory $optionFactory, StringUtil $stringUtil)
     {
         $this->optionFactory = $optionFactory;
+        $this->stringUtil = $stringUtil;
     }
 
     /**
@@ -44,6 +51,6 @@ class SerializedFactory
      */
     public function create(Attribute $attribute, array $data = []): Serialized
     {
-        return new Serialized($this->optionFactory, $attribute, $data);
+        return new Serialized($this->optionFactory, $this->stringUtil, $attribute, $data);
     }
 }

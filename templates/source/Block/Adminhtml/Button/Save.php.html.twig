@@ -1,51 +1,125 @@
+{% if not module.isUmcCrud() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button;
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Block\Adminhtml\Button;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Ui\Component\Control\Container;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\EntityUiConfig;
 
 class Save implements ButtonProviderInterface
 {
     /**
-     * @var string | null
+     * @var EntityUiConfig
      */
-    private $label;
+    private $uiConfig;
 
     /**
      * Save constructor.
-     * @param string $label
+     * @param EntityUiConfig $uiConfig
      */
-    public function __construct($label = null)
+    public function __construct(EntityUiConfig $uiConfig)
     {
-        $this->label = $label;
+        $this->uiConfig = $uiConfig;
     }
 
     /**
-     * get button data
-     *
      * @return array
      */
     public function getButtonData()
     {
         return [
-            'label' => $this->getLabel(),
+            'label' => $this->uiConfig->getSaveLabel(),
             'class' => 'save primary',
             'data_attribute' => [
-                'mage-init' => ['button' => ['event' => 'save']],
-                'form-role' => 'save',
+                'mage-init' => [
+                    'buttonAdapter' => [
+                        'actions' => [
+                            [
+                                'targetName' => $this->uiConfig->getSaveFormTarget(),
+                                'actionName' => 'save',
+                                'params' => [
+                                    true,
+                                    [
+                                        'back' => 'continue'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ],
-            'sort_order' => 90,
+            'class_name' => ($this->hasOptions())
+                ? Container::SPLIT_BUTTON
+                : Container::DEFAULT_CONTROL,
+            'options' => $this->getOptions(),
         ];
     }
 
     /**
-     * @return string
-     */
-    private function getLabel()
+    * @return bool
+    */
+    private function hasOptions(): bool
     {
-        if ($this->label === null) {
-            return __('Save')->render();
+        return $this->uiConfig->getAllowSaveAndClose() || $this->uiConfig->getAllowSaveAndDuplicate();
+    }
+
+    /**
+    * @return array
+    */
+    private function getOptions(): array
+    {
+        $options = [];
+        if ($this->uiConfig->getAllowSaveAndDuplicate()) {
+            $options[] = [
+                'label' => $this->uiConfig->getSaveAndDuplicateLabel(),
+                'id_hard' => 'save_and_duplicate',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => $this->uiConfig->getSaveFormTarget(),
+                                    'actionName' => 'save',
+                                    'params' => [
+                                        true,
+                                        [
+                                            'back' => 'duplicate'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
         }
-        return $this->label;
+        if ($this->uiConfig->getAllowSaveAndClose()) {
+            $options[] = [
+                'id_hard' => 'save_and_close',
+                'label' => $this->uiConfig->getSaveAndCloseLabel(),
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => $this->uiConfig->getSaveFormTarget(),
+                                    'actionName' => 'save',
+                                    'params' => [
+                                        true,
+                                        [
+                                            'back' => 'close'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+        return $options;
     }
 }
+{% endif %}

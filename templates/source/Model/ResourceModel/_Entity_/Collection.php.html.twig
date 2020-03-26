@@ -1,0 +1,31 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use {{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Collection\{{ entity.getParentCollectionModel() }};
+
+/**
+ * @api
+ */
+class Collection extends {{ entity.getParentCollectionModel() }}
+{
+    /**
+     * Define resource model
+     *
+     * @return void
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
+     */
+    protected function _construct()
+    {
+        $this->_init(
+            \{{ entity.getModel() }}::class,
+            \{{ entity.getResourceModel() }}::class
+        );
+{% if entity.isStore() %}
+        $this->_map['fields']['store_id'] = 'store_table.store_id';
+        $this->_map['fields']['{{ entity.getPk() }}'] = 'main_table.{{ entity.getPk() }}';
+{% endif %}
+        //phpcs: enable
+    }
+}

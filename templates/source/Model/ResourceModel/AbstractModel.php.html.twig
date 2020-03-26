@@ -1,114 +1,93 @@
+{% if not module.isUmcCrud() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel;
 
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\Model\AbstractModel as FrameworkAbstractModel;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
-/**
- * @api
- */
 abstract class AbstractModel extends AbstractDb
 {
     /**
-     * Event Manager
-     * @var EventManagerInterface
+     * @var EntityManager
      */
-    protected $eventManager;
+    protected $entityManager;
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+    /**
+     * @var string
+     */
+    protected $interfaceClass;
 
     /**
-     * constructor
+     * AbstractModel constructor.
      * @param Context $context
-     * @param EventManagerInterface $eventManager
-     * @param mixed $connectionName
+     * @param EntityManager $entityManager
+     * @param MetadataPool $metadataPool
+     * @param string $interfaceClass
+     * @param null $connectionName
      */
     public function __construct(
         Context $context,
-        EventManagerInterface $eventManager,
+        EntityManager $entityManager,
+        MetadataPool $metadataPool,
+        string $interfaceClass,
         $connectionName = null
     ) {
-        $this->eventManager = $eventManager;
+        $this->entityManager = $entityManager;
+        $this->metadataPool = $metadataPool;
+        $this->interfaceClass = $interfaceClass;
         parent::__construct($context, $connectionName);
     }
 
     /**
-     * @param FrameworkAbstractModel $object
-     * @param array $attribute
+     * @param AbstractModel $object
      * @return $this
      * @throws \Exception
      */
-    public function saveAttribute(FrameworkAbstractModel $object, $attribute)
+    public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (is_string($attribute)) {
-            $attributes = [$attribute];
-        } else {
-            $attributes = $attribute;
-        }
-        if (is_array($attributes) && !empty($attributes)) {
-            $this->getConnection()->beginTransaction();
-            $data = array_intersect_key($object->getData(), array_flip($attributes));
-            try {
-                $this->beforeSaveAttribute($object, $attributes);
-                if ($object->getId() && !empty($data)) {
-                    $this->getConnection()->update(
-                        $object->getResource()->getMainTable(),
-                        $data,
-                        [$object->getResource()->getIdFieldName() . '= ?' => (int)$object->getId()]
-                    );
-                    $object->addData($data);
-                }
-                $this->afterSaveAttribute($object, $attributes);
-                $this->getConnection()->commit();
-            } catch (\Exception $e) {
-                $this->getConnection()->rollBack();
-                throw $e;
-            }
-        }
+        $this->entityManager->save($object);
         return $this;
     }
 
     /**
-     * @param FrameworkAbstractModel $object
-     * @param array $attribute
-     * @return $this
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this|AbstractDb
+     * @throws \Exception
      */
-    protected function beforeSaveAttribute(FrameworkAbstractModel $object, $attribute)
+    public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->getEventObject() && $object->getEventPrefix()) {
-            $this->eventManager->dispatch(
-                $object->getEventPrefix() . '_save_attribute_before',
-                [
-                    $object->getEventObject() => $this,
-                    'object' => $object,
-                    'attribute' => $attribute
-                ]
-            );
-        }
+        $this->entityManager->delete($object);
         return $this;
     }
 
     /**
-     * After save object attribute
-     *
-     * @param FrameworkAbstractModel $object
-     * @param string $attribute
-     * @return $this
+     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \Exception
      */
-    protected function afterSaveAttribute(FrameworkAbstractModel $object, $attribute)
+    public function getConnection()
     {
-        if ($object->getEventObject() && $object->getEventPrefix()) {
-            $this->eventManager->dispatch(
-                $object->getEventPrefix() . '_save_attribute_after',
-                [
-                    $object->getEventObject() => $this,
-                    'object' => $object,
-                    'attribute' => $attribute
-                ]
-            );
-        }
+        return $this->metadataPool->getMetadata($this->interfaceClass)->getEntityConnection();
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param mixed $value
+     * @param null $field
+     * @return $this|AbstractDb
+     * @throws LocalizedException
+     */
+    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    {
+        $this->entityManager->load($object, $value);
         return $this;
     }
 }
+{% endif %}

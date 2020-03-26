@@ -1,0 +1,11 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends \{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Controller\Adminhtml\Delete implements HttpPostActionInterface
+{
+    public const ADMIN_RESOURCE = '{{ entity.getAclName }}';
+}

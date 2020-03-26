@@ -1,0 +1,46 @@
+{% if not module.isUmcCrud() and module.isSerializedAttributes() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\SaveDataProcessor;
+
+use Magento\Framework\Serialize\Serializer\Json;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\SaveDataProcessorInterface;
+
+class DynamicRows implements SaveDataProcessorInterface
+{
+    /**
+     * @var Json
+     */
+    private $serializer;
+    /**
+     * @var array
+     */
+    private $fields = [];
+
+    /**
+     * DynamicRows constructor.
+     * @param Json $serializer
+     * @param array $fields
+     */
+    public function __construct(Json $serializer, array $fields)
+    {
+        $this->serializer = $serializer;
+        $this->fields = $fields;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(array $data): array
+    {
+        foreach ($this->fields as $field) {
+            if (array_key_exists($field, $data) && is_array($data[$field])) {
+                $data[$field] = $this->serializer->serialize($data[$field]);
+            }
+        }
+        return $data;
+    }
+}
+{% endif %}

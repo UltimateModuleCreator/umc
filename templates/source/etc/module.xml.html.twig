@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>{{ module.getFormattedLicense('xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="{{ module.getNamespace() }}_{{module.getModuleName() }}"
+    <module name="{{ module.getNamespace() }}_{{module.getModuleName() }}">
         <sequence>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Ui" />
-            <module name="Magento_Config" />
-{% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
-            <module name="Magento_MediaStorage" />
-            <module name="Magento_Store" />
-{% endif %}
-{% if module.hasAttributeType('product_attribute') or module.hasAttributeType('product_attribute_set')%}
-            <module name="Magento_Eav" />
-            <module name="Magento_Catalog" />
-{% endif %}
-{% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
-            <module name="Magento_Widget" />
-{% endif %}
-{% if module.hasFrontend() %}
-            <module name="Magento_Theme" />
-{% endif %}
+{% for dep in module.getModuleDependencies() %}
+            <module name="{{ dep }}"/>
+{% endfor %}
         </sequence>
     </module>
 </config>

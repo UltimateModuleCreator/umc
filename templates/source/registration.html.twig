@@ -1,9 +1,0 @@
-<?php{{ module.getFormattedLicense('php') }}
-declare(strict_types=1);
-
-// @codeCoverageIgnore
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    '{{ module.getNamespace()|ucfirst }}_{{ module.getModuleName()|ucfirst }}',
-    __DIR__
-);

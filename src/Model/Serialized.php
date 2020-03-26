@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Util\StringUtil;
+
 class Serialized
 {
     /**
@@ -72,19 +74,30 @@ class Serialized
      */
     private $optionFactory;
     /**
+     * @var StringUtil
+     */
+    private $stringUtil;
+    /**
      * @var SerializedOption[]
      */
     private $options;
 
     /**
      * Serialized constructor.
-     * @param Attribute $attribute
      * @param SerializedOptionFactory $optionFactory
+     * @param StringUtil $stringUtil
+     * @param Attribute $attribute
+     * @param array $data
      */
-    public function __construct(SerializedOptionFactory $optionFactory, Attribute $attribute, array $data = [])
-    {
+    public function __construct(
+        SerializedOptionFactory $optionFactory,
+        StringUtil $stringUtil,
+        Attribute $attribute,
+        array $data = []
+    ) {
         $this->attribute = $attribute;
         $this->optionFactory = $optionFactory;
+        $this->stringUtil = $stringUtil;
         $this->code = (string)($data['code'] ?? '');
         $this->label = (string)($data['label'] ?? '');
         $this->type = (string)($data['type'] ?? '');
@@ -192,11 +205,49 @@ class Serialized
     }
 
     /**
+     * @return bool
+     * TODO: refactor this to use serialized types
+     */
+    public function isManualOptions(): bool
+    {
+        return $this->type === 'dropdown' || $this->type === 'multiselect';
+    }
+
+    /**
      * @return SerializedOption[]
      */
     public function getOptions(): array
     {
-        return $this->options;
+        return $this->isManualOptions() ? $this->options : [];
+    }
+
+    /**
+     * @return string
+     * //TODO: refactor this to loop only once
+     */
+    public function getOptionType(): string
+    {
+        foreach ($this->getOptions() as $option) {
+            if (!is_numeric($option->getValue())) {
+                return 'string';
+            }
+        }
+        return 'number';
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionSourceVirtualType(): string
+    {
+        $parts = [
+            $this->getAttribute()->getEntity()->getModule()->getModuleName(),
+            $this->getAttribute()->getEntity()->getNameSingular(),
+            'Source',
+            $this->getAttribute()->getCode(),
+            $this->getCode()
+        ];
+        return $this->stringUtil->glueClassParts($parts, '');
     }
 
     /**
@@ -219,7 +270,7 @@ class Serialized
                 function (SerializedOption $option) {
                     return $option->toArray();
                 },
-                $this->getOptions()
+                $this->options
             )
         ];
     }

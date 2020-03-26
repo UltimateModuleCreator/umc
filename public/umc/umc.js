@@ -111,13 +111,18 @@ UMC.Module = function (data) {
                 url: form.attr('action'),
                 data: {data: self.toParams()},
                 complete: function (response) {
-                    var data = response.responseJSON;
-                    $('#body-loader').hide();
-                    var className = (data.success) ? 'alert-success' : 'alert-error';
-                    var content = '<div class="alert ' + className + '">' + data.message + '</div>';
-                    if (data.link && data.module) {
-                        content += '<br /><a class="btn btn-primary col-lg-12" href="' + data.link + '">Download module ' + data.module + '</a>';
-                        //$('[data-role=umc-title]').html('Edit: ' + data.module);
+                    var isJson = response.responseJSON !== undefined;
+                    if (isJson) {
+                        var data = response.responseJSON;
+                        $('#body-loader').hide();
+                        var className = (data.success) ? 'alert-success' : 'alert-error';
+                        var content = '<div class="alert ' + className + '">' + data.message + '</div>';
+                        if (data.link && data.module) {
+                            content += '<br /><a class="btn btn-primary col-lg-12" href="' + data.link + '">Download module ' + data.module + '</a>';
+                            //$('[data-role=umc-title]').html('Edit: ' + data.module);
+                        }
+                    } else {
+                        var content = response.responseText;
                     }
                     var modal = $('#response-modal');
                     modal.find('.modal-body').html(content);

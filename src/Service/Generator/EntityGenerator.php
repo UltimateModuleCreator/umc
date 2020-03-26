@@ -50,13 +50,14 @@ class EntityGenerator implements GeneratorInterface
      * @param Module $module
      * @param array $fileConfig
      * @return array
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function generateContent(Module $module, array $fileConfig) : array
     {
         $result = [];
+        $fileConfig = $this->processFileConfig($fileConfig);
         foreach ($module->getEntities() as $entity) {
             $destination = $this->processDestination($fileConfig['destination'], $entity);
             $content = $this->twig->render($fileConfig['template'], ['entity' => $entity, 'module' => $module]);
@@ -65,6 +66,20 @@ class EntityGenerator implements GeneratorInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @param array $fileConfig
+     * @return array
+     */
+    private function processFileConfig(array $fileConfig): array
+    {
+        if (!isset($fileConfig['source'])) {
+            throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
+        }
+        $fileConfig['template'] = $fileConfig['template'] ?? 'source/' . $fileConfig['source'] . '.html.twig';
+        $fileConfig['destination'] = $fileConfig['destination'] ?? $fileConfig['source'];
+        return $fileConfig;
     }
 
     /**

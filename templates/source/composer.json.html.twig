@@ -1,26 +1,11 @@
 {
-  "name": "{{module.getNamespace()|lower}}/module-{{ module.getModuleName()|hyphen }}",
-  "description": "{{ module.getNamespace() }}_{{ module.getModuleName() }} magento 2 extension",
+  "name": "{{module.getComposerExtensionName() }}",
+  "description": "{{module.getExtensionName() }} magento 2 extension",
   "require": {
-    "php": "{{module.getComposerPhpVersion()}}",
-    "magento/module-backend": "*",
-    "magento/module-config": "*",
-    "magento/module-ui": "*",
-{% if module.hasAttributeType('product_attribute') or module.hasAttributeType('product_attribute_set')%}
-    "magento/module-eav": "*",
-    "magento/module-catalog": "*",
-{% endif %}
-{% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
-    "magento/module-media-storage": "*",
-    "magento/module-store": "*",
-{% endif %}
-{% if module.hasAttributeType('wysiwyg') and module.hasFrontend() %}
-    "magento/module-widget": "*",
-{% endif %}
-{% if module.hasFrontend() %}
-    "magento/module-theme": "*",
-{% endif %}
-    "magento/framework": "*.*"
+{% for dep in module.getComposerDependencies() %}
+    "{{ dep }}": "*",
+{% endfor %}
+    "php": "~7.1.3||~7.2.0||~7.3.0",
   },
   "type": "magento2-module",
   "license": [
@@ -32,7 +17,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "{{ module.getNamespace() }}\\{{ module.getModuleName() }}\\": ""
+      "{{ module.getExtensionName('\\\\') }}\\": ""
     }
   }
 }

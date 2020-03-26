@@ -1,7 +1,8 @@
-{% if module.hasAttributeType('image') or module.hasAttributeType('file') %}
+{% if not module.isUmcCrud() and module.isUpload() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
@@ -16,72 +17,50 @@ use Psr\Log\LoggerInterface;
 class Uploader
 {
     /**
-     * DB file storage
-     *
      * @var Database
      */
-    protected $coreFileStorageDatabase;
-
+    private $coreFileStorageDatabase;
     /**
-     * Uploader factory
-     *
      * @var UploaderFactory
      */
-    protected $uploaderFactory;
-
+    private $uploaderFactory;
     /**
-     * Store Manager
-     *
      * @var StoreManagerInterface
      */
-    protected $storeManager;
-
+    private $storeManager;
     /**
-     * Logger
-     *
      * @var LoggerInterface
      */
-    protected $logger;
-
+    private $logger;
     /**
-     * Media directory
-     *
      * @var WriteInterface
      */
-    protected $mediaDirectory;
-
+    private $mediaDirectory;
     /**
-     * Base tmp path
-     *
      * @var string
      */
-    protected $baseTmpPath;
-
+    private $baseTmpPath;
     /**
-     * Base path
-     *
      * @var string
      */
-    protected $basePath;
+    private $basePath;
 
     /**
-     * Allowd file extensions
-     *
      * @var array
      */
-    protected $allowedExtensions = [];
+    private $allowedExtensions = [];
 
     /**
-     * constructor
-     *
+     * Uploader constructor.
      * @param Database $coreFileStorageDatabase
      * @param Filesystem $filesystem
      * @param UploaderFactory $uploaderFactory
      * @param StoreManagerInterface $storeManager
      * @param LoggerInterface $logger
-     * @param string $baseTmpPath
-     * @param string $basePath
+     * @param $baseTmpPath
+     * @param $basePath
      * @param array $allowedExtensions
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         Database $coreFileStorageDatabase,
@@ -89,8 +68,8 @@ class Uploader
         UploaderFactory $uploaderFactory,
         StoreManagerInterface $storeManager,
         LoggerInterface $logger,
-        $baseTmpPath,
-        $basePath,
+        string $baseTmpPath,
+        string $basePath,
         array $allowedExtensions = []
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
@@ -101,42 +80,6 @@ class Uploader
         $this->basePath                = $basePath;
         $this->allowedExtensions       = $allowedExtensions;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-    }
-
-    /**
-     * Set base tmp path
-     *
-     * @param string $baseTmpPath
-     *
-     * @return void
-     */
-    public function setBaseTmpPath($baseTmpPath)
-    {
-        $this->baseTmpPath = $baseTmpPath;
-    }
-
-    /**
-     * Set base path
-     *
-     * @param string $basePath
-     *
-     * @return void
-     */
-    public function setBasePath($basePath)
-    {
-        $this->basePath = $basePath;
-    }
-
-    /**
-     * Set allowed extensions
-     *
-     * @param string[] $allowedExtensions
-     *
-     * @return void
-     */
-    public function setAllowedExtensions($allowedExtensions)
-    {
-        $this->allowedExtensions = $allowedExtensions;
     }
 
     /**
@@ -223,9 +166,7 @@ class Uploader
     {
         return $this->storeManager
             ->getStore()
-            ->getBaseUrl(
-                UrlInterface::URL_TYPE_MEDIA
-            );
+            ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
     }
 
     /**
@@ -240,7 +181,6 @@ class Uploader
     public function saveFileToTmpDir($fileId)
     {
         $baseTmpPath = $this->getBaseTmpPath();
-
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
         $uploader->setAllowedExtensions($this->getAllowedExtensions());
         $uploader->setAllowRenameFiles(true);
@@ -271,35 +211,7 @@ class Uploader
                 );
             }
         }
-
         return $result;
-    }
-
-    /**
-     * @param string $input
-     * @param array $data
-     * @return string
-     */
-    public function uploadFileAndGetName($input, $data)
-    {
-        if (!isset($data[$input])) {
-            return '';
-        }
-        if (is_array($data[$input]) && !empty($data[$input]['delete'])) {
-            return '';
-        }
-
-        if (isset($data[$input][0]['name']) && isset($data[$input][0]['tmp_name'])) {
-            try {
-                $result = $this->moveFileFromTmp($data[$input][0]['file']);
-                return $result;
-            } catch (\Exception $e) {
-                return '';
-            }
-        } elseif (isset($data[$input][0]['name'])) {
-            return $data[$input][0]['name'];
-        }
-        return '';
     }
 }
 {% endif %}

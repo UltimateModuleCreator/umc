@@ -1,0 +1,12 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model;
+
+use Magento\Framework\Api\SearchResults;
+use {{ entity.getSearchResultsInterface() }};
+
+class {{ entity.getNameSingular()|camel|ucfirst }}SearchResults extends SearchResults implements SomethingSearchResultsInterface
+{
+
+}

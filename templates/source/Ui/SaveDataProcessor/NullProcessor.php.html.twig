@@ -1,0 +1,20 @@
+{% if not module.isUmcCrud() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\SaveDataProcessor;
+
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\SaveDataProcessorInterface;
+
+class NullProcessor implements SaveDataProcessorInterface
+{
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(array $data): array
+    {
+        return $data;
+    }
+}
+{% endif %}

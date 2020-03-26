@@ -1,0 +1,37 @@
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
+
+use {{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\{{ entity.getParentResourceModel() }};
+
+class {{ entity.getNameSingular()|camel|ucfirst }} extends {{ entity.getParentResourceModel() }}
+{
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
+     */
+    protected function _construct()
+    {
+        $this->_init('{{ entity.getMainTableName() }}', '{{ entity.getPk()}}');
+    }
+{% if entity.isStore() %}
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+    */
+    protected function _getLoadSelect($field, $value, $object)
+    {
+        $select = parent::_getLoadSelect($field, $value, $object);
+        $select->where('is_active = ?', 1);
+        return $select;
+    }
+{% endif %}
+    //phpcs: enable
+}

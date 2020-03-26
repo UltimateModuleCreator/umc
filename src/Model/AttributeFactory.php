@@ -22,6 +22,7 @@ namespace App\Model;
 
 use App\Model\Attribute\AttributeTypeFactory;
 use App\Model\Attribute\TypeFactory;
+use App\Util\StringUtil;
 
 class AttributeFactory
 {
@@ -37,21 +38,28 @@ class AttributeFactory
      * @var SerializedFactory
      */
     private $serializedFactory;
+    /**
+     * @var StringUtil
+     */
+    private $stringUtil;
 
     /**
      * AttributeFactory constructor.
      * @param AttributeTypeFactory $typeFactory
      * @param OptionFactory $optionFactory
      * @param SerializedFactory $serilizedFactory
+     * @param StringUtil $stringUtil
      */
     public function __construct(
         AttributeTypeFactory $typeFactory,
         OptionFactory $optionFactory,
-        SerializedFactory $serilizedFactory
+        SerializedFactory $serilizedFactory,
+        StringUtil $stringUtil
     ) {
         $this->typeFactory = $typeFactory;
         $this->optionFactory = $optionFactory;
         $this->serializedFactory = $serilizedFactory;
+        $this->stringUtil = $stringUtil;
     }
 
     /**
@@ -60,6 +68,13 @@ class AttributeFactory
      */
     public function create(Entity $entity, array $data = []) : Attribute
     {
-        return new Attribute($this->typeFactory, $this->optionFactory, $this->serializedFactory, $entity, $data);
+        return new Attribute(
+            $this->typeFactory,
+            $this->optionFactory,
+            $this->serializedFactory,
+            $this->stringUtil,
+            $entity,
+            $data
+        );
     }
 }

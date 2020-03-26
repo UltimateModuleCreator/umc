@@ -54,6 +54,20 @@ class StringUtil
     }
 
     /**
+     * @param $array
+     * @return array
+     */
+    public function snakeArray($array): array
+    {
+        return array_map(
+            function (string $string) {
+                return $this->snake($string);
+            },
+            $array
+        );
+    }
+
+    /**
      * @param string $string
      * @return string
      */
@@ -69,5 +83,25 @@ class StringUtil
     public function hyphen(string $string) : string
     {
         return str_replace('_', '-', $this->snake($string));
+    }
+
+    /**
+     * @param $parts
+     * @param string $glue
+     * @return string
+     */
+    public function glueClassParts($parts, $glue = '\\'): string
+    {
+        return implode(
+            $glue,
+            array_map(
+                function (string $text) {
+                    return $this->ucfirst(
+                        $this->camel($text)
+                    );
+                },
+                $parts
+            )
+        );
     }
 }
