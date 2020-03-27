@@ -503,8 +503,12 @@ class Module
                 'image' => [],
                 'file' => [],
                 'product_attribute' => [],
+                'product_attribute_set' => [],
                 'option_attribute' => [],
-                'multiple_attributes' => []
+                'serialized' => [],
+                'multiple_attributes' => [],
+                'date_attributes' => [],
+                'data_processor' => []
             ]
         ];
         foreach ($this->getEntities() as $entity) {
@@ -648,6 +652,14 @@ class Module
     {
         $this->initEntityCacheData();
         return $this->cacheData['entity']['file'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImage(): bool
+    {
+        return count($this->getImageEntities()) > 0;
     }
 
     /**

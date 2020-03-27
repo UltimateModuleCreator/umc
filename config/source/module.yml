@@ -130,3 +130,30 @@
 -
   source: Ui/SaveDataProcessor/CompositeProcessor.php
   label: Date save data processor
+-
+  source: Ui/Form/DataProvider.php
+  label: Admin Form Data provider
+-
+  source: Ui/Form/DataModifierInterface.php
+  label: Admin Form Data modifier interface
+-
+  source: Ui/Form/DataModifier/Upload.php
+  label: Admin Form Data Upload modifier
+-
+  source: Ui/Form/DataModifier/NullModifier.php
+  label: Admin Form Data Null modifier
+-
+  source: Ui/Form/DataModifier/Multiselect.php
+  label: Admin Form Data Multiselect modifier
+-
+  source: Ui/Form/DataModifier/DynamicRows.php
+  label: Admin Form Data DynamicRows modifier
+-
+  source: Ui/Form/DataModifier/CompositeDataModifier.php
+  label: Admin Form Data composite modifier
+-
+  source: Ui/Component/Listing/Image.php
+  label: Grid Image column
+-
+  source: Ui/Component/Listing/ActionsColumn.php
+  label: Grid Actions column

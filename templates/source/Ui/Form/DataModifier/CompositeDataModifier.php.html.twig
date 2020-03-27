@@ -1,0 +1,46 @@
+{% if not module.isUmcCrud() and module.isDataProcessor() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifier;
+
+use Magento\Framework\Model\AbstractModel;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifierInterface;
+
+class CompositeDataModifier implements DataModifierInterface
+{
+    /**
+     * @var DataModifierInterface[]
+     */
+    private $modifiers;
+
+    /**
+     * CompositeDataModifier constructor.
+     * @param DataModifierInterface[] $modifiers
+     */
+    public function __construct(array $modifiers)
+    {
+        foreach ($modifiers as $modifier) {
+            if (!($modifier instanceof DataModifierInterface)) {
+                throw new \InvalidArgumentException(
+                    "Form data modifier must implemenet " . DataModifierInterface::class
+                );
+            }
+        }
+        $this->modifiers = $modifiers;
+    }
+
+    /**
+     * @param AbstractModel $model
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(AbstractModel $model, array $data): array
+    {
+        foreach ($this->modifiers as $modifier) {
+            $data = $modifier->modifyData($model, $data);
+        }
+        return $data;
+    }
+}
+{% endif %}
