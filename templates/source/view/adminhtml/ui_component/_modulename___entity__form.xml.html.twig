@@ -74,7 +74,7 @@
         </field>
 {% endif %}
 {% for attribute in entity.getAttributes() %}
-{#{{ attribute.getTypeInstance().renderForm()|raw }}#}
+{{ attribute.getTypeInstance().renderForm()|raw }}
 {% endfor %}
 {% if entity.isStore() %}
     <field name="store_id" formElement="multiselect">

@@ -132,7 +132,7 @@
         </column>
 {% for attribute in entity.getAttributes() %}
 {% if attribute.isAdminGrid() %}
-{#{{ attribute.getTypeInstance().renderGrid()|raw }}#}
+{{ attribute.getTypeInstance().renderGrid()|raw }}
 {% endif %}
 {% endfor %}
 {% if entity.isFrontend() %}

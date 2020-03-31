@@ -1,10 +1,10 @@
         <column name="{{ attribute.getCode() }}">
             <settings>
-{% if (attribute.getAdminGridFilter()) %}
+{% if (attribute.isAdminGridFilter()) %}
                 <filter>{{ type.getGridFilterType() }}</filter>
 {% endif %}
                 <editor>
-{% if (attribute.getRequired()) %}
+{% if (attribute.isRequired()) %}
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
@@ -12,7 +12,7 @@
                     <editorType>text</editorType>
                 </editor>
                 <label translate="true">{{ attribute.getLabel() }}</label>
-{% if attribute.getAdminGrid() is same as("2") %}
+{% if attribute.isAdminGridHidden() %}
                 <visible>false</visible>
 {% endif %}
             </settings>

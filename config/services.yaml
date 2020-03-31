@@ -12,118 +12,120 @@ parameters:
     text:
       label: Text
       grid_filter_type: text
-      grid_template: attribute/grid/text.html.twig
-      form_template: attribute/form/text.html.twig
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/text.html.twig
-      frontend_list_template: attribute/frontend/list/text.html.twig
-#      class: App\Model\Attribute\Text
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: 'null'
       type_hint: string
       input_type: Text Input
-      has_options: false
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/text.html.twig
+        frontend:
+          view: attribute/frontend/view/text.html.twig
+          list: attribute/frontend/list/text.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      schema_fk_template: attribute/schema_fk/product_attribute.html.twig
-      fk_template: attribute/fk/product_attribute.html.twig
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-#      class: App\Model\Attribute\Attributes
+      class: App\Model\AttributeTypeProductAttribute
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_SMALLINT
-      sql_size: 'null'
       type_hint: int
-      multiple_text: 'false'
       input_type: Select
-      has_options: true
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        schema_fk: attribute/schema_fk/product_attribute.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     product_attribute_multiselect:
       label: Product Attribute Multiselect
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-      multiple_text: 'true'
-#      class: App\Model\Attribute\AttributesMultiselect
+      class: App\Model\AttributeTypeProductAttribute
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       multiple: true
       grid_filter_type: 'false'
       input_type: Multiselect
-      has_options: true
       schema_type: text
       can_be_serialized: true
       data_processor_required: true
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: attribute/fk/product_attribute_set.html.twig
-      schema_fk_template: attribute/schema_fk/product_attribute_set.html.twig
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-#      class: App\Model\Attribute\AttributeSet
+      class: App\Model\AttributeTypeProductAttributeSet
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_SMALLINT
-      sql_size: 'null'
       type_hint: int
-      multiple_text: 'false'
       input_type: Select
-      has_options: true
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        schema_fk: attribute/schema_fk/product_attribute_set.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     product_attribute_set_multiselect:
       label: Product Attribute Set Multiselect
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-      multiple_text: 'true'
-#      class: App\Model\Attribute\AttributeSetMultiselect
+      class: App\Model\AttributeTypeProductAttributeSet
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       multiple: true
       grid_filter_type: 'false'
@@ -132,24 +134,26 @@ parameters:
       schema_type: text
       can_be_serialized: true
       data_processor_required: true
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     country:
       label: Country
       source_model: Magento\Config\Model\Config\Source\Locale\Country
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-      multiple_text: 'false'
-#      class: \App\Model\Attribute\Country
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: 3
       type_hint: string
       grid_filter_type: select
       input_type: Select
@@ -157,41 +161,47 @@ parameters:
       schema_type: varchar
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     country_multiselect:
       label: Country Multiselect
       source_model: Magento\Config\Model\Config\Source\Locale\Country
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-      multiple_text: 'true'
-#      class: \App\Model\Attribute\CountryMultiselect
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       multiple: true
       grid_filter_type: 'false'
       input_type: Multiselect
-      has_options: true
       schema_type: text
       can_be_serialized: true
       data_processor_required: true
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     date:
       label: Date
-      grid_template: attribute/grid/date.html.twig
-      form_template: attribute/form/date.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/date.html.twig
-      frontend_list_template: attribute/frontend/list/date.html.twig
-#      class: \App\Model\Attribute\Date
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -206,23 +216,26 @@ parameters:
       schema_type: timestamp
       can_be_serialized: true
       data_processor_required: true
+      templates:
+        backend:
+          grid: attribute/grid/date.html.twig
+          form: attribute/form/date.html.twig
+        frontend:
+          view: attribute/frontend/view/date.html.twig
+          list: attribute/frontend/list/date.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     decimal:
       label: Decimal
       grid_filter_type: textRange
-      grid_template: attribute/grid/text.html.twig
-      form_template: attribute/form/text.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/text.html.twig
-      frontend_list_template: attribute/frontend/list/text.html.twig
-      class: \App\Model\Attribute\Decimal
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_DECIMAL
-      sql_size: "'12,4'"
       type_hint: float
       input_type: Text Input
       has_options: false
@@ -230,41 +243,46 @@ parameters:
       schema_attributes: 'scale="4" precision="12"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/text.html.twig
+        frontend:
+          view: attribute/frontend/view/text.html.twig
+          list: attribute/frontend/list/text.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     dropdown:
       label: Dropdown
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-      multiple_text: 'false'
-#      class: \App\Model\Attribute\Dropdown
       can_be_name: false
       can_show_in_grid: true
       can_have_options: true
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_INTEGER
-      sql_size: 'null'
       type_hint: int
       grid_filter_type: select
       input_type: Select
-      has_options: true
       schema_type: int
       schema_attributes: 'padding="11"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     file:
       label: File
-      grid_template: false
-      form_template: attribute/form/file.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/file.html.twig
-      frontend_list_template: attribute/frontend/list/file.html.twig
-#      class: \App\Model\Attribute\File
-      upload_type: file
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
@@ -274,51 +292,43 @@ parameters:
       sql_size: 255
       type_hint: string
       input_type: File
-      has_options: false
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: false
       data_processor_required: true
+      templates:
+        backend:
+          form: attribute/form/file.html.twig
+        frontend:
+          view: attribute/frontend/view/file.html.twig
+          list: attribute/frontend/list/file.html.twig
     image:
       label: Image
-      grid_template: false
-      form_template: attribute/form/file.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/image.html.twig
-      frontend_list_template: attribute/frontend/list/image.html.twig
-#      class: \App\Model\Attribute\Image
-      upload_type: image
       can_be_name: false
-      can_show_in_grid: false
+      can_show_in_grid: true
       can_have_options: false
       can_be_required: false
-      full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: 255
+      full_text: false
       type_hint: string
       input_type: File
-      has_options: false
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: false
       data_processor_required: true
+      templates:
+        backend:
+          grid: attribute/grid/image.html.twig
+          form: attribute/form/file.html.twig
+        frontend:
+          view: attribute/frontend/view/image.html.twig
+          list: attribute/frontend/list/image.html.twig
     integer:
       label: Integer
-      grid_template: attribute/grid/text.html.twig
-      form_template: attribute/form/text.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/text.html.twig
-      frontend_list_template: attribute/frontend/list/text.html.twig
-#      class: \App\Model\Attribute\Integer
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_INTEGER
-      sql_size: 'null'
       type_hint: int
       grid_filter_type: textRange
       input_type: Text Input
@@ -327,94 +337,101 @@ parameters:
       schema_attributes: 'padding="11"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/text.html.twig
+        frontend:
+          view: attribute/frontend/view/text.html.twig
+          list: attribute/frontend/list/text.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     multiselect:
       label: Multiselect
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/select.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
-      multiple_text: 'true'
-#      class: \App\Model\Attribute\Multiselect
       can_be_name: false
       can_show_in_grid: true
       can_have_options: true
       can_be_required: true
       full_text: false
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       multiple: true
       grid_filter_type: 'false'
       input_type: Multiselect
-      has_options: true
       schema_type: text
       can_be_serialized: true
       data_processor_required: true
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     textarea:
       label: Textarea (no editor)
-      grid_template: attribute/grid/text.html.twig
-      form_template: attribute/form/textarea.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/text.html.twig
-      frontend_list_template: attribute/frontend/list/text.html.twig
-#      class: \App\Model\Attribute\Textarea
       can_be_name: true
       can_show_in_grid: true
       can_have_options: false
       can_be_required: true
       full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       grid_filter_type: 'false'
       input_type: Textarea
-      has_options: false
       schema_type: text
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/textarea.html.twig
+        frontend:
+          view: attribute/frontend/view/text.html.twig
+          list: attribute/frontend/list/text.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     wysiwyg:
       label: Wysiwyg
-      grid_template: false
-      form_template: attribute/form/wysiwyg.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/wysiwyg.html.twig
-      frontend_list_template: attribute/frontend/list/wysiwyg.html.twig
-#      class: \App\Model\Attribute\Wysiwyg
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
       can_be_required: true
       full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       grid_filter_type: 'false'
       input_type: Textarea
-      has_options: false
       schema_type: mediumtext
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          form: attribute/form/wysiwyg.html.twig
+        frontend:
+          view: attribute/frontend/view/wysiwyg.html.twig
+          list: attribute/frontend/list/wysiwyg.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     yesno:
       label: Yes/No
-      grid_template: attribute/grid/select.html.twig
-      form_template: attribute/form/yesno.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/select.html.twig
-      frontend_list_template: attribute/frontend/list/select.html.twig
       source_model: Magento\Config\Model\Config\Source\Yesno
-#      class: \App\Model\Attribute\Yesno
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
       can_be_required: false
       full_text: false
-      sql_type_constant: TYPE_INTEGER
-      sql_size: 1
       type_hint: int
       grid_filter_type: select
       input_type: Checkbox (toggle)
@@ -423,31 +440,38 @@ parameters:
       schema_attributes: 'padding="2"'
       can_be_serialized: true
       data_processor_required: false
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/yesno.html.twig
+        frontend:
+          view: attribute/frontend/view/select.html.twig
+          list: attribute/frontend/list/select.html.twig
+        serialized:
+          backend: false
+          frontend:
+            list: false
+            view: false
     serialized:
       label: Serialized
-      grid_template: ''
-      form_template: attribute/form/serialized.html.twig
-      fk_template: false
-      schema_fk_template: false
-      frontend_view_template: attribute/frontend/view/serialized.html.twig
-      frontend_list_template: attribute/frontend/list/serialized.html.twig
-      multiple_text: 'false'
       class: \App\Model\AttributeTypeSerialized
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
       can_be_required: false
       full_text: false
-      sql_type_constant: TYPE_TEXT
-      sql_size: "'64k'"
       type_hint: string
       multiple: false
-      grid_filter_type: 'false'
       input_type: Serialized Fields
-      has_options: false
       schema_type: text
       can_be_serialized: false
       data_processor_required: true
+      templates:
+        backend:
+          form: attribute/form/serialized.html.twig
+        frontend:
+          view: attribute/frontend/view/serialized.html.twig
+          list: attribute/frontend/list/serialized.html.twig
 
   menu_type_config:
     '':

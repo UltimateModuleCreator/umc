@@ -33,20 +33,13 @@ rows:
       title: This is the field type.
       col: 4
   -
-    expanded:
-      name: expanded
-      type: checkbox
-      has_default: true
-      label: Display Expanded
-      title: If set yo "Yes" each field in the serialized group will be displayed on a separate line. If set to "No" they will all be on the same line
-      col: 3
     required:
       name: required
       type: checkbox
       has_default: true
       label: Required
       title: This sets the attribute as required in the admin add/edit form
-      col: 3
+      col: 4
     show_in_list:
       name: show_in_list
       type: checkbox
@@ -55,7 +48,7 @@ rows:
       dataValidation: validate_required
       title: "This allows you to display the attribute in the entity list page on frontend"
       additionalDataBind: 'enable: $parent.data.frontend_list'
-      col: 3
+      col: 4
     show_in_view:
       name: show_in_view
       type: checkbox
@@ -63,7 +56,7 @@ rows:
       label: Show in frontend view page
       title: "This allows you to display the attribute in the entity view page on frontend"
       additionalDataBind: 'enable: $parent.data.frontend_view'
-      col: 3
+      col: 4
   -
     note:
       name: note

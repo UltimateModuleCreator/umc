@@ -274,4 +274,13 @@ class Serialized
             )
         ];
     }
+
+    /**
+     * @return string
+     * //TODO: use templates to render stuff
+     */
+    public function renderForm(): string
+    {
+        return '';
+    }
 }

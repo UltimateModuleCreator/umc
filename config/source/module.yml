@@ -157,3 +157,6 @@
 -
   source: Ui/Component/Listing/ActionsColumn.php
   label: Grid Actions column
+-
+  source: etc/db_schema.xml
+  label: Table schema definitions

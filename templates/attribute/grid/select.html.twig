@@ -1,9 +1,9 @@
         <column name="{{ attribute.getCode() }}" component="Magento_Ui/js/grid/columns/select">
             <settings>
                 <filter>{{ type.getGridFilterType() }}</filter>
-{% if not type.getMultiple() %}
+{% if not type.isMultiple() %}
                 <editor>
-{% if (attribute.getRequired()) %}
+{% if (attribute.isRequired()) %}
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
@@ -14,8 +14,8 @@
                 <dataType>select</dataType>
                 <options class="{{ type.getSourceModel() }}"/>
                 <label translate="true">{{ attribute.getLabel() }}</label>
-{% if attribute.getAdminGrid() is same as("2") %}
-                <visible>false</visible>
+{% if attribute.isAdminGridHidden() %}
+                    <visible>false</visible>
 {% endif %}
             </settings>
         </column>

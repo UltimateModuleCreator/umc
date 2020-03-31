@@ -2,7 +2,7 @@
             <settings>
                 <filter>dateRange</filter>
                 <editor>
-{% if (attribute.getRequired()) %}
+{% if (attribute.isRequired()) %}
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
@@ -13,8 +13,8 @@
                 <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
                 <label translate="true">{{ attribute.getLabel() }}</label>
-{% if attribute.getAdminGrid() is same as("2") %}
-                    <visible>false</visible>
+{% if attribute.isAdminGridHidden() %}
+                <visible>false</visible>
 {% endif %}
             </settings>
         </column>

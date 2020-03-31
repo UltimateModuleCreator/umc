@@ -82,4 +82,20 @@
   source: view/adminhtml/ui_component/_modulename___entity__form.xml
   label: "Entity admin grid ui component"
   scope: entity
+-
+  source: Model/_Entity_Repo.php
+  label: "Entity repository model"
+  scope: entity
+-
+  source: Model/_Entity_ListRepo.php
+  label: "Entity List repository model"
+  scope: entity
+-
+  source: Model/_Entity_UiManager.php
+  label: "Entity Admin ui manager"
+  scope: entity
+-
+  source: Model/_Entity_UiCollectionProvider.php
+  label: "Entity Admin ui collection provider"
+  scope: entity
 

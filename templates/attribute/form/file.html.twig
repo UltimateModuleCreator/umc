@@ -14,9 +14,9 @@
                 <fileUploader>
                     <settings>
                         <uploaderConfig>
-                            <param xsi:type="url" name="url" path="{{ module.getNamespace()|camel }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|camel }}_{{ type.getUploadType() }}/upload/field/{{ attribute.getCode() }}"/>
+                            <param xsi:type="url" name="url" path="{{ module.getNamespace()|camel }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|camel }}_{{ attribute.getType() }}/upload/field/{{ attribute.getCode() }}"/>
                         </uploaderConfig>
-                        <previewTmpl>{{ module.getNamespace() }}_{{ module.getModuleName() }}/{{ type.getUploadType() }}-preview</previewTmpl>
+                        <previewTmpl>{{ module.getUmcCrudNamespace()|camel|ucfirst }}_{{ module.getUmcModuleName()|camel|ucfirst }}/preview</previewTmpl>
                     </settings>
                 </fileUploader>
             </formElements>

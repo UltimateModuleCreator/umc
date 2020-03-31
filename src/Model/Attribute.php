@@ -98,6 +98,14 @@ class Attribute
      */
     private $tooltip;
     /**
+     * @var bool
+     */
+    private $fullText;
+    /**
+     * @var bool
+     */
+    private $expanded;
+    /**
      * @var string
      */
     private $defaultValue;
@@ -149,6 +157,8 @@ class Attribute
         $this->note = (string)($data['note'] ?? '');
         $this->tooltip = (string)($data['tooltip'] ?? '');
         $this->defaultValue = (string)($data['default_value'] ?? '');
+        $this->fullText = (bool)($data['full_text'] ?? false);
+        $this->expanded = (bool)($data['expanded'] ?? false);
         $this->options = array_map(
             function ($option) {
                 return $this->optionFactory->create($this, $option);
@@ -323,6 +333,22 @@ class Attribute
     }
 
     /**
+     * @return bool
+     */
+    public function isFullText(): bool
+    {
+        return $this->getTypeInstance()->isFullText() && $this->fullText;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpanded(): bool
+    {
+        return $this->expanded;
+    }
+
+    /**
      * @return AttributeType
      */
     public function getTypeInstance() : AttributeType
@@ -477,6 +503,8 @@ class Attribute
             'note' => $this->note,
             'tooltip' => $this->tooltip,
             'default_value' => $this->defaultValue,
+            'full_text' => $this->fullText,
+            'expanded' => $this->expanded,
             '_options' => array_map(
                 function (Option $option) {
                     return $option->toArray();

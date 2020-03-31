@@ -34,13 +34,18 @@ class AttributeTypeFactory
      * @var array
      */
     private $typeMap;
+    /**
+     * @var \Twig\Environment;
+     */
+    private $twig;
 
     /**
      * AttributeTypeFactory constructor.
      * @param array $typeMap
      */
-    public function __construct(array $typeMap)
+    public function __construct(\Twig\Environment $twig, array $typeMap)
     {
+        $this->twig = $twig;
         $this->typeMap = $typeMap;
     }
 
@@ -57,6 +62,6 @@ class AttributeTypeFactory
         }
         $config = $this->typeMap[$type];
         $class = $config['class'] ?? self::DEFAULT_TYPE_CLASS;
-        return new $class($attribute, $config);
+        return new $class($this->twig, $attribute, $config);
     }
 }

@@ -97,7 +97,7 @@ class Save extends Action implements HttpPostActionInterface
                 $resultRedirect->setPath('*/*/index');
             } elseif ($back === 'duplicate' && $this->entityUiConfig->getAllowSaveAndDuplicate()) {
                 $newEntity = $this->entityUiManager->get(null);
-                    $this->dataObjectHelper->populateWithArray(
+                $this->dataObjectHelper->populateWithArray(
                     $newEntity,
                     $data,
                     $this->entityUiConfig->getInterface()

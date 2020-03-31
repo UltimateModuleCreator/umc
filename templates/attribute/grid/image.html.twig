@@ -1,0 +1,15 @@
+        <column name="{{ attribute.getCode() }}" class="{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\Ui\Component\Listing\Image">
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+            <argument name="fileInfo" xsi:type="object">{{ entity.getVirtualType('ImageInfo') }}</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="has_preview" xsi:type="string">1</item>
+                    <item name="label" xsi:type="string" translate="true">{{ attribute.getLabel() }}</item>
+                    {% if attribute.isAdminGridHidden() %}
+                        <item name="visible" xsi:type="boolean">false</item>
+                    {% endif %}
+                </item>
+            </argument>
+        </column>

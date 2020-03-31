@@ -1,0 +1,103 @@
+{% if not module.isUmcCrud() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model;
+
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
+
+class {{ entity.getNameSingular()|camel|ucfirst }}Repo implements {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory
+     */
+    private $factory;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel
+     */
+    private $resource;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Interface[]
+     */
+    private $cache = [];
+
+    /**
+     *
+     */
+    public function __construct(
+        {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory $factory,
+        {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel $resource
+    ) {
+        $this->factory = $factory;
+        $this->resource = $resource;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
+    {
+        try {
+            $this->resource->save(${{ entity.getNameSingular()|camel }});
+        } catch (\Exception $exception) {
+            throw new \Magento\Framework\Exception\CouldNotSaveException(
+                __($exception->getMessage())
+            );
+        }
+        return $entity;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(int $id)
+    {
+        if (!isset($this->cache[$id])) {
+            ${{ entity.getNameSingular()|camel }} = $this->factory->create();
+            $this->resource->load($entity, $id);
+            if (!${{ entity.getNameSingular()|camel }}->getId()) {
+                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                    __('The {{ entity.getLabelSingular() }} with the ID "%1" does not exist . ', $id)
+                );
+            }
+            $this->cache[$id] = ${{ entity.getNameSingular()|camel }};
+        }
+        return $this->cache[$id];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
+    {
+        try {
+            $this->resource->delete(${{ entity.getNameSingular()|camel }});
+            unset($this->cache[$id]);
+        } catch (\Exception $exception) {
+            throw new \Magento\Framework\Exception\CouldNotDeleteException(
+                __($exception->getMessage())
+            );
+        }
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteById(int $id)
+    {
+        return $this->delete($this->get($id));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function clear()
+    {
+        return $this->cache = [];
+    }
+}
+{% endif %}

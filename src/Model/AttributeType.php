@@ -21,8 +21,14 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Twig\Environment;
+
 class AttributeType
 {
+    /**
+     * @var Environment
+     */
+    private $twig;
     /**
      * @var Attribute
      */
@@ -35,22 +41,6 @@ class AttributeType
      * @var string|null
      */
     private $gridFilterType;
-    /**
-     * @var string|null
-     */
-    private $gridTemplate;
-    /**
-     * @var string|null
-     */
-    private $schemaFkTemplate;
-    /**
-     * @var string
-     */
-    private $frontendViewTemplate;
-    /**
-     * @var string
-     */
-    private $frontendListTemplate;
     /**
      * @var bool
      */
@@ -99,26 +89,26 @@ class AttributeType
      * @var bool
      */
     private $multiple;
+    /**
+     * @var string|null
+     */
+    private $sourceModel;
+    /**
+     * @var array
+     */
+    private $templates;
 
     /**
      * AttributeType constructor.
      * @param Attribute $attribute
      * @param array $data
      */
-    public function __construct(Attribute $attribute, array $data)
+    public function __construct(Environment $twig, Attribute $attribute, array $data)
     {
+        $this->twig = $twig;
         $this->attribute = $attribute;
         $this->label = (string)($data['label'] ?? null);
         $this->gridFilterType = (string)($data['grid_filter_type'] ?? '');
-        $this->gridTemplate = $data['grid_template'] ? (string) $data['grid_template'] : null;
-        $this->gridTemplate = $data['form_template'] ? (string) $data['form_template'] : null;
-        $this->schemaFkTemplate = $data['schema_fk_template'] ? (string) $data['schema_fk_template'] : null;
-        $this->frontendViewTemplate = $data['frontend_view_template']
-            ? (string) $data['frontend_view_template']
-            : null;
-        $this->frontendListTemplate = $data['frontend_view_template']
-            ? (string) $data['frontend_list_template']
-            : null;
         $this->canBeName = (bool)($data['can_be_name'] ?? false);
         $this->canShowInGrid = (bool)($data['can_show_in_grid'] ?? false);
         $this->canFilterInGrid = (bool)($data['can_filter_in_grid'] ?? false);
@@ -127,10 +117,12 @@ class AttributeType
         $this->fullText = (bool)($data['full_text'] ?? false);
         $this->typeHint = (string)($data['type_hint'] ?? 'string');
         $this->schemaType = (string)($data['schema_type'] ?? 'varchar');
-        $this->schemaAttributes = (string)($data['schema_attributes'] ?? 'langth="255"');
+        $this->schemaAttributes = (string)($data['schema_attributes'] ?? 'length="255"');
         $this->upload = (bool)($data['upload'] ?? false);
         $this->multiple = (bool)($data['multiple'] ?? false);
         $this->dataProcessorRequired = (bool)($data['data_processor_required'] ?? false);
+        $this->sourceModel = $data['source_model'] ?? null;
+        $this->templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
     }
 
     /**
@@ -155,38 +147,6 @@ class AttributeType
     public function getGridFilterType(): ?string
     {
         return $this->gridFilterType;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getGridTemplate(): ?string
-    {
-        return $this->gridTemplate;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getSchemaFkTemplate(): ?string
-    {
-        return $this->schemaFkTemplate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFrontendViewTemplate(): string
-    {
-        return $this->frontendViewTemplate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFrontendListTemplate(): string
-    {
-        return $this->frontendListTemplate;
     }
 
     /**
@@ -288,24 +248,121 @@ class AttributeType
     /**
      * @return bool
      */
-    public function isProductAttribute()
+    public function isProductAttribute(): bool
     {
-        return in_array($this->attribute->getType(), ['product_attribute', 'product_attribute_multiselect']);
+        return false;
     }
 
     /**
      * @return bool
      */
-    public function isProductAttributeSet()
+    public function isProductAttributeSet(): bool
     {
-        return in_array($this->attribute->getType(), ['product_attribute_set', 'product_attribute_set_multiselect']);
+        return false;
     }
 
     /**
      * @return string
      */
-    public function getDefaultValue()
+    public function getDefaultValue(): string
     {
         return implode(',', array_map('trim', explode("\n", $this->attribute->getRawDefaultValue())));
+    }
+
+    /**
+     * @return string
+     */
+    public function getMultipleText(): string
+    {
+        return $this->isMultiple() ? 'true' : 'false';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttributeColumnSettingsStringXml() : string
+    {
+        $attributes = $this->schemaAttributes;
+        if (strlen($attributes) > 0) {
+            $attributes .= ' ';
+        }
+        $attributes .= 'nullable="'. ($this->getAttribute()->isRequired() ? 'false' : 'true') .'"';
+        return $attributes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceModel(): string
+    {
+        return $this->sourceModel ?? $this->attribute->getOptionSourceVirtualType();
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndexDeleteType(): string
+    {
+        return $this->getAttribute()->isRequired() ? 'CASCADE' : 'SET NULL';
+    }
+
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function renderGrid(): string
+    {
+        return !empty($this->templates['backend']['grid'])
+            ? $this->renderTemplate($this->templates['backend']['grid'])
+            : '';
+    }
+
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function renderSchemaFk(): string
+    {
+        return $this->renderTemplate($this->templates['schema_fk'] ?? null);
+    }
+
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function renderForm(): string
+    {
+        return !empty($this->templates['backend']['form'])
+            ? $this->renderTemplate($this->templates['backend']['form'])
+            : '';
+    }
+
+    /**
+     * @param null|string $template
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    private function renderTemplate(?string $template): string
+    {
+        if (!$template) {
+            return '';
+        }
+        return $this->twig->render(
+            $template,
+            [
+                'type' => $this,
+                'attribute' => $this->attribute,
+                'entity' => $this->attribute->getEntity(),
+                'module' => $this->attribute->getEntity()->getModule()
+            ]
+        );
     }
 }

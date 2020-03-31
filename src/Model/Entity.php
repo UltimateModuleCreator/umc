@@ -262,6 +262,7 @@ class Entity
         $this->cacheData['attribute']['data_processor_required'] = [];
         $this->cacheData['attribute']['product_attribute'] = [];
         $this->cacheData['attribute']['product_attribute_set'] = [];
+        $this->cacheData['attribute']['full_text'] = [];
         foreach ($this->getAttributes() as $attribute) {
             $type = $attribute->getType();
             $this->cacheData['attribute']['by_type'][$type] = $this->cacheData['attribute']['by_type'][$type] ?? [];
@@ -275,6 +276,7 @@ class Entity
             $attribute->isProductAttribute() && ($this->cacheData['attribute']['product_attribute'][] = $attribute);
             $attribute->isProductAttributeSet()
                 && ($this->cacheData['attribute']['product_attribute_set'][] = $attribute);
+            $attribute->isFullText() && ($this->cacheData['attribute']['full_text'][] = $attribute);
         }
     }
 
@@ -285,6 +287,15 @@ class Entity
     {
         $this->initAttributeCacheData();
         return count($this->cacheData['attribute']['product_attribute']) > 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFullTextAttributes(): array
+    {
+        $this->initAttributeCacheData();
+        return $this->cacheData['attribute']['full_text'];
     }
 
     /**

@@ -8,7 +8,7 @@
                 </item>
             </argument>
             <settings>
-{% if attribute.getRequired() %}
+{% if attribute.isRequired() %}
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>

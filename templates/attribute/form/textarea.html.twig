@@ -11,7 +11,7 @@
                 <dataType>text</dataType>
                 <label translate="true">{{ attribute.getLabel() }}</label>
                 <dataScope>{{ attribute.getCode() }}</dataScope>
-{% if attribute.getRequired() %}
+{% if attribute.isRequired() %}
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>

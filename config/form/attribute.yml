@@ -15,14 +15,14 @@ rows:
       dataValidationRegexp: "^[a-z_]+"
       dataValidationErrorMsg: "Attribute code must consist only of letters and underscore"
       title: "This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter. There are some naming restriction. For example the code cannot be: 'data', 'child'"
-      col: 3
+      col: 2
     label:
       name: label
       type: text
       label: Label
       dataValidation: validate_required
       title: This is the attribute label that will be visible in the back-end in the add/edit form and in some cases in frontend.
-      col: 3
+      col: 2
     type:
       name: type
       type: choice
@@ -32,7 +32,7 @@ rows:
       data-pretty-select: 'true'
       optionProvider: 'attribute_type'
       title: This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.
-      col: 3
+      col: 2
     is_name:
       name: is_name
       type: checkbox
@@ -40,8 +40,7 @@ rows:
       label: Acts as name
       title: Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.
       additionalDataBind: 'click: $parent.nameChange, enable:canBehaveAsName'
-      col: 3
-  -
+      col: 2
     required:
       name: required
       type: checkbox
@@ -49,6 +48,14 @@ rows:
       label: Required
       title: This sets the attribute as required in the admin add/edit form
       col: 2
+    full_text:
+      name: full_text
+      type: checkbox
+      has_default: true
+      label: Full text
+      title: This adds the attribute to the full text search index of the entity
+      col: 2
+  -
     show_in_list:
       name: show_in_list
       type: checkbox
@@ -89,6 +96,13 @@ rows:
       label: Filterable in admin grid
       title: If this is set to yes, your field will be filtrable in the admin grid
       additionalDataBind: 'enable:canFilterInAdmin'
+      col: 2
+    expanded:
+      name: expanded
+      type: checkbox
+      has_default: true
+      label: Display Expanded
+      title: If set yo "Yes" each field in the serialized group will be displayed on a separate line. If set to "No" they will all be on the same line
       col: 2
   -
     note:

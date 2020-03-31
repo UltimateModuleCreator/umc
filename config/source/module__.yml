@@ -19,11 +19,6 @@ etc/frontend/di.xml:
   label: "Frontend DI file"
   scope: module
   template: source/etc/frontend/di.xml.html.twig
-etc/db_schema.xml:
-  destination: etc/db_schema.xml
-  label: "Declarative schema file for 2.3+"
-  scope: module
-  template: source/etc/db_schema.xml.html.twig
 
 
 Model/UploaderPool.php:
