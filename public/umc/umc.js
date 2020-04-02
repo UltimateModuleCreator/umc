@@ -168,15 +168,25 @@ UMC.Attribute = function (data) {
         return self.data.type() === "text";
     });
     this.canShowInAdmin = ko.pureComputed(function () {
-        return this.data.type() !== 'file' && this.data.type() !== "wysiwyg" && this.data.type() !== 'serialized';
+        return self.data.type() !== 'file' && this.data.type() !== "wysiwyg" && this.data.type() !== 'serialized';
     }, this);
     this.canHideInAdmin = ko.pureComputed(function () {
-        return this.data.admin_grid() && this.canShowInAdmin();
+        return self.data.admin_grid() && this.canShowInAdmin();
+    }, this);
+    this.hasExpanded = ko.pureComputed(function () {
+        return self.data.type() === 'serialized';
+    }, this);
+    this.canBeFullText = ko.pureComputed(function () {
+        return self.data.type() === 'text' || self.data.type() === 'textarea' || self.data.type() === 'wysiwyg'
+            || self.data.type() === 'country'  || self.data.type() === 'country_multiselect';
+    }, this);
+    this.canBeRequired = ko.pureComputed(function () {
+        return self.data.type() !== 'image' && self.data.type() !== 'file';
     }, this);
     this.canFilterInAdmin = ko.pureComputed(function () {
-        return this.data.admin_grid() && this.canShowInAdmin()
-            && this.data.type() !== "image" && this.data.type() !== "product_attribute_multiselect"
-            && this.data.type() !== "multiselect";
+        return self.data.admin_grid() && self.canShowInAdmin()
+            && self.data.type() !== "image" && self.data.type() !== "product_attribute_multiselect"
+            && self.data.type() !== "multiselect";
     }, this);
 };
 UMC.Option = function (data) {
@@ -231,7 +241,7 @@ UMC.getSortingConfig = function (placeholder) {
 };
 
 ko.bindingHandlers.sortableListEntities = UMC.getSortingConfig('drag-placeholder');
+ko.bindingHandlers.sortableListAttributes = UMC.getSortingConfig('drag-placeholder');
 ko.bindingHandlers.sortableListOptions = UMC.getSortingConfig('h-drag-placeholder');
-ko.bindingHandlers.sortableListSerialized = UMC.getSortingConfig('drag-placeholder');
 ko.bindingHandlers.sortableListSerialized = UMC.getSortingConfig('drag-placeholder');
 

@@ -92,7 +92,7 @@ class Builder
         $writer->writeFiles($files, $moduleName);
         $csFiles = $this->codingStandardsFactory->create($this->basePath . $moduleName)->run();
         $writer->writeFiles($csFiles, $moduleName);
-//        $this->archiverFactory->create($this->basePath)->createZip($this->basePath . $moduleName, $moduleName);
+        $this->archiverFactory->create($this->basePath)->createZip($this->basePath . $moduleName, $moduleName);
         $configWriter = $this->writerFactory->create($this->configFilePath);
         $configWriter->writeFiles([
             $moduleName . '.yml' => $this->yamlLoader->arrayToYaml($module->toArray())

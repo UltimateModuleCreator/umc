@@ -18,11 +18,11 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
     public function save({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }});
 
     /**
-     * @param $id
+     * @param int ${{ entity.getPk()|camel }}
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($id);
+    public function get(int ${{ entity.getPk()|camel }});
 
     /**
      * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
@@ -37,7 +37,7 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById(${{ entity.getPk()|camel }});
+    public function deleteById(int ${{ entity.getPk()|camel }});
 
     /**
      * clear caches instances

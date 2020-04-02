@@ -875,6 +875,16 @@ class Entity
     }
 
     /**
+     * @return string
+     */
+    public function getFormDataModifier(): string
+    {
+        return ($this->hasFormDataModifier())
+            ? $this->getVirtualType('FormDataModifier')
+            : $this->module->getNullFormDataModifier();
+    }
+
+    /**
      * @param $route
      * @return string
      */

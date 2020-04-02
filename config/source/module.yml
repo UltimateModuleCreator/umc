@@ -101,6 +101,9 @@
   source: Source/Catalog/ProductAttributeSet.php
   label: "Attribute set source model"
 -
+  source: Source/Options.php
+  label: "Manual Options Source Model"
+-
   source: Ui/CollectionProviderInterface.php
   label: "UI Collection provider interface"
 -

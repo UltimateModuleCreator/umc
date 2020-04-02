@@ -252,6 +252,16 @@
         </arguments>
     </virtualType>
     <!--[-] form button configuration for 'something' -->
+    <virtualType name="{{ entity.getVirtualType('UiFormDataProvider') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\Form\DataProvider">
+        <arguments>
+            <argument name="primaryFieldName" xsi:type="object">{{ entity.getPk() }}</argument>
+            <argument name="requestFieldName" xsi:type="object">{{ entity.getPk() }}</argument>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+            <argument name="dataModifier" xsi:type="object">{{ entity.getFormDataModifier() }}</argument>
+            <argument name="collectionProvider" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}UiCollectionProvider</argument>
+        </arguments>
+    </virtualType>
+
 {% endif %}
 {% endfor %}
 {% if module.hasSearchableEntities() %}

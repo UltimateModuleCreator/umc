@@ -47,7 +47,7 @@
         <arguments>
             <argument name="collections" xsi:type="array">
 {% for entity in module.getEntities() %}
-                <item name="{{ module.getNamespace()|snake }}_{{module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing_data_source" xsi:type="string">{{ module.getNamespace() }}{{module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection</item>
+                <item name="{{module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing_data_source" xsi:type="string">{{ module.getNamespace() }}{{module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection</item>
 {% endfor %}
             </argument>
         </arguments>
@@ -55,6 +55,7 @@
 {% for entity in module.getEntities() %}
     <type name="{{ entity.getCollectionModel() }}">
         <arguments>
+            <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
             <argument name="model" xsi:type="string">{{ entity.getModel() }}</argument>
             <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
             <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
@@ -68,6 +69,7 @@
     </type>
     <virtualType name="{{ module.getNamespace() }}{{module.getModuleName()|camel|ucfirst }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
         <arguments>
+            <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
             <argument name="model" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\Document</argument>
             <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
             <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
@@ -123,9 +125,9 @@
     </type>
 {% endif %}
 {% for entity in module.getImageEntities() %}
-    <virtualType name="{{ entity.getUploadInfoModel('File') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\FileInfo">
+    <virtualType name="{{ entity.getUploadInfoModel('Image') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\FileInfo">
         <arguments>
-            <argument name="filePath" xsi:type="string">{{ entity.getUploadFolder('file') }}</argument>
+            <argument name="filePath" xsi:type="string">{{ entity.getUploadFolder('image') }}</argument>
         </arguments>
     </virtualType>
 {% endfor %}

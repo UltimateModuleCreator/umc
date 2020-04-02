@@ -53,19 +53,19 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Repo implements {{ entity.getN
     /**
      * @inheritdoc
      */
-    public function get(int $id)
+    public function get(int ${{ entity.getPk()|camel }})
     {
-        if (!isset($this->cache[$id])) {
+        if (!isset($this->cache[${{ entity.getPk()|camel }}])) {
             ${{ entity.getNameSingular()|camel }} = $this->factory->create();
-            $this->resource->load($entity, $id);
+            $this->resource->load(${{ entity.getNameSingular()|camel }}, ${{ entity.getPk()|camel }});
             if (!${{ entity.getNameSingular()|camel }}->getId()) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
-                    __('The {{ entity.getLabelSingular() }} with the ID "%1" does not exist . ', $id)
+                    __('The {{ entity.getLabelSingular() }} with the ID "%1" does not exist . ', ${{ entity.getPk()|camel }})
                 );
             }
-            $this->cache[$id] = ${{ entity.getNameSingular()|camel }};
+            $this->cache[${{ entity.getPk()|camel }}] = ${{ entity.getNameSingular()|camel }};
         }
-        return $this->cache[$id];
+        return $this->cache[${{ entity.getPk()|camel }}];
     }
 
     /**
@@ -87,9 +87,9 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Repo implements {{ entity.getN
     /**
      * @inheritdoc
      */
-    public function deleteById(int $id)
+    public function deleteById(int ${{ entity.getPk()|camel }})
     {
-        return $this->delete($this->get($id));
+        return $this->delete($this->get(${{ entity.getPk()|camel }}));
     }
 
     /**

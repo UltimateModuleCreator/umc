@@ -29,8 +29,8 @@ class AttributeTypeProductAttributeSet extends AttributeType
     public function getSourceModel(): string
     {
         $parts = [
-            $this->getAttribute()->getEntity()->getModule()->getUmcModuleName(),
             $this->getAttribute()->getEntity()->getModule()->getUmcCrudNamespace(),
+            $this->getAttribute()->getEntity()->getModule()->getUmcModuleName(),
             'Source',
             'Catalog',
             'ProductAttributeSet'

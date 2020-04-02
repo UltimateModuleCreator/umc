@@ -5,6 +5,7 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 use {{ entity.getInterface() }};
 use Magento\Framework\Model\AbstractModel;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
 
 class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|camel|ucfirst }}Interface
 {

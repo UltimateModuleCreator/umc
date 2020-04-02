@@ -421,7 +421,7 @@ class Attribute
      */
     public function isManualOptions(): bool
     {
-        return $this->type === 'dropdown' || $this->type === 'multiselect';
+        return $this->getTypeInstance()->isCanHaveOptions();
     }
 
     /**

@@ -47,6 +47,7 @@ rows:
       has_default: true
       label: Required
       title: This sets the attribute as required in the admin add/edit form
+      additionalDataBind: 'enable: canBeRequired'
       col: 2
     full_text:
       name: full_text
@@ -54,6 +55,7 @@ rows:
       has_default: true
       label: Full text
       title: This adds the attribute to the full text search index of the entity
+      additionalDataBind: 'enable: canBeFullText'
       col: 2
   -
     show_in_list:
@@ -103,6 +105,7 @@ rows:
       has_default: true
       label: Display Expanded
       title: If set yo "Yes" each field in the serialized group will be displayed on a separate line. If set to "No" they will all be on the same line
+      additionalDataBind: 'enable: hasExpanded'
       col: 2
   -
     note:

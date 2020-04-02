@@ -208,9 +208,9 @@
             </settings>
         </column>
 {% endif %}
-        <actionsColumn name="actions" class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Column\{{ entity.getNameSingular()|camel|ucfirst }}Actions">
+        <actionsColumn name="actions" class="{{ entity.getVirtualType('GridActions') }}">
             <settings>
-                <indexField>{{ entity.getNameSingular()|snake }}_id</indexField>
+                <indexField>{{ entity.getPk()|snake }}</indexField>
                 <resizeEnabled>false</resizeEnabled>
             </settings>
         </actionsColumn>

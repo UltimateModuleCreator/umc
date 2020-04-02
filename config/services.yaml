@@ -76,6 +76,7 @@ parameters:
       grid_filter_type: 'false'
       input_type: Multiselect
       schema_type: text
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: true
       templates:
@@ -132,6 +133,7 @@ parameters:
       input_type: Multiselect
       has_options: true
       schema_type: text
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: true
       templates:
@@ -159,6 +161,7 @@ parameters:
       input_type: Select
       has_options: true
       schema_type: varchar
+      schema_attributes: ' length="3"'
       can_be_serialized: true
       data_processor_required: false
       templates:
@@ -186,6 +189,7 @@ parameters:
       grid_filter_type: 'false'
       input_type: Multiselect
       schema_type: text
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: true
       templates:
@@ -214,6 +218,7 @@ parameters:
       input_type: Date
       has_options: false
       schema_type: timestamp
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: true
       templates:
@@ -288,8 +293,7 @@ parameters:
       can_have_options: false
       can_be_required: false
       full_text: true
-      sql_type_constant: TYPE_TEXT
-      sql_size: 255
+      upload: true
       type_hint: string
       input_type: File
       schema_type: varchar
@@ -309,6 +313,7 @@ parameters:
       can_have_options: false
       can_be_required: false
       full_text: false
+      upload: true
       type_hint: string
       input_type: File
       schema_type: varchar
@@ -361,6 +366,7 @@ parameters:
       grid_filter_type: 'false'
       input_type: Multiselect
       schema_type: text
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: true
       templates:
@@ -386,6 +392,7 @@ parameters:
       grid_filter_type: 'false'
       input_type: Textarea
       schema_type: text
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: false
       templates:
@@ -411,6 +418,7 @@ parameters:
       grid_filter_type: 'false'
       input_type: Textarea
       schema_type: mediumtext
+      schema_attributes: ''
       can_be_serialized: true
       data_processor_required: false
       templates:
@@ -464,6 +472,7 @@ parameters:
       multiple: false
       input_type: Serialized Fields
       schema_type: text
+      schema_attributes: ''
       can_be_serialized: false
       data_processor_required: true
       templates:

@@ -742,6 +742,6 @@ class Module
      */
     public function getAdminRoutePrefix(): string
     {
-        return $this->stringUtil->snake($this->getModuleName());
+        return str_replace('_', '', $this->stringUtil->snake($this->getModuleName()));
     }
 }

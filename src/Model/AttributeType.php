@@ -117,7 +117,7 @@ class AttributeType
         $this->fullText = (bool)($data['full_text'] ?? false);
         $this->typeHint = (string)($data['type_hint'] ?? 'string');
         $this->schemaType = (string)($data['schema_type'] ?? 'varchar');
-        $this->schemaAttributes = (string)($data['schema_attributes'] ?? 'length="255"');
+        $this->schemaAttributes = (string)($data['schema_attributes'] ?? '');
         $this->upload = (bool)($data['upload'] ?? false);
         $this->multiple = (bool)($data['multiple'] ?? false);
         $this->dataProcessorRequired = (bool)($data['data_processor_required'] ?? false);
