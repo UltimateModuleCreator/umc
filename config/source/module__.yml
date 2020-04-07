@@ -81,16 +81,6 @@ Helper/Image.php:
   label: "Image helper"
   scope: module
   template: source/Helper/Image.php.html.twig
-view/adminhtml/web/template/image-preview.html:
-  destination: view/adminhtml/web/template/image-preview.html
-  label: "Image preview template"
-  scope: module
-  template: source/view/adminhtml/web/template/image-preview.html.html.twig
-view/adminhtml/web/template/file-preview.html:
-  destination: view/adminhtml/web/template/file-preview.html
-  label: "File preview template"
-  scope: module
-  template: source/view/adminhtml/web/template/file-preview.html.html.twig
 view/frontend/templates/image.phtml:
   destination: view/frontend/templates/image.phtml
   label: "Image template for frontend"

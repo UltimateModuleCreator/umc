@@ -7,9 +7,9 @@
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="has_preview" xsi:type="string">1</item>
                     <item name="label" xsi:type="string" translate="true">{{ attribute.getLabel() }}</item>
-                    {% if attribute.isAdminGridHidden() %}
+{% if attribute.isAdminGridHidden() %}
                         <item name="visible" xsi:type="boolean">false</item>
-                    {% endif %}
+{% endif %}
                 </item>
             </argument>
         </column>

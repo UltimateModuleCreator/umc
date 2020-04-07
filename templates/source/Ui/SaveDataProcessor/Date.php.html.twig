@@ -1,4 +1,4 @@
-{% if not module.isUmcCrud() and module.isDateAttributes() %}
+{% if not module.isUmcCrud() and module.isProcessorWithType('save', 'date') %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 

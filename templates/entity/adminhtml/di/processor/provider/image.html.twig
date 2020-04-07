@@ -1,0 +1,11 @@
+    <virtualType name="{{ entity.getVirtualType('FormImageModifier') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\Form\DataModifier\Upload">
+        <arguments>
+            <argument name="uploader" xsi:type="object">{{ entity.getVirtualType('ImageUploader') }}</argument>
+            <argument name="fileInfo" xsi:type="object">{{ entity.getVirtualType('ImageInfo') }}</argument>
+            <argument name="fields" xsi:type="array">
+{% for attribute in attributes %}
+                <item name="{{ attribute.getCode() }}" xsi:type="string">{{ attribute.getCode() }}</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>

@@ -7,7 +7,7 @@ namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|ca
 use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
 use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\CollectionProviderInterface;
 
-class SomethingUiCollectionProvider implements CollectionProviderInterface
+class {{ entity.getNameSingular()|camel|ucfirst }}UiCollectionProvider implements CollectionProviderInterface
 {
     /**
      * @var CollectionFactory

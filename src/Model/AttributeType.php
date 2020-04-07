@@ -82,9 +82,9 @@ class AttributeType
      */
     private $upload;
     /**
-     * @var bool
+     * @var string[]
      */
-    private $dataProcessorRequired;
+    private $processor;
     /**
      * @var bool
      */
@@ -120,7 +120,7 @@ class AttributeType
         $this->schemaAttributes = (string)($data['schema_attributes'] ?? '');
         $this->upload = (bool)($data['upload'] ?? false);
         $this->multiple = (bool)($data['multiple'] ?? false);
-        $this->dataProcessorRequired = (bool)($data['data_processor_required'] ?? false);
+        $this->processor = $data['processor'] ?? [];
         $this->sourceModel = $data['source_model'] ?? null;
         $this->templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
     }
@@ -230,11 +230,12 @@ class AttributeType
     }
 
     /**
-     * @return bool
+     * @param $type
+     * @return string
      */
-    public function isDataProcessorRequired(): bool
+    public function getProcessorType($type): string
     {
-        return $this->dataProcessorRequired;
+        return (string)($this->processor[$type] ?? '');
     }
 
     /**
@@ -282,7 +283,7 @@ class AttributeType
      */
     public function getAttributeColumnSettingsStringXml() : string
     {
-        $attributes = $this->schemaAttributes;
+        $attributes = $this->getSchemaAttributes();
         if (strlen($attributes) > 0) {
             $attributes .= ' ';
         }

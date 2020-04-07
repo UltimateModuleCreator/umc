@@ -1,0 +1,73 @@
+    <!--[+] configure admin controllers to use the ui entity config for "{{ entity.getNameSingular() }}" -->
+    <type name="{{ entity.getAdminController('Index') }}">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+        </arguments>
+    </type>
+    <type name="{{ entity.getAdminController('Edit') }}">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+            <argument name="entityUiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
+        </arguments>
+    </type>
+    <type name="{{ entity.getAdminController('Save') }}">
+        <arguments>
+            <argument name="entityUiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
+            <argument name="dataProcessor" xsi:type="object">{{ entity.getSaveDataProcessor() }}</argument>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+        </arguments>
+    </type>
+    <type name="{{ entity.getAdminController('InlineEdit') }}">
+        <arguments>
+            <argument name="entityUiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
+            <argument name="dataProcessor" xsi:type="object">{{ entity.getSaveDataProcessor() }}</argument>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+        </arguments>
+    </type>
+    <type name="{{ entity.getAdminController('Delete') }}">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+            <argument name="uiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
+        </arguments>
+    </type>
+    <type name="{{ entity.getAdminController('MassDelete') }}">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+            <argument name="uiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
+            <argument name="collectionProvider" xsi:type="object">{{ entity.getModel('UiCollectionProvider') }}</argument>
+        </arguments>
+    </type>
+{% if entity.hasAttributeType('image') %}
+    <type name="{{ entity.getAdminController('Image\\Upload') }}">
+        <arguments>
+            <argument name="uploader" xsi:type="object">{{ entity.getVirtualType('ImageUploader') }}</argument>
+        </arguments>
+    </type>
+    <virtualType name="{{ entity.getVirtualType('ImageUploader') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\Uploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">{{ entity.getUploadFolder('image', true) }}</argument>
+            <argument name="basePath" xsi:type="string">{{ entity.getUploadFolder('image') }}</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+        </arguments>
+    </virtualType>
+{% endif %}
+{% if entity.hasAttributeType('file') %}
+    <type name="{{ entity.getAdminController('File\\Upload') }}">
+        <arguments>
+            <argument name="uploader" xsi:type="object">{{ entity.getVirtualType('FileUploader') }}</argument>
+        </arguments>
+    </type>
+    <virtualType name="{{ entity.getVirtualType('FileUploader') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\Uploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">{{ entity.getUploadFolder('file', true) }}</argument>
+            <argument name="basePath" xsi:type="string">{{ entity.getUploadFolder('file') }}</argument>
+            <argument name="allowedExtensions" xsi:type="array" />
+        </arguments>
+    </virtualType>
+{% endif %}
+    <!--[+] configure admin controllers to use the ui entity config for "{{ entity.getNameSingular() }}" -->

@@ -48,18 +48,4 @@ class AttributeTypeSerialized extends AttributeType
         }
         return false;
     }
-
-    /**
-     * @return bool
-     * TODO: check differently
-     */
-    public function isCanHaveOptions(): bool
-    {
-        foreach ($this->getAttribute()->getSerialized() as $serialized) {
-            if (in_array($serialized->getType(), ['dropdown', 'multiselect'])) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

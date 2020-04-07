@@ -85,7 +85,7 @@
                 <settings>
                     <callback>
                         <target>editSelected</target>
-                        <provider>{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_columns_editor</provider>
+                        <provider>{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_columns_editor</provider>
                     </callback>
                     <type>edit</type>
                     <label translate="true">Edit</label>
@@ -101,13 +101,13 @@
                     <item name="saveUrl" xsi:type="url" path="{{ module.getModuleName()|camel|lower }}/{{ entity.getNameSingular()|camel|lower }}/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
-                <param name="indexField" xsi:type="string">{{ entity.getNameSingular()|snake }}_id</param>
+                <param name="indexField" xsi:type="string">{{ entity.getPk() }}</param>
                 <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_columns.ids</param>
+                <param name="selectProvider" xsi:type="string">{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_columns.ids</param>
             </editorConfig>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getNamespace()|snake }}_{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_columns_editor</item>
+                    <item name="provider" xsi:type="string">{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing.{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_columns_editor</item>
                     <item name="target" xsi:type="string">startEdit</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
@@ -123,7 +123,7 @@
                 <resizeDefaultWidth>55</resizeDefaultWidth>
             </settings>
         </selectionsColumn>
-        <column name="{{ entity.getNameSingular()|snake }}_id">
+        <column name="{{ entity.getPk() }}">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">ID</label>

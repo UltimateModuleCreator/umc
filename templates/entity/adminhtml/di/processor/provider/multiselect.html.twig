@@ -1,0 +1,9 @@
+    <virtualType name="{{ entity.getVirtualType('FormMultiselectModifier') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\Form\DataModifier\Multiselect">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+    {% for attribute in attributes %}
+            <item name="{{ attribute.getCode() }}" xsi:type="string">{{ attribute.getCode() }}</item>
+    {% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>

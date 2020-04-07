@@ -163,3 +163,6 @@
 -
   source: etc/db_schema.xml
   label: Table schema definitions
+-
+  source: view/adminhtml/web/template/preview.html
+  label: Image / File preview admin template

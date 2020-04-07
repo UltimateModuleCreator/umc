@@ -121,6 +121,14 @@ class Attribute
      * @var StringUtil
      */
     private $stringUtil;
+    /**
+     * @var Serialized[]
+     */
+    private $serializedWithOptions;
+    /**
+     * @var string;
+     */
+    private $optionType;
 
     /**
      * Attribute constructor.
@@ -303,7 +311,6 @@ class Attribute
 
     /**
      * @return bool
-     * TODO: refactor this to use type instance
      */
     public function isSerialized(): bool
     {
@@ -320,16 +327,18 @@ class Attribute
 
     /**
      * @return Serialized[]
-     * //TODO: refactor to loop only one throught all serialized
      */
     public function getSerializedWithOptions(): array
     {
-        return array_filter(
-            $this->serialized,
-            function (Serialized $serialized) {
-                return $serialized->isManualOptions();
-            }
-        );
+        if ($this->serializedWithOptions === null) {
+            $this->serializedWithOptions = array_filter(
+                $this->getSerialized(),
+                function (Serialized $serialized) {
+                    return $serialized->isManualOptions();
+                }
+            );
+        }
+        return $this->serializedWithOptions;
     }
 
     /**
@@ -357,29 +366,6 @@ class Attribute
             $this->typeInstance = $this->typeFactory->create($this);
         }
         return $this->typeInstance;
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getProcessedOptions() : array
-    {
-        if ($this->processedOptions === null) {
-            $this->processedOptions = [];
-            $options = $this->getOptions();
-            if ($options != null) {
-                $options = explode(self::OPTIONS_DELIMITER, $options);
-                foreach ($options as $key => $option) {
-                    $option = trim($option);
-                    $this->processedOptions[$this->toConstantName($option)] = [
-                        'value' => $key + 1,
-                        'label' => $option
-                    ];
-                }
-            }
-        }
-        return $this->processedOptions;
     }
 
     /**
@@ -417,7 +403,6 @@ class Attribute
 
     /**
      * @return bool
-     * TODO: refactor this to use type instance methods
      */
     public function isManualOptions(): bool
     {
@@ -426,16 +411,19 @@ class Attribute
 
     /**
      * @return string
-     * //TODO: refactor this to loop only once
      */
     public function getOptionType(): string
     {
-        foreach ($this->getOptions() as $option) {
-            if (!is_numeric($option->getValue())) {
-                return 'string';
+        if ($this->optionType === null) {
+            $this->optionType = 'number';
+            foreach ($this->getOptions() as $option) {
+                if (!is_numeric($option->getValue())) {
+                    $this->optionType = 'string';
+                    break;
+                }
             }
         }
-        return 'number';
+        return $this->optionType;
     }
 
     /**
@@ -453,11 +441,12 @@ class Attribute
     }
 
     /**
-     * @return bool
+     * @param $type
+     * @return string
      */
-    public function isDataProcessorRequired(): bool
+    public function getProcessorType($type): string
     {
-        return $this->getTypeInstance()->isDataProcessorRequired();
+        return $this->getTypeInstance()->getProcessorType($type);
     }
 
     /**

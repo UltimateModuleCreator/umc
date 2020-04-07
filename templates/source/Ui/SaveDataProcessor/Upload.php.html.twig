@@ -1,4 +1,4 @@
-{% if not module.isUmcCrud() and module.isUpload() %}
+{% if not module.isUmcCrud() and (module.isProcessorWithType('save', 'image') or module.isProcessorWithType('save', 'file')) %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
@@ -69,7 +69,7 @@ class Upload implements SaveDataProcessorInterface
      * @param $value
      * @return string
      */
-    private function getUploadedImageName($value)
+    private function getUploadedName($value)
     {
         return (is_array($value) && isset($value[0]['file'])) ? $value[0]['file'] : '';
     }
@@ -85,7 +85,7 @@ class Upload implements SaveDataProcessorInterface
                 continue;
             }
             $value = $data[$field] ?? '';
-            if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
+            if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedName($value)) {
                 try {
                     $data[$field] = $this->uploader->moveFileFromTmp($imageName);
                 } catch (\Exception $e) {

@@ -258,11 +258,13 @@ class Entity
         $this->cacheData['attribute']['upload'] = [];
         $this->cacheData['attribute']['with_options'] = [];
         $this->cacheData['attribute']['codes'] = [];
-        $this->cacheData['attribute']['multiple'] = [];
         $this->cacheData['attribute']['data_processor_required'] = [];
         $this->cacheData['attribute']['product_attribute'] = [];
         $this->cacheData['attribute']['product_attribute_set'] = [];
         $this->cacheData['attribute']['full_text'] = [];
+        foreach ($this->getModule()->getProcessorTypes() as $processorType) {
+            $this->cacheData['attribute']['processor'][$processorType] = [];
+        }
         foreach ($this->getAttributes() as $attribute) {
             $type = $attribute->getType();
             $this->cacheData['attribute']['by_type'][$type] = $this->cacheData['attribute']['by_type'][$type] ?? [];
@@ -270,13 +272,19 @@ class Entity
             $this->cacheData['attribute']['codes'][] = $attribute->getCode();
             $attribute->isUpload() && ($this->cacheData['attribute']['upload'][] = $attribute);
             $attribute->isManualOptions() && ($this->cacheData['attribute']['with_options'][] = $attribute);
-            $attribute->isDataProcessorRequired() &&
-                ($this->cacheData['attribute']['data_processor_required'][] = $attribute);
-            $attribute->isMultiple() && ($this->cacheData['attribute']['multiple'][] = $attribute);
             $attribute->isProductAttribute() && ($this->cacheData['attribute']['product_attribute'][] = $attribute);
             $attribute->isProductAttributeSet()
                 && ($this->cacheData['attribute']['product_attribute_set'][] = $attribute);
             $attribute->isFullText() && ($this->cacheData['attribute']['full_text'][] = $attribute);
+            foreach ($this->getModule()->getProcessorTypes() as $processorType) {
+                $processor = $attribute->getProcessorType($processorType);
+                if ($processor === '') {
+                    continue;
+                }
+                $this->cacheData['attribute']['processor'][$processorType][$processor] =
+                    $this->cacheData['attribute']['processor'][$processorType][$processor] ?? [];
+                $this->cacheData['attribute']['processor'][$processorType][$processor][] = $attribute;
+            }
         }
     }
 
@@ -287,6 +295,27 @@ class Entity
     {
         $this->initAttributeCacheData();
         return count($this->cacheData['attribute']['product_attribute']) > 0;
+    }
+
+    /**
+     * @param $type
+     * @return Attribute[][]
+     */
+    public function getAttributesWithProcessor($type): array
+    {
+        $this->initAttributeCacheData();
+        return $this->cacheData['attribute']['processor'][$type] ?? [];
+    }
+
+    /**
+     * @param $processor
+     * @param $processorType
+     * @return Attribute[]
+     */
+    public function getAttributesWithProcessorType($processor, $processorType): array
+    {
+        $this->initAttributeCacheData();
+        return $this->cacheData['attribute']['processor'][$processor][$processorType] ?? [];
     }
 
     /**
@@ -344,15 +373,6 @@ class Entity
     }
 
     /**
-     * @return Attribute[]
-     */
-    public function getSerializedAttributes(): array
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['serialized'] ?? [];
-    }
-
-    /**
      * @param string $typeConfig
      * @return Attribute[]
      * @deprecated
@@ -377,7 +397,7 @@ class Entity
     public function getAttributesWithType(string $type): array
     {
         $this->initAttributeCacheData();
-        return $this->cacheData['attribute'][$type] ?? [];
+        return $this->cacheData['attribute']['by_type'][$type] ?? [];
     }
 
     /**
@@ -783,48 +803,6 @@ class Entity
 
     /**
      * @return bool
-     * TODO: check this using all available processors
-     */
-    public function hasDataProcessor(): bool
-    {
-        $this->initAttributeCacheData();
-        return count($this->cacheData['attribute']['data_processor_required']) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasDateDataProcessor(): bool
-    {
-        return count($this->getDateAttributes()) > 0;
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getDateAttributes()
-    {
-        return $this->getAttributesWithType('date');
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSerializedDataProcessor(): bool
-    {
-        return count($this->getSerializedAttributes()) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasMultipleAttributes(): bool
-    {
-        return count($this->getMultipleAttributes()) > 0;
-    }
-
-    /**
-     * @return bool
      */
     public function hasImageAttributes(): bool
     {
@@ -837,15 +815,6 @@ class Entity
     public function hasFileAttributes(): bool
     {
         return count($this->getFileAttributes()) > 0;
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getMultipleAttributes(): array
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['multiple'];
     }
 
     /**
@@ -869,7 +838,7 @@ class Entity
      */
     public function getSaveDataProcessor(): string
     {
-        return ($this->hasDataProcessor())
+        return (count($this->getAttributesWithProcessor('save')) > 0)
             ? $this->getVirtualType('SaveDataProcessor')
             : $this->module->getNullSaveDataProcessor();
     }
@@ -879,7 +848,7 @@ class Entity
      */
     public function getFormDataModifier(): string
     {
-        return ($this->hasFormDataModifier())
+        return (count($this->getAttributesWithProcessor('provider')) > 0)
             ? $this->getVirtualType('FormDataModifier')
             : $this->module->getNullFormDataModifier();
     }

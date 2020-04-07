@@ -47,7 +47,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Repo implements {{ entity.getN
                 __($exception->getMessage())
             );
         }
-        return $entity;
+        return ${{ entity.getNameSingular()|camel }};
     }
 
     /**

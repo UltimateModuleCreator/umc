@@ -81,21 +81,36 @@ class Serialized
      * @var SerializedOption[]
      */
     private $options;
+    /**
+     * @var SerializedTypeFactory
+     */
+    private $typeFactory;
+    /**
+     * @var SerializedType
+     */
+    private $typeInstance;
+    /**
+     * @var string
+     */
+    private $optionType;
 
     /**
      * Serialized constructor.
      * @param SerializedOptionFactory $optionFactory
+     * @param SerializedTypeFactory $typeFactory
      * @param StringUtil $stringUtil
      * @param Attribute $attribute
      * @param array $data
      */
     public function __construct(
         SerializedOptionFactory $optionFactory,
+        SerializedTypeFactory $typeFactory,
         StringUtil $stringUtil,
         Attribute $attribute,
         array $data = []
     ) {
         $this->attribute = $attribute;
+        $this->typeFactory = $typeFactory;
         $this->optionFactory = $optionFactory;
         $this->stringUtil = $stringUtil;
         $this->code = (string)($data['code'] ?? '');
@@ -206,11 +221,10 @@ class Serialized
 
     /**
      * @return bool
-     * TODO: refactor this to use serialized types
      */
     public function isManualOptions(): bool
     {
-        return $this->type === 'dropdown' || $this->type === 'multiselect';
+        return $this->typeInstance->isCanHaveOptions();
     }
 
     /**
@@ -223,16 +237,19 @@ class Serialized
 
     /**
      * @return string
-     * //TODO: refactor this to loop only once
      */
     public function getOptionType(): string
     {
-        foreach ($this->getOptions() as $option) {
-            if (!is_numeric($option->getValue())) {
-                return 'string';
+        if ($this->optionType === null) {
+            $this->optionType = 'number';
+            foreach ($this->getOptions() as $option) {
+                if (!is_numeric($option->getValue())) {
+                    $this->optionType = 'sting';
+                    break;
+                }
             }
         }
-        return 'number';
+        return $this->optionType;
     }
 
     /**
@@ -276,11 +293,13 @@ class Serialized
     }
 
     /**
-     * @return string
-     * //TODO: use templates to render stuff
+     * @return SerializedType
      */
-    public function renderForm(): string
+    public function getTypeInstance()
     {
-        return '';
+        if ($this->typeInstance === null) {
+            $this->typeInstance = $this->typeFactory->create($this);
+        }
+        return $this->typeInstance;
     }
 }

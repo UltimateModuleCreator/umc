@@ -6,7 +6,7 @@ namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|ca
 use Magento\Framework\Api\SearchResults;
 use {{ entity.getSearchResultsInterface() }};
 
-class {{ entity.getNameSingular()|camel|ucfirst }}SearchResults extends SearchResults implements SomethingSearchResultsInterface
+class {{ entity.getNameSingular()|camel|ucfirst }}SearchResults extends SearchResults implements {{ entity.getNameSingular()|camel|ucfirst }}SearchResultsInterface
 {
 
 }

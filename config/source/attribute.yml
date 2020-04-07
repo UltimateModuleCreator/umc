@@ -1,8 +1,3 @@
-Model/Entity/Source/Attribute.php:
-  destination: Model/_Entity_/Source/_Code_.php
-  label: "Attribute Options Source Model"
-  scope: attribute
-  template: source/Model/Entity/Source/Attribute.php.html.twig
 view/base/web/images/entity/placeholder/attribute.png:
   destination: view/base/web/images/_entity_/placeholder/_code_.png
   scope: attribute

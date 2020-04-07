@@ -505,12 +505,11 @@ class Module
                 'product_attribute' => [],
                 'product_attribute_set' => [],
                 'option_attribute' => [],
-                'serialized' => [],
-                'multiple_attributes' => [],
-                'date_attributes' => [],
-                'data_processor' => []
             ]
         ];
+        foreach ($this->getProcessorTypes() as $processorType) {
+            $this->cacheData['entity']['processor'][$processorType] = [];
+        }
         foreach ($this->getEntities() as $entity) {
             if ($entity->isFrontendView()) {
                 $this->cacheData['entity']['frontend_view'][] = $entity;
@@ -551,55 +550,36 @@ class Module
             if ($entity->hasOptionAttributes()) {
                 $this->cacheData['entity']['option_attribute'][] = $entity;
             }
-            if ($entity->hasMultipleAttributes()) {
-                $this->cacheData['entity']['multiple_attributes'][] = $entity;
-            }
-            if ($entity->hasSerializedDataProcessor()) {
-                $this->cacheData['entity']['serialized'][] = $entity;
-            }
-            if ($entity->hasDateDataProcessor()) {
-                $this->cacheData['entity']['date_attributes'][] = $entity;
-            }
-            if ($entity->hasDataProcessor()) {
-                $this->cacheData['entity']['data_processor'][] = $entity;
+            foreach ($this->getProcessorTypes() as $processorType) {
+                foreach ($entity->getAttributesWithProcessor($processorType) as $type => $attributes) {
+                    $this->cacheData['entity']['processor'][$processorType][$type] =
+                        $this->cacheData['entity']['processor'][$processorType][$type] ?? [];
+                    $this->cacheData['entity']['processor'][$processorType][$type][] = $entity;
+                }
+
             }
         }
     }
 
     /**
+     * @param $processorType
      * @return bool
      */
-    public function isMultipleAttributes(): bool
+    public function isProcessor($processorType): bool
     {
         $this->initEntityCacheData();
-        return count($this->cacheData['entity']['multiple_attributes']) > 0;
+        return isset($this->cacheData['entity']['processor'][$processorType]);
     }
 
     /**
+     * @param $processorType
+     * @param $type
      * @return bool
      */
-    public function isDataProcessor(): bool
+    public function isProcessorWithType($processorType, $type)
     {
         $this->initEntityCacheData();
-        return count($this->cacheData['entity']['data_processor']) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDateAttributes(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->cacheData['entity']['date_attributes']) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSerializedAttributes(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->cacheData['entity']['serialized']) > 0;
+        return isset($this->cacheData['entity']['processor'][$processorType][$type]);
     }
 
     /**
@@ -723,7 +703,6 @@ class Module
 
     /**
      * @return string
-     * //TODO: memoize result
      */
     public function getNullSaveDataProcessor(): string
     {
@@ -740,8 +719,32 @@ class Module
     /**
      * @return string
      */
+    public function getNullFormDataModifier(): string
+    {
+        $parts = [
+            $this->getUmcCrudNamespace(),
+            $this->getUmcModuleName(),
+            'Ui',
+            'Form',
+            'DataModifier',
+            'NullModifier'
+        ];
+        return $this->stringUtil->glueClassParts($parts);
+    }
+
+    /**
+     * @return string
+     */
     public function getAdminRoutePrefix(): string
     {
         return str_replace('_', '', $this->stringUtil->snake($this->getModuleName()));
+    }
+
+    /**
+     * @return array
+     */
+    public function getProcessorTypes(): array
+    {
+        return ['save', 'provider'];
     }
 }

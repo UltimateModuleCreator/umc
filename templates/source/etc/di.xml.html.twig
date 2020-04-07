@@ -153,17 +153,17 @@
         </arguments>
     </virtualType>
 {% endfor %}
-{% for attribute in entity.getSerializedAttributes() %}
+{% for attribute in entity.getAttributesWithType('serialized') %}
 {% for serialized in attribute.getSerializedWithOptions() %}
     <virtualType name="{{ serialized.getOptionSourceVirtualType() }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Source\Options">
         <arguments>
             <argument name="options" xsi:type="array">
-                {% for option in serialized.getOptions() %}
+{% for option in serialized.getOptions() %}
                     <item name="{{ option.getValue() }}" xsi:type="array">
-                        <item name="value" xsi:type="{{ attribute.getOptionType() }}">{{ option.getValue() }}</item>
+                        <item name="value" xsi:type="{{ serialized.getOptionType() }}">{{ option.getValue() }}</item>
                         <item name="label" xsi:type="string" translatable="true">{{ option.getLabel() }}</item>
                     </item>
-                {% endfor %}
+{% endfor %}
             </argument>
         </arguments>
     </virtualType>

@@ -33,14 +33,24 @@ class SerializedFactory
      * @var StringUtil
      */
     private $stringUtil;
+    /**
+     * @var SerializedTypeFactory
+     */
+    private $typeFactory;
 
     /**
      * SerializedFactory constructor.
      * @param SerializedOptionFactory $optionFactory
+     * @param SerializedTypeFactory $typeFactory
+     * @param StringUtil $stringUtil
      */
-    public function __construct(SerializedOptionFactory $optionFactory, StringUtil $stringUtil)
-    {
+    public function __construct(
+        SerializedOptionFactory $optionFactory,
+        SerializedTypeFactory $typeFactory,
+        StringUtil $stringUtil
+    ) {
         $this->optionFactory = $optionFactory;
+        $this->typeFactory = $typeFactory;
         $this->stringUtil = $stringUtil;
     }
 
@@ -51,6 +61,6 @@ class SerializedFactory
      */
     public function create(Attribute $attribute, array $data = []): Serialized
     {
-        return new Serialized($this->optionFactory, $this->stringUtil, $attribute, $data);
+        return new Serialized($this->optionFactory, $this->typeFactory, $this->stringUtil, $attribute, $data);
     }
 }

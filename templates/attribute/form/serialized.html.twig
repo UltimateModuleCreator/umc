@@ -18,9 +18,19 @@
                         <item name="showFallbackReset" xsi:type="boolean">false</item>
                     </item>
                 </argument>
+{% if attribute.isExpanded() %}
+                <fieldset name="{{ attribute.getCode() }}_row">
+                    <settings>
+                        <label translate="true">{{ attribute.getLabel()|ucfirst }}</label>
+                        <collapsible>true</collapsible>
+                    </settings>
+{% endif %}
 {% for field in attribute.getSerialized() %}
-{{ field.renderForm() }}
+{{ field.getTypeInstance().renderForm()|raw }}
 {% endfor %}
+{% if attribute.isExpanded() %}
+                </fieldset>
+{% endif %}
                 <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">

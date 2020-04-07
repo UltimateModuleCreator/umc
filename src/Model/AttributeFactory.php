@@ -63,8 +63,9 @@ class AttributeFactory
     }
 
     /**
+     * @param Entity $entity
      * @param array $data
-     * @return Attribute | AbstractModel
+     * @return Attribute
      */
     public function create(Entity $entity, array $data = []) : Attribute
     {

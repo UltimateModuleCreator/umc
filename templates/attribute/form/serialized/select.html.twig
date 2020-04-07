@@ -1,0 +1,41 @@
+                {{ indent }}<field name="{{ field.getCode() }}" formElement="select" component="Magento_Ui/js/form/element/ui-select">
+                    {{ indent }}<argument name="data" xsi:type="array">
+                        {{ indent }}<item name="config" xsi:type="array">
+                            {{ indent }}<item name="source" xsi:type="string">{{  attribute.getCode() }}</item>
+{% if field.getDefaultValue() %}
+                            {{ indent }}<item name="default" xsi:type="string">{{ field.getDefaultValue() }}</item>
+{% endif %}
+                            {{ indent }}<item name="filterOptions" xsi:type="boolean">true</item>
+                            {{ indent }}<item name="chipsEnabled" xsi:type="boolean">true</item>
+                            {{ indent }}<item name="disableLabel" xsi:type="boolean">true</item>
+                            {{ indent }}<item name="multiple" xsi:type="boolean">{{ type.getMultipleText() }}</item>
+                        {{ indent }}</item>
+                    {{ indent }}</argument>
+                    {{ indent }}<settings>
+                        {{ indent }}<elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
+                        {{ indent }}<dataType>text</dataType>
+                        {{ indent }}<label translate="true">{{ field.getLabel() }}</label>
+                        {{ indent }}<dataScope>{{ field.getCode() }}</dataScope>
+{% if field.isRequired() %}
+                        {{ indent }}<validation>
+                            {{ indent }}<rule name="required-entry" xsi:type="boolean">true</rule>
+                        {{ indent }}</validation>
+{% endif %}
+                        {{ indent }}<componentType>field</componentType>
+{% if field.getNote() %}
+                        {{ indent }}<notice>{{ attribute.getNote() }}</notice>
+{% endif %}
+{% if field.getTooltip() %}
+                        {{ indent }}<tooltip>
+                            {{ indent }}<description>{{ field.getTooltip() }}</description>
+                        {{ indent }}</tooltip>
+{% endif %}
+                    {{ indent }}</settings>
+                    {{ indent }}<formElements>
+                        {{ indent }}<select>
+                            {{ indent }}<settings>
+                                {{ indent }}<options class="{{ type.getSourceModel() }}"/>
+                            {{ indent }}</settings>
+                        {{ indent }}</select>
+                    {{ indent }}</formElements>
+                {{ indent }}</field>

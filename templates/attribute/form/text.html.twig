@@ -19,5 +19,10 @@
 {% if attribute.getNote() %}
                 <notice>{{ attribute.getNote() }}</notice>
 {% endif %}
+{% if attribute.getTooltip() %}
+                <tooltip>
+                    <description>{{ attribute.getTooltip() }}</description>
+                </tooltip>
+{% endif %}
             </settings>
         </field>

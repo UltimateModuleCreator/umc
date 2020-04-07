@@ -1,4 +1,4 @@
-{% if not module.isUmcCrud() and module.isDataProcessor() %}
+{% if not module.isUmcCrud() and module.isProcessor('provider') %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 

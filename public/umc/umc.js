@@ -137,7 +137,7 @@ UMC.Entity = function (data) {
     UMC.initModel(this, data, UMC.config.entity);
     this.nameChange = function (value) {
         if (value.data.is_name()) {
-            self.attributes().forEach(function (attribute) {
+            self.children['_attributes']().forEach(function (attribute) {
                 attribute.data.is_name(false);
             });
             value.data.is_name(true);

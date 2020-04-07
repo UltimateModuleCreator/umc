@@ -1,0 +1,16 @@
+{% for type, attributes in entity.getAttributesWithProcessor('save') %}
+{% include 'entity/adminhtml/di/processor/save/'~ type ~'.html.twig' with {module: module, enitity: entity, attributes: attributes} %}
+{% endfor %}
+{% if entity.getAttributesWithProcessor('save')|length > 0 %}
+    <virtualType name="{{ entity.getVirtualType('SaveDataProcessor') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+{% for type, attributes in entity.getAttributesWithProcessor('save') %}
+{% set ucType = 'Save' ~ type|ucfirst ~ 'Processor' %}
+                <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>
+{% endif %}
+

@@ -1,49 +1,45 @@
-{% if not module.isUmcCrud() and module.isMultipleAttributes() %}
+{% if not module.isUmcCrud() and module.isProcessorWithType('provider', 'multiselect') %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
 namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifier;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Serialize\Serializer\Json;
 use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifierInterface;
 
 class Multiselect implements DataModifierInterface
 {
-    /**
-     * @var Json
-     */
-    private $serializer;
     /**
      * @var array
      */
     private $fields;
 
     /**
-     * DynamicRows constructor.
-     * @param Json $serializer
+     * Multiselect constructor.
      * @param array $fields
      */
-    public function __construct(Json $serializer, array $fields)
+    public function __construct(array $fields)
     {
-        $this->serializer = $serializer;
         $this->fields = $fields;
     }
 
     /**
-     * @param AbstractModel $model
-     * @param array $data
-     * @return array
-     */
+    * @param AbstractModel $model
+    * @param array $data
+    * @return array
+    * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+    */
     public function modifyData(AbstractModel $model, array $data): array
     {
         foreach ($this->fields as $field) {
-            if (array_key_exists($field, $data) && !is_array($data[$field])) {
-                try {
-                    $data[$field] = $this->serializer->unserialize($data[$field]);
-                } catch (\Exception $e) {
-                    $data[$field] = [];
-                }
+            if (!array_key_exists($field, $data)) {
+                continue;
+            }
+            if ($data[$field] === null) {
+                $data[$field] = [];
+            }
+            if (is_string($data[$field])) {
+                $data[$field] = explode(',', $data[$field]);
             }
         }
         return $data;

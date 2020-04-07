@@ -13,12 +13,17 @@
                 <label translate="true">{{ attribute.getLabel() }}</label>
                 <dataScope>{{ attribute.getCode() }}</dataScope>
 {% if attribute.isRequired() %}
-                    <validation>
-                        <rule name="required-entry" xsi:type="boolean">true</rule>
-                    </validation>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
 {% endif %}
 {% if attribute.getNote() %}
-                    <notice>{{ attribute.getNote() }}</notice>
+                <notice>{{ attribute.getNote() }}</notice>
+{% endif %}
+{% if attribute.getTooltip() %}
+                <tooltip>
+                    <description>{{ attribute.getTooltip() }}</description>
+                </tooltip>
 {% endif %}
             </settings>
         </field>

@@ -1,0 +1,34 @@
+                {{ indent }}<field name="{{ field.getCode() }}" formElement="checkbox">
+                    {{ indent }}<argument name="data" xsi:type="array">
+                        {{ indent }}<item name="config" xsi:type="array">
+                            {{ indent }}<item name="source" xsi:type="string">{{  attribute.getCode() }}</item>
+{% if field.getDefaultValue() %}
+                            {{ indent }}<item name="default" xsi:type="string">{{ field.getDefaultValue() }}</item>
+{% endif %}
+                        {{ indent }}</item>
+                    {{ indent }}</argument>
+                    {{ indent }}<settings>
+                        {{ indent }}<dataType>text</dataType>
+                        {{ indent }}<label translate="true">{{ field.getLabel() }}</label>
+                        {{ indent }}<dataScope>{{ field.getCode() }}</dataScope>
+{% if field.getNote() %}
+                        {{ indent }}<notice>{{ field.getNote() }}</notice>
+{% endif %}
+{% if field.getTooltip() %}
+                        {{ indent }}<tooltip>
+                            {{ indent }}<description>{{ field.getTooltip() }}</description>
+                        {{ indent }}</tooltip>
+{% endif %}
+                    {{ indent }}</settings>
+                    {{ indent }}<formElements>
+                        {{ indent }}<checkbox>
+                            {{ indent }}<settings>
+                                {{ indent }}<valueMap>
+                                    {{ indent }}<map name="false" xsi:type="number">0</map>
+                                    {{ indent }}<map name="true" xsi:type="number">1</map>
+                                {{ indent }}</valueMap>
+                            {{ indent }}<prefer>toggle</prefer>
+                            {{ indent }}</settings>
+                        {{ indent }}</checkbox>
+                    {{ indent }}</formElements>
+                {{ indent }}</field>

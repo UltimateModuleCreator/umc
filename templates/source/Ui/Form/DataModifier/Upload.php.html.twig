@@ -1,4 +1,4 @@
-{% if not module.isUmcCrud() and module.isUpload() %}
+{% if not module.isUmcCrud() and (module.isProcessorWithType('provider', 'image') or module.isProcessorWithType('provider', 'file')) %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
@@ -6,7 +6,7 @@ namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|ca
 
 use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\FileInfo;
 use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\Uploader;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}d\Ui\Form\DataModifierInterface;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifierInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
