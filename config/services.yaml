@@ -267,7 +267,7 @@ parameters:
             view: false
     dropdown:
       label: Dropdown
-      class: App\Model\AttributeTypeDropdown
+      class: App\Model\Attribute\Dropdown
       can_be_name: false
       can_show_in_grid: true
       can_have_options: true
@@ -469,7 +469,7 @@ parameters:
             view: false
     serialized:
       label: Serialized
-      class: \App\Model\AttributeTypeSerialized
+      class: \App\Model\Attribute\Serialized
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
@@ -921,16 +921,13 @@ services:
         $standards: [PSR1, PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
         $phpcsPath: '%kernel.root_dir%/../vendor/squizlabs/php_codesniffer/bin/phpcs'
 
-    App\Model\ModuleFactory:
+    App\Model\Module\Factory:
       arguments:
         $licenseFormatter:
           php: '@App\Service\License\Php'
           xml: '@App\Service\License\Xml'
         $menuConfig: '%menu_type_config%'
-    App\Model\Attribute\TypeFactory:
-      arguments:
-        $map: '%attribute_type_config%'
-    App\Model\SerializedTypeFactory:
+    App\Model\Attribute\Serialized\Type\Factory:
       arguments:
         $typeMap: '%attribute_type_config%'
 
@@ -939,7 +936,7 @@ services:
         $path: '%defaults_path%'
         $file: '%defaults_file%'
 
-    App\Model\Attribute\AttributeTypeFactory:
+    App\Model\Attribute\Type\Factory:
       arguments:
         $typeMap: '%attribute_type_config%'
 

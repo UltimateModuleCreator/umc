@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\Settings;
+use App\Service\Form\Loader;
 use App\Service\ModuleList;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
@@ -45,9 +46,9 @@ class SettingsTest extends TestCase
      */
     private $router;
     /**
-     * @var FormFactoryInterface | MockObject
+     * @var Loader | MockObject
      */
-    private $formFactory;
+    private $formLoader;
 
     /**
      * setup tests
@@ -58,9 +59,7 @@ class SettingsTest extends TestCase
         $this->settingsModel = $this->createMock(\App\Model\Settings::class);
         $this->router = $this->createMock(Router::class);
         $this->router->expects($this->once())->method('generate')->willReturn('route');
-        $this->formFactory = $this->createMock(FormFactoryInterface::class);
-        $this->formFactory->expects($this->once())->method('create')
-            ->willReturn($this->createMock(FormInterface::class));
+        $this->formLoader = $this->createMock(Loader::class);
     }
 
     /**
@@ -72,7 +71,7 @@ class SettingsTest extends TestCase
         $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template));
         $this->settingsModel->expects($this->once())->method('getSettings')->willReturn([]);
         /** @var ModuleList | MockObject $moduleList */
-        $settings = new Settings($this->twig, $this->template, $this->settingsModel);
+        $settings = new Settings($this->twig, $this->template, $this->settingsModel, $this->formLoader);
         /** @var ContainerInterface | MockObject $container */
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnMap([

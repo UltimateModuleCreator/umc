@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Service\Form\Loader;
-use App\Util\OptionGroup;
 use App\Util\YamlLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -63,6 +62,7 @@ class Edit extends AbstractController
      * @param RequestStack $requestStack
      * @param YamlLoader $yamlLoader
      * @param \App\Model\Settings $settingsModel
+     * @param Loader $formLoader
      * @param string $basePath
      * @param array $attributeConfig
      */

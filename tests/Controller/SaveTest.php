@@ -20,7 +20,6 @@ namespace App\Tests\Controller;
 use App\Controller\Save;
 use App\Model\Module;
 use App\Service\Builder;
-use App\Service\ModuleLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -44,9 +43,9 @@ class SaveTest extends TestCase
      */
     private $builder;
     /**
-     * @var ModuleLoader | MockObject
+     * @var Module\Factory | MockObject
      */
-    private $moduleLoader;
+    private $moduleFactory;
     /**
      * @var Router | MockObject
      */
@@ -65,9 +64,9 @@ class SaveTest extends TestCase
         $this->request = $this->createMock(Request::class);
         $this->requestStack->method('getCurrentRequest')->willReturn($this->request);
         $this->builder = $this->createMock(Builder::class);
-        $this->moduleLoader = $this->createMock(ModuleLoader::class);
+        $this->moduleFactory = $this->createMock(Module\Factory::class);
         $this->router = $this->createMock(Router::class);
-        $this->save = new Save($this->requestStack, $this->builder, $this->moduleLoader);
+        $this->save = new Save($this->requestStack, $this->builder, $this->moduleFactory);
         /** @var ContainerInterface | MockObject $container */
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnMap([
@@ -104,7 +103,7 @@ class SaveTest extends TestCase
                 ]
             ]
         ]);
-        $this->moduleLoader->expects($this->once())->method('loadModule')
+        $this->moduleFactory->expects($this->once())->method('create')
             ->willReturn($this->createMock(Module::class));
         $this->router->expects($this->once())->method('generate')->willReturn('url');
         $this->assertInstanceOf(JsonResponse::class, $this->save->run());

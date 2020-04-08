@@ -19,9 +19,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\ModuleFactory;
+use App\Model\Module\Factory;
 use App\Service\Builder;
-use App\Service\ModuleLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -37,7 +36,7 @@ class Save extends AbstractController
      */
     private $builder;
     /**
-     * @var ModuleFactory
+     * @var Factory
      */
     private $moduleFactory;
 
@@ -45,12 +44,12 @@ class Save extends AbstractController
      * Save constructor.
      * @param RequestStack $requestStack
      * @param Builder $builder
-     * @param ModuleFactory $moduleFactory
+     * @param Factory $moduleFactory
      */
     public function __construct(
         RequestStack $requestStack,
         Builder $builder,
-        ModuleFactory $moduleFactory
+        Factory $moduleFactory
     ) {
         $this->requestStack = $requestStack;
         $this->builder = $builder;
@@ -73,7 +72,6 @@ class Save extends AbstractController
             $response['module'] = $module->getExtensionName();
         } catch (\Exception $e) {
             $response['success'] = false;
-//            $response['message'] = '<pre>' . print_r($module->getComposerDependencies(), true) . '</pre>';
             $response['message'] = $e->getMessage() . '<pre>' . $this->getExceptionTraceAsString($e) . '</pre>';
         }
         return new JsonResponse($response);

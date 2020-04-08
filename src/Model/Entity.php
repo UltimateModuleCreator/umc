@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Attribute\Factory as AttributeFactory;
 use App\Service\Form\OptionProvider\FrontendMenuLink;
 use App\Util\StringUtil;
 
@@ -206,7 +207,7 @@ class Entity
      */
     public function isSeo(): bool
     {
-        return $this->seo;
+        return $this->isFrontendView() && $this->seo;
     }
 
     /**
@@ -373,84 +374,13 @@ class Entity
     }
 
     /**
-     * @param string $typeConfig
+     * @param string $type
      * @return Attribute[]
-     * @deprecated
-     */
-    public function getAttributesWithTypeConfig(string $typeConfig): array
-    {
-        return array_values(
-            array_filter(
-                $this->getAttributes(),
-                function (Attribute $item) use ($typeConfig) {
-                    return $item->getTypeInstance()->getData($typeConfig);
-                }
-            )
-        );
-    }
-
-    /**
-     * @param string $typeConfig
-     * @return Attribute[]
-     * @deprecated
      */
     public function getAttributesWithType(string $type): array
     {
         $this->initAttributeCacheData();
         return $this->cacheData['attribute']['by_type'][$type] ?? [];
-    }
-
-    /**
-     * @param string $typeConfig
-     * @param int $tabs
-     * @return string
-     * @deprecated
-     */
-    public function getAttributesWithTypeConfigString(string $typeConfig, int $tabs = 0): string
-    {
-        return $this->arrayToPrintString(
-            $this->getAttributeCodes($this->getAttributesWithTypeConfig($typeConfig)),
-            $tabs
-        );
-    }
-
-    /**
-     * @param string $type
-     * @param int $tabs
-     * @return string
-     * @deprecated
-     */
-    public function getAttributesWithTypeString(string $type, int $tabs = 0): string
-    {
-        return $this->arrayToPrintString(
-            $this->getAttributeCodes($this->getAttributesWithType($type)),
-            $tabs
-        );
-    }
-
-    /**
-     * @param Attribute[] $attributes
-     * @return array
-     */
-    private function getAttributeCodes(array $attributes): array
-    {
-        return array_map(
-            function (Attribute $item) {
-                return $item->getCode();
-            },
-            $attributes
-        );
-    }
-
-    /**
-     * @param array $codes
-     * @param int $tabs
-     * @return string
-     */
-    private function arrayToPrintString($codes, $tabs = 0): string
-    {
-        $pad = str_repeat(' ', 4 * $tabs);
-        return (count($codes)) ? $pad . "'" . implode("'," . PHP_EOL . $pad . "'", $codes) . "'" : '';
     }
 
     /**
@@ -575,7 +505,7 @@ class Entity
     }
 
     /**
-     * @param string $suffix
+     * @param string $name
      * @return string
      */
     public function getAdminController($name): string
@@ -776,6 +706,7 @@ class Entity
     }
 
     /**
+     * @param $suffix
      * @return string
      */
     public function getVirtualType($suffix): string

@@ -45,6 +45,6 @@ class YamlLoader
      */
     public function arrayToYaml(array $array) : string
     {
-        return Yaml::dump($array,100, 2, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
+        return Yaml::dump($array, 100, 2, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
     }
 }

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Entity\Factory as EntityFactory;
 use App\Service\Form\OptionProvider\FrontendMenuLink;
 use App\Service\License\ProcessorInterface;
 use App\Util\StringUtil;
@@ -358,7 +359,6 @@ class Module
     /**
      * @param $type
      * @return bool
-     * @deprecated
      */
     public function hasAttributeType($type) : bool
     {
@@ -412,23 +412,6 @@ class Module
         };
         $this->cacheData['menu_parents'] = array_reverse($parents);
         return $this->cacheData['menu_parents'];
-    }
-
-    /**
-     * @param $property
-     * @return array
-     * @deprecated
-     */
-    public function getEntitiesWithProperty($property) : array
-    {
-        return array_values(
-            array_filter(
-                $this->getEntities(),
-                function (Entity $entity) use ($property) {
-                    return $entity->getData($property) !== "0" && $entity->getData($property) !== null;
-                }
-            )
-        );
     }
 
     /**
@@ -556,7 +539,6 @@ class Module
                         $this->cacheData['entity']['processor'][$processorType][$type] ?? [];
                     $this->cacheData['entity']['processor'][$processorType][$type][] = $entity;
                 }
-
             }
         }
     }

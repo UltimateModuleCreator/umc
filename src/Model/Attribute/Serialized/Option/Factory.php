@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,18 +16,23 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
-namespace App\Service\Generator;
+namespace App\Model\Attribute\Serialized\Option;
 
-use App\Model\Module;
+use App\Model\Attribute\Serialized;
+use App\Model\Attribute\Serialized\Option;
 
-interface GeneratorInterface
+class Factory
 {
     /**
-     * @param Module $module
-     * @param array $fileConfig
-     * @return array
+     * @param Serialized $field
+     * @param array $data
+     * @return Option
      */
-    public function generateContent(Module $module, array $fileConfig) : array;
+    public function create(Serialized $field, array $data = []): Option
+    {
+        return new Option($field, $data);
+    }
 }

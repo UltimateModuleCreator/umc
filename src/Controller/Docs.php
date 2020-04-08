@@ -32,7 +32,6 @@ class Docs extends AbstractController
 
     /**
      * Files constructor.
-     * @param Reader $reader
      * @param string $template
      */
     public function __construct(string $template)

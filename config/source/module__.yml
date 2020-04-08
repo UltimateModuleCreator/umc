@@ -20,33 +20,6 @@ etc/frontend/di.xml:
   scope: module
   template: source/etc/frontend/di.xml.html.twig
 
-
-Model/UploaderPool.php:
-  destination: Model/UploaderPool.php
-  label: "Pool of uploaders"
-  scope: module
-  template: source/Model/UploaderPool.php.html.twig
-
-Model/DateFilter.php:
-  destination: Model/DateFilter.php
-  label: "Filter for date inputs"
-  scope: module
-  template: source/Model/DateFilter.php.html.twig
-Model/UploadPath.php:
-  destination: Model/UploadPath.php
-  label: "Upload paths for all entities"
-  scope: module
-  template: source/Model/UploadPath.php.html.twig
-Model/Source/ProductAttribute.php:
-  destination: Model/Source/ProductAttribute.php
-  label: "Product Attribute Source Model"
-  scope: module
-  template: source/Model/Source/ProductAttribute.php.html.twig
-Model/Source/ProductAttributeSet.php:
-  destination: Model/Source/ProductAttributeSet.php
-  label: "Product Attribute Set Source Model"
-  scope: module
-  template: source/Model/Source/ProductAttributeSet.php.html.twig
 Model/Output.php:
   destination: Model/Output.php
   label: "Model for filtering wysiwyg output"

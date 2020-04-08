@@ -62,6 +62,6 @@ class PhpTest extends TestCase
         $replacer = $this->createMock(Replacer::class);
         $replacer->method('replaceVars')->willReturn('');
         $php = new Php($replacer);
-        $this->assertEquals('', $php->process($module));
+        $this->assertEquals("\n", $php->process($module));
     }
 }

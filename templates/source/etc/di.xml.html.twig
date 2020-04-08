@@ -82,13 +82,6 @@
         </arguments>
     </virtualType>
 {% endfor %}
-{% if module.hasAttributeType('wysiwyg') and module.isFrontend() %}
-    <type name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\Output">
-        <arguments>
-            <argument name="templateProcessor" xsi:type="object">Magento\Widget\Model\Template\Filter</argument>
-        </arguments>
-    </type>
-{% endif %}
 {% for entity in module.getStoreEntities() %}
     <virtualType name="{{ entity.getStoreHandler('Read') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\ReadHandler">
         <arguments>

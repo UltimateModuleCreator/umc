@@ -19,18 +19,22 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Model\Attribute\AttributeTypeFactory;
-use App\Model\Attribute\TypeInterface;
+use App\Model\Attribute\Serialized;
+use App\Model\Attribute\Serialized\Factory as SerializedFactory;
+use App\Model\Attribute\Type\BaseType;
+use App\Model\Attribute\Type\Factory as TypeFactory;
+use App\Model\Attribute\Option;
+use App\Model\Attribute\Option\Factory as OptionFactory;
 use App\Util\StringUtil;
 
 class Attribute
 {
     /**
-     * @var TypeInterface
+     * @var BaseType
      */
     private $typeInstance;
     /**
-     * @var AttributeTypeFactory
+     * @var TypeFactory
      */
     private $typeFactory;
     /**
@@ -45,10 +49,6 @@ class Attribute
      * @var SerializedFactory
      */
     private $serializedFactory;
-    /**
-     * @var array
-     */
-    private $processedOptions;
     /**
      * @var string
      */
@@ -132,7 +132,7 @@ class Attribute
 
     /**
      * Attribute constructor.
-     * @param AttributeTypeFactory $typeFactory
+     * @param TypeFactory $typeFactory
      * @param OptionFactory $optionFactory
      * @param SerializedFactory $serializedFactory
      * @param StringUtil $stringUtil
@@ -140,7 +140,7 @@ class Attribute
      * @param array $data
      */
     public function __construct(
-        AttributeTypeFactory $typeFactory,
+        TypeFactory $typeFactory,
         OptionFactory $optionFactory,
         SerializedFactory $serializedFactory,
         StringUtil $stringUtil,
@@ -358,9 +358,9 @@ class Attribute
     }
 
     /**
-     * @return AttributeType
+     * @return BaseType
      */
-    public function getTypeInstance() : AttributeType
+    public function getTypeInstance() : BaseType
     {
         if ($this->typeInstance === null) {
             $this->typeInstance = $this->typeFactory->create($this);

@@ -27,6 +27,6 @@ class VersionTest extends TestCase
      */
     public function testGetVersion()
     {
-        $this->assertStringStartsWith('3.', Version::getVersion());
+        $this->assertStringStartsWith('4.', Version::getVersion());
     }
 }
