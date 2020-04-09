@@ -46,7 +46,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twig = $this->createMock(Environment::class);
         $this->attribute = $this->createMock(Attribute::class);
@@ -55,7 +55,6 @@ class FactoryTest extends TestCase
 
     /**
      * @covers \App\Model\Attribute\Option\Factory::create
-     * @covers \App\Model\Attribute\Option\Factory::__construct
      */
     public function testCreate()
     {
@@ -65,7 +64,6 @@ class FactoryTest extends TestCase
 
     /**
      * @covers \App\Model\Attribute\Option\Factory::create
-     * @covers \App\Model\Attribute\Option\Factory::__construct
      */
     public function testCreateMissingType()
     {

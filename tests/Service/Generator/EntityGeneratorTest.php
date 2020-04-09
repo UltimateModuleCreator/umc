@@ -81,7 +81,7 @@ class EntityGeneratorTest extends TestCase
                 $this->module,
                 [
                     'template' => 'template',
-                    'destination' => 'path/_Entity_'
+                    'source' => 'path/_Entity_'
                 ]
             )
         );
@@ -105,7 +105,7 @@ class EntityGeneratorTest extends TestCase
                 $this->module,
                 [
                     'template' => 'template',
-                    'destination' => 'path/_Entity_'
+                    'source' => 'path/_Entity_'
                 ]
             )
         );

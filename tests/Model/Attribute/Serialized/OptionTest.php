@@ -19,31 +19,31 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Test\Unit\Attribute;
+namespace App\Model\Test\Unit\Attribute\Serialized;
 
-use App\Model\Attribute;
-use App\Model\Attribute\Option;
+use App\Model\Attribute\Serialized;
+use App\Model\Attribute\Serialized\Option;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class OptionTest extends TestCase
 {
     /**
-     * @var Attribute | MockObject
+     * @var Serialized | MockObject
      */
-    private $attribute;
+    private $serialized;
 
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->attribute = $this->createMock(Attribute::class);
+        $this->serialized = $this->createMock(Serialized::class);
     }
 
     /**
-     * @covers \App\Model\Attribute\Option::getValue
-     * @covers \App\Model\Attribute\Option::__construct
+     * @covers \App\Model\Attribute\Serialized\Option::getValue
+     * @covers \App\Model\Attribute\Serialized\Option::__construct
      */
     public function testGetValue()
     {
@@ -53,8 +53,8 @@ class OptionTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Option::getLabel
-     * @covers \App\Model\Attribute\Option::__construct
+     * @covers \App\Model\Attribute\Serialized\Option::getLabel
+     * @covers \App\Model\Attribute\Serialized\Option::__construct
      */
     public function testGetLabel()
     {
@@ -64,8 +64,8 @@ class OptionTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Option::isDefaultRadio
-     * @covers \App\Model\Attribute\Option::__construct
+     * @covers \App\Model\Attribute\Serialized\Option::isDefaultRadio
+     * @covers \App\Model\Attribute\Serialized\Option::__construct
      */
     public function testIsDefaultRadio()
     {
@@ -75,8 +75,8 @@ class OptionTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Option::isDefaultCheckbox
-     * @covers \App\Model\Attribute\Option::__construct
+     * @covers \App\Model\Attribute\Serialized\Option::isDefaultCheckbox
+     * @covers \App\Model\Attribute\Serialized\Option::__construct
      */
     public function testIsDefaultCheckbox()
     {
@@ -86,17 +86,17 @@ class OptionTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Option::getAttribute
-     * @covers \App\Model\Attribute\Option::__construct
+     * @covers \App\Model\Attribute\Serialized\Option::getField
+     * @covers \App\Model\Attribute\Serialized\Option::__construct
      */
-    public function testGetAttribute()
+    public function testGetField()
     {
-        $this->assertEquals($this->attribute, $this->getInstance([])->getAttribute());
+        $this->assertEquals($this->serialized, $this->getInstance([])->getField());
     }
 
     /**
-     * @covers \App\Model\Attribute\Option::toArray
-     * @covers \App\Model\Attribute\Option::__construct
+     * @covers \App\Model\Attribute\Serialized\Option::toArray
+     * @covers \App\Model\Attribute\Serialized\Option::__construct
      */
     public function testToArray()
     {
@@ -113,6 +113,6 @@ class OptionTest extends TestCase
      */
     private function getInstance(array $data): Option
     {
-        return new Option($this->attribute, $data);
+        return new Option($this->serialized, $data);
     }
 }
