@@ -29,7 +29,7 @@ class Serialized extends BaseType
     public function isProductAttribute(): bool
     {
         foreach ($this->getAttribute()->getSerialized() as $serialized) {
-            if (in_array($serialized->getType(), ['product_attribute', 'product_attribute_multiselect'])) {
+            if ($serialized->getTypeInstance()->isProductAttribute()) {
                 return true;
             }
         }
@@ -42,7 +42,7 @@ class Serialized extends BaseType
     public function isProductAttributeSet(): bool
     {
         foreach ($this->getAttribute()->getSerialized() as $serialized) {
-            if (in_array($serialized->getType(), ['product_attribute_set', 'product_attribute_set_multiselect'])) {
+            if ($serialized->getTypeInstance()->isProductAttributeSet()) {
                 return true;
             }
         }

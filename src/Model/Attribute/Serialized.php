@@ -249,7 +249,7 @@ class Serialized
             $this->optionType = 'number';
             foreach ($this->getOptions() as $option) {
                 if (!is_numeric($option->getValue())) {
-                    $this->optionType = 'sting';
+                    $this->optionType = 'string';
                     break;
                 }
             }
@@ -283,8 +283,8 @@ class Serialized
             'type' => $this->type,
             'expanded' => $this->expanded,
             'required' => $this->required,
-            'showInList' => $this->showInList,
-            'showInView' => $this->showInView,
+            'show_in_list' => $this->showInList,
+            'show_in_view' => $this->showInView,
             'note' => $this->note,
             'tooltip' => $this->tooltip,
             'default_value' => $this->defaultValue,

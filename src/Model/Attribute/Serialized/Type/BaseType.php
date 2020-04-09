@@ -92,6 +92,22 @@ class BaseType
     }
 
     /**
+     * @return bool
+     */
+    public function isProductAttributeSet(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductAttribute(): bool
+    {
+        return false;
+    }
+
+    /**
      * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError

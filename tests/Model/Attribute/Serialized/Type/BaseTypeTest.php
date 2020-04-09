@@ -102,6 +102,24 @@ class BaseTypeTest extends TestCase
     }
 
     /**
+     * @covers \App\Model\Attribute\Serialized\Type\BaseType::isProductAttributeSet
+     * @covers \App\Model\Attribute\Serialized\Type\BaseType::__construct
+     */
+    public function testIsProductAttributeSet()
+    {
+        $this->assertFalse($this->getInstance([])->isProductAttributeSet());
+    }
+
+    /**
+     * @covers \App\Model\Attribute\Serialized\Type\BaseType::isProductAttribute
+     * @covers \App\Model\Attribute\Serialized\Type\BaseType::__construct
+     */
+    public function testIsProductAttribute()
+    {
+        $this->assertFalse($this->getInstance([])->isProductAttribute());
+    }
+
+    /**
      * @covers \App\Model\Attribute\Serialized\Type\BaseType::renderForm
      * @covers \App\Model\Attribute\Serialized\Type\BaseType::renderTemplate
      * @covers \App\Model\Attribute\Serialized\Type\BaseType::__construct
