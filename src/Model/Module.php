@@ -503,7 +503,7 @@ class Module
             if ($entity->isFrontendView() || $entity->isFrontendList()) {
                 $this->cacheData['entity']['frontend'][] = $entity;
             }
-            if ($entity->isSearch() || $entity->isSearch()) {
+            if ($entity->isSearch()) {
                 $this->cacheData['entity']['search'][] = $entity;
             }
             if ($entity->getMenuLink() === FrontendMenuLink::MAIN_MENU) {

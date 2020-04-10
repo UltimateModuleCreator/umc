@@ -19,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Test\Unit\Attribute\Serialized\Option;
+namespace App\Test\Model\Attribute\Serialized\Option;
 
 use App\Model\Attribute\Serialized;
 use App\Model\Attribute\Serialized\Option;
@@ -41,7 +41,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serialized = $this->createMock(Serialized::class);
         $this->factory = new Factory();

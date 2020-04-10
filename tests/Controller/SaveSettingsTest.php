@@ -59,7 +59,7 @@ class SaveSettingsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->request = $this->createMock(Request::class);

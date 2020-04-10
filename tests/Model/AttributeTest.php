@@ -46,7 +46,7 @@ class AttributeTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeFactory = $this->createMock(Attribute\TypeFactory::class);
         $this->attribute = new Attribute($this->typeFactory, $this->data);

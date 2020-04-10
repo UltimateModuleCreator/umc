@@ -33,7 +33,7 @@ class HyphenTest extends TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
     }

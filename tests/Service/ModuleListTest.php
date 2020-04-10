@@ -43,7 +43,7 @@ class ModuleListTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->finder = $this->createMock(Finder::class);
         $this->finderFactory = $this->createMock(FinderFactory::class);

@@ -1,11 +1,28 @@
 <?php
+
+/**
+ *
+ * UMC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ *
+ */
+
 declare(strict_types=1);
 
-namespace App\Test\Model\Attribute\Serialized\Type;
+namespace App\Test\Model\Attribute\Type;
 
 use App\Model\Attribute;
-use App\Model\Attribute\Serialized;
-use App\Model\Attribute\Serialized\Type\ProductAttributeSet;
+use App\Model\Attribute\Type\ProductAttributeSet;
 use App\Model\Entity;
 use App\Model\Module;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,9 +36,9 @@ class ProductAttributeSetTest extends TestCase
      */
     private $twig;
     /**
-     * @var Serialized | MockObject
+     * @var Attribute | MockObject
      */
-    private $serialized;
+    private $attribute;
     /**
      * @var ProductAttributeSet
      */
@@ -33,24 +50,22 @@ class ProductAttributeSetTest extends TestCase
     protected function setUp(): void
     {
         $this->twig = $this->createMock(Environment::class);
-        $this->serialized = $this->createMock(Serialized::class);
+        $this->attribute = $this->createMock(Attribute::class);
         $this->productAttributeSet = new ProductAttributeSet(
             $this->twig,
-            $this->serialized,
+            $this->attribute,
             []
         );
     }
 
     /**
-     * @covers \App\Model\Attribute\Serialized\Type\ProductAttributeSet::getSourceModel
+     * @covers \App\Model\Attribute\Type\ProductAttributeSet::getSourceModel
      */
     public function testGetSourceModel()
     {
-        $attribute = $this->createMock(Attribute::class);
         $entity = $this->createMock(Entity::class);
         $module = $this->createMock(Module::class);
-        $this->serialized->method('getAttribute')->willReturn($attribute);
-        $attribute->method('getEntity')->willReturn($entity);
+        $this->attribute->method('getEntity')->willReturn($entity);
         $entity->method('getModule')->willReturn($module);
         $module->method('getUmcCrudNamespace')->willReturn('Namespace');
         $module->method('getUmcModuleName')->willReturn('Module');
@@ -59,7 +74,7 @@ class ProductAttributeSetTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Serialized\Type\ProductAttributeSet::isProductAttributeSet
+     * @covers \App\Model\Attribute\Type\ProductAttributeSet::isProductAttributeSet
      */
     public function testIsProductAttribute()
     {

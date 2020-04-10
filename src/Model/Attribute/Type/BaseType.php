@@ -330,7 +330,7 @@ class BaseType
      */
     public function renderSchemaFk(): string
     {
-        return $this->renderTemplate($this->templates['schema_fk'] ?? null);
+        return isset($this->templates['schema_fk']) ? $this->renderTemplate($this->templates['schema_fk']) : '';
     }
 
     /**
@@ -355,16 +355,15 @@ class BaseType
      */
     private function renderTemplate(?string $template): string
     {
-        if (!$template) {
-            return '';
-        }
+        $entity = $this->attribute->getEntity();
+        $module = $entity->getModule();
         return $this->twig->render(
             $template,
             [
                 'type' => $this,
                 'attribute' => $this->attribute,
-                'entity' => $this->attribute->getEntity(),
-                'module' => $this->attribute->getEntity()->getModule()
+                'entity' => $entity,
+                'module' => $module
             ]
         );
     }

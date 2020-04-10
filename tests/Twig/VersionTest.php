@@ -32,6 +32,6 @@ class VersionTest extends TestCase
         $functions = $version->getFunctions();
         $this->assertEquals(1, count($functions));
         $this->assertInstanceOf(TwigFunction::class, $functions[0]);
-        $this->assertStringStartsWith('3.', $functions[0]->getCallable()());
+        $this->assertStringStartsWith('4.', $functions[0]->getCallable()());
     }
 }

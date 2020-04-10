@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\Test\Unit\Attribute\Serialized;
+namespace App\Test\Model\Attribute\Serialized;
 
 use App\Model\Attribute;
 use App\Model\Attribute\Serialized\Factory;

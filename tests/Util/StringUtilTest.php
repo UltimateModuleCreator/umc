@@ -71,4 +71,26 @@ class StringUtilTest extends TestCase
         $this->assertEquals('sometext', $snake->hyphen('sometext'));
         $this->assertEquals('some-text', $snake->hyphen('someText'));
     }
+
+    /**
+     * @covers \App\Util\StringUtil::snakeArray
+     */
+    public function testSnakeArray()
+    {
+        $snake = new StringUtil();
+        $data = ['someText', 'some_text', 'SOMETEXT'];
+        $expected = ['some_text', 'some_text', 's_o_m_e_t_e_x_t'];
+        $this->assertEquals($expected, $snake->snakeArray($data));
+    }
+
+    /**
+     * @covers \App\Util\StringUtil::glueClassParts
+     */
+    public function testGlueClassParts()
+    {
+        $util = new StringUtil();
+        $parts = ['text', 'Text', 't_ext'];
+        $expected = 'Text\Text\TExt';
+        $this->assertEquals($expected, $util->glueClassParts($parts));
+    }
 }

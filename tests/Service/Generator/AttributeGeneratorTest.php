@@ -49,7 +49,7 @@ class AttributeGeneratorTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->module = $this->createMock(Module::class);

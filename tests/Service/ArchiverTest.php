@@ -58,7 +58,7 @@ class ArchiverTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         $this->zipFactory = $this->createMock(ZipArchiveFactory::class);

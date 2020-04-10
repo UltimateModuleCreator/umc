@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,96 +16,179 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Tests\Model;
 
+use App\Model\Attribute;
 use App\Model\Entity;
+use App\Model\Entity\Factory;
 use App\Model\Module;
 use App\Service\License\ProcessorInterface;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ModuleTest extends TestCase
 {
     /**
-     * @var Module
-     */
-    private $module;
-    /**
-     * @var array
-     */
-    private $data = [
-        'namespace' => 'Namespace',
-        'module_name' => 'Module',
-        'dummy' => 'dummy'
-    ];
-    /**
      * @var StringUtil | MockObject
      */
     private $stringUtil;
+    /**
+     * @var Factory | MockObject
+     */
+    private $entityFactory;
 
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
-        $this->module = new Module($this->stringUtil, [], [], $this->data);
+        $this->entityFactory = $this->createMock(Factory::class);
+        $this->stringUtil->method('snake')->willReturnArgument(0);
+        $this->stringUtil->method('camel')->willReturnArgument(0);
+        $this->stringUtil->method('hyphen')->willReturnArgument(0);
+        $this->stringUtil->method('ucfirst')->willReturnArgument(0);
     }
 
+
     /**
-     * @covers \App\Model\Module::getData()
-     * @covers \App\Model\Module::__construct()
+     * @covers \App\Model\Module::getEntities
+     * @covers \App\Model\Module::__construct
      */
-    public function testGetData()
+    public function testGetEntities()
     {
-        $this->assertEquals('Namespace', $this->module->getData('namespace'));
-        $this->assertEquals('dummy', $this->module->getData('dummy'));
-        $this->assertNull($this->module->getData('non_existent'));
-        $this->assertEquals('default', $this->module->getData('non_existent', 'default'));
+        $data = [
+            '_entities' => [[], []]
+        ];
+        $this->entityFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createMock(Entity::class)
+        );
+        $this->assertEquals(2, count($this->getInstance($data)->getEntities()));
     }
 
     /**
-     * @covers \App\Model\Module::getRawData()
-     * @covers \App\Model\Module::__construct()
+     * @covers \App\Model\Module::getNamespace
+     * @covers \App\Model\Module::__construct
      */
-    public function testGetRawData()
+    public function testGetNamespace()
     {
-        $this->assertEquals($this->data, $this->module->getRawData());
+        $this->assertEquals('Namespace', $this->getInstance(['namespace' => 'Namespace'])->getNamespace());
+        $this->assertEquals('', $this->getInstance([])->getNamespace());
     }
 
     /**
-     * @covers \App\Model\Module::getPropertiesData()
-     * @covers \App\Model\Module::__construct()
+     * @covers \App\Model\Module::getModuleName
+     * @covers \App\Model\Module::__construct
      */
-    public function testGetPropertiesData()
+    public function testGetModuleName()
     {
-        $this->assertArrayNotHasKey('dummy', $this->module->getPropertiesData());
+        $this->assertEquals('ModuleName', $this->getInstance(['module_name' => 'ModuleName'])->getModuleName());
+        $this->assertEquals('', $this->getInstance([])->getModuleName());
     }
 
     /**
-     * @covers \App\Model\Module::toArray()
-     * @covers \App\Model\Module::getAdditionalToArray()
-     * @covers \App\Model\Module::__construct()
+     * @covers \App\Model\Module::getMenuParent
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetMenuParent()
+    {
+        $this->assertEquals('Parent', $this->getInstance(['menu_parent' => 'Parent'])->getMenuParent());
+        $this->assertEquals('', $this->getInstance([])->getMenuParent());
+    }
+
+    /**
+     * @covers \App\Model\Module::getSortOrder
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetSortOrder()
+    {
+        $this->assertEquals(10, $this->getInstance(['sort_order' => 10])->getSortOrder());
+        $this->assertEquals(0, $this->getInstance([])->getSortOrder());
+    }
+
+    /**
+     * @covers \App\Model\Module::getMenuText
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetMenuText()
+    {
+        $this->assertEquals('Menu', $this->getInstance(['menu_text' => 'Menu'])->getMenuText());
+        $this->assertEquals('', $this->getInstance([])->getMenuText());
+    }
+
+    /**
+     * @covers \App\Model\Module::getLicense
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetLicense()
+    {
+        $this->assertEquals('License', $this->getInstance(['license' => 'License'])->getLicense());
+        $this->assertEquals('', $this->getInstance([])->getLicense());
+    }
+
+    /**
+     * @covers \App\Model\Module::getFrontKey
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetFrontKey()
+    {
+        $this->assertEquals('front_key', $this->getInstance(['front_key' => 'front_key'])->getFrontKey());
+        $this->assertEquals('ns_md', $this->getInstance(['namespace' => 'ns', 'module_name' => 'md'])->getFrontKey());
+        $this->assertEquals('_', $this->getInstance([])->getFrontKey());
+    }
+
+    /**
+     * @covers \App\Model\Module::getConfigTab
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetConfigTab()
+    {
+        $this->assertEquals('tab', $this->getInstance(['config_tab' => 'tab'])->getConfigTab());
+        $this->assertEquals('', $this->getInstance([])->getLicense());
+    }
+
+    /**
+     * @covers \App\Model\Module::getConfigTabPosition
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetConfigTabPosition()
+    {
+        $this->assertEquals(10, $this->getInstance(['config_tab_position' => 10])->getConfigTabPosition());
+        $this->assertEquals(0, $this->getInstance([])->getConfigTabPosition());
+    }
+
+    /**
+     * @covers \App\Model\Module::isUmcCrud
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsUmcCrud()
+    {
+        $this->assertTrue($this->getInstance(['umc_crud' => 1])->isUmcCrud());
+        $this->assertFalse($this->getInstance([])->isUmcCrud());
+    }
+
+    /**
+     * @covers \App\Model\Module::toArray
+     * @covers \App\Model\Module::__construct
      */
     public function testToArray()
     {
-        /** @var Entity | MockObject $entity */
         $entity = $this->createMock(Entity::class);
-        $entity->expects($this->once())->method('toArray')->willReturn(['entity']);
-        $this->module->addEntity($entity);
-        $moduleArray = $this->module->toArray();
-        $this->assertArrayHasKey('_entities', $moduleArray);
-        $this->assertArrayHasKey('menu_text', $moduleArray);
-        $this->assertArrayNotHasKey('dummy', $moduleArray);
+        $entity->expects($this->once())->method('toArray');
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $result = $this->getInstance(['_entities' => [[]]])->toArray();
+        $this->assertArrayHasKey('namespace', $result);
+        $this->assertArrayHasKey('module_name', $result);
+        $this->assertArrayHasKey('_entities', $result);
     }
 
     /**
-     * @covers \App\Model\Module::getFormattedLicense()
-     * @covers \App\Model\Module::__construct()
-     * @throws \Exception
+     * @covers \App\Model\Module::getFormattedLicense
+     * @covers \App\Model\Module::__construct
      */
     public function testGetFormattedLicense()
     {
@@ -112,7 +196,7 @@ class ModuleTest extends TestCase
         $xml = $this->createMock(ProcessorInterface::class);
         $php->expects($this->once())->method('process');
         $xml->expects($this->once())->method('process');
-        $module = new Module($this->stringUtil, ['php' => $php, 'xml' => $xml], []);
+        $module = new Module($this->stringUtil, $this->entityFactory, ['php' => $php, 'xml' => $xml], []);
         $module->getFormattedLicense('php');
         $module->getFormattedLicense('xml');
     }
@@ -123,7 +207,7 @@ class ModuleTest extends TestCase
      */
     public function testGetFormattedLicenseWithException()
     {
-        $module = new Module($this->stringUtil, ['wrong' => new \stdClass()], []);
+        $module = new Module($this->stringUtil, $this->entityFactory, ['wrong' => new \stdClass()], []);
         $this->expectException(\Exception::class);
         $module->getFormattedLicense('wrong');
     }
@@ -132,123 +216,140 @@ class ModuleTest extends TestCase
      * @covers \App\Model\Module::getFormattedLicense()
      * @covers \App\Model\Module::__construct()
      */
-    public function testGetFormattedLicenseWithMissingProcessor()
+    public function testGetFormattedLicenseWithMIssing()
     {
-        $module = new Module($this->stringUtil, [], []);
+        $module = $this->getInstance([]);
         $this->expectException(\Exception::class);
         $module->getFormattedLicense('missing');
     }
 
     /**
-     * @covers \App\Model\Module::hasAttributeType()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testHasAttributeType()
-    {
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('hasAttributeType')->willReturnMap([
-            ['text', true],
-            ['textarea', false],
-            ['dummy', false]
-        ]);
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('hasAttributeType')->willReturnMap([
-            ['text', false],
-            ['textarea', true],
-            ['dummy', false]
-        ]);
-        $module = new Module($this->stringUtil, [], []);
-        $module->addEntity($entity1);
-        $module->addEntity($entity2);
-        $this->assertTrue($module->hasAttributeType('text'));
-        $this->assertTrue($module->hasAttributeType('textarea'));
-        $this->assertFalse($module->hasAttributeType('dummy'));
-    }
-
-    /**
-     * @covers \App\Model\Module::getSearchableEntities()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetSearchableEntities()
-    {
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getData')->willReturn('search')->willReturn("1");
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getData')->willReturn('search')->willReturn("0");
-
-        $module = new Module($this->stringUtil, [], []);
-        $module->addEntity($entity1);
-        $module->addEntity($entity2);
-        $this->assertEquals([$entity1], $module->getSearchableEntities());
-
-        $module = new Module($this->stringUtil, [], []);
-        $module->addEntity($entity2);
-        $this->assertEquals([], $module->getSearchableEntities());
-    }
-
-    /**
-     * @covers \App\Model\Module::hasSearchableEntities()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testHasSearchableEntities()
-    {
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getData')->willReturn('search')->willReturn("1");
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getData')->willReturn('search')->willReturn("0");
-
-        $module = new Module($this->stringUtil, [], []);
-        $module->addEntity($entity1);
-        $module->addEntity($entity2);
-        $this->assertTrue($module->hasSearchableEntities());
-
-        $module = new Module($this->stringUtil, [], []);
-        $module->addEntity($entity2);
-        $this->assertFalse($module->hasSearchableEntities());
-    }
-
-    /**
      * @covers \App\Model\Module::getExtensionName
-     * @covers \App\Model\Module::__construct()
+     * @covers \App\Model\Module::__construct
      */
     public function testGetExtensionName()
     {
-        $module = new Module(
-            $this->stringUtil,
-            [],
-            [],
-            [
-                'namespace' => 'Namespace',
-                'module_name' => 'ModuleName'
-            ]
+        $this->assertEquals(
+            'ns_md',
+            $this->getInstance(['namespace' => 'ns', 'module_name' => 'md'])->getExtensionName()
         );
-        $this->assertEquals('Namespace_ModuleName', $module->getExtensionName());
     }
 
     /**
-     * @covers \App\Model\Module::getEntities
-     * @covers \App\Model\Module::addEntity
-     * @covers \App\Model\Module::__construct()
+     * @covers \App\Model\Module::getComposerExtensionName
+     * @covers \App\Model\Module::__construct
      */
-    public function testGetEntities()
+    public function testGetComposerExtensionName()
     {
-        $module = new Module($this->stringUtil, [], []);
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $module->addEntity($entity1);
-        $module->addEntity($entity2);
-        $entities = $module->getEntities();
-        $this->assertEquals(2, count($entities));
-        $this->assertEquals($entity1, $entities[0]);
-        $this->assertEquals($entity2, $entities[1]);
+        $this->assertEquals(
+            'ns/module-md',
+            $this->getInstance(['namespace' => 'ns', 'module_name' => 'md'])->getComposerExtensionName()
+        );
+    }
+
+    /**
+     * @covers \App\Model\Module::getModuleDependencies
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetModuleDependencies()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getComposerDependencies
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetComposerDependencies()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getAclName
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetAclName()
+    {
+        $expected = 'ns_md::md';
+        $data = [
+            'namespace' => 'ns',
+            'module_name' => 'md'
+        ];
+        $this->assertEquals($expected, $this->getInstance($data)->getAclName());
+    }
+
+    /**
+     * @covers \App\Model\Module::hasAttributeType
+     * @covers \App\Model\Module::__construct
+     */
+    public function testHasAttributeType()
+    {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('hasAttributeType')->willReturnMap([
+            ['text', true],
+            ['select', false]
+        ]);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->hasAttributeType('text'));
+        //call twice for memozing
+        $this->assertTrue($module->hasAttributeType('text'));
+
+        $this->assertFalse($module->hasAttributeType('select'));
+        //call teice to test memozing
+        $this->assertFalse($module->hasAttributeType('select'));
+    }
+
+    /**
+     * @covers \App\Model\Module::hasSearchableEntities
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testHasSearchableEntities()
+    {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isSearch')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->hasSearchableEntities());
+        //call twice to test memoizing
+        $this->assertTrue($module->hasSearchableEntities());
+
+        $this->assertFalse($this->getInstance([])->hasSearchableEntities());
+    }
+
+    /**
+     * @covers \App\Model\Module::getSearchableEntities
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetSearchableEntities()
+    {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isSearch')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getSearchableEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getSearchableEntities());
+
+        $this->assertEquals([], $this->getInstance([])->getSearchableEntities());
     }
 
     /**
@@ -257,266 +358,221 @@ class ModuleTest extends TestCase
      */
     public function testGetAclMenuParents()
     {
-        $menuConfig = [
-            'level1' => [
-                'label' => 'Level 1',
-            ],
-            'level2' => [
-                'label' => 'Level 2',
-                'parent' => 'level1'
-            ],
-            'level22' => [
-                'label' => 'Level 22',
-                'parent' => 'level1',
-                'acl' => ['acl1', 'acl2']
-            ],
-            'level3' => [
-                'label' => 'Level 3',
-                'parent' => 'level2'
+
+    }
+
+    /**
+     * @covers \App\Model\Module::isFrontend
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsFrontend()
+    {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isFrontendView')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
             ]
         ];
-        $module = new Module($this->stringUtil, [], $menuConfig, ['menu_parent' => '']);
-        $this->assertEquals([], $module->getAclMenuParents());
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isFrontend());
+        //call twice to test memoizing
+        $this->assertTrue($module->isFrontend());
 
-        $module->setData('menu_parent', 'level1');
-        $this->assertEquals(['level1'], $module->getAclMenuParents());
-
-        $module->setData('menu_parent', 'level2');
-        $this->assertEquals(['level1', 'level2'], $module->getAclMenuParents());
-
-        $module->setData('menu_parent', 'level22');
-        $this->assertEquals(['acl1', 'acl2'], $module->getAclMenuParents());
-
-        $module->setData('menu_parent', 'level3');
-        $this->assertEquals(['level1', 'level2', 'level3'], $module->getAclMenuParents());
-
-        $module->setData('menu_parent', 'missing');
-        $this->assertEquals(['missing'], $module->getAclMenuParents());
+        $this->assertFalse($this->getInstance([])->isFrontend());
     }
 
     /**
-     * @covers \App\Model\Module::getNamespace()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetNamespace()
-    {
-        $module = new Module($this->stringUtil, [], [], ['namespace' => 'Namespace']);
-        $this->assertEquals('Namespace', $module->getNamespace());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals('', $module->getNamespace());
-    }
-
-    /**
-     * @covers \App\Model\Module::getModuleName()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetModuleName()
-    {
-        $module = new Module($this->stringUtil, [], [], ['module_name' => 'ModuleName']);
-        $this->assertEquals('ModuleName', $module->getModuleName());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals('', $module->getModuleName());
-    }
-
-    /**
-     * @covers \App\Model\Module::getVersion()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetVersion()
-    {
-        $module = new Module($this->stringUtil, [], [], ['version' => '1.1.1']);
-        $this->assertEquals('1.1.1', $module->getVersion());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals('', $module->getVersion());
-    }
-
-    /**
-     * @covers \App\Model\Module::getMenuParent()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetMenuParent()
-    {
-        $module = new Module($this->stringUtil, [], [], ['menu_parent' => 'parent']);
-        $this->assertEquals('parent', $module->getMenuParent());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals('', $module->getMenuParent());
-    }
-
-    /**
-     * @covers \App\Model\Module::getSortOrder()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetSortOrder()
-    {
-        $module = new Module($this->stringUtil, [], [], ['sort_order' => '55']);
-        $this->assertEquals(55, $module->getSortOrder());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals(0, $module->getSortOrder());
-    }
-
-    /**
-     * @covers \App\Model\Module::getMenuText()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetMenuText()
-    {
-        $module = new Module($this->stringUtil, [], [], ['menu_text' => 'Menu']);
-        $this->assertEquals('Menu', $module->getMenuText());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals('', $module->getMenuText());
-    }
-
-    /**
-     * @covers \App\Model\Module::getLicense()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetLicense()
-    {
-        $module = new Module($this->stringUtil, [], [], ['license' => 'License']);
-        $this->assertEquals('License', $module->getLicense());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals('', $module->getLicense());
-    }
-
-    /**
-     * @covers \App\Model\Module::getFrontKey()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetFrontKey()
-    {
-        $this->stringUtil->method('snake')->willReturnArgument(0);
-        $module = new Module($this->stringUtil, [], [], ['namespace' => 'namespace', 'module_name' => 'module']);
-        $this->assertEquals('namespace_module', $module->getFrontKey());
-        $module = new Module($this->stringUtil, [], [], ['front_key' => 'front_key']);
-        $this->assertEquals('front_key', $module->getFrontKey());
-    }
-
-    /**
-     * @covers \App\Model\Module::getConfigTab()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetConfigTab()
-    {
-        $module = new Module($this->stringUtil, [], [], ['config_tab' => 'Config Tab']);
-        $this->assertEquals('Config Tab', $module->getConfigTab());
-        $module = new Module($this->stringUtil, [], [], ['module_name' => 'Module Name']);
-        $this->assertEquals('Module Name', $module->getConfigTab());
-    }
-
-    /**
-     * @covers \App\Model\Module::getConfigTabPosition()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetConfigTabPosition()
-    {
-        $module = new Module($this->stringUtil, [], [], ['config_tab_position' => 100]);
-        $this->assertEquals(100, $module->getConfigTabPosition());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals(0, $module->getConfigTabPosition());
-    }
-
-    /**
-     * @covers \App\Model\Module::hasFrontend
+     * @covers \App\Model\Module::getFrontendViewEntities
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
-    public function testHasFrontend()
+    public function testGetFrontendViewEntities()
     {
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertFalse($module->hasFrontend());
-        /** @var Entity | MockObject $entity */
         $entity = $this->createMock(Entity::class);
-        $entity->method('getData')->willReturnMap([
-            ['frontend_view', null, "0"],
-            ['frontend_list', null, "0"],
-        ]);
-        $module->addEntity($entity);
-        $this->assertFalse($module->hasFrontend());
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getData')->willReturnMap([
-            ['frontend_view', null, "1"],
-            ['frontend_list', null, "0"],
-        ]);
-        $module->addEntity($entity1);
-        $this->assertTrue($module->hasFrontend());
+        $entity->method('isFrontendView')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getFrontendViewEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getFrontendViewEntities());
+
+        $this->assertEquals([], $this->getInstance([])->getFrontendViewEntities());
     }
 
     /**
-     * @covers \App\Model\Module::getEntitiesWithProperty
+     * @covers \App\Model\Module::getFrontendListEntities
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
-    public function testGetEntitiesWithProperty()
+    public function testGetFrontendListEntities()
     {
-        $module = new Module($this->stringUtil, [], [], []);
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getData')->willReturnMap([
-            ['prop1', null, "1"],
-            ['prop2', null, "0"],
-        ]);
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getData')->willReturnMap([
-            ['prop1', null, "0"],
-            ['prop2', null, "1"],
-        ]);
-        $module->addEntity($entity1);
-        $module->addEntity($entity2);
-        $this->assertEquals([$entity1], $module->getEntitiesWithProperty('prop1'));
-        $this->assertEquals([$entity2], $module->getEntitiesWithProperty('prop2'));
-        $this->assertEquals([], $module->getEntitiesWithProperty('prop3'));
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isFrontendList')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getFrontendListEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getFrontendListEntities());
+
+        $this->assertEquals([], $this->getInstance([])->getFrontendListEntities());
     }
 
     /**
-     * @covers \App\Model\Module::getMagentoVersion()
-     * @covers \App\Model\Module::__construct()
-     */
-    public function testGetMagentoVersion()
-    {
-        $module = new Module($this->stringUtil, [], [], ['magento_version' => '2.2']);
-        $this->assertEquals(2.2, $module->getMagentoVersion());
-        $module = new Module($this->stringUtil, [], [], ['magento_version' => '2.3']);
-        $this->assertEquals(2.3, $module->getMagentoVersion());
-        $module = new Module($this->stringUtil, [], [], []);
-        $this->assertEquals(2.2, $module->getMagentoVersion());
-    }
-
-    /**
-     * @covers \App\Model\Module::getMenuEntities
+     * @covers \App\Model\Module::isUpload
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
-    public function testGetMenuEntities()
+    public function testIsUpload()
     {
-        $module = new Module($this->stringUtil, [], []);
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getMenuLink')->willReturn(1);
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getMenuLink')->willReturn(2);
-        $module->addEntity($entity1);
-        $module->addEntity($entity2);
-        $this->assertEquals([$entity1], $module->getMenuEntities(1));
-        $this->assertEquals([$entity2], $module->getMenuEntities(2));
-        $this->assertEquals([], $module->getMenuEntities(3));
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isUpload')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isUpload());
+        //call twice to test memoizing
+        $this->assertTrue($module->isUpload());
+
+        $this->assertFalse($this->getInstance([])->isUpload());
+    }
+
+    /**
+     * @covers \App\Model\Module::isStore
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsStore()
+    {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isStore')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isStore());
+        //call twice to test memoizing
+        $this->assertTrue($module->isStore());
+
+        $this->assertFalse($this->getInstance([])->isStore());
+    }
+
+    /**
+     * @covers \App\Model\Module::getStoreEntities
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetStoreEntities()
+    {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isStore')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getStoreEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getStoreEntities());
+
+        $this->assertEquals([], $this->getInstance([])->getStoreEntities());
+    }
+
+    /**
+     * @covers \App\Model\Module::isProcessor
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsProcessor()
+    {
+        $entity = $this->createMock(Entity::class);
+        $attribute = $this->createMock(Attribute::class);
+        $entity->method('getAttributesWithProcessor')->willReturn(['save' => [$attribute]]);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isProcessor('save'));
+        //call twice to test memoizing
+        $this->assertTrue($module->isProcessor('save'));
+
+        $this->assertTrue($module->isProcessor('provider'));
+        //call twice to test memoizing
+        $this->assertTrue($module->isProcessor('provider'));
+    }
+
+    /**
+     * @covers \App\Model\Module::isProcessorWithType
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsProcessorWithType()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::isProductAttribute
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsProductAttribute()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::isProductAttributeSet
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsProductAttributeSet()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::isOptionAttribute
+     * @covers \App\Model\Module::initEntityCacheData
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsOptionAttribute()
+    {
+
     }
 
     /**
      * @covers \App\Model\Module::hasTopMenu
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testHasTopMenu()
     {
-        $module = new Module($this->stringUtil, [], []);
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $module->addEntity($entity1);
-        $this->assertFalse($module->hasTopMenu());
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getMenuLink')->willReturn(Entity::MENU_LINK_MAIN_MENU);
-        $module->addEntity($entity2);
-        $this->assertTrue($module->hasTopMenu());
+
     }
 
     /**
@@ -525,29 +581,138 @@ class ModuleTest extends TestCase
      */
     public function testHasFooterMenu()
     {
-        $module = new Module($this->stringUtil, [], []);
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $module->addEntity($entity1);
-        $this->assertFalse($module->hasFooterMenu());
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getMenuLink')->willReturn(Entity::MENU_LINK_FOOTER);
-        $module->addEntity($entity2);
-        $this->assertTrue($module->hasFooterMenu());
+
     }
 
     /**
-     * @covers \App\Model\Module::getComposerPhpVersion
+     * @covers \App\Model\Module::getFileEntities
      * @covers \App\Model\Module::__construct
      */
-    public function testGetComposerPhpVersion()
+    public function testGetFileEntities()
     {
-        $module = new Module($this->stringUtil, [], []);
-        $this->assertEquals(Module::COMPOSER_PHP_VERSION_2_2, $module->getComposerPhpVersion());
-        $module = new Module($this->stringUtil, [], [], ['magento_version' => Module::MAGENTO_VERSION_2_2]);
-        $this->assertEquals(Module::COMPOSER_PHP_VERSION_2_2, $module->getComposerPhpVersion());
-        $module = new Module($this->stringUtil, [], [], ['magento_version' => Module::MAGENTO_VERSION_2_3]);
-        $this->assertEquals(Module::COMPOSER_PHP_VERSION_2_3, $module->getComposerPhpVersion());
+
+    }
+
+    /**
+     * @covers \App\Model\Module::isImage
+     * @covers \App\Model\Module::__construct
+     */
+    public function testIsImage()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getImageEntities
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetImageEntities()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getMainMenuEntities
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetMainMenuEntities()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getFooterLinksEntities
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetFooterLinksEntities()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getMockObjectUse
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetMockObjectUse()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getMockObjectClass
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetMockObjectClass()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getUmcCrudNamespace
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetUmcCrudNamespace()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getUmcModuleName
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetUmcModuleName()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getNullSaveDataProcessor
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetNullSaveDataProcessor()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getNullFormDataModifier
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetNullFormDataModifier()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getAdminRoutePrefix
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetAdminRoutePrefix()
+    {
+
+    }
+
+    /**
+     * @covers \App\Model\Module::getProcessorTypes
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetProcessorTypes()
+    {
+
+    }
+
+    /**
+     * @param $data
+     * @return Module
+     */
+    private function getInstance($data): Module
+    {
+        return  new Module(
+            $this->stringUtil,
+            $this->entityFactory,
+            [],
+            [],
+            $data
+        );
     }
 }

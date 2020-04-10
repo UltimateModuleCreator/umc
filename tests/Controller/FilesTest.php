@@ -44,7 +44,7 @@ class FilesTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->reader = $this->createMock(Reader::class);

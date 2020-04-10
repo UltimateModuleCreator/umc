@@ -19,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Test\Unit\Attribute\Serialized\Type;
+namespace App\Test\Model\Attribute\Serialized\Type;
 
 use App\Model\Attribute;
 use App\Model\Attribute\Serialized;
@@ -44,7 +44,7 @@ class BaseTypeTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twig = $this->createMock(Environment::class);
         $this->serialized = $this->createMock(Serialized::class);

@@ -19,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Test\Unit\Attribute\Type;
+namespace App\Test\Model\Attribute\Type;
 
 use App\Model\Attribute;
 use App\Model\Attribute\Type\BaseType;
@@ -54,7 +54,8 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Option\Factory::create
+     * @covers \App\Model\Attribute\Type\Factory::create
+     * @covers \App\Model\Attribute\Type\Factory::__construct
      */
     public function testCreate()
     {
@@ -63,7 +64,8 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Option\Factory::create
+     * @covers \App\Model\Attribute\Type\Factory::create
+     * @covers \App\Model\Attribute\Type\Factory::__construct
      */
     public function testCreateMissingType()
     {

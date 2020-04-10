@@ -75,7 +75,7 @@ class EditTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->twig->expects($this->once())->method('render')->with($this->equalTo('template'));

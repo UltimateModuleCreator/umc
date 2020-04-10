@@ -38,7 +38,7 @@ class WriterTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->writer = new Writer('dummy/path', $this->filesystem);

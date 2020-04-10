@@ -19,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Model;
+namespace App\Tests\Model\Attribute;
 
 use App\Model\Attribute;
 use App\Model\Attribute\Factory;

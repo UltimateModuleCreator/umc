@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Tests\Model;
@@ -38,7 +40,7 @@ class SettingsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loader = $this->createMock(YamlLoader::class);
         $this->settings = new Settings('file', 'path', $this->loader);

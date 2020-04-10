@@ -24,16 +24,28 @@ namespace App\Model\Attribute\Type;
 class Serialized extends BaseType
 {
     /**
+     * @var bool
+     */
+    private $isProductAttribute;
+    /**
+     * @var bool
+     */
+    private $isProductAttributeSet;
+    /**
      * @return bool
      */
     public function isProductAttribute(): bool
     {
-        foreach ($this->getAttribute()->getSerialized() as $serialized) {
-            if ($serialized->getTypeInstance()->isProductAttribute()) {
-                return true;
+        if ($this->isProductAttribute === null) {
+            $this->isProductAttribute = false;
+            foreach ($this->getAttribute()->getSerialized() as $serialized) {
+                if ($serialized->getTypeInstance()->isProductAttribute()) {
+                    $this->isProductAttribute = true;
+                    break;
+                }
             }
         }
-        return false;
+        return $this->isProductAttribute;
     }
 
     /**
@@ -41,11 +53,15 @@ class Serialized extends BaseType
      */
     public function isProductAttributeSet(): bool
     {
-        foreach ($this->getAttribute()->getSerialized() as $serialized) {
-            if ($serialized->getTypeInstance()->isProductAttributeSet()) {
-                return true;
+        if ($this->isProductAttributeSet === null) {
+            $this->isProductAttributeSet = false;
+            foreach ($this->getAttribute()->getSerialized() as $serialized) {
+                if ($serialized->getTypeInstance()->isProductAttributeSet()) {
+                    $this->isProductAttributeSet = true;
+                    break;
+                }
             }
         }
-        return false;
+        return $this->isProductAttributeSet;
     }
 }

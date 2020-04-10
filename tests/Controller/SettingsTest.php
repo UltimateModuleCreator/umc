@@ -53,7 +53,7 @@ class SettingsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->settingsModel = $this->createMock(\App\Model\Settings::class);

@@ -52,7 +52,7 @@ class GeneratorTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reader = $this->createMock(Reader::class);
         $this->moduleGenerator = $this->createMock(GeneratorInterface::class);

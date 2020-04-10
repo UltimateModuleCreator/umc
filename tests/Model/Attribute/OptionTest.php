@@ -19,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Test\Unit\Attribute;
+namespace App\Test\Model\Attribute;
 
 use App\Model\Attribute;
 use App\Model\Attribute\Option;
@@ -36,7 +36,7 @@ class OptionTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this->createMock(Attribute::class);
     }

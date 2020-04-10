@@ -38,7 +38,7 @@ class ReaderTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->yamlLoader = $this->createMock(YamlLoader::class);
         $this->reader = new Reader($this->yamlLoader, ['source.yml']);
