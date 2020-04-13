@@ -62,6 +62,30 @@ class SettingsTest extends TestCase
     }
 
     /**
+     * @covers \App\Model\Settings::__construct
+     * @covers \App\Model\Settings::getSettingsSplit
+     */
+    public function testGetSettingsSplit()
+    {
+        $loaded = [
+            'module_field1' => 'value1',
+            'module_field2' => 'value2',
+            'entity_field1' => 'value11',
+        ];
+        $this->loader->method('load')->willReturn($loaded);
+        $expected = [
+            'module' => [
+                'field1' => 'value1',
+                'field2' => 'value2',
+            ],
+            'entity' => [
+                'field1' => 'value11'
+            ]
+        ];
+        $this->assertEquals($expected, $this->settings->getSettingsSplit());
+    }
+
+    /**
      * @covers \App\Model\Settings::getSettings
      */
     public function testGetSettingsWithException()

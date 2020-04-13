@@ -20,66 +20,47 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\Attribute;
+use App\Model\Attribute\Type\Factory as TypeFactory;
+use App\Model\Attribute\Option\Factory as OptionFactory;
+use App\Model\Attribute\Serialized\Factory as SerializedFactory;
 use App\Model\Entity;
+use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class AttributeTest extends TestCase
 {
     /**
-     * @var Attribute
-     */
-    private $attribute;
-    /**
-     * @var Attribute\TypeFactory
+     * @var TypeFactory | MockObject
      */
     private $typeFactory;
     /**
-     * @var array
+     * @var OptionFactory
      */
-    private $data = [
-        'label' => 'Attribute',
-        'code' => 'attribute',
-        'dummy' => 'dummy'
-    ];
+    private $optionFactory;
+    /**
+     * @var SerializedFactory
+     */
+    private $serializedFactory;
+    /**
+     * @var StringUtil | MockObject
+     */
+    private $stringUtil;
+    /**
+     * @var Entity | MockObject
+     */
+    private $entity;
 
     /**
      * setup tests
      */
     protected function setUp(): void
     {
-        $this->typeFactory = $this->createMock(Attribute\TypeFactory::class);
-        $this->attribute = new Attribute($this->typeFactory, $this->data);
-    }
-
-    /**
-     * @covers \App\Model\Attribute::getData()
-     */
-    public function testGetData()
-    {
-        $this->assertEquals('Attribute', $this->attribute->getData('label'));
-        $this->assertEquals('attribute', $this->attribute->getData('code'));
-        $this->assertNull($this->attribute->getData('non_existent'));
-        $this->assertEquals('default', $this->attribute->getData('non_existent', 'default'));
-    }
-
-    /**
-     * @covers \App\Model\Attribute::getRawData()
-     */
-    public function testGetRawData()
-    {
-        $this->assertEquals($this->data, $this->attribute->getRawData());
-    }
-
-    /**
-     * @covers \App\Model\Attribute::getPropertiesData()
-     */
-    public function testGetPropertiesData()
-    {
-        $propertiesData = $this->attribute->getPropertiesData();
-        $this->assertArrayHasKey('label', $propertiesData);
-        $this->assertArrayHasKey('code', $propertiesData);
-        $this->assertArrayNotHasKey('dummy', $propertiesData);
+        $this->typeFactory = $this->createMock(Attribute\Type\Factory::class);
+        $this->optionFactory = $this->createMock(OptionFactory::class);
+        $this->serializedFactory = $this->createMock(SerializedFactory::class);
+        $this->stringUtil = $this->createMock(StringUtil::class);
+        $this->entity = $this->createMock(Entity::class);
     }
 
     /**
@@ -98,53 +79,22 @@ class AttributeTest extends TestCase
      */
     public function testGetTypeInstance()
     {
-        $typeInstance = $this->createMock(Attribute\TypeInterface::class);
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
         $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
         //test memoizing
-        $attrTypeInstance = $this->attribute->getTypeInstance();
-        $this->attribute->getTypeInstance();
+        $instance = $this->getInstance([]);
+        $attrTypeInstance = $instance->getTypeInstance();
+        $instance->getTypeInstance();
         $this->assertEquals($typeInstance, $attrTypeInstance);
     }
 
     /**
      * @covers \App\Model\Attribute::getEntity
-     * @covers \App\Model\Attribute::setEntity
+     * @covers \App\Model\Attribute::__construct
      */
-    public function testSetEntity()
+    public function testGetEntity()
     {
-        /** @var Entity | MockObject $entity */
-        $entity = $this->createMock(Entity::class);
-        $this->attribute->setEntity($entity);
-        $this->assertEquals($entity, $this->attribute->getEntity());
-    }
-
-    /**
-     * @covers \App\Model\Attribute::getProcessedOptions
-     * @covers \App\Model\Attribute::toConstantName
-     */
-    public function testGetProcessedOptions()
-    {
-        $options = "o1\no2\n3\n";
-        $attribute = new Attribute($this->typeFactory, ['options' => $options]);
-        $expected = [
-            'O1' => [
-                'value' => 1,
-                'label' => 'o1'
-            ],
-            'O2' => [
-                'value' => 2,
-                'label' => 'o2'
-            ],
-            '_3' => [
-                'value' => 3,
-                'label' => '3'
-            ],
-            '_EMPTY' => [
-                'value' => 4,
-                'label' => ''
-            ]
-        ];
-        $this->assertEquals($expected, $attribute->getProcessedOptions());
+        $this->assertEquals($this->entity, $this->getInstance([])->getEntity());
     }
 
     /**
@@ -153,10 +103,8 @@ class AttributeTest extends TestCase
      */
     public function testGetCode()
     {
-        $attribute = new Attribute($this->typeFactory, ['code' => 'code']);
-        $this->assertEquals('code', $attribute->getCode());
-        $attribute = new Attribute($this->typeFactory, ['code' => '']);
-        $this->assertEquals('', $attribute->getCode());
+        $this->assertEquals('code', $this->getInstance(['code' => 'code'])->getCode());
+        $this->assertEquals('', $this->getInstance([])->getCode());
     }
 
     /**
@@ -165,10 +113,8 @@ class AttributeTest extends TestCase
      */
     public function testGetLabel()
     {
-        $attribute = new Attribute($this->typeFactory, ['label' => 'label']);
-        $this->assertEquals('label', $attribute->getLabel());
-        $attribute = new Attribute($this->typeFactory, ['label' => '']);
-        $this->assertEquals('', $attribute->getLabel());
+        $this->assertEquals('label', $this->getInstance(['label' => 'label'])->getLabel());
+        $this->assertEquals('', $this->getInstance([])->getLabel());
     }
 
     /**
@@ -177,22 +123,18 @@ class AttributeTest extends TestCase
      */
     public function testGetType()
     {
-        $attribute = new Attribute($this->typeFactory, ['type' => 'text']);
-        $this->assertEquals('text', $attribute->getType());
-        $attribute = new Attribute($this->typeFactory, ['type' => '']);
-        $this->assertEquals('', $attribute->getType());
+        $this->assertEquals('type', $this->getInstance(['type' => 'type'])->getType());
+        $this->assertEquals('', $this->getInstance([])->getCode());
     }
 
     /**
-     * @covers \App\Model\Attribute::getIsName
+     * @covers \App\Model\Attribute::isName
      * @covers \App\Model\Attribute::__construct
      */
-    public function testGetIsName()
+    public function testIsName()
     {
-        $attribute = new Attribute($this->typeFactory, ['is_name' => '1']);
-        $this->assertTrue($attribute->getIsName());
-        $attribute = new Attribute($this->typeFactory, []);
-        $this->assertFalse($attribute->getIsName());
+        $this->assertTrue($this->getInstance(['name' => 1])->isName());
+        $this->assertFalse($this->getInstance([])->isName());
     }
 
     /**
@@ -201,10 +143,8 @@ class AttributeTest extends TestCase
      */
     public function testGetRequired()
     {
-        $attribute = new Attribute($this->typeFactory, ['required' => '1']);
-        $this->assertTrue($attribute->getRequired());
-        $attribute = new Attribute($this->typeFactory, []);
-        $this->assertFalse($attribute->getRequired());
+        $this->assertTrue($this->getInstance(['required' => 1])->isRequired());
+        $this->assertFalse($this->getInstance([])->isRequired());
     }
 
     /**
@@ -220,27 +160,13 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute::getPosition
-     * @covers \App\Model\Attribute::__construct
-     */
-    public function testGetPosition()
-    {
-        $attribute = new Attribute($this->typeFactory, ['position' => '22']);
-        $this->assertEquals(22, $attribute->getPosition());
-        $attribute = new Attribute($this->typeFactory, []);
-        $this->assertEquals(0, $attribute->getPosition());
-    }
-
-    /**
      * @covers \App\Model\Attribute::getNote
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetNote()
     {
-        $attribute = new Attribute($this->typeFactory, ['note' => 'note']);
-        $this->assertEquals('note', $attribute->getNote());
-        $attribute = new Attribute($this->typeFactory, ['note' => '']);
-        $this->assertEquals('', $attribute->getNote());
+        $this->assertEquals('note', $this->getInstance(['note' => 'note'])->getNote());
+        $this->assertEquals('', $this->getInstance([])->getNote());
     }
 
     /**
@@ -337,5 +263,20 @@ class AttributeTest extends TestCase
         $this->assertFalse($attribute->getShowInView());
         $attribute->setEntity($entity2);
         $this->assertFalse($attribute->getShowInView());
+    }
+
+    /**
+     * @param $data
+     * @return Attribute
+     */
+    private function getInstance($data): Attribute
+    {
+        return new Attribute(
+            $this->typeFactory,
+            $this->optionFactory,
+            $this->serializedFactory,
+            $this->stringUtil,
+            $data
+        );
     }
 }

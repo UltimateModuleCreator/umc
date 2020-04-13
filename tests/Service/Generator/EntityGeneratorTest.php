@@ -53,6 +53,7 @@ class EntityGeneratorTest extends TestCase
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->module = $this->createMock(Module::class);
         $this->stringUtil = $this->createMock(StringUtil::class);
+        $this->stringUtil->method('camel')->willReturnArgument(0);
         $this->generator = new EntityGenerator($this->twig, $this->stringUtil);
 
         $this->module->expects($this->once())->method('getEntities')->willReturn(
@@ -104,7 +105,7 @@ class EntityGeneratorTest extends TestCase
             $this->generator->generateContent(
                 $this->module,
                 [
-                    'template' => 'template',
+                    'scope' => 'entity',
                     'source' => 'path/_Entity_'
                 ]
             )

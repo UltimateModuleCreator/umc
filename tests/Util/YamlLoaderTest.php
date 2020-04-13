@@ -73,8 +73,8 @@ class YamlLoaderTest extends TestCase
         ];
         $loader = new YamlLoader();
         $expected = "dummy1:\n";
-        $expected .= "    var1: val1\n";
-        $expected .= "    var2: val2\n";
+        $expected .= "  var1: val1\n";
+        $expected .= "  var2: val2\n";
         $expected .= "dummy2: val3\n";
         $this->assertEquals($expected, $loader->arrayToYaml($array));
     }

@@ -253,7 +253,50 @@ class ModuleTest extends TestCase
      */
     public function testGetModuleDependencies()
     {
+        $entity1 = $this->createMock(Entity::class);
+        $entity1->method('getModuleDependencies')->willReturn(['dep1', 'dep2']);
+        $entity2 = $this->createMock(Entity::class);
+        $entity2->method('getModuleDependencies')->willReturn(['dep1', 'dep3']);
+        $this->entityFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($entity1, $entity2);
+        $data = [
+            '_entities' => [
+                ['data'],
+                ['data']
+            ],
+            'umc_crud' => true
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue(in_array('Umc_Crud', $module->getModuleDependencies()));
+        $this->assertTrue(in_array('dep1', $module->getModuleDependencies()));
+        $this->assertTrue(in_array('dep2', $module->getModuleDependencies()));
+        $this->assertTrue(in_array('dep3', $module->getModuleDependencies()));
+    }
 
+    /**
+     * @covers \App\Model\Module::getModuleDependencies
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetModuleDependenciesNoUmcCrud()
+    {
+        $entity1 = $this->createMock(Entity::class);
+        $entity1->method('getModuleDependencies')->willReturn(['dep1', 'dep2']);
+        $entity2 = $this->createMock(Entity::class);
+        $entity2->method('getModuleDependencies')->willReturn(['dep1', 'dep3']);
+        $this->entityFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($entity1, $entity2);
+        $data = [
+            '_entities' => [
+                ['data'],
+                ['data']
+            ],
+            'umc_crud' => false
+        ];
+        $module = $this->getInstance($data);
+        $this->assertFalse(in_array('Umc_Crud', $module->getModuleDependencies()));
+        $this->assertTrue(in_array('dep1', $module->getModuleDependencies()));
+        $this->assertTrue(in_array('dep2', $module->getModuleDependencies()));
+        $this->assertTrue(in_array('dep3', $module->getModuleDependencies()));
     }
 
     /**
@@ -262,7 +305,50 @@ class ModuleTest extends TestCase
      */
     public function testGetComposerDependencies()
     {
+        $entity1 = $this->createMock(Entity::class);
+        $entity1->method('getComposerDependencies')->willReturn(['dep1', 'dep2']);
+        $entity2 = $this->createMock(Entity::class);
+        $entity2->method('getComposerDependencies')->willReturn(['dep1', 'dep3']);
+        $this->entityFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($entity1, $entity2);
+        $data = [
+            '_entities' => [
+                ['data'],
+                ['data']
+            ],
+            'umc_crud' => true
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue(in_array('umc/module-crud', $module->getComposerDependencies()));
+        $this->assertTrue(in_array('dep1', $module->getComposerDependencies()));
+        $this->assertTrue(in_array('dep2', $module->getComposerDependencies()));
+        $this->assertTrue(in_array('dep3', $module->getComposerDependencies()));
+    }
 
+    /**
+     * @covers \App\Model\Module::getComposerDependencies
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetComposerDependenciesNoUmcCrid()
+    {
+        $entity1 = $this->createMock(Entity::class);
+        $entity1->method('getComposerDependencies')->willReturn(['dep1', 'dep2']);
+        $entity2 = $this->createMock(Entity::class);
+        $entity2->method('getComposerDependencies')->willReturn(['dep1', 'dep3']);
+        $this->entityFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($entity1, $entity2);
+        $data = [
+            '_entities' => [
+                ['data'],
+                ['data']
+            ],
+            'umc_crud' => false
+        ];
+        $module = $this->getInstance($data);
+        $this->assertFalse(in_array('umc/module-crud', $module->getComposerDependencies()));
+        $this->assertTrue(in_array('dep1', $module->getComposerDependencies()));
+        $this->assertTrue(in_array('dep2', $module->getComposerDependencies()));
+        $this->assertTrue(in_array('dep3', $module->getComposerDependencies()));
     }
 
     /**
@@ -358,7 +444,38 @@ class ModuleTest extends TestCase
      */
     public function testGetAclMenuParents()
     {
+        $menuConfig = [
+            'level1' => [
+                'label' => 'Level 1',
+            ],
+            'level2' => [
+                'label' => 'Level 2',
+                'parent' => 'level1'
+            ],
+            'level22' => [
+                'label' => 'Level 22',
+                'parent' => 'level1',
+                'acl' => ['acl1', 'acl2']
+            ],
+            'level3' => [
+                'label' => 'Level 3',
+                'parent' => 'level2'
+            ]
+        ];
+        $this->assertEquals([],  $this->getInstance(['menu_parent' => ''], $menuConfig)->getAclMenuParents());
 
+        $instance = $this->getInstance(['menu_parent' => 'level1'], $menuConfig);
+        $this->assertEquals(['level1'], $instance->getAclMenuParents());
+        //call twice for memoizing
+        $this->assertEquals(['level1'], $instance->getAclMenuParents());
+
+        $this->assertEquals(['level1', 'level2'], $this->getInstance(['menu_parent' => 'level2'], $menuConfig)->getAclMenuParents());
+
+        $this->assertEquals(['acl1', 'acl2'], $this->getInstance(['menu_parent' => 'level22'], $menuConfig)->getAclMenuParents());
+
+        $this->assertEquals(['level1', 'level2', 'level3'], $this->getInstance(['menu_parent' => 'level3'], $menuConfig)->getAclMenuParents());
+
+        $this->assertEquals(['missing'], $this->getInstance(['menu_parent' => 'missing'], $menuConfig)->getAclMenuParents());
     }
 
     /**
@@ -532,7 +649,19 @@ class ModuleTest extends TestCase
      */
     public function testIsProcessorWithType()
     {
-
+        $entity = $this->createMock(Entity::class);
+        $attribute = $this->createMock(Attribute::class);
+        $entity->method('getAttributesWithProcessor')->willReturn(['date' => $attribute]);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isProcessorWithType('save', 'date'));
+        //call twice to test memoizing
+        $this->assertTrue($module->isProcessorWithType('save', 'date'));
     }
 
     /**
@@ -542,7 +671,20 @@ class ModuleTest extends TestCase
      */
     public function testIsProductAttribute()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isProductAttribute')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isProductAttribute());
+        //call twice to test memoizing
+        $this->assertTrue($module->isProductAttribute());
 
+        $this->assertFalse($this->getInstance([])->isProductAttribute());
     }
 
     /**
@@ -552,7 +694,20 @@ class ModuleTest extends TestCase
      */
     public function testIsProductAttributeSet()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('isProductAttributeSet')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isProductAttributeSet());
+        //call twice to test memoizing
+        $this->assertTrue($module->isProductAttributeSet());
 
+        $this->assertFalse($this->getInstance([])->isProductAttributeSet());
     }
 
     /**
@@ -562,7 +717,20 @@ class ModuleTest extends TestCase
      */
     public function testIsOptionAttribute()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('hasOptionAttributes')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isOptionAttribute());
+        //call twice to test memoizing
+        $this->assertTrue($module->isOptionAttribute());
 
+        $this->assertFalse($this->getInstance([])->isOptionAttribute());
     }
 
     /**
@@ -572,61 +740,158 @@ class ModuleTest extends TestCase
      */
     public function testHasTopMenu()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('getMenuLink')->willReturn(1);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->hasTopMenu());
+        //call twice to test memoizing
+        $this->assertTrue($module->hasTopMenu());
 
+        $this->assertFalse($this->getInstance([])->hasTopMenu());
     }
 
     /**
      * @covers \App\Model\Module::hasFooterMenu
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testHasFooterMenu()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('getMenuLink')->willReturn(2);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->hasFooterMenu());
+        //call twice to test memoizing
+        $this->assertTrue($module->hasFooterMenu());
 
+        $this->assertFalse($this->getInstance([])->hasFooterMenu());
     }
 
     /**
      * @covers \App\Model\Module::getFileEntities
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testGetFileEntities()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('hasAttributeType')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getFileEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getFileEntities());
 
+        $this->assertEquals([], $this->getInstance([])->getFileEntities());
     }
 
     /**
      * @covers \App\Model\Module::isImage
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testIsImage()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('hasAttributeType')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertTrue($module->isImage());
+        //call twice to test memoizing
+        $this->assertTrue($module->isImage());
 
+        $this->assertFalse($this->getInstance([])->isImage());
     }
 
     /**
      * @covers \App\Model\Module::getImageEntities
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testGetImageEntities()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('hasAttributeType')->willReturn(true);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getImageEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getImageEntities());
 
+        $this->assertEquals([], $this->getInstance([])->getImageEntities());
     }
 
     /**
      * @covers \App\Model\Module::getMainMenuEntities
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testGetMainMenuEntities()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('getMenuLink')->willReturn(1);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getMainMenuEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getMainMenuEntities());
 
+        $this->assertEquals([], $this->getInstance([])->getMainMenuEntities());
     }
 
     /**
      * @covers \App\Model\Module::getFooterLinksEntities
+     * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
      */
     public function testGetFooterLinksEntities()
     {
+        $entity = $this->createMock(Entity::class);
+        $entity->method('getMenuLink')->willReturn(2);
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
+        $data = [
+            '_entities' => [
+                ['data']
+            ]
+        ];
+        $module = $this->getInstance($data);
+        $this->assertEquals([$entity], $module->getFooterLinksEntities());
+        //call twice to test memoizing
+        $this->assertEquals([$entity], $module->getFooterLinksEntities());
 
+        $this->assertEquals([], $this->getInstance([])->getFooterLinksEntities());
     }
 
     /**
@@ -635,7 +900,10 @@ class ModuleTest extends TestCase
      */
     public function testGetMockObjectUse()
     {
-
+        $this->assertEquals(
+            "\n" . 'use PHPUnit\Framework\MockObject\MockObject;',
+            $this->getInstance([])->getMockObjectUse()
+        );
     }
 
     /**
@@ -644,7 +912,7 @@ class ModuleTest extends TestCase
      */
     public function testGetMockObjectClass()
     {
-
+        $this->assertEquals('MockObject', $this->getInstance([])->getMockObjectClass());
     }
 
     /**
@@ -653,7 +921,15 @@ class ModuleTest extends TestCase
      */
     public function testGetUmcCrudNamespace()
     {
+        $this->assertEquals(
+            'Umc',
+            $this->getInstance(['umc_crud' => true, 'namespace' => 'Ns'])->getUmcCrudNamespace()
+        );
 
+        $this->assertEquals(
+            'Ns',
+            $this->getInstance(['umc_crud' => false, 'namespace' => 'Ns'])->getUmcCrudNamespace()
+        );
     }
 
     /**
@@ -662,7 +938,15 @@ class ModuleTest extends TestCase
      */
     public function testGetUmcModuleName()
     {
+        $this->assertEquals(
+            'Crud',
+            $this->getInstance(['umc_crud' => true, 'module_name' => 'Md'])->getUmcModuleName()
+        );
 
+        $this->assertEquals(
+            'Md',
+            $this->getInstance(['umc_crud' => false, 'module_name' => 'Md'])->getUmcModuleName()
+        );
     }
 
     /**
@@ -671,7 +955,25 @@ class ModuleTest extends TestCase
      */
     public function testGetNullSaveDataProcessor()
     {
+        $expected = ['Umc', 'Crud', 'Ui', 'SaveDataProcessor', 'NullProcessor'];
+        $this->stringUtil->expects($this->once())->method('glueClassParts')->with($expected)->willReturn('class');
+        $this->assertEquals('class', $this->getInstance(['umc_crud' => 1])->getNullSaveDataProcessor());
+    }
 
+    /**
+     * @covers \App\Model\Module::getNullSaveDataProcessor
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetNullSaveDataProcessorNoUmcCrud()
+    {
+        $expected = ['Ns', 'Md', 'Ui', 'SaveDataProcessor', 'NullProcessor'];
+        $this->stringUtil->expects($this->once())->method('glueClassParts')->with($expected)->willReturn('class');
+        $settings = [
+            'umc_crud' => false,
+            'namespace' => 'Ns',
+            'module_name' => 'Md'
+        ];
+        $this->assertEquals('class', $this->getInstance($settings)->getNullSaveDataProcessor());
     }
 
     /**
@@ -680,7 +982,25 @@ class ModuleTest extends TestCase
      */
     public function testGetNullFormDataModifier()
     {
+        $expected = ['Umc', 'Crud', 'Ui', 'Form', 'DataModifier', 'NullModifier'];
+        $this->stringUtil->expects($this->once())->method('glueClassParts')->with($expected)->willReturn('class');
+        $this->assertEquals('class', $this->getInstance(['umc_crud' => 1])->getNullFormDataModifier());
+    }
 
+    /**
+     * @covers \App\Model\Module::getNullFormDataModifier
+     * @covers \App\Model\Module::__construct
+     */
+    public function testGetNullFormDataModifierNoUmcCrud()
+    {
+        $expected = ['Ns', 'Md', 'Ui', 'Form', 'DataModifier', 'NullModifier'];
+        $this->stringUtil->expects($this->once())->method('glueClassParts')->with($expected)->willReturn('class');
+        $settings = [
+            'umc_crud' => false,
+            'namespace' => 'Ns',
+            'module_name' => 'Md'
+        ];
+        $this->assertEquals('class', $this->getInstance($settings)->getNullFormDataModifier());
     }
 
     /**
@@ -689,7 +1009,7 @@ class ModuleTest extends TestCase
      */
     public function testGetAdminRoutePrefix()
     {
-
+        $this->assertEquals('modulename', $this->getInstance(['module_name' => 'module_name'])->getAdminRoutePrefix());
     }
 
     /**
@@ -698,20 +1018,21 @@ class ModuleTest extends TestCase
      */
     public function testGetProcessorTypes()
     {
-
+        $this->assertEquals(2, count($this->getInstance([])->getProcessorTypes()));
     }
 
     /**
      * @param $data
+     * @param array $menuConfig
      * @return Module
      */
-    private function getInstance($data): Module
+    private function getInstance($data, $menuConfig = []): Module
     {
         return  new Module(
             $this->stringUtil,
             $this->entityFactory,
             [],
-            [],
+            $menuConfig,
             $data
         );
     }

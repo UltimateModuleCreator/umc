@@ -41,7 +41,7 @@ class PhpTest extends TestCase
         $license = "This is the license for/**/<!----> Namespace_ModuleName for the year 2018\n" .
                 "and {{this should not be replaced}}";
         $replacer->method('replaceVars')->willReturn($license);
-        $expected = PHP_EOL . "/**" . PHP_EOL;
+        $expected = PHP_EOL . PHP_EOL . "/**" . PHP_EOL;
         $expected .= " * This is the license for Namespace_ModuleName for the year 2018" . PHP_EOL;
         $expected .= " * and {{this should not be replaced}}" . PHP_EOL;
         $expected .= " */" . PHP_EOL;
