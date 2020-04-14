@@ -27,7 +27,7 @@ use App\Model\Entity\Factory;
 use App\Model\Module;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
@@ -51,7 +51,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->attributeFactory = $this->createMock(AttributeFactory::class);
         $this->stringUtil = $this->createMock(StringUtil::class);

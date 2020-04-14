@@ -24,7 +24,7 @@ use App\Service\Archiver;
 use App\Service\ZipArchiveFactory;
 use App\Util\FinderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -58,7 +58,7 @@ class ArchiverTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
 
         $this->zipFactory = $this->createMock(ZipArchiveFactory::class);

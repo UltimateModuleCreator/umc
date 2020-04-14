@@ -40,7 +40,7 @@ class SettingsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->loader = $this->createMock(YamlLoader::class);
         $this->settings = new Settings('file', 'path', $this->loader);

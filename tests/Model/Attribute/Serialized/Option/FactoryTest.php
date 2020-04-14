@@ -41,7 +41,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->serialized = $this->createMock(Serialized::class);
         $this->factory = new Factory();

@@ -44,7 +44,7 @@ class ModuleTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
         $this->entityFactory = $this->createMock(Factory::class);

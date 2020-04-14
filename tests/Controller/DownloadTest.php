@@ -25,7 +25,7 @@ use App\Service\ModuleList;
 use App\Service\Source\Reader;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -69,7 +69,7 @@ class DownloadTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->request = $this->createMock(Request::class);

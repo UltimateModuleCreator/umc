@@ -21,7 +21,7 @@ use App\Controller\Index;
 use App\Service\ModuleList;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 
 class IndexTest extends TestCase
@@ -42,7 +42,7 @@ class IndexTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->moduleList = $this->createMock(ModuleList::class);
@@ -54,7 +54,8 @@ class IndexTest extends TestCase
      */
     public function testRun()
     {
-        $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template));
+        $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template))
+            ->willReturn('output');
         $this->moduleList->expects($this->once())->method('getModules')->willReturn([]);
         /** @var ModuleList | MockObject $moduleList */
         $index = new Index($this->moduleList, $this->template);

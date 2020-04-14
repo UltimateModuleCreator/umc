@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace App\Tests\Util;
 
 use App\Util\FinderFactory;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
 class FinderFactoryTest extends TestCase

@@ -19,7 +19,7 @@
 namespace App\Tests\Util;
 
 use App\Util\StringUtil;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class StringUtilTest extends TestCase
 {

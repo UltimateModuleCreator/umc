@@ -44,10 +44,6 @@ class Edit extends AbstractController
      */
     private $basePath;
     /**
-     * @var array
-     */
-    private $attributeConfig;
-    /**
      * @var \App\Model\Settings
      */
     private $settingsModel;
@@ -64,7 +60,6 @@ class Edit extends AbstractController
      * @param \App\Model\Settings $settingsModel
      * @param Loader $formLoader
      * @param string $basePath
-     * @param array $attributeConfig
      */
     public function __construct(
         string $template,
@@ -72,8 +67,7 @@ class Edit extends AbstractController
         YamlLoader $yamlLoader,
         \App\Model\Settings $settingsModel,
         Loader $formLoader,
-        string $basePath,
-        array $attributeConfig
+        string $basePath
     ) {
         $this->template = $template;
         $this->requestStack = $requestStack;
@@ -81,7 +75,6 @@ class Edit extends AbstractController
         $this->settingsModel = $settingsModel;
         $this->formLoader = $formLoader;
         $this->basePath = $basePath;
-        $this->attributeConfig = $attributeConfig;
     }
 
     /**
@@ -125,8 +118,10 @@ class Edit extends AbstractController
                 'forms' => $forms,
                 'data' => $data,
                 'title' => $title,
-                'attribute_config' => $this->getGroupedAttributeConfig($formsConfig['attribute']['rows']),
-                'serialized_attribute_config' => $this->getGroupedAttributeConfig($formsConfig['serialized']['rows']),
+                'attribute_config' => $this->getGroupedAttributeConfig($formsConfig['attribute']['rows'] ?? []),
+                'serialized_attribute_config' => $this->getGroupedAttributeConfig(
+                    $formsConfig['serialized']['rows'] ?? []
+                ),
                 'is_new_mode' => (int)$isNewMode,
                 'uiConfig' => $this->getUiConfig($formsConfig),
                 'defaults' => $defaults,
@@ -154,8 +149,8 @@ class Edit extends AbstractController
                     },
                     []
                 ),
-                'panel' => $form['panel'],
-                'children' => $form['children']
+                'panel' => $form['panel'] ?? '',
+                'children' => $form['children'] ?? []
 
             ];
         }

@@ -24,7 +24,7 @@ use App\Service\Generator;
 use App\Service\Generator\GeneratorInterface;
 use App\Service\Source\Reader;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GeneratorTest extends TestCase
 {
@@ -52,7 +52,7 @@ class GeneratorTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->reader = $this->createMock(Reader::class);
         $this->moduleGenerator = $this->createMock(GeneratorInterface::class);

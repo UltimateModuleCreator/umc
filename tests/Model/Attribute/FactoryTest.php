@@ -29,7 +29,7 @@ use App\Model\Attribute\Serialized\Factory as SerializedFactory;
 use App\Model\Entity;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
@@ -61,7 +61,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->typeFactory = $this->createMock(TypeFactory::class);
         $this->optionFactory = $this->createMock(OptionFactory::class);

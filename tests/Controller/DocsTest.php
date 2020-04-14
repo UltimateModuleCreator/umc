@@ -22,7 +22,7 @@ namespace App\Tests\Controller;
 use App\Controller\Docs;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
 class DocsTest extends TestCase
@@ -39,7 +39,7 @@ class DocsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(Environment::class);
     }
@@ -49,7 +49,8 @@ class DocsTest extends TestCase
      */
     public function testRun()
     {
-        $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template));
+        $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template))
+            ->willReturn('output');
         $docs = new Docs($this->template);
         /** @var ContainerInterface | MockObject $container */
         $container = $this->createMock(ContainerInterface::class);

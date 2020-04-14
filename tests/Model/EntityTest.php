@@ -22,10 +22,9 @@ namespace App\Tests\Model;
 use App\Model\Attribute;
 use App\Model\Entity;
 use App\Model\Module;
-use App\Util\Sorter;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
 {
@@ -41,20 +40,11 @@ class EntityTest extends TestCase
      * @var Module | MockObject
      */
     private $module;
-    /**
-     * @var array
-     * @deprecated
-     */
-    private $data = [
-        'name_singular' => 'Entity',
-        'name_plural' => 'Entities',
-        'dummy' => 'dummy'
-    ];
 
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
         $this->attributeFactory = $this->createMock(Attribute\Factory::class);
@@ -67,7 +57,7 @@ class EntityTest extends TestCase
      */
     public function testToArray()
     {
-        $attribute = $this->createMock(Entity::class);
+        $attribute = $this->createMock(Attribute::class);
         $attribute->expects($this->once())->method('toArray');
         $this->attributeFactory->expects($this->once())->method('create')->willReturn($attribute);
         $result = $this->getInstance(['_attributes' => [[]]])->toArray();
@@ -87,7 +77,8 @@ class EntityTest extends TestCase
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
         $attribute2->method('isName')->willReturn(true);
-        $this->attributeFactory->expects($this->exactly(2))->willReturnOnConsecutiveCalls($attribute1, $attribute2);
+        $this->attributeFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($attribute1, $attribute2);
         $entity = $this->getInstance(['_attributes' => [['data'], ['data']]]);
         $this->assertEquals($attribute2, $entity->getNameAttribute());
     }
@@ -120,14 +111,31 @@ class EntityTest extends TestCase
         /** @var Attribute | MockObject $attribute2 */
         $attribute2 = $this->createMock(Attribute::class);
         $attribute2->method('getType')->willReturn('textarea');
-        $entity = new Entity($this->sorter);
-        $entity->addAttribute($attribute1);
-        $entity->addAttribute($attribute2);
+        $this->attributeFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($attribute1, $attribute2);
+        $entity = $this->getInstance([
+            '_attributes' => [[], []]
+        ]);
         $this->assertTrue($entity->hasAttributeType('text'));
         $this->assertTrue($entity->hasAttributeType('textarea'));
         $this->assertFalse($entity->hasAttributeType('dummy'));
     }
 
+    /**
+     * @covers \App\Model\Entity::getAttributes
+     * @covers \App\Model\Entity::__construct
+     */
+    public function testGetAttributes()
+    {
+        /** @var Attribute | MockObject $attribute1 */
+        $attribute1 = $this->createMock(Attribute::class);
+        /** @var Attribute | MockObject $attribute2 */
+        $attribute2 = $this->createMock(Attribute::class);
+        $this->attributeFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($attribute1, $attribute2);
+        $entity = $this->getInstance(['_attributes' => [['data'], ['data']]]);
+        $this->assertEquals([$attribute1, $attribute2], $entity->getAttributes());
+    }
 
     /**
      * @covers \App\Model\Entity::getModule

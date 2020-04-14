@@ -4,8 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-  form_config_path: '%kernel.root_dir%/../config/form'
-  module_list_path: '%kernel.root_dir%/../var/umc'
+  form_config_path: '%kernel.project_dir%/config/form'
+  module_list_path: '%kernel.project_dir%/var/umc'
   defaults_path: '%module_list_path%/defaults/'
   defaults_file: 'defaults.yml'
   attribute_type_config:
@@ -888,14 +888,14 @@ services:
     App\Service\Source\Reader:
       arguments:
         $files:
-          - '%kernel.root_dir%/../config/source/module.yml'
-          - '%kernel.root_dir%/../config/source/entity.yml'
-#          - '%kernel.root_dir%/../config/source/attribute.yml'
-#          - '%kernel.root_dir%/../config/source/entity-unit-test.yml'
+          - '%kernel.project_dir%/config/source/module.yml'
+          - '%kernel.project_dir%/config/source/entity.yml'
+#          - '%kernel.project_dir%/config/source/attribute.yml'
+#          - '%kernel.project_dir%/config/source/entity-unit-test.yml'
 
     App\Service\Builder:
       arguments:
-        $basePath: '%kernel.root_dir%/../var/umc/'
+        $basePath: '%kernel.project_dir%/var/umc/'
         $configFilePath: '%module_list_path%/'
     App\Service\Writer:
       autowire: false
@@ -918,8 +918,8 @@ services:
           admin_menu: '@App\Service\Form\OptionProvider\AdminMenu'
     App\Util\CodingStandardsFactory:
       arguments:
-        $standards: [PSR1, PSR2, PSR12, '%kernel.root_dir%/../vendor/magento-ecg/coding-standard/EcgM2']
-        $phpcsPath: '%kernel.root_dir%/../vendor/squizlabs/php_codesniffer/bin/phpcs'
+        $standards: [PSR1, PSR2, PSR12, '%kernel.project_dir%/vendor/magento-ecg/coding-standard/EcgM2']
+        $phpcsPath: '%kernel.project_dir%/vendor/squizlabs/php_codesniffer/bin/phpcs'
 
     App\Model\Module\Factory:
       arguments:

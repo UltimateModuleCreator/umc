@@ -43,7 +43,7 @@ class SerializedTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->optionFactory = $this->createMock(OptionFactory::class);
         $this->typeFactory = $this->createMock(TypeFactory::class);

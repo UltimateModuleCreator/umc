@@ -24,7 +24,7 @@ use App\Service\ModuleList;
 use App\Service\Source\Reader;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FilesTest extends TestCase
 {
@@ -44,7 +44,7 @@ class FilesTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->reader = $this->createMock(Reader::class);
@@ -56,7 +56,8 @@ class FilesTest extends TestCase
      */
     public function testRun()
     {
-        $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template));
+        $this->twig->expects($this->once())->method('render')->with($this->equalTo($this->template))
+            ->willReturn('output');
         $this->reader->expects($this->once())->method('getFiles')->willReturn([]);
         /** @var ModuleList | MockObject $moduleList */
         $files = new Files($this->reader, $this->template);

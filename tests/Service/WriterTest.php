@@ -21,7 +21,7 @@ namespace App\Tests\Service;
 
 use App\Service\Writer;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 class WriterTest extends TestCase
@@ -38,7 +38,7 @@ class WriterTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->writer = new Writer('dummy/path', $this->filesystem);

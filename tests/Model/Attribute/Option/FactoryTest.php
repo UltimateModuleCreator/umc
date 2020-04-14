@@ -41,7 +41,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->attribute = $this->createMock(Attribute::class);
         $this->factory = new Factory();

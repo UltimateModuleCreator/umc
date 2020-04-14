@@ -20,7 +20,7 @@ namespace App\Tests\Service;
 use App\Service\ModuleList;
 use App\Util\FinderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -43,7 +43,7 @@ class ModuleListTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->finder = $this->createMock(Finder::class);
         $this->finderFactory = $this->createMock(FinderFactory::class);

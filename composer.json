@@ -16,7 +16,6 @@
         "symfony/form": "*",
         "symfony/framework-bundle": "*",
         "symfony/process": "*",
-        "symfony/translation": "4.3.*",
         "symfony/twig-bundle": "*",
         "symfony/yaml": "*",
         "twig/extensions": "^1.5"
@@ -67,7 +66,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "4.3.*"
+            "require": "5.*"
         }
     }
 }

@@ -58,7 +58,7 @@ class SaveTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->request = $this->createMock(Request::class);
@@ -116,9 +116,7 @@ class SaveTest extends TestCase
     public function testRunWithException()
     {
         $this->request->method('get')->willReturn([]);
-        $this->moduleLoader->expects($this->once())->method('loadModule')
-            ->willReturn($this->createMock(Module::class));
-        $this->moduleLoader->method('loadModule')->willThrowException(new \Exception(''));
+        $this->moduleFactory->method('create')->willThrowException(new \Exception(''));
         $this->assertInstanceOf(JsonResponse::class, $this->save->run());
     }
 }

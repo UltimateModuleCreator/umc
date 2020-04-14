@@ -22,7 +22,7 @@ namespace App\Tests\Service\Source;
 use App\Service\Source\Reader;
 use App\Util\YamlLoader;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ReaderTest extends TestCase
 {
@@ -38,7 +38,7 @@ class ReaderTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->yamlLoader = $this->createMock(YamlLoader::class);
         $this->reader = new Reader($this->yamlLoader, ['source.yml']);

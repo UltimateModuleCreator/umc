@@ -30,7 +30,7 @@ use App\Util\CodingStandards;
 use App\Util\CodingStandardsFactory;
 use App\Util\YamlLoader;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {

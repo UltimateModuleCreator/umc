@@ -11,6 +11,9 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/event-dispatcher": {
+        "version": "1.0.0"
+    },
     "psr/log": {
         "version": "1.0.2"
     },
@@ -44,14 +47,14 @@
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
     },
-    "symfony/debug": {
-        "version": "v4.1.4"
-    },
     "symfony/dependency-injection": {
         "version": "v4.1.4"
     },
     "symfony/dotenv": {
         "version": "v4.1.4"
+    },
+    "symfony/error-handler": {
+        "version": "v5.0.7"
     },
     "symfony/event-dispatcher": {
         "version": "v4.1.4"
@@ -128,19 +131,6 @@
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
     },
-    "symfony/translation": {
-        "version": "3.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "2ad9d2545bce8ca1a863e50e92141f0b9d87ffcd"
-        },
-        "files": [
-            "config/packages/translation.yaml",
-            "translations/.gitignore"
-        ]
-    },
     "symfony/translation-contracts": {
         "version": "v1.1.7"
     },
@@ -155,6 +145,9 @@
             "version": "3.3",
             "ref": "f75ac166398e107796ca94cc57fa1edaa06ec47f"
         }
+    },
+    "symfony/var-dumper": {
+        "version": "v5.0.7"
     },
     "symfony/yaml": {
         "version": "v4.1.4"

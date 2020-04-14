@@ -37,7 +37,7 @@ class FactoryTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->optionFactory = $this->createMock(OptionFactory::class);
         $this->stringUtil = $this->createMock(StringUtil::class);

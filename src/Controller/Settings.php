@@ -20,11 +20,12 @@ namespace App\Controller;
 use App\Service\Form\Loader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class Settings extends AbstractController
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $twig;
     /**
@@ -42,13 +43,13 @@ class Settings extends AbstractController
 
     /**
      * Settings constructor.
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param string $template
      * @param \App\Model\Settings $settingsModel
      * @param Loader $formLoader
      */
     public function __construct(
-        \Twig_Environment $twig,
+        Environment $twig,
         string $template,
         \App\Model\Settings $settingsModel,
         Loader $formLoader

@@ -43,7 +43,7 @@ class BaseTypeTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(Environment::class);
         $this->attribute = $this->createMock(Attribute::class);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,19 +16,18 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 namespace App\Tests\Controller;
 
 use App\Controller\Edit;
 use App\Model\Settings;
+use App\Service\Form\Loader;
 use App\Util\YamlLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 class EditTest extends TestCase
 {
@@ -36,14 +36,6 @@ class EditTest extends TestCase
      */
     private $twig;
     /**
-     * @var Router | MockObject
-     */
-    private $router;
-    /**
-     * @var FormFactoryInterface | MockObject
-     */
-    private $formFactory;
-    /**
      * @var RequestStack | MockObject
      */
     private $requestStack;
@@ -51,14 +43,6 @@ class EditTest extends TestCase
      * @var YamlLoader | MockObject
      */
     private $yamlLoader;
-    /**
-     * @var array
-     */
-    private $attributeConfig;
-    /**
-     * @var array
-     */
-    private $formConfig;
     /**
      * @var Request | MockObject
      */
@@ -71,77 +55,71 @@ class EditTest extends TestCase
      * @var Edit
      */
     private $edit;
+    /**
+     * @var Loader | MockObject
+     */
+    private $formLoader;
 
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
-        $this->twig->expects($this->once())->method('render')->with($this->equalTo('template'));
-        $this->router = $this->createMock(Router::class);
-        $this->router->expects($this->once())->method('generate')->willReturn('route');
+        $this->twig->expects($this->once())->method('render')->with($this->equalTo('template'))
+            ->willReturn('output');
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->request = $this->createMock(Request::class);
         $this->requestStack->expects($this->once())->method('getCurrentRequest')->willReturn($this->request);
         $this->yamlLoader = $this->createMock(YamlLoader::class);
         $this->settings = $this->createMock(Settings::class);
-        $this->attributeConfig = [
-            'can_be_name' => true,
-            'can_show_in_grid' => false,
-            'can_have_options' => true,
-            'can_be_required' => false
-        ];
 
-        $this->formConfig = [
-            'module' => [
-                'class' => \Symfony\Component\Form\AbstractType::class,
-                'name' => 'dummy'
-            ]
-        ];
+        $this->formLoader = $this->createMock(Loader::class);
 
         $this->edit = new Edit(
             'template',
             $this->requestStack,
             $this->yamlLoader,
             $this->settings,
-            'basePath',
-            $this->attributeConfig,
-            $this->formConfig
+            $this->formLoader,
+            'basePath'
         );
-        $this->formFactory = $this->createMock(FormFactoryInterface::class);
-        $this->formFactory->expects($this->once())->method('create')
-            ->willReturn($this->createMock(FormInterface::class));
         /** @var ContainerInterface | MockObject $container */
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnMap([
             ['twig', true],
-            ['form.factory', true],
-            ['router', true]
         ]);
         $container->method('get')->willReturnMap([
             ['twig', $this->twig],
-            ['form.factory', $this->formFactory],
-            ['router', $this->router]
         ]);
         $this->edit->setContainer($container);
     }
 
     /**
      * @covers \App\Controller\Edit::run
-     * @covers \App\Controller\Edit::getAttributeConfig
+     * @covers \App\Controller\Edit::getGroupedAttributeConfig
+     * @covers \App\Controller\Edit::getUiConfig
      * @covers \App\Controller\Edit::__construct
      */
     public function testRunNewMode()
     {
         $this->request->method('get')->willReturn(null);
         $this->yamlLoader->expects($this->never())->method('load');
+        $this->formLoader->method('getForms')->willReturn([
+            [
+                'rows' => [['data']]
+            ],
+            [
+                'rows' => [['data']]
+            ]
+        ]);
         $this->edit->run();
     }
 
     /**
      * @covers \App\Controller\Edit::run
-     * @covers \App\Controller\Edit::getAttributeConfig
+     * @covers \App\Controller\Edit::getGroupedAttributeConfig
+     * @covers \App\Controller\Edit::getUiConfig
      * @covers \App\Controller\Edit::__construct
      */
     public function testEditValidData()
@@ -151,18 +129,35 @@ class EditTest extends TestCase
             'namespace' => 'Namespace',
             'module_name' => 'ModuleName'
         ]);
+        $this->formLoader->method('getForms')->willReturn([
+            'attribute' => [
+                'rows' => [['data']]
+            ],
+            'entity' => [
+                'rows' => [['data']]
+            ]
+        ]);
         $this->edit->run();
     }
 
     /**
      * @covers \App\Controller\Edit::run
-     * @covers \App\Controller\Edit::getAttributeConfig
+     * @covers \App\Controller\Edit::getGroupedAttributeConfig
+     * @covers \App\Controller\Edit::getUiConfig
      * @covers \App\Controller\Edit::__construct
      */
     public function testEditNotValidData()
     {
         $this->request->method('get')->willReturn('module');
         $this->yamlLoader->expects($this->once())->method('load')->willThrowException(new \Exception());
+        $this->formLoader->method('getForms')->willReturn([
+            [
+                'rows' => [['data']]
+            ],
+            [
+                'rows' => [['data']]
+            ]
+        ]);
         $this->edit->run();
     }
 }

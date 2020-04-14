@@ -21,7 +21,7 @@ namespace App\Tests\Service;
 
 use App\Service\Writer;
 use App\Service\WriterFactory;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 class WriterFactoryTest extends TestCase

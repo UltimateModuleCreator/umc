@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -72,58 +74,8 @@ class Save extends AbstractController
             $response['module'] = $module->getExtensionName();
         } catch (\Exception $e) {
             $response['success'] = false;
-            $response['message'] = $e->getMessage() . '<pre>' . $this->getExceptionTraceAsString($e) . '</pre>';
+            $response['message'] = $e->getMessage() . '<pre>' . $e->getTraceAsString() . '</pre>';
         }
         return new JsonResponse($response);
-    }
-
-    /**
-     * @param \Exception $exception
-     * @return string
-     */
-    public function getExceptionTraceAsString(\Exception $exception)
-    {
-        $rtn = "";
-        $count = 0;
-        foreach ($exception->getTrace() as $frame) {
-            $args = "";
-            if (isset($frame['args'])) {
-                $args = array();
-                foreach ($frame['args'] as $arg) {
-                    if (is_string($arg)) {
-                        $args[] = "'" . $arg . "'";
-                    } elseif (is_array($arg)) {
-                        $args[] = "Array";
-                    } elseif (is_null($arg)) {
-                        $args[] = 'NULL';
-                    } elseif (is_bool($arg)) {
-                        $args[] = ($arg) ? "true" : "false";
-                    } elseif (is_object($arg)) {
-                        $args[] = get_class($arg);
-                    } elseif (is_resource($arg)) {
-                        $args[] = get_resource_type($arg);
-                    } else {
-                        $args[] = $arg;
-                    }
-                }
-                $args = join(", ", $args);
-            }
-            $current_file = "[internal function]";
-            if(isset($frame['file'])) {
-                $current_file = $frame['file'];
-            }
-            $current_line = "";
-            if(isset($frame['line'])) {
-                $current_line = $frame['line'];
-            }
-            $rtn .= sprintf( "#%s %s(%s): %s(%s)\n",
-                $count,
-                $current_file,
-                $current_line,
-                $frame['function'],
-                $args );
-            $count++;
-        }
-        return $rtn;
     }
 }

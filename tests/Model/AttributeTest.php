@@ -26,7 +26,7 @@ use App\Model\Attribute\Serialized\Factory as SerializedFactory;
 use App\Model\Entity;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AttributeTest extends TestCase
 {
@@ -35,11 +35,11 @@ class AttributeTest extends TestCase
      */
     private $typeFactory;
     /**
-     * @var OptionFactory
+     * @var OptionFactory | MockObject
      */
     private $optionFactory;
     /**
-     * @var SerializedFactory
+     * @var SerializedFactory | MockObject
      */
     private $serializedFactory;
     /**
@@ -54,7 +54,7 @@ class AttributeTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->typeFactory = $this->createMock(Attribute\Type\Factory::class);
         $this->optionFactory = $this->createMock(OptionFactory::class);
@@ -68,9 +68,20 @@ class AttributeTest extends TestCase
      */
     public function testToArray()
     {
-        $entityArray = $this->attribute->toArray();
-        $this->assertArrayHasKey('label', $entityArray);
-        $this->assertArrayNotHasKey('dummy', $entityArray);
+        $serialized = $this->createMock(Attribute\Serialized::class);
+        $serialized->expects($this->once())->method('toArray');
+        $option = $this->createMock(Attribute\Option::class);
+        $option->expects($this->once())->method('toArray');
+        $this->serializedFactory->expects($this->once())->method('create')->willReturn($serialized);
+        $this->optionFactory->expects($this->once())->method('create')->willReturn($option);
+        $result = $this->getInstance([
+            '_options' => [[]],
+            '_serialized' => [[]]
+        ])->toArray();
+        $this->assertArrayHasKey('code', $result);
+        $this->assertArrayHasKey('label', $result);
+        $this->assertArrayHasKey('_options', $result);
+        $this->assertArrayHasKey('_serialized', $result);
     }
 
     /**
@@ -133,18 +144,67 @@ class AttributeTest extends TestCase
      */
     public function testIsName()
     {
-        $this->assertTrue($this->getInstance(['name' => 1])->isName());
-        $this->assertFalse($this->getInstance([])->isName());
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isCanBeName')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $this->assertTrue($this->getInstance(['is_name' => 1])->isName());
     }
 
     /**
-     * @covers \App\Model\Attribute::getRequired
+     * @covers \App\Model\Attribute::isName
      * @covers \App\Model\Attribute::__construct
      */
-    public function testGetRequired()
+    public function testIsNameNotAllowedByType()
     {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isCanBeName')->willReturn(false);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $this->assertFalse($this->getInstance(['is_name' => 1])->isName());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isName
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsNameNotAllowed()
+    {
+        $this->assertFalse($this->getInstance(['is_name' => false])->isName());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isRequired
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsRequired()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isCanBeRequired')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
         $this->assertTrue($this->getInstance(['required' => 1])->isRequired());
-        $this->assertFalse($this->getInstance([])->isRequired());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isRequired
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsRequiredNotAllowedByType()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isCanBeRequired')->willReturn(false);
+        $this->typeFactory->method('create')->willReturn($type);
+        $this->assertFalse($this->getInstance(['required' => 1])->isRequired());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isRequired
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsRequiredNotAllowed()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->never())->method('isCanBeRequired')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($type);
+        $this->assertFalse($this->getInstance(['required' => false])->isRequired());
     }
 
     /**
@@ -153,10 +213,32 @@ class AttributeTest extends TestCase
      */
     public function testGetOptions()
     {
-        $attribute = new Attribute($this->typeFactory, ['options' => 'options']);
-        $this->assertEquals('options', $attribute->getOptions());
-        $attribute = new Attribute($this->typeFactory, ['options' => '']);
-        $this->assertEquals('', $attribute->getOptions());
+        $option = $this->createMock(Attribute\Option::class);
+        $this->optionFactory->expects($this->once())->method('create')->willReturn($option);
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isCanHaveOptions')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($type);
+        $attribute = $this->getInstance([
+            '_options' => [[]]
+        ]);
+        $this->assertEquals([$option], $attribute->getOptions());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getOptions
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetOptionsNotAllowed()
+    {
+        $option = $this->createMock(Attribute\Option::class);
+        $this->optionFactory->expects($this->once())->method('create')->willReturn($option);
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isCanHaveOptions')->willReturn(false);
+        $this->typeFactory->method('create')->willReturn($type);
+        $attribute = $this->getInstance([
+            '_options' => [[]]
+        ]);
+        $this->assertEquals([], $attribute->getOptions());
     }
 
     /**
@@ -170,33 +252,75 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute::getAdminGrid
+     * @covers \App\Model\Attribute::isAdminGrid
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetAdminGrid()
     {
-        $attribute = new Attribute($this->typeFactory, ['admin_grid' => '1']);
-        $this->assertEquals(1, $attribute->getAdminGrid());
-        $attribute = new Attribute($this->typeFactory, []);
-        $this->assertEquals(0, $attribute->getAdminGrid());
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $type->method('isCanShowInGrid')->willReturn(true);
+        $this->assertTrue($this->getInstance(['admin_grid' => 1])->isAdminGrid());
     }
 
     /**
-     * @covers \App\Model\Attribute::getAdminGridFilter
+     * @covers \App\Model\Attribute::isAdminGrid
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsAdminGridNotAllowedByType()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $type->method('isCanShowInGrid')->willReturn(false);
+        $this->assertFalse($this->getInstance(['admin_grid' => true])->isAdminGrid());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isAdminGrid
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsAdminGridNotAllowed()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $this->typeFactory->method('create')->willReturn($type);
+        $type->expects($this->never())->method('isCanShowInGrid');
+        $this->assertFalse($this->getInstance(['admin_grid' => false])->isAdminGrid());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isAdminGridFilter
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetAdminGridFilter()
     {
-        $attribute = new Attribute($this->typeFactory, ['admin_grid' => '1', 'admin_grid_filter' => 1]);
-        $this->assertTrue($attribute->getAdminGridFilter());
-        $attribute = new Attribute($this->typeFactory, []);
-        $this->assertFalse($attribute->getAdminGridFilter());
-        $attribute = new Attribute($this->typeFactory, ['admin_grid' => 0, 'admin_grid_filter' => 1]);
-        $this->assertFalse($attribute->getAdminGridFilter());
-        $attribute = new Attribute($this->typeFactory, ['admin_grid' => 1, 'admin_grid_filter' => 0]);
-        $this->assertFalse($attribute->getAdminGridFilter());
-        $attribute = new Attribute($this->typeFactory, ['admin_grid' => 0, 'admin_grid_filter' => 0]);
-        $this->assertFalse($attribute->getAdminGridFilter());
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->method('isCanFilterInGrid')->willReturn(true);
+        $type->method('isCanShowInGrid')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($type);
+        $attribute = $this->getInstance(['admin_grid' => '1', 'admin_grid_filter' => 1]);
+        $this->assertTrue($attribute->isAdminGridFilter());
+        $attribute = $this->getInstance([]);
+        $this->assertFalse($attribute->isAdminGridFilter());
+        $attribute = $this->getInstance(['admin_grid' => 0, 'admin_grid_filter' => 1]);
+        $this->assertFalse($attribute->isAdminGridFilter());
+        $attribute = $this->getInstance(['admin_grid' => 1, 'admin_grid_filter' => 0]);
+        $this->assertFalse($attribute->isAdminGridFilter());
+        $attribute = $this->getInstance(['admin_grid' => 0, 'admin_grid_filter' => 0]);
+        $this->assertFalse($attribute->isAdminGridFilter());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isAdminGridFilter
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetAdminGridFilterNotAllowed()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->method('isCanFilterInGrid')->willReturn(false);
+        $type->method('isCanShowInGrid')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($type);
+        $attribute = $this->getInstance(['admin_grid' => '1', 'admin_grid_filter' => 1]);
+        $this->assertFalse($attribute->isAdminGridFilter());
     }
 
     /**
@@ -205,64 +329,69 @@ class AttributeTest extends TestCase
      */
     public function testGetDefaultValue()
     {
-        $attribute = new Attribute($this->typeFactory, ['default_value' => 'default']);
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('getDefaultValue')->willReturn('default');
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $attribute = $this->getInstance(['default_value' => 'default']);
         $this->assertEquals('default', $attribute->getDefaultValue());
-        $attribute = new Attribute($this->typeFactory, ['default_value' => '']);
-        $this->assertEquals('', $attribute->getDefaultValue());
     }
 
     /**
-     * @covers \App\Model\Attribute::getShowInList
+     * @covers \App\Model\Attribute::isShowInList
      * @covers \App\Model\Attribute::__construct
      */
-    public function testGetShowInList()
+    public function testIsShowInList()
     {
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getFrontendList')->willReturn(true);
+        $this->entity->method('isFrontendList')->willReturn(true);
+        $attribute = $this->getInstance(['show_in_list' => 1]);
+        $this->assertTrue($attribute->isShowInList());
+        //call twice to test memoizing
+        $this->assertTrue($attribute->isShowInList());
 
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getFrontendList')->willReturn(false);
-
-        $attribute = new Attribute($this->typeFactory, ['show_in_list' => 1]);
-        $attribute->setEntity($entity1);
-        $this->assertTrue($attribute->getShowInList());
-        $attribute->setEntity($entity2);
-        $this->assertFalse($attribute->getShowInList());
-
-        $attribute = new Attribute($this->typeFactory, ['show_in_list' => 0]);
-        $attribute->setEntity($entity1);
-        $this->assertFalse($attribute->getShowInList());
-        $attribute->setEntity($entity2);
-        $this->assertFalse($attribute->getShowInList());
+        $attribute = $this->getInstance(['show_in_list' => 0]);
+        $this->assertFalse($attribute->isShowInList());
     }
 
     /**
-     * @covers \App\Model\Attribute::getShowInView
+     * @covers \App\Model\Attribute::isShowInList
      * @covers \App\Model\Attribute::__construct
      */
-    public function testGetShowInView()
+    public function testIsShowInListNotAllowedByEntity()
     {
-        /** @var Entity | MockObject $entity1 */
-        $entity1 = $this->createMock(Entity::class);
-        $entity1->method('getFrontendView')->willReturn(true);
+        $this->entity->method('isFrontendList')->willReturn(false);
+        $attribute = $this->getInstance(['show_in_list' => 1]);
+        $this->assertFalse($attribute->isShowInList());
+        //call twice to test memoizing
+        $this->assertFalse($attribute->isShowInList());
+    }
 
-        /** @var Entity | MockObject $entity2 */
-        $entity2 = $this->createMock(Entity::class);
-        $entity2->method('getFrontendView')->willReturn(false);
+    /**
+     * @covers \App\Model\Attribute::isShowInView
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsShowInView()
+    {
+        $this->entity->method('isFrontendView')->willReturn(true);
+        $attribute = $this->getInstance(['show_in_view' => 1]);
+        $this->assertTrue($attribute->isShowInView());
+        //call twice to test memoizing
+        $this->assertTrue($attribute->isShowInView());
 
-        $attribute = new Attribute($this->typeFactory, ['show_in_view' => 1]);
-        $attribute->setEntity($entity1);
-        $this->assertTrue($attribute->getShowInView());
-        $attribute->setEntity($entity2);
-        $this->assertFalse($attribute->getShowInView());
+        $attribute = $this->getInstance(['show_in_view' => 0]);
+        $this->assertFalse($attribute->isShowInView());
+    }
 
-        $attribute = new Attribute($this->typeFactory, ['show_in_view' => 0]);
-        $attribute->setEntity($entity1);
-        $this->assertFalse($attribute->getShowInView());
-        $attribute->setEntity($entity2);
-        $this->assertFalse($attribute->getShowInView());
+    /**
+     * @covers \App\Model\Attribute::isShowInView
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsShowInViewNotAllowedByEntity()
+    {
+        $this->entity->method('isFrontendView')->willReturn(false);
+        $attribute = $this->getInstance(['show_in_view' => 1]);
+        $this->assertFalse($attribute->isShowInView());
+        //call twice to test memoizing
+        $this->assertFalse($attribute->isShowInView());
     }
 
     /**
@@ -276,6 +405,7 @@ class AttributeTest extends TestCase
             $this->optionFactory,
             $this->serializedFactory,
             $this->stringUtil,
+            $this->entity,
             $data
         );
     }

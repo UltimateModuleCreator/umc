@@ -20,7 +20,7 @@ namespace App\Tests\Twig;
 use App\Twig\SnakeCase;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 
 class SnakeCaseTest extends TestCase
@@ -33,7 +33,7 @@ class SnakeCaseTest extends TestCase
     /**
      * Setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
     }

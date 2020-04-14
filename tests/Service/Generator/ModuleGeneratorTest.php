@@ -22,7 +22,7 @@ namespace App\Tests\Service\Generator;
 use App\Model\Module;
 use App\Service\Generator\ModuleGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ModuleGeneratorTest extends TestCase
 {
@@ -42,7 +42,7 @@ class ModuleGeneratorTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->module = $this->createMock(Module::class);
@@ -50,32 +50,29 @@ class ModuleGeneratorTest extends TestCase
     }
 
     /**
-     * @covers \App\Service\Generator\ModuleGenerator::generateContent()
-     * @covers \App\Service\Generator\ModuleGenerator::processDestination()
-     * @covers \App\Service\Generator\ModuleGenerator::__construct()
+     * @covers \App\Service\Generator\ModuleGenerator::generateContent
+     * @covers \App\Service\Generator\ModuleGenerator::processDestination
+     * @covers \App\Service\Generator\ModuleGenerator::processFileConfig
+     * @covers \App\Service\Generator\ModuleGenerator::__construct
      */
     public function testGenerateContent()
     {
         $this->twig->expects($this->once())->method('render')->willReturn('content');
-        $expected = [
-            'destination' => 'content'
-        ];
+        $expected = ['source' => 'content'];
         $this->assertEquals(
             $expected,
             $this->generator->generateContent(
                 $this->module,
-                [
-                    'template' => 'template',
-                    'destination' => 'destination'
-                ]
+                ['source' => 'source']
             )
         );
     }
 
     /**
-     * @covers \App\Service\Generator\ModuleGenerator::generateContent()
-     *
-     * with empty generated content
+     * @covers \App\Service\Generator\ModuleGenerator::generateContent
+     * @covers \App\Service\Generator\ModuleGenerator::processDestination
+     * @covers \App\Service\Generator\ModuleGenerator::processFileConfig
+     * @covers \App\Service\Generator\ModuleGenerator::__construct
      */
     public function testGenerateContentWithEmptyContent()
     {
@@ -84,11 +81,21 @@ class ModuleGeneratorTest extends TestCase
             [],
             $this->generator->generateContent(
                 $this->module,
-                [
-                    'template' => 'template',
-                    'destination' => 'destination'
-                ]
+                ['source' => 'source']
             )
         );
+    }
+
+    /**
+     * @covers \App\Service\Generator\ModuleGenerator::generateContent
+     * @covers \App\Service\Generator\ModuleGenerator::processDestination
+     * @covers \App\Service\Generator\ModuleGenerator::processFileConfig
+     * @covers \App\Service\Generator\ModuleGenerator::__construct
+     */
+    public function testGenerateContentWithMissingSource()
+    {
+        $this->twig->expects($this->never())->method('render');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->generator->generateContent($this->module, []);
     }
 }

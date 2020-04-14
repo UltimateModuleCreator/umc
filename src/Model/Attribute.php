@@ -218,7 +218,7 @@ class Attribute
      */
     public function isName(): bool
     {
-        return $this->isName;
+        return $this->isName && $this->getTypeInstance()->isCanBeName();
     }
 
     /**

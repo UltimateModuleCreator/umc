@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\ZipArchiveFactory;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ZipArchiveFactoryTest extends TestCase
 {

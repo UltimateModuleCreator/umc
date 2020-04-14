@@ -23,7 +23,7 @@ use App\Service\Archiver;
 use App\Service\ArchiverFactory;
 use App\Service\ZipArchiveFactory;
 use App\Util\FinderFactory;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ArchiverFactoryTest extends TestCase

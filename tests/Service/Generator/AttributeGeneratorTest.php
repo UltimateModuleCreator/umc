@@ -25,7 +25,7 @@ use App\Model\Module;
 use App\Service\Generator\AttributeGenerator;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AttributeGeneratorTest extends TestCase
 {
@@ -49,7 +49,7 @@ class AttributeGeneratorTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->twig = $this->createMock(\Twig_Environment::class);
         $this->module = $this->createMock(Module::class);
