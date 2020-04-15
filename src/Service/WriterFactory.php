@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -41,7 +43,7 @@ class WriterFactory
      * @param string $basePath
      * @return Writer
      */
-    public function create(string $basePath) : Writer
+    public function create(string $basePath): Writer
     {
         return new Writer($basePath, $this->filesystem);
     }

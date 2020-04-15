@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,9 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
+declare(strict_types=1);
+
 namespace App\Util;
 
 use Symfony\Component\Process\Process;
@@ -25,7 +29,7 @@ class ProcessFactory
      * @param array $data
      * @return Process
      */
-    public function create(array $data) : Process
+    public function create(array $data): Process
     {
         return new Process($data);
     }

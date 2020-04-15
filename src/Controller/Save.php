@@ -61,7 +61,7 @@ class Save extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function run() : JsonResponse
+    public function run(): JsonResponse
     {
         try {
             $response = [];

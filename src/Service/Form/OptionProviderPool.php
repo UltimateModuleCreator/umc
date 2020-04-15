@@ -32,6 +32,13 @@ class OptionProviderPool
      */
     public function __construct(array $providers)
     {
+        foreach ($providers as $provider) {
+            if (!($provider instanceof OptionProviderInterface)) {
+                throw new \InvalidArgumentException(
+                    "Option providers must implement " . OptionProviderInterface::class
+                );
+            }
+        }
         $this->providers = $providers;
     }
 
@@ -41,12 +48,11 @@ class OptionProviderPool
      */
     public function getProvider($code)
     {
-        $provider = $this->providers[$code] ?? null;
-        if ($provider === null || !($provider instanceof OptionProviderInterface)) {
-            throw new \InvalidArgumentException(
-                "Option provider with code " . $code . " must implement " . OptionProviderInterface::class
-            );
+        if (isset($this->providers[$code])) {
+            return $this->providers[$code];
         }
-        return $provider;
+        throw new \InvalidArgumentException(
+            "Option provider with code " . $code . " does not exist."
+        );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,19 +16,20 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App;
 
 class Version
 {
-    const VERSION = '4.0.0';
-    const BUILD = 'alpha1';
+    public const VERSION = '4.0.0';
+    public const BUILD = 'alpha1';
 
     /**
      * @return string
      */
-    public static function getVersion() : string
+    public static function getVersion(): string
     {
         return self::VERSION . ((self::BUILD) ? '-' . self::BUILD : '');
     }

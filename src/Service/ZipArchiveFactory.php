@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -24,7 +26,7 @@ class ZipArchiveFactory
     /**
      * @return \ZipArchive
      */
-    public function create() : \ZipArchive
+    public function create(): \ZipArchive
     {
         return new \ZipArchive();
     }

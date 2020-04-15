@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -49,7 +51,7 @@ class Generator
      * @return string
      * @throws \Exception
      */
-    public function generateModule(Module $module) : array
+    public function generateModule(Module $module): array
     {
         $files = [];
         foreach ($this->reader->getFiles() as $file) {
@@ -65,7 +67,7 @@ class Generator
      * @return GeneratorInterface
      * @throws \Exception
      */
-    private function getContentGenerator(string $scope) : GeneratorInterface
+    private function getContentGenerator(string $scope): GeneratorInterface
     {
         if (!isset($this->contentGenerators[$scope])) {
             throw new \Exception("Content generator not found for scope {$scope}");

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,9 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Util\FinderFactory;
@@ -63,9 +67,9 @@ class Archiver
      * @param $destination
      * @param bool $removeSource
      */
-    public function createZip($source, $zipName, $removeSource = true) : void
+    public function createZip($source, $zipName, $removeSource = true): void
     {
-        $source = realpath($source);
+        $source = realpath($source) ? realpath($source) : '';
         $destination = $this->baseDestination . $zipName . '.zip';
         $zip = $this->zipArchiveFactory->create();
         $zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);

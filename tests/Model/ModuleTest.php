@@ -462,20 +462,29 @@ class ModuleTest extends TestCase
                 'parent' => 'level2'
             ]
         ];
-        $this->assertEquals([],  $this->getInstance(['menu_parent' => ''], $menuConfig)->getAclMenuParents());
+        $this->assertEquals([], $this->getInstance(['menu_parent' => ''], $menuConfig)->getAclMenuParents());
 
         $instance = $this->getInstance(['menu_parent' => 'level1'], $menuConfig);
         $this->assertEquals(['level1'], $instance->getAclMenuParents());
         //call twice for memoizing
         $this->assertEquals(['level1'], $instance->getAclMenuParents());
 
-        $this->assertEquals(['level1', 'level2'], $this->getInstance(['menu_parent' => 'level2'], $menuConfig)->getAclMenuParents());
-
-        $this->assertEquals(['acl1', 'acl2'], $this->getInstance(['menu_parent' => 'level22'], $menuConfig)->getAclMenuParents());
-
-        $this->assertEquals(['level1', 'level2', 'level3'], $this->getInstance(['menu_parent' => 'level3'], $menuConfig)->getAclMenuParents());
-
-        $this->assertEquals(['missing'], $this->getInstance(['menu_parent' => 'missing'], $menuConfig)->getAclMenuParents());
+        $this->assertEquals(
+            ['level1', 'level2'],
+            $this->getInstance(['menu_parent' => 'level2'], $menuConfig)->getAclMenuParents()
+        );
+        $this->assertEquals(
+            ['acl1', 'acl2'],
+            $this->getInstance(['menu_parent' => 'level22'], $menuConfig)->getAclMenuParents()
+        );
+        $this->assertEquals(
+            ['level1', 'level2', 'level3'],
+            $this->getInstance(['menu_parent' => 'level3'], $menuConfig)->getAclMenuParents()
+        );
+        $this->assertEquals(
+            ['missing'],
+            $this->getInstance(['menu_parent' => 'missing'], $menuConfig)->getAclMenuParents()
+        );
     }
 
     /**

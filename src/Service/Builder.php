@@ -84,7 +84,7 @@ class Builder
      * @param Module $module
      * @throws \Exception
      */
-    public function buildModule(Module $module) : void
+    public function buildModule(Module $module): void
     {
         $moduleName = $module->getExtensionName();
         $writer = $this->writerFactory->create($this->basePath);

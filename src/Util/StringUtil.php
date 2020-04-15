@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Util;
@@ -33,7 +35,7 @@ class StringUtil
      * @param string $string
      * @return string
      */
-    public function camel(string $string) : string
+    public function camel(string $string): string
     {
         if (!array_key_exists($string, $this->camelCache)) {
             $this->camelCache[$string] = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
@@ -45,7 +47,7 @@ class StringUtil
      * @param $string
      * @return string
      */
-    public function snake(string $string) : string
+    public function snake(string $string): string
     {
         if (!array_key_exists($string, $this->snakeCache)) {
             $this->snakeCache[$string] = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $string), '_'));
@@ -71,7 +73,7 @@ class StringUtil
      * @param string $string
      * @return string
      */
-    public function ucfirst(?string $string) : string
+    public function ucfirst(?string $string): string
     {
         return ucfirst($string);
     }
@@ -80,7 +82,7 @@ class StringUtil
      * @param string $string
      * @return string
      */
-    public function hyphen(string $string) : string
+    public function hyphen(string $string): string
     {
         return str_replace('_', '-', $this->snake($string));
     }

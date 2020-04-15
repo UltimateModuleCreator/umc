@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -43,10 +45,10 @@ class Writer
 
     /**
      * @param array $files
-     * @param ?string $subFolder
+     * @param null|string $subFolder
      * @return void
      */
-    public function writeFiles(array $files, ?string $subFolder = null) : void
+    public function writeFiles(array $files, ?string $subFolder = null): void
     {
         if (!$this->filesystem->exists($this->basePath)) {
             $this->filesystem->mkdir($this->basePath);
@@ -59,9 +61,9 @@ class Writer
     /**
      * @param string $destination
      * @param string $content
-     * @param string $subFolder
+     * @param string|null $subFolder
      */
-    private function writeFile(string $destination, string $content, ?string $subFolder = null) : void
+    private function writeFile(string $destination, string $content, ?string $subFolder = null): void
     {
         $destination = $this->basePath . (($subFolder) ? $subFolder . '/' : '') . $destination;
         $folder = dirname($destination);

@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class AdminMenu implements OptionProviderInterface
 {
-    const CONFIG_PARAM_NAME = 'menu_type_config';
+    public const CONFIG_PARAM_NAME = 'menu_type_config';
     /**
      * @var ContainerBagInterface
      */

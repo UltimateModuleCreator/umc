@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -44,7 +46,7 @@ class Docs extends AbstractController
      * @return Response
      * @throws \Exception
      */
-    public function run() : Response
+    public function run(): Response
     {
         return $this->render(
             $this->template,

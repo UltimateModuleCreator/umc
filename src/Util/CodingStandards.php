@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,13 +16,14 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Util;
 
 class CodingStandards
 {
-    const RESULT_KEY_PREFIX = 'PHPCS_';
+    public const RESULT_KEY_PREFIX = 'PHPCS_';
     /**
      * @var ProcessFactory
      */
@@ -58,7 +60,7 @@ class CodingStandards
      * @param $moduleName
      * @return array
      */
-    public function run() : array
+    public function run(): array
     {
         $result = [];
         $commands = [];

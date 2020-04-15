@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -14,6 +15,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Model;
@@ -71,7 +73,7 @@ class Settings
     /**
      * @return string
      */
-    public function getSettingsAsYml() : string
+    public function getSettingsAsYml(): string
     {
         return $this->loader->arrayToYaml($this->getSettings());
     }
@@ -79,7 +81,7 @@ class Settings
     /**
      * @return array
      */
-    public function getSettings($reload = false) : array
+    public function getSettings($reload = false): array
     {
         if ($this->settings === null || $reload) {
             try {

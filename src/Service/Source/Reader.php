@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -49,9 +50,10 @@ class Reader
     }
 
     /**
+     * @return array
      * @throws \Exception
      */
-    private function loadSource() : void
+    public function getFiles(): array
     {
         if ($this->source === null) {
             $this->source = [];
@@ -59,15 +61,6 @@ class Reader
                 $this->source = array_merge($this->source, $this->yamlLoader->load($file));
             }
         }
-    }
-
-    /**
-     * @return array
-     * @throws \Exception
-     */
-    public function getFiles() : array
-    {
-        $this->loadSource();
         return $this->source;
     }
 }

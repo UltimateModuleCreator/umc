@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Model;
@@ -360,7 +362,7 @@ class Attribute
     /**
      * @return BaseType
      */
-    public function getTypeInstance() : BaseType
+    public function getTypeInstance(): BaseType
     {
         if ($this->typeInstance === null) {
             $this->typeInstance = $this->typeFactory->create($this);
@@ -374,7 +376,7 @@ class Attribute
      * @param string $string
      * @return string
      */
-    protected function toConstantName($string) : string
+    protected function toConstantName($string): string
     {
         $string = str_replace(' ', '_', $string);
         $processed =  preg_replace(

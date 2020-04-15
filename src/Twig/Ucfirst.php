@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,7 +16,9 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
+
 namespace App\Twig;
 
 use App\Util\StringUtil;
@@ -41,7 +44,7 @@ class Ucfirst extends AbstractExtension
     /**
      * @return array|\Twig_Filter[]
      */
-    public function getFilters() : array
+    public function getFilters(): array
     {
         return [
             new TwigFilter('ucfirst', [$this, 'ucfirst']),
@@ -52,7 +55,7 @@ class Ucfirst extends AbstractExtension
      * @param $string
      * @return string
      */
-    public function ucfirst(string $string) : string
+    public function ucfirst(string $string): string
     {
         return $this->stringUtil->ucfirst($string);
     }

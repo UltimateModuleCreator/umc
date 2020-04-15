@@ -16,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Model\Attribute;
@@ -70,7 +71,7 @@ class Factory
      * @param array $data
      * @return Attribute
      */
-    public function create(Entity $entity, array $data = []) : Attribute
+    public function create(Entity $entity, array $data = []): Attribute
     {
         return new Attribute(
             $this->typeFactory,

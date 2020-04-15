@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Tests\Service;
@@ -35,8 +37,8 @@ use PHPUnit\Framework\TestCase;
 class BuilderTest extends TestCase
 {
     /**
-     * @covers \App\Service\Builder::buildModule()
-     * @covers \App\Service\Builder::__construct()
+     * @covers \App\Service\Builder::buildModule
+     * @covers \App\Service\Builder::__construct
      */
     public function testBuildModule()
     {

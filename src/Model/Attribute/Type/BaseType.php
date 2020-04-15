@@ -283,13 +283,13 @@ class BaseType
     /**
      * @return string
      */
-    public function getAttributeColumnSettingsStringXml() : string
+    public function getAttributeColumnSettingsStringXml(): string
     {
         $attributes = $this->getSchemaAttributes();
         if (strlen($attributes) > 0) {
             $attributes .= ' ';
         }
-        $attributes .= 'nullable="'. ($this->getAttribute()->isRequired() ? 'false' : 'true') .'"';
+        $attributes .= 'nullable="' . ($this->getAttribute()->isRequired() ? 'false' : 'true') . '"';
         return $attributes;
     }
 

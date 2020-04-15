@@ -1,6 +1,7 @@
 <?php
 
 /**
+ *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -13,21 +14,24 @@
  * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ *
  */
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Tests\Service\Form\OptionProvider;
 
-use Symfony\Component\Finder\Finder;
+use App\Service\Form\OptionProvider\FrontendMenuLink;
+use PHPUnit\Framework\TestCase;
 
-class FinderFactory
+class FrontendMenuLinkTest extends TestCase
 {
     /**
-     * @return Finder
+     * @covers \App\Service\Form\OptionProvider\FrontendMenuLink::getOptions
      */
-    public function create(): Finder
+    public function testGetOptions()
     {
-        return new Finder();
+        $provider = new FrontendMenuLink();
+        $this->assertEquals(3, count($provider->getOptions()));
     }
 }

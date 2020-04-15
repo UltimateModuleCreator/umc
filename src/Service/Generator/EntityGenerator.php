@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Service\Generator;
@@ -45,7 +47,6 @@ class EntityGenerator implements GeneratorInterface
         $this->stringUtil = $stringUtil;
     }
 
-
     /**
      * @param Module $module
      * @param array $fileConfig
@@ -54,7 +55,7 @@ class EntityGenerator implements GeneratorInterface
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function generateContent(Module $module, array $fileConfig) : array
+    public function generateContent(Module $module, array $fileConfig): array
     {
         $result = [];
         $fileConfig = $this->processFileConfig($fileConfig);
@@ -87,7 +88,7 @@ class EntityGenerator implements GeneratorInterface
      * @param Entity $entity
      * @return string
      */
-    private function processDestination(string $destination, Entity $entity) : string
+    private function processDestination(string $destination, Entity $entity): string
     {
         $replace = [
             '_Entity_' =>  ucfirst($this->stringUtil->camel($entity->getNameSingular())),

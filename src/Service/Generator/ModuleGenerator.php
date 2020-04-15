@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Service\Generator;
@@ -45,7 +47,7 @@ class ModuleGenerator implements GeneratorInterface
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function generateContent(Module $module, array $fileConfig) : array
+    public function generateContent(Module $module, array $fileConfig): array
     {
         $fileConfig = $this->processFileConfig($fileConfig);
 
@@ -78,7 +80,7 @@ class ModuleGenerator implements GeneratorInterface
      * @param Module $module
      * @return string
      */
-    private function processDestination(string $destination, Module $module) : string
+    private function processDestination(string $destination, Module $module): string
     {
         return $destination;
     }

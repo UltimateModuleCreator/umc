@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Util;
@@ -26,7 +28,7 @@ class YamlLoader
      * @return array
      * @throws \Exception
      */
-    public function load($file) : array
+    public function load($file): array
     {
         try {
             $values = Yaml::parseFile($file, 1);
@@ -43,7 +45,7 @@ class YamlLoader
      * @param array $array
      * @return string
      */
-    public function arrayToYaml(array $array) : string
+    public function arrayToYaml(array $array): string
     {
         return Yaml::dump($array, 100, 2, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
     }

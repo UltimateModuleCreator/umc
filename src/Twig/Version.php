@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,7 +16,9 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
+
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
@@ -26,7 +29,7 @@ class Version extends AbstractExtension
     /**
      * @return array|\Twig_Filter[]
      */
-    public function getFunctions() : array
+    public function getFunctions(): array
     {
         return [
             new TwigFunction(

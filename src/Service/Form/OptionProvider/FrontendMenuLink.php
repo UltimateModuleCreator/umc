@@ -23,9 +23,9 @@ use App\Service\Form\OptionProviderInterface;
 
 class FrontendMenuLink implements OptionProviderInterface
 {
-    const NONE = 0;
-    const MAIN_MENU = 1;
-    const FOOTER = 2;
+    public const NONE = 0;
+    public const MAIN_MENU = 1;
+    public const FOOTER = 2;
 
     /**
      * @return array

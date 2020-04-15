@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Service\Generator;
@@ -28,5 +30,5 @@ interface GeneratorInterface
      * @param array $fileConfig
      * @return array
      */
-    public function generateContent(Module $module, array $fileConfig) : array;
+    public function generateContent(Module $module, array $fileConfig): array;
 }

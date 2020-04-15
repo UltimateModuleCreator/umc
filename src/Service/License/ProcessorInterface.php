@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,12 +16,14 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
+
 namespace App\Service\License;
 
 use App\Model\Module;
 
 interface ProcessorInterface
 {
-    public function process(Module $module) : string;
+    public function process(Module $module): string;
 }

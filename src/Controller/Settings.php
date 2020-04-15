@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -64,7 +66,7 @@ class Settings extends AbstractController
      * @return Response
      * @throws \Exception
      */
-    public function run() : Response
+    public function run(): Response
     {
         $forms = $this->formLoader->getForms();
         $groups = [];

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Util;
@@ -51,7 +53,7 @@ class CodingStandardsFactory
      * @param string $basePath
      * @return CodingStandards
      */
-    public function create(string $basePath) : CodingStandards
+    public function create(string $basePath): CodingStandards
     {
         return new CodingStandards($this->processFactory, $this->standards, $this->phpcsPath, $basePath);
     }

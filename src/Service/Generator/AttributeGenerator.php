@@ -48,7 +48,6 @@ class AttributeGenerator implements GeneratorInterface
         $this->stringUtil = $stringUtil;
     }
 
-
     /**
      * @param Module $module
      * @param array $fileConfig
@@ -57,7 +56,7 @@ class AttributeGenerator implements GeneratorInterface
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function generateContent(Module $module, array $fileConfig) : array
+    public function generateContent(Module $module, array $fileConfig): array
     {
         $result = [];
         foreach ($module->getEntities() as $entity) {
@@ -91,7 +90,7 @@ class AttributeGenerator implements GeneratorInterface
      * @param Attribute $attribute
      * @return string
      */
-    private function processDestination(string $destination, Attribute $attribute) : string
+    private function processDestination(string $destination, Attribute $attribute): string
     {
         $entity = $attribute->getEntity();
         $replace = [

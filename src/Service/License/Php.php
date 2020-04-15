@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,7 +16,9 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
+
 namespace App\Service\License;
 
 use App\Model\Module;

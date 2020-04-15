@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * UMC
@@ -15,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Tests\Service\Source;
@@ -45,9 +47,8 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @covers \App\Service\Source\Reader::getFiles()
-     * @covers \App\Service\Source\Reader::__construct()
-     * @covers \App\Service\Source\Reader::loadSource()
+     * @covers \App\Service\Source\Reader::getFiles
+     * @covers \App\Service\Source\Reader::__construct
      */
     public function testGetFiles()
     {
@@ -63,7 +64,8 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @covers \App\Service\Source\Reader::getFiles()
+     * @covers \App\Service\Source\Reader::getFiles
+     * @covers \App\Service\Source\Reader::__construct
      */
     public function testGetFilesWithException()
     {

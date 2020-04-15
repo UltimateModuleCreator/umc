@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -41,7 +43,7 @@ class ModuleList
     /**
      * files to find
      */
-    const FILE_TYPE = '*.yml';
+    public const FILE_TYPE = '*.yml';
 
     /**
      * ModuleList constructor.
@@ -59,7 +61,7 @@ class ModuleList
     /**
      * @return array
      */
-    public function getModules() : array
+    public function getModules(): array
     {
         if ($this->modules === null) {
             $this->createBaseDir();
@@ -80,7 +82,7 @@ class ModuleList
     /**
      * create the base dir if it does not exist
      */
-    private function createBaseDir() : void
+    private function createBaseDir(): void
     {
         if (!$this->filesystem->exists($this->basePath)) {
             $this->filesystem->mkdir($this->basePath);

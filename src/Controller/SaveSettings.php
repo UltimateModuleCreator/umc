@@ -60,7 +60,7 @@ class SaveSettings extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function run() : JsonResponse
+    public function run(): JsonResponse
     {
         $response = [];
         try {

@@ -81,7 +81,7 @@ class Edit extends AbstractController
      * @return Response
      * @throws \Exception
      */
-    public function run() : Response
+    public function run(): Response
     {
         $moduleName = $this->requestStack->getCurrentRequest()->get('module');
         $defaults = $this->settingsModel->getSettingsSplit(true);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -13,6 +14,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -46,7 +48,7 @@ class Index extends AbstractController
     /**
      * @return Response
      */
-    public function run() : Response
+    public function run(): Response
     {
         return $this->render(
             $this->template,

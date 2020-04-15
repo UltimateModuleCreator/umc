@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Loader
 {
-    const DEFAULT_GROUP = 'Misc';
+    public const DEFAULT_GROUP = 'Misc';
     /**
      * @var YamlLoader
      */
@@ -56,7 +56,7 @@ class Loader
      * @return array
      * @throws \Exception
      */
-    public function getForms()
+    public function getForms(): array
     {
         $forms = [];
         foreach ($this->fileMap as $key => $file) {

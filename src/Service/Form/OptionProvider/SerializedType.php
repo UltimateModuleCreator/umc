@@ -23,7 +23,7 @@ use App\Service\Form\OptionProviderInterface;
 
 class SerializedType implements OptionProviderInterface
 {
-    const FILTER_FIELD = 'can_be_serialized';
+    public const FILTER_FIELD = 'can_be_serialized';
     /**
      * @var AttributeType
      */

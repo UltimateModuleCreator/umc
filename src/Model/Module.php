@@ -16,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Model;
@@ -252,7 +253,7 @@ class Module
      * @return string
      * @throws \Exception
      */
-    public function getFormattedLicense(string $format) : string
+    public function getFormattedLicense(string $format): string
     {
         if (!isset($this->licenseFormatter[$format])) {
             throw new \Exception("Unsupported licenese formatter {$format}");
@@ -268,7 +269,7 @@ class Module
      * @param string $separator
      * @return string
      */
-    public function getExtensionName($separator = '_') : string
+    public function getExtensionName($separator = '_'): string
     {
         $parts = [$this->getNamespace(), $this->getModuleName()];
         return implode(
@@ -360,7 +361,7 @@ class Module
      * @param $type
      * @return bool
      */
-    public function hasAttributeType($type) : bool
+    public function hasAttributeType($type): bool
     {
         if (isset($this->flags['attribute_type'][$type])) {
             return $this->flags['attribute_type'][$type];
@@ -378,7 +379,7 @@ class Module
     /**
      * @return bool
      */
-    public function hasSearchableEntities() : bool
+    public function hasSearchableEntities(): bool
     {
         return count($this->getSearchableEntities()) > 0;
     }
@@ -386,7 +387,7 @@ class Module
     /**
      * @return Entity[]
      */
-    public function getSearchableEntities() : array
+    public function getSearchableEntities(): array
     {
         $this->initEntityCacheData();
         return $this->cacheData['entity']['search'];
@@ -395,7 +396,7 @@ class Module
     /**
      * @return array
      */
-    public function getAclMenuParents() : array
+    public function getAclMenuParents(): array
     {
         if (isset($this->cacheData['menu_parents'])) {
             return $this->cacheData['menu_parents'];
@@ -594,7 +595,7 @@ class Module
     /**
      * @return bool
      */
-    public function hasTopMenu() : bool
+    public function hasTopMenu(): bool
     {
         return count($this->getMainMenuEntities()) > 0;
     }
@@ -602,7 +603,7 @@ class Module
     /**
      * @return bool
      */
-    public function hasFooterMenu() : bool
+    public function hasFooterMenu(): bool
     {
         return count($this->getFooterLinksEntities()) > 0;
     }
