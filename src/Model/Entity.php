@@ -443,7 +443,7 @@ class Entity
         if ($this->isStore()) {
             $dependencies[] = "magento/module-store";
         }
-        if ($this->hasAttributeType('product_attribute') || $this->hasAttributeType('product_attribute_set')) {
+        if ($this->isProductAttribute() || $this->isProductAttributeSet()) {
             $dependencies[] = "magento/module-catalog";
             $dependencies[] = "magento/module-eav";
         }
@@ -473,7 +473,7 @@ class Entity
         if ($this->isStore()) {
             $dependencies[] = "Magento_Store";
         }
-        if ($this->hasAttributeType('product_attribute') || $this->hasAttributeType('product_attribute_set')) {
+        if ($this->isProductAttributeSet() || $this->isProductAttribute()) {
             $dependencies[] = "Magento_Catalog";
             $dependencies[] = "Magento_Eav";
         }
@@ -549,14 +549,7 @@ class Entity
      */
     public function getRepoModel(): string
     {
-        $parts = [
-            $this->module->getNamespace(),
-            $this->module->getModuleName(),
-            'Model',
-            $this->getNameSingular()
-
-        ];
-        return $this->stringUtil->glueClassParts($parts) . 'Repo';
+        return $this->getModel('Repo');
     }
 
     /**
@@ -564,14 +557,7 @@ class Entity
      */
     public function getListRepoModel(): string
     {
-        $parts = [
-            $this->module->getNamespace(),
-            $this->module->getModuleName(),
-            'Model',
-            $this->getNameSingular()
-
-        ];
-        return $this->stringUtil->glueClassParts($parts) . 'ListRepo';
+        return $this->getModel('ListRepo');
     }
 
     /**
@@ -585,7 +571,6 @@ class Entity
             'Model',
             'Search',
             $this->getNameSingular()
-
         ];
         return $this->stringUtil->glueClassParts($parts);
     }
@@ -669,7 +654,7 @@ class Entity
             $type
         ];
         if ($tmp) {
-            array_splice($parts, 1, 0, 'tmp');
+            array_splice($parts, 2, 0, 'tmp');
         }
         return implode('/', $this->stringUtil->snakeArray($parts));
     }

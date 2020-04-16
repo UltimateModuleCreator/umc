@@ -89,7 +89,7 @@ class AttributeTypeTest extends TestCase
                     'value' => 'type3'
                 ],
             ],
-            'Misc' =>[
+            'Misc' => [
                 'type4' => [
                     'dummy' => 'dummy',
                     'value' => 'type4'

@@ -26,6 +26,7 @@ use App\Model\Attribute\Type\Factory as TypeFactory;
 use App\Model\Attribute\Option\Factory as OptionFactory;
 use App\Model\Attribute\Serialized\Factory as SerializedFactory;
 use App\Model\Entity;
+use App\Model\Module;
 use App\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -121,6 +122,26 @@ class AttributeTest extends TestCase
     }
 
     /**
+     * @covers \App\Model\Attribute::getTooltip
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetTooltip()
+    {
+        $this->assertEquals('tooltip', $this->getInstance(['tooltip' => 'tooltip'])->getTooltip());
+        $this->assertEquals('', $this->getInstance([])->getTooltip());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getRawDefaultValue
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetRawDefaultValue()
+    {
+        $this->assertEquals('default', $this->getInstance(['default_value' => 'default'])->getRawDefaultValue());
+        $this->assertEquals('', $this->getInstance([])->getRawDefaultValue());
+    }
+
+    /**
      * @covers \App\Model\Attribute::getLabel
      * @covers \App\Model\Attribute::__construct
      */
@@ -171,6 +192,59 @@ class AttributeTest extends TestCase
     public function testIsNameNotAllowed()
     {
         $this->assertFalse($this->getInstance(['is_name' => false])->isName());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isFullText
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsFullText()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isFullText')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $this->assertTrue($this->getInstance(['full_text' => 1])->isFullText());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isFullText
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsFullTextNotAllowedByType()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $type->expects($this->once())->method('isFullText')->willReturn(false);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $this->assertFalse($this->getInstance(['full_text' => 1])->isFullText());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isFullText
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsFulltextNotAllowed()
+    {
+        $this->assertFalse($this->getInstance(['full_text' => false])->isFullText());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isExpanded
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsExpanded()
+    {
+        $this->assertTrue($this->getInstance(['expanded' => 1])->isExpanded());
+        $this->assertFalse($this->getInstance([])->isExpanded());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isSerialized
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsSerialized()
+    {
+        $this->assertTrue($this->getInstance(['type' => 'serialized'])->isSerialized());
+        $this->assertFalse($this->getInstance([])->isSerialized());
     }
 
     /**
@@ -290,6 +364,18 @@ class AttributeTest extends TestCase
     }
 
     /**
+     * @covers \App\Model\Attribute::isAdminGridHidden
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetAdminGridHidden()
+    {
+        $type = $this->createMock(Attribute\Type\BaseType::class);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($type);
+        $type->method('isCanShowInGrid')->willReturn(true);
+        $this->assertTrue($this->getInstance(['admin_grid' => 1, 'admin_grid_hidden' => true])->isAdminGridHidden());
+    }
+
+    /**
      * @covers \App\Model\Attribute::isAdminGridFilter
      * @covers \App\Model\Attribute::__construct
      */
@@ -394,6 +480,185 @@ class AttributeTest extends TestCase
         $this->assertFalse($attribute->isShowInView());
         //call twice to test memoizing
         $this->assertFalse($attribute->isShowInView());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getSerialized
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetSerialized()
+    {
+        $serialized = $this->createMock(Attribute\Serialized::class);
+        $this->serializedFactory->expects($this->once())->method('create')->willReturn($serialized);
+        $this->assertEquals(
+            [$serialized],
+            $this->getInstance(['_serialized' => [[]], 'type' => 'serialized'])->getSerialized()
+        );
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getSerialized
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetSerializedNotSerialized()
+    {
+        $serialized = $this->createMock(Attribute\Serialized::class);
+        $this->serializedFactory->expects($this->once())->method('create')->willReturn($serialized);
+        $this->assertEquals(
+            [],
+            $this->getInstance(['_serialized' => [[]], 'type' => 'text'])->getSerialized()
+        );
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getSerializedWithOptions
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetSerializedWithOptions()
+    {
+        $serialized1 = $this->createMock(Attribute\Serialized::class);
+        $serialized1->method('isManualOptions')->willReturn(false);
+        $serialized2 = $this->createMock(Attribute\Serialized::class);
+        $serialized2->method('isManualOptions')->willReturn(true);
+        $this->serializedFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($serialized1, $serialized2);
+        $this->assertEquals(
+            [$serialized2],
+            $this->getInstance(['_serialized' => [[], []], 'type' => 'serialized'])->getSerializedWithOptions()
+        );
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isUpload
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsUpload()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('isUpload')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance([])->isUpload());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isManualOptions
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsCanHaveOptions()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('isCanHaveOptions')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance([])->isManualOptions());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getOptionType
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetOptionType()
+    {
+        $option1 = $this->createMock(Attribute\Option::class);
+        $option1->expects($this->once())->method('getValue')->willReturn(10);
+        $option2 = $this->createMock(Attribute\Option::class);
+        $option2->expects($this->once())->method('getValue')->willReturn('value');
+        $option3 = $this->createMock(Attribute\Option::class);
+        $option3->expects($this->never())->method('getValue');
+        $this->optionFactory->expects($this->exactly(3))->method('create')
+            ->willReturnOnConsecutiveCalls($option1, $option2, $option3);
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('isCanHaveOptions')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $instance = $this->getInstance(['_options' => [[], [], []]]);
+        $this->assertEquals('string', $instance->getOptionType());
+        //call twice to test memoizing
+        $this->assertEquals('string', $instance->getOptionType());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getOptionType
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetOptionTypeAllNumbers()
+    {
+        $option1 = $this->createMock(Attribute\Option::class);
+        $option1->expects($this->once())->method('getValue')->willReturn(10);
+        $option2 = $this->createMock(Attribute\Option::class);
+        $option2->expects($this->once())->method('getValue')->willReturn(20);
+        $option3 = $this->createMock(Attribute\Option::class);
+        $option3->expects($this->once())->method('getValue')->willReturn(30);
+        $this->optionFactory->expects($this->exactly(3))->method('create')
+            ->willReturnOnConsecutiveCalls($option1, $option2, $option3);
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('isCanHaveOptions')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $instance = $this->getInstance(['_options' => [[], [], []]]);
+        $this->assertEquals('number', $instance->getOptionType());
+        //call twice to test memoizing
+        $this->assertEquals('number', $instance->getOptionType());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getOptionSourceVirtualType
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetOptionSourceVirtualType()
+    {
+        $module = $this->createMock(Module::class);
+        $this->entity->method('getNameSingular')->willReturn('Name');
+        $module->expects($this->once())->method('getModuleName')->willReturn('Md');
+        $this->entity->method('getModule')->willReturn($module);
+        $expected = ['Md', 'Name', 'Source', 'code'];
+        $this->stringUtil->expects($this->once())->method('glueClassParts')->with($expected, '')->willReturn('type');
+        $this->assertEquals('type', $this->getInstance(['code' => 'code'])->getOptionSourceVirtualType());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isMultiple
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsMultiple()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('isMultiple')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance([])->isMultiple());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isProductAttribute
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsProductAttribute()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('isProductAttribute')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance([])->isProductAttribute());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::isProductAttributeSet
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testIsProductAttributeSet()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('isProductAttributeSet')->willReturn(true);
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance([])->isProductAttributeSet());
+    }
+
+    /**
+     * @covers \App\Model\Attribute::getProcessorType
+     * @covers \App\Model\Attribute::__construct
+     */
+    public function testGetProcessorType()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->expects($this->once())->method('getProcessorType')->willReturn('processor');
+        $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
+        $this->assertEquals('processor', $this->getInstance([])->getProcessorType('type'));
     }
 
     /**

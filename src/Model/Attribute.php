@@ -333,11 +333,13 @@ class Attribute
     public function getSerializedWithOptions(): array
     {
         if ($this->serializedWithOptions === null) {
-            $this->serializedWithOptions = array_filter(
-                $this->getSerialized(),
-                function (Serialized $serialized) {
-                    return $serialized->isManualOptions();
-                }
+            $this->serializedWithOptions = array_values(
+                array_filter(
+                    $this->getSerialized(),
+                    function (Serialized $serialized) {
+                        return $serialized->isManualOptions();
+                    }
+                )
             );
         }
         return $this->serializedWithOptions;
@@ -368,31 +370,6 @@ class Attribute
             $this->typeInstance = $this->typeFactory->create($this);
         }
         return $this->typeInstance;
-    }
-
-    /**
-     * transform string to constant name
-     *
-     * @param string $string
-     * @return string
-     */
-    protected function toConstantName($string): string
-    {
-        $string = str_replace(' ', '_', $string);
-        $processed =  preg_replace(
-            '/[^A-Za-z0-9_]/',
-            '',
-            $string
-        );
-        $processed = strtoupper($processed);
-        if (strlen($processed) == 0) {
-            return '_EMPTY';
-        }
-        $first = substr($processed, 0, 1);
-        if (is_numeric($first)) {
-            $processed = '_' . $processed;
-        }
-        return $processed;
     }
 
     /**
