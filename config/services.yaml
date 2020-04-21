@@ -37,8 +37,8 @@ parameters:
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
-      class: App\Model\AttributeTypeProductAttribute
-      serialized_class: App\Model\SerializedTypeProductAttribute
+      class: App\Model\Attribute\Type\ProductAttribute
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttribute
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -63,8 +63,8 @@ parameters:
             view: false
     product_attribute_multiselect:
       label: Product Attribute Multiselect
-      class: App\Model\AttributeTypeProductAttribute
-      serialized_class: App\Model\SerializedTypeProductAttribute
+      class: App\Model\Attribute\Type\ProductAttribute
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttribute
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -95,8 +95,8 @@ parameters:
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
-      class: App\Model\AttributeTypeProductAttributeSet
-      serialized_class: App\Model\SerializedTypeProductAttributeSet
+      class: App\Model\Attribute\Type\ProductAttributeSet
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttributeSet
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -122,8 +122,8 @@ parameters:
             view: false
     product_attribute_set_multiselect:
       label: Product Attribute Set Multiselect
-      class: App\Model\AttributeTypeProductAttributeSet
-      serialized_class: App\Model\SerializedTypeProductAttributeSet
+      class: App\Model\Attribute\Type\ProductAttributeSet
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttributeSet
       can_be_name: false
       can_show_in_grid: true
       can_have_options: false
@@ -267,7 +267,7 @@ parameters:
             view: false
     dropdown:
       label: Dropdown
-      class: App\Model\Attribute\Dropdown
+      class: App\Model\Attribute\Type\Dropdown
       can_be_name: false
       can_show_in_grid: true
       can_have_options: true
@@ -469,7 +469,7 @@ parameters:
             view: false
     serialized:
       label: Serialized
-      class: \App\Model\Attribute\Serialized
+      class: \App\Model\Attribute\Type\Serialized
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
@@ -862,7 +862,6 @@ services:
       arguments:
         $template: 'edit.html.twig'
         $basePath: '%module_list_path%/'
-        $attributeConfig: '%attribute_type_config%'
     App\Controller\Files:
       arguments:
         $template: 'files.html.twig'

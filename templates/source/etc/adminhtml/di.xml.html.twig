@@ -7,15 +7,13 @@
 {% include 'entity/adminhtml/di/processor/provider.html.twig' with {module: module, entity:entity} %}
 {% include 'entity/adminhtml/di/buttons.html.twig' with {module: module, entity:entity} %}
 {% include 'entity/adminhtml/di/actions.html.twig' with {module: module, entity:entity} %}
-
-
 {% endfor %}
 {% if module.hasSearchableEntities() %}
     <type name="Magento\Backend\Block\GlobalSearch">
         <arguments>
             <argument name="entityResources" xsi:type="array">
 {% for entity in module.getSearchableEntities() %}
-                <item name="{{ module.getMenuText() }} {{ entity.getLabelPlural() }}" xsi:type="string">{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}</item>
+                <item name="{{ module.getMenuText() }} {{ entity.getLabelPlural() }}" xsi:type="string">{{ module.getNamespace()|camel|ucfirst }}_{{ module.getModuleName()|camel|ucfirst }}::{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}</item>
 {% endfor %}
             </argument>
             <argument name="entityPaths" xsi:type="array">

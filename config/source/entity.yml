@@ -98,4 +98,7 @@
   source: Model/_Entity_UiCollectionProvider.php
   label: "Entity Admin ui collection provider"
   scope: entity
-
+-
+  source: Model/Search/_Entity_.php
+  label: "Entity admin search model"
+  scope: entity

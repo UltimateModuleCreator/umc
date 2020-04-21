@@ -96,7 +96,7 @@ class Settings extends AbstractController
                     $allFields[] = $field['name'];
                 }
                 $groups[$formKey] = [
-                    'settings_label' => $form['settings_label'],
+                    'settings_label' => $form['settings_label'] ?? $formKey,
                     'rows' => array_chunk($cleanedFields, $perRow, true)
                 ];
             }

@@ -299,31 +299,4 @@
         UMC.defaults = {{ defaults|json_encode|raw }};
         ko.applyBindings(new UMC.Module({{ data|json_encode|raw }}));
     </script>
-    {#<script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>#}
-    {#<script type="text/javascript">#}
-        {#jQuery(document).ready(function ($) {#}
-            {#var storageData = null;#}
-            {#try {#}
-                {#storageData = JSON.parse(localStorage.umc);#}
-            {#} catch (e) {}#}
-            {#var data = {{ data|json_encode|raw }};#}
-            {#if (storageData && {{ is_new_mode }}) {#}
-                {#console.log(storageData);#}
-                {#if (confirm("It looks like you previously started creating a module. Do you want to continue?\n 'OK' to continue editing where you left off,\n 'Cancel' to start over!")) {#}
-                    {#data = storageData;#}
-                {#} else {#}
-                    {#delete localStorage.umc;#}
-                {#}#}
-            {#}#}
-            {#$('[data-role=umc]').umc({#}
-                {#data: data,#}
-                {#attrConfig: {{ attribute_config|raw }},#}
-                {#defaults: {{ defaults|json_encode|raw }},#}
-                {#submitAction: '{{ submit_action }}'#}
-            {#});#}
-            {#$.validate({#}
-                {#lang: 'en'#}
-            {#});#}
-        {#});#}
-    {#</script>#}
 {% endblock %}

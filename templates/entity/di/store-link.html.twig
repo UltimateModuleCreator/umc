@@ -1,0 +1,12 @@
+    <virtualType name="{{ entity.getStoreHandler('Read') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\ReadHandler">
+        <arguments>
+            <argument name="resource" xsi:type="object">{{ entity.getResourceModel() }}</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="{{ entity.getStoreHandler('Save') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\SaveHandler">
+        <arguments>
+            <argument name="resource" xsi:type="object">{{ entity.getResourceModel() }}</argument>
+            <argument name="entityType" xsi:type="string">{{ entity.getInterface() }}</argument>
+            <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+        </arguments>
+    </virtualType>

@@ -46,7 +46,7 @@ rows:
       has_default: true
       label: Admin parent menu ID
       required: false
-      data-pretty-select: 'true'
+      additionalDataBind: 'select2: {}'
       title: This is the parent menu id of the module menu. Leave empty to add in top menu.
       optionProvider: 'admin_menu'
       col: 4

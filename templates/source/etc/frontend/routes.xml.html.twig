@@ -1,9 +1,9 @@
-{% if module.hasFrontend() %}
+{% if module.isFrontend() %}
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
         <route id="{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}" frontName="{{ module.getFrontKey()|lower }}">
-            <module name="{{ module.getNamespace() }}_{{ module.getModuleName() }}" />
+            <module name="{{ module.getNamespace()|camel|ucfirst }}_{{ module.getModuleName()|camel|ucfirst }}" />
         </route>
     </router>
 </config>

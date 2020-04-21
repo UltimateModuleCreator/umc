@@ -166,3 +166,6 @@
 -
   source: view/adminhtml/web/template/preview.html
   label: Image / File preview admin template
+-
+  source: etc/frontend/routes.xml
+  label: "Frontend routes file"

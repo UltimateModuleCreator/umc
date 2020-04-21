@@ -1,16 +1,13 @@
 <?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 {% for entity in module.getEntities() %}
-    <preference for="{{ entity.getRepoInterface() }}" type="{{ entity.getRepoModel() }}"/>
-    <preference for="{{ entity.getListRepoInterface() }}" type="{{ entity.getListRepoModel() }}"/>
-    <preference for="{{ entity.getInterface() }}" type="{{ entity.getModel() }}"/>
-    <preference for="{{ entity.getSearchResultsInterface() }}" type="Magento\Framework\Api\SearchResults"/>
+{% include 'entity/di/preference.html.twig' with {module: module, entity:entity} %}
 {% endfor %}
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
 {% for entity in module.getEntities() %}
-                <item name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" xsi:type="array">
+                <item name="{{ module.getNamespace()|camel|ucfirst }}\{{module.getModuleName()|camel|ucfirst }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">{{ entity.getMainTableName() }}</item>
                     <item name="identifierField" xsi:type="string">{{ entity.getPk() }}</item>
                 </item>
@@ -53,65 +50,17 @@
         </arguments>
     </type>
 {% for entity in module.getEntities() %}
-    <type name="{{ entity.getCollectionModel() }}">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
-            <argument name="model" xsi:type="string">{{ entity.getModel() }}</argument>
-            <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
-            <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
-            <argument name="eventPrefix" xsi:type="string">{{ entity.getEventPrefix()}}_collection</argument>
-            <argument name="eventObject" xsi:type="string">{{ entity.getNameSingular()|snake }}_collection</argument>
-            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
-{% if entity.isStore() %}
-                <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
-{% endif %}
-        </arguments>
-    </type>
-    <virtualType name="{{ module.getNamespace() }}{{module.getModuleName()|camel|ucfirst }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
-            <argument name="model" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\Document</argument>
-            <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
-            <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
-            <argument name="eventPrefix" xsi:type="string">{{ entity.getEventPrefix() }}_collection</argument>
-            <argument name="eventObject" xsi:type="string">{{ entity.getNameSingular()|snake }}_collection</argument>
-            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
-{% if entity.isStore() %}
-                <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
-{% endif %}
-        </arguments>
-    </virtualType>
+{% include 'entity/di/collection.html.twig' with {module: module, entity:entity} %}
 {% endfor %}
 {% for entity in module.getStoreEntities() %}
-    <virtualType name="{{ entity.getStoreHandler('Read') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\ReadHandler">
-        <arguments>
-            <argument name="resource" xsi:type="object">{{ entity.getResourceModel() }}</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="{{ entity.getStoreHandler('Save') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Relation\Store\SaveHandler">
-        <arguments>
-            <argument name="resource" xsi:type="object">{{ entity.getResourceModel() }}</argument>
-            <argument name="entityType" xsi:type="string">{{ entity.getInterface() }}</argument>
-            <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
-        </arguments>
-    </virtualType>
+{% include 'entity/di/store-link.html.twig' with {module: module, entity:entity} %}
 {% endfor %}
 {% if module.isStore() %}
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
 {% for entity in module.getStoreEntities() %}
-                <item name="{{ entity.getInterface() }}" xsi:type="array">
-                    <item name="read" xsi:type="array">
-                        <item name="storeReader" xsi:type="string">{{ entity.getStoreHandler('Read') }}</item>
-                    </item>
-                    <item name="create" xsi:type="array">
-                        <item name="storeCreator" xsi:type="string">{{ entity.getStoreHandler('Save') }}</item>
-                    </item>
-                    <item name="update" xsi:type="array">
-                        <item name="storeUpdater" xsi:type="string">{{ entity.getStoreHandler('Save') }}</item>
-                    </item>
-                </item>
+{% include 'entity/di/store-handlers.html.twig' with {module: module, entity:entity} %}
 {% endfor %}
             </argument>
         </arguments>

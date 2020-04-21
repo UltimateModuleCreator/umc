@@ -96,6 +96,7 @@ class Edit extends AbstractController
         }
         if (empty($data)) {
             $data = $defaults['module'] ?? [];
+            $moduleName = 'New Module';
         }
         $formsConfig = $this->formLoader->getForms();
         $forms = [];
@@ -104,25 +105,16 @@ class Edit extends AbstractController
                 $forms[$key] = $form['rows'];
             }
         }
-
-        $isNewMode = true;
-        if (isset($data['module']['namespace']) && isset($data['module']['module_name'])) {
-            $title = 'Edit: ' . (($data['module']['namespace']) ?? '') . '_' . (($data['module']['module_name']) ?? '');
-            $isNewMode = false;
-        } else {
-            $title = 'New Module';
-        }
         return $this->render(
             $this->template,
             [
+                'title' => $moduleName,
                 'forms' => $forms,
                 'data' => $data,
-                'title' => $title,
                 'attribute_config' => $this->getGroupedAttributeConfig($formsConfig['attribute']['rows'] ?? []),
                 'serialized_attribute_config' => $this->getGroupedAttributeConfig(
                     $formsConfig['serialized']['rows'] ?? []
                 ),
-                'is_new_mode' => (int)$isNewMode,
                 'uiConfig' => $this->getUiConfig($formsConfig),
                 'defaults' => $defaults,
                 'selectedMenu' => 'edit'
@@ -166,7 +158,7 @@ class Edit extends AbstractController
         foreach ($rows as $row) {
             foreach ($row as $key => $field) {
                 if ($key === 'type') {
-                    return $field['options'];
+                    return $field['options'] ?? [];
                 }
             }
         }

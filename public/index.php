@@ -21,7 +21,6 @@ $debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
 if ($debug) {
     umask(0000);
 }
-
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
     Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
 }
@@ -29,9 +28,12 @@ if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
-
 $kernel = new Kernel($env, $debug);
 $request = Request::createFromGlobals();
-$response = $kernel->handle($request);
+try {
+    $response = $kernel->handle($request);
+} catch (\Exception $e) {
+    echo $e->getMessage();exit;
+}
 $response->send();
 $kernel->terminate($request, $response);

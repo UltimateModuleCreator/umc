@@ -1,11 +1,7 @@
 
 
 
-Model/Search/Entity.php:
-  destination: Model/Search/_Entity_.php
-  label: "Entity admin search model"
-  scope: entity
-  template: source/Model/Search/Entity.php.html.twig
+
 Model/Entity/Url.php:
   destination: Model/_Entity_/Url.php
   label: "Entity url model"

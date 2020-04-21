@@ -9,11 +9,7 @@ etc/adminhtml/system.xml:
   label: "Admin system file"
   scope: module
   template: source/etc/adminhtml/system.xml.html.twig
-etc/frontend/routes.xml:
-  destination: etc/frontend/routes.xml
-  label: "Frontend routes file"
-  scope: module
-  template: source/etc/frontend/routes.xml.html.twig
+
 etc/frontend/di.xml:
   destination: etc/frontend/di.xml
   label: "Frontend DI file"

@@ -1,0 +1,11 @@
+                <item name="{{ entity.getInterface() }}" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">{{ entity.getStoreHandler('Read') }}</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">{{ entity.getStoreHandler('Save') }}</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">{{ entity.getStoreHandler('Save') }}</item>
+                    </item>
+                </item>

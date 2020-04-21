@@ -63,24 +63,39 @@ class SettingsTest extends TestCase
     public function testRun()
     {
         $this->formLoader->method('getForms')->willReturn([
-            [
+            'module' => [
                 'rows' => [
                     [
-                        'has_default' => true,
-                        'dummy' => 'dummy'
+                        'field1' => [
+                            'has_default' => true,
+                            'name' => 'dummy'
+                        ],
+                        'field2' => [
+                            'name' => 'dummy1'
+                        ],
                     ],
                     [
-                        'dummy1' => 'dummy1'
-                    ],
-                ],
-                [
+                        'field3' => [
+                            'has_default' => true,
+                            'name' => 'dummy'
+                        ],
+                        'field4' => [
+                            'name' => 'dummy1'
+                        ],
+                    ]
+                ]
+            ],
+            'attribute' => [
+                'rows' => [
                     [
-                        'has_default' => true,
-                        'dummy2' => 'dummy2'
-                    ],
-                    [
-                        'dummy3' => 'dummy3'
-                    ],
+                        'field3' => [
+                            'has_default' => true,
+                            'name' => 'dummy2'
+                        ],
+                        'field4' => [
+                            'name' => 'dummy3'
+                        ],
+                    ]
                 ],
             ]
         ]);

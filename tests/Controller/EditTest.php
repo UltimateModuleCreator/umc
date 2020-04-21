@@ -106,11 +106,11 @@ class EditTest extends TestCase
         $this->request->method('get')->willReturn(null);
         $this->yamlLoader->expects($this->never())->method('load');
         $this->formLoader->method('getForms')->willReturn([
-            [
-                'rows' => [['data']]
+            'attribute' => [
+                'rows' => [['type' => 'data']]
             ],
-            [
-                'rows' => [['data']]
+            'serialized' => [
+                'rows' => [['type' => 'data']]
             ]
         ]);
         $this->edit->run();

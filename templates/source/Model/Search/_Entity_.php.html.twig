@@ -1,8 +1,8 @@
-{% if (entity.getSearch()) %}
+{% if (entity.isSearch()) %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Search;
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\Search;
 
 use Magento\Framework\DataObject;
 use Magento\Backend\Helper\Data;
@@ -51,15 +51,21 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
         }
 
         $query = $this->getQuery();
-        $collection = $this->collectionFactory->create()->addFieldToFilter(
-            '{{ entity.getNameAttribute().getCode() }}',
-            ['like' => '%' . $query . '%']
-        )->setCurPage(
-            $this->getStart()
-        )->setPageSize(
-            $this->getLimit()
-        )->load();
-
+        $collection = $this->collectionFactory->create()
+            ->addFieldToFilter('{{ entity.getNameAttribute().getCode() }}', ['like' => '%' . $query . '%'])
+            ->setCurPage($this->getStart())
+            ->setPageSize($this->getLimit())
+            ->load();
+        $result[] = [
+            'id' => '{{ entity.getNameSingular()|snake }}0',
+            'type' => '',
+            'name' => __('"%1" in {{ entity.getLabelSingular() }}', $query),
+            'description' => '',
+            'url' => $this->adminhtmlData->getUrl(
+                '{{ entity.getAdminRoute('index') }}',
+                ['_query' => "search=" . $query]
+            ),
+        ];
         foreach ($collection as $item) {
             $result[] = [
                 'id' => '{{ entity.getNameSingular()|snake }}' . $item->getId(),
@@ -67,14 +73,12 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
                 'name' => __('{{ entity.getLabelSingular() }} %1', $item->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}()),
                 'description' => __('{{ entity.getLabelSingular() }} %1', $item->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}()),
                 'url' => $this->adminhtmlData->getUrl(
-                    '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/edit',
-                    ['{{ entity.getNameSingular()|snake }}_id' => $item->getId()]
+                    '{{ entity.getAdminRoute('edit') }}',
+                    ['{{ entity.getPk() }}' => $item->getId()]
                 ),
             ];
         }
-
         $this->setResults($result);
-
         return $this;
     }
 }
