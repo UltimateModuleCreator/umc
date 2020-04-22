@@ -196,7 +196,7 @@ class Module
     {
         return ($this->frontKey)
             ? $this->frontKey
-            : $this->stringUtil->snake($this->getNamespace()) . '_' . $this->stringUtil->snake($this->getModuleName());
+            : str_replace('_', '', $this->stringUtil->snake($this->getModuleName()));
     }
 
     /**

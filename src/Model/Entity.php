@@ -773,6 +773,17 @@ class Entity
      * @param $route
      * @return string
      */
+    public function getFrontendRoute($route): string
+    {
+        return $this->module->getFrontKey() .
+            '/' . $this->stringUtil->snake($this->getNameSingular()) .
+            '/' . $route;
+    }
+
+    /**
+     * @param $route
+     * @return string
+     */
     public function getAdminRoute($route): string
     {
         return $this->module->getAdminRoutePrefix() .

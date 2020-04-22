@@ -2,23 +2,10 @@
 
 
 
-Model/Entity/Url.php:
-  destination: Model/_Entity_/Url.php
-  label: "Entity url model"
-  scope: entity
-  template: source/Model/Entity/Url.php.html.twig
 
 
-Controller/Entity/Index.php:
-  destination: Controller/_Entity_/Index.php
-  label: "Entity frontend index controller action"
-  scope: entity
-  template: source/Controller/Entity/Index.php.html.twig
-Controller/Entity/View.php:
-  destination: Controller/_Entity_/View.php
-  label: "Entity frontend View controller action"
-  scope: entity
-  template: source/Controller/Entity/View.php.html.twig
+
+
 Block/Entity/ListEntity.php:
   destination: Block/_Entity_/List_Entity_.php
   label: "Entity list block"

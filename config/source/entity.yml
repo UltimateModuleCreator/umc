@@ -102,3 +102,15 @@
   source: Model/Search/_Entity_.php
   label: "Entity admin search model"
   scope: entity
+-
+  source: Model/_Entity_/Url.php
+  label: "Entity url model"
+  scope: entity
+-
+  source: Controller/_Entity_/Index.php
+  label: "Entity frontend index controller action"
+  scope: entity
+-
+  source: Controller/_Entity_/View.php
+  label: "Entity frontend View controller action"
+  scope: entity

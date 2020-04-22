@@ -1,30 +1,31 @@
-{% if entity.getFrontendList() %}
+{% if entity.isFrontendList() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Index extends Action
 {
-{% if entity.getSeo() %}
+{% if entity.isSeo() %}
     /**
      * @var string
      */
-    const META_DESCRIPTION_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_description';
+    public const META_DESCRIPTION_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_description';
     /**
      * @var string
      */
-    const META_KEYWORDS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_keywords';
+    public const META_KEYWORDS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_keywords';
     /**
      * @var string
      */
-    const META_TITLE_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_title';
+    public const META_TITLE_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_title';
 {% endif %}
     /**
      * @var string
@@ -33,7 +34,7 @@ class Index extends Action
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
@@ -41,11 +42,9 @@ class Index extends Action
      */
     public function __construct(
         Context $context,
-        PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($context);
-        $this->resultPageFactory = $resultPageFactory;
         $this->scopeConfig = $scopeConfig;
     }
     /**
@@ -53,7 +52,8 @@ class Index extends Action
      */
     public function execute()
     {
-        $resultPage = $this->resultPageFactory->create();
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+{% if entity.isSeo() %}
         $resultPage->getConfig()->getTitle()->set(
             $this->scopeConfig->getValue(self::META_TITLE_CONFIG_PATH, ScopeInterface::SCOPE_STORE)
         );
@@ -63,6 +63,9 @@ class Index extends Action
         $resultPage->getConfig()->setKeywords(
             $this->scopeConfig->getValue(self::META_KEYWORDS_CONFIG_PATH, ScopeInterface::SCOPE_STORE)
         );
+{% else %}
+        $resultPage->getConfig()->getTitle()->set(__('{{ entity.getLabelPlural }}'));
+{% endif %}
         if ($this->scopeConfig->isSetFlag(self::BREADCRUMBS_CONFIG_PATH, ScopeInterface::SCOPE_STORE)) {
             /** @var \Magento\Theme\Block\Html\Breadcrumbs $breadcrumbsBlock */
             $breadcrumbsBlock = $resultPage->getLayout()->getBlock('breadcrumbs');

@@ -1,8 +1,8 @@
-{% if entity.getFrontendView() %}
+{% if entity.isFrontendView() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -11,10 +11,11 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\View\Result\Page;
 use Magento\Store\Model\ScopeInterface;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Url as UrlModel;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}Registry;
-{% if entity.getStore() %}
+use {{ entity.getRepoInterface() }};
+{% if entity.isFrontendList() %}
+use {{ entity.getModel('\\Url') }};
+{% endif %}
+{% if entity.isStore() %}
 use Magento\Store\Model\StoreManagerInterface;
 {% endif %}
 
@@ -23,38 +24,33 @@ class View extends Action
     /**
      * @var string
      */
-    const BREADCRUMBS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
+    public const BREADCRUMBS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
     /**
-     * @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
      */
-    protected ${{ entity.getNameSingular()|camel }}Repository;
-
+    private ${{ entity.getNameSingular()|camel }}Repository;
     /**
-     * @var {{ entity.getNameSingular()|camel|ucfirst }}Registry
-     */
-    protected $registry;
-
-    /**
-     * @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}\Url
+     * @var Url
      */
     protected $urlModel;
-{% if entity.getStore() %}
+{% if entity.isStore() %}
     /**
      * @var StoreManagerInterface
      */
     private $storeManager;
 {% endif %}
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
      * @param Context $context
      * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
-     * @param Registry $registry
-     * @param UrlModel $urlModel
-{% if entity.getStore() %}
+{% if entity.isFrontendList() %}
+     * @param Url $urlModel
+{% endif %}
+{% if entity.isStore() %}
      * @param StoreManagerInterface $storeManager
 {% endif %}
      * @param ScopeConfigInterface $scopeConfig
@@ -62,17 +58,19 @@ class View extends Action
     public function __construct(
         Context $context,
         {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
-        {{ entity.getNameSingular()|camel|ucfirst }}Registry $registry,
-        UrlModel $urlModel,
-{% if entity.getStore() %}
+{% if entity.isFrontendList() %}
+        Url $urlModel,
+{% endif %}
+{% if entity.isStore() %}
         StoreManagerInterface $storeManager,
 {% endif %}
         ScopeConfigInterface $scopeConfig
     ) {
         $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
-        $this->registry = $registry;
+{% if entity.isFrontendList() %}
         $this->urlModel = $urlModel;
-{% if entity.getStore() %}
+{% endif %}
+{% if entity.isStore() %}
         $this->storeManager = $storeManager;
 {% endif %}
         $this->scopeConfig = $scopeConfig;
@@ -85,29 +83,25 @@ class View extends Action
     public function execute()
     {
         try {
-            ${{ entity.getNameSingular()|camel }}Id = (int)$this->getRequest()->getParam('id');
-            ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Repository->get(${{ entity.getNameSingular()|camel }}Id);
+            ${{ entity.getPk()|camel }} = (int)$this->getRequest()->getParam('id');
+            ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Repository->get(${{ entity.getPk()|camel }});
 
             if (!${{ entity.getNameSingular()|camel }}->getIsActive()) {
-                throw new \Exception();
+                return $this->getNoRouteResult();
             }
-{% if entity.getStore() %}
+{% if entity.isStore() %}
             $validStores = [$this->storeManager->getStore()->getId(), 0];
             if (!count(array_intersect($validStores, ${{ entity.getNameSingular()|camel }}->getStoreId()))) {
-                throw new \Exception();
+                return $this->getNoRouteResult();
             }
 {% endif %}
         } catch (\Exception $e) {
-            /** @var Forward $resultForward */
-            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
-            $resultForward->forward('noroute');
-            return $resultForward;
+            return $this->getNoRouteResult();
         }
 
-        $this->registry->set(${{ entity.getNameSingular()|camel }});
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-{% if entity.getSeo() %}
+{% if entity.isSeo() %}
         $resultPage->getConfig()->setDescription(${{ entity.getNameSingular()|camel }}->getMetaDescription());
         $resultPage->getConfig()->setKeywords(${{ entity.getNameSingular()|camel }}->getMetaKeywords());
         $title = ${{ entity.getNameSingular()|camel }}->getMetaTitle();
@@ -133,7 +127,7 @@ class View extends Action
                         'link'  => $this->_url->getUrl('')
                     ]
                 );
-{% if entity.getFrontendList() %}
+{% if entity.isFrontendList() %}
                 $breadcrumbsBlock->addCrumb(
                     '{{ entity.getNamePlural() }}',
                     [
@@ -151,6 +145,17 @@ class View extends Action
             }
         }
         return $resultPage;
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Forward
+     */
+    private function getNoRouteResult()
+    {
+        /** @var Forward $resultForward */
+        $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+        $resultForward->forward('noroute');
+        return $resultForward;
     }
 }
 {% endif %}

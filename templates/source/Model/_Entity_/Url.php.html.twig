@@ -1,11 +1,13 @@
-{% if entity.getFrontendView() or entity.getFrontendList() %}
+{% if entity.isFrontend() %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+namespace {{ entity.getModel() }};
 
 use Magento\Framework\UrlInterface;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+{% if entity.isFrontendView() %}
+use {{ entity.getInterface() }};
+{% endif %}
 
 class Url
 {
@@ -14,7 +16,8 @@ class Url
      *
      * @var \Magento\Framework\UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
+
     /**
      * @param UrlInterface $urlBuilder
      */
@@ -23,17 +26,17 @@ class Url
     ) {
         $this->urlBuilder = $urlBuilder;
     }
-{% if (entity.getFrontendList()) %}
+{% if (entity.isFrontendList()) %}
 
     /**
      * @return string
      */
     public function getListUrl()
     {
-        return $this->urlBuilder->getUrl('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|lower }}/index');
+        return $this->urlBuilder->getUrl('{{ entity.getFrontendRoute('index') }}');
     }
 {% endif %}
-{% if (entity.getFrontendView()) %}
+{% if (entity.isFrontendView()) %}
 
     /**
      * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
@@ -41,7 +44,7 @@ class Url
      */
     public function get{{ entity.getNameSingular()|camel|ucfirst }}Url({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
     {
-        return $this->urlBuilder->getUrl('{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|lower }}/view', ['id' => ${{ entity.getNameSingular()|camel }}->getId()]);
+        return $this->urlBuilder->getUrl('{{ entity.getFrontendRoute('view') }}', ['id' => ${{ entity.getNameSingular()|camel }}->getId()]);
     }
 {% endif %}
 }
