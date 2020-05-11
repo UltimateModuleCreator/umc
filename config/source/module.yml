@@ -29,6 +29,9 @@
   source: etc/adminhtml/menu.xml
   label: "Admin menu file"
 -
+  source: etc/adminhtml/system.xml
+  label: "Admin system config definition file"
+-
   source: "Block/Adminhtml/Button/Back.php"
   label: "Admin grids back button"
 -
@@ -70,6 +73,9 @@
 -
   source: Model/FileInfo.php
   label: "File info model"
+-
+  source: Model/FileChecker.php
+  label: "Check for name collisions in uploaded files"
 -
   source: Model/ResourceModel/StoreAwareAbstractModel.php
   label: "Resource model for store related entities"
@@ -169,3 +175,33 @@
 -
   source: etc/frontend/routes.xml
   label: "Frontend routes file"
+-
+  source: ViewModel/Formatter.php
+  label: "Frontend value formatter view model"
+-
+  source: ViewModel/Formatter/Date.php
+  label: "Frontend value formatter view model for date fields"
+-
+  source: ViewModel/Formatter/File.php
+  label: "Frontend value formatter view model for file fields"
+-
+  source: ViewModel/Formatter/FormatterInterface.php
+  label: "Frontend value formatter interface"
+-
+  source: ViewModel/Formatter/Image.php
+  label: "Frontend value formatter view model for image fields"
+-
+  source: ViewModel/Formatter/Options.php
+  label: "Frontend value formatter view model for dropdown and multi-select fields"
+-
+  source: ViewModel/Formatter/Text.php
+  label: "Frontend value formatter view model for text fields"
+-
+  source: ViewModel/Formatter/Wysiwyg.php
+  label: "Frontend value formatter view model for editor fields"
+-
+  source: Plugin/Theme/Block/Html/TopmenuPlugin.php
+  label: "Frontend Top menu block plugin"
+-
+  source: view/frontend/layout/default.xml
+  label: "Default layout handle"

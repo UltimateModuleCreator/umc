@@ -1,0 +1,11 @@
+    /**
+     * @return array
+     */
+    public function get{{ attribute.getCode()|camel }}AsArray()
+    {
+        try {
+            return $this->json->unserialize($this->get{{ attribute.getCode()|camel }}());
+        } catch (\Exception $e) {
+            return [];
+        }
+    }

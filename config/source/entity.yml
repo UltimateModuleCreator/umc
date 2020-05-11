@@ -103,8 +103,8 @@
   label: "Entity admin search model"
   scope: entity
 -
-  source: Model/_Entity_/Url.php
-  label: "Entity url model"
+  source: ViewModel/_Entity_/Url.php
+  label: "Entity url view model"
   scope: entity
 -
   source: Controller/_Entity_/Index.php
@@ -113,4 +113,28 @@
 -
   source: Controller/_Entity_/View.php
   label: "Entity frontend View controller action"
+  scope: entity
+-
+  source: ViewModel/_Entity_/List_Entity_.php
+  label: "Entity frontend List view action"
+  scope: entity
+-
+  source: ViewModel/_Entity_/View.php
+  label: "Entity frontend view action"
+  scope: entity
+-
+  source: view/adminhtml/ui_component/_modulename___entity__index.xml
+  label: "Entity frontend list layout handle"
+  scope: entity
+-
+  source: view/adminhtml/ui_component/_modulename___entity__view.xml
+  label: "Entity frontend list layout handle"
+  scope: entity
+-
+  source: view/frontend/templates/_entity_/view.phtml
+  label: "Entity frontend view template"
+  scope: entity
+-
+  source: view/frontend/templates/_entity_/list.phtml
+  label: "Entity frontend list template"
   scope: entity

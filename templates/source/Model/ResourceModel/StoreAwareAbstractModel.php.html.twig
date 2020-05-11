@@ -103,9 +103,9 @@ abstract class StoreAwareAbstractModel extends AbstractModel
         $entityId = $value;
         if ($field != $entityMetadata->getIdentifierField() || $object->getData($this->storeIdField)) {
             $select = $this->_getLoadSelect($field, $value, $object);
-            $select->reset(Select::COLUMNS)
-                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
-                ->limit(1);
+            $select->reset(Select::COLUMNS);
+            $select->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField());
+            $select->limit(1);
             $result = $this->getConnection()->fetchCol($select);
             $entityId = count($result) ? $result[0] : false;
         }
@@ -141,14 +141,14 @@ abstract class StoreAwareAbstractModel extends AbstractModel
         $idField = $entityMetadata->getIdentifierField();
         $linkField = $entityMetadata->getLinkField();
 
-        $select = $connection->select()
-            ->from(['entity_store_table' => $this->getTable($this->storeTable)], $this->storeIdField)
-            ->join(
-                ['entity_table' => $this->getMainTable()],
-                'entity_store_table.' . $linkField . ' = entity_table.' . $linkField,
-                []
-            )
-            ->where('entity_table.' . $entityMetadata->getIdentifierField() . ' = :' . $idField);
+        $select = $connection->select();
+        $select->from(['entity_store_table' => $this->getTable($this->storeTable)], $this->storeIdField);
+        $select->join(
+            ['entity_table' => $this->getMainTable()],
+            'entity_store_table.' . $linkField . ' = entity_table.' . $linkField,
+            []
+        );
+        $select->where('entity_table.' . $entityMetadata->getIdentifierField() . ' = :' . $idField);
         return $connection->fetchCol($select, [$idField => (int)$id]);
     }
 }

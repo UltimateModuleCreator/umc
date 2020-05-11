@@ -421,11 +421,11 @@ class Attribute
 
     /**
      * @param $type
-     * @return string
+     * @return array
      */
-    public function getProcessorType($type): string
+    public function getProcessorType($type): array
     {
-        return $this->getTypeInstance()->getProcessorType($type);
+        return $this->getTypeInstance()->getProcessorTypes($type);
     }
 
     /**

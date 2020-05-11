@@ -183,16 +183,16 @@ class BaseTypeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Type\BaseType::getProcessorType
+     * @covers \App\Model\Attribute\Type\BaseType::getProcessorTypes
      * @covers \App\Model\Attribute\Type\BaseType::__construct
      */
-    public function testGetProcessorType()
+    public function testGetProcessorTypes()
     {
         $this->assertEquals(
-            'type',
-            $this->getInstance(['processor' => ['type' => 'type']])->getProcessorType('type')
+            ['type'],
+            $this->getInstance(['processor' => ['type' => 'type']])->getProcessorTypes('type')
         );
-        $this->assertEquals('', $this->getInstance([])->getProcessorType('type'));
+        $this->assertEquals([], $this->getInstance([])->getProcessorTypes('type'));
     }
 
     /**

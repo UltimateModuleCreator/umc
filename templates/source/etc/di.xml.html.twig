@@ -112,4 +112,37 @@
 {% endfor %}
 {% endfor %}
 {% endfor %}
+{% if not module.isUmcCrud() and module.isFrontend() and module.isProcessorWithType('frontend', 'editor') %}
+    <type name="{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Wysiwyg">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Widget\Model\Template\Filter</argument>
+        </arguments>
+    </type>
+{% endif %}
+{% if not module.isUmcCrud() and module.isFrontend() %}
+    <type name="{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter">
+        <arguments>
+            <argument name="formatterMap" xsi:type="array">
+{% if module.isProcessorWithType('frontend', 'date') %}
+                <item name="date" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Date</item>
+{% endif %}
+{% if module.isProcessorWithType('frontend', 'text') %}
+                <item name="text" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Text</item>
+{% endif %}
+{% if module.isProcessorWithType('frontend', 'editor') %}
+                <item name="editor" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Wysiwyg</item>
+{% endif %}
+{% if module.isProcessorWithType('frontend', 'options') %}
+                <item name="options" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Options</item>
+{% endif %}
+{% if module.isProcessorWithType('frontend', 'image') %}
+                <item name="image" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Image</item>
+{% endif %}
+{% if module.isProcessorWithType('frontend', 'file') %}
+                <item name="file" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\File</item>
+{% endif %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
 </config>

@@ -137,8 +137,8 @@ class ModuleTest extends TestCase
     public function testGetFrontKey()
     {
         $this->assertEquals('front_key', $this->getInstance(['front_key' => 'front_key'])->getFrontKey());
-        $this->assertEquals('ns_md', $this->getInstance(['namespace' => 'ns', 'module_name' => 'md'])->getFrontKey());
-        $this->assertEquals('_', $this->getInstance([])->getFrontKey());
+        $this->assertEquals('md', $this->getInstance(['module_name' => 'md'])->getFrontKey());
+        $this->assertEquals('', $this->getInstance([])->getFrontKey());
     }
 
     /**
@@ -1027,7 +1027,7 @@ class ModuleTest extends TestCase
      */
     public function testGetProcessorTypes()
     {
-        $this->assertEquals(2, count($this->getInstance([])->getProcessorTypes()));
+        $this->assertEquals(4, count($this->getInstance([])->getProcessorTypes()));
     }
 
     /**

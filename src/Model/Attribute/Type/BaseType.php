@@ -23,6 +23,9 @@ namespace App\Model\Attribute\Type;
 
 use App\Model\Attribute;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class BaseType
 {
@@ -233,11 +236,18 @@ class BaseType
 
     /**
      * @param $type
-     * @return string
+     * @return array
      */
-    public function getProcessorType($type): string
+    public function getProcessorTypes($type): array
     {
-        return (string)($this->processor[$type] ?? '');
+        $processorType = $this->processor[$type] ?? null;
+        if ($processorType === null) {
+            return [];
+        }
+        if (!is_array($processorType)) {
+            return [$processorType];
+        }
+        return $processorType;
     }
 
     /**
@@ -311,9 +321,9 @@ class BaseType
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function renderGrid(): string
     {
@@ -324,9 +334,9 @@ class BaseType
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function renderSchemaFk(): string
     {
@@ -335,9 +345,9 @@ class BaseType
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function renderForm(): string
     {
@@ -347,11 +357,63 @@ class BaseType
     }
 
     /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderAdditionalInterface(): string
+    {
+        return !empty($this->templates['interface'])
+            ? $this->renderTemplate($this->templates['interface'])
+            : '';
+    }
+
+    /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderAdditionalModel(): string
+    {
+        return !empty($this->templates['model'])
+            ? $this->renderTemplate($this->templates['model'])
+            : '';
+    }
+
+    /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderFrontendList()
+    {
+        return !empty($this->templates['frontend']['list'])
+            ? $this->renderTemplate($this->templates['frontend']['list'])
+            : '';
+    }
+
+    /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderFrontendView()
+    {
+        return !empty($this->templates['frontend']['view'])
+            ? $this->renderTemplate($this->templates['frontend']['view'])
+            : '';
+    }
+
+    /**
      * @param null|string $template
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function renderTemplate(?string $template): string
     {

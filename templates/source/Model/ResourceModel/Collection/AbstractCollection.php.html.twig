@@ -8,7 +8,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection as DbCollection;
 
-abstract class AbstractCollection extends DbCollection implements SearchResultInterface
+class AbstractCollection extends DbCollection implements SearchResultInterface
 {
     /**
      * @var AggregationInterface

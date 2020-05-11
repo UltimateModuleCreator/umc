@@ -263,6 +263,8 @@ class Entity
         $this->cacheData['attribute']['product_attribute'] = [];
         $this->cacheData['attribute']['product_attribute_set'] = [];
         $this->cacheData['attribute']['full_text'] = [];
+        $this->cacheData['attribute']['show_in_list'] = [];
+        $this->cacheData['attribute']['show_in_view'] = [];
         foreach ($this->getModule()->getProcessorTypes() as $processorType) {
             $this->cacheData['attribute']['processor'][$processorType] = [];
         }
@@ -272,19 +274,20 @@ class Entity
             $this->cacheData['attribute']['by_type'][$type][] = $attribute;
             $this->cacheData['attribute']['codes'][] = $attribute->getCode();
             $attribute->isUpload() && ($this->cacheData['attribute']['upload'][] = $attribute);
+            $attribute->isShowInList() && ($this->cacheData['attribute']['show_in_list'][] = $attribute);
+            $attribute->isShowInView() && ($this->cacheData['attribute']['show_in_view'][] = $attribute);
             $attribute->isManualOptions() && ($this->cacheData['attribute']['with_options'][] = $attribute);
             $attribute->isProductAttribute() && ($this->cacheData['attribute']['product_attribute'][] = $attribute);
             $attribute->isProductAttributeSet()
                 && ($this->cacheData['attribute']['product_attribute_set'][] = $attribute);
             $attribute->isFullText() && ($this->cacheData['attribute']['full_text'][] = $attribute);
             foreach ($this->getModule()->getProcessorTypes() as $processorType) {
-                $processor = $attribute->getProcessorType($processorType);
-                if ($processor === '') {
-                    continue;
+                $processors = $attribute->getProcessorType($processorType);
+                foreach ($processors as $processor) {
+                    $this->cacheData['attribute']['processor'][$processorType][$processor] =
+                        $this->cacheData['attribute']['processor'][$processorType][$processor] ?? [];
+                    $this->cacheData['attribute']['processor'][$processorType][$processor][] = $attribute;
                 }
-                $this->cacheData['attribute']['processor'][$processorType][$processor] =
-                    $this->cacheData['attribute']['processor'][$processorType][$processor] ?? [];
-                $this->cacheData['attribute']['processor'][$processorType][$processor][] = $attribute;
             }
         }
     }
@@ -317,6 +320,24 @@ class Entity
     {
         $this->initAttributeCacheData();
         return $this->cacheData['attribute']['processor'][$processor][$processorType] ?? [];
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getListAttributes()
+    {
+        $this->initAttributeCacheData();
+        return $this->cacheData['attribute']['show_in_list'];
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getViewAttributes()
+    {
+        $this->initAttributeCacheData();
+        return $this->cacheData['attribute']['show_in_view'];
     }
 
     /**
@@ -756,6 +777,16 @@ class Entity
     {
         return (count($this->getAttributesWithProcessor('save')) > 0)
             ? $this->getVirtualType('SaveDataProcessor')
+            : $this->module->getNullSaveDataProcessor();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSaveDataProcessorInlineEdit(): string
+    {
+        return (count($this->getAttributesWithProcessor('inlineEdit')) > 0)
+            ? $this->getVirtualType('SaveDataProcessorInlineEdit')
             : $this->module->getNullSaveDataProcessor();
     }
 

@@ -166,6 +166,13 @@ class Module
     }
 
     /**
+     * @return bool
+     */
+    public function isConfigMenuParent(): bool
+    {
+        return $this->getMenuParent() === 'Magento_Config::config';
+    }
+    /**
      * @return int
      */
     public function getSortOrder(): int
@@ -421,7 +428,7 @@ class Module
     public function isFrontend(): bool
     {
         $this->initEntityCacheData();
-        return count($this->cacheData['entity']['frontend']) > 0;
+        return count($this->getFrontendEntities()) > 0;
     }
 
     /**
@@ -431,6 +438,15 @@ class Module
     {
         $this->initEntityCacheData();
         return $this->cacheData['entity']['frontend_view'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getFrontendEntities(): array
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData['entity']['frontend'];
     }
 
     /**
@@ -728,6 +744,6 @@ class Module
      */
     public function getProcessorTypes(): array
     {
-        return ['save', 'provider'];
+        return ['save', 'provider', 'frontend', 'inlineEdit'];
     }
 }

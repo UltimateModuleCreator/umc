@@ -1,0 +1,174 @@
+{% if not module.isUmcCrud() and module.isFrontend() and module.isProcessorWithType('frontend', 'image') %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter;
+
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\FileInfo;
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\FileInfoFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Image\Adapter\AbstractAdapter;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Store\Model\StoreManagerInterface;
+
+class Image implements FormatterInterface
+{
+    public const DEFAULT_IMAGE_NAME_PARTS = 3;
+    /**
+     * image settings properties
+     */
+    public const IMAGE_NAME_PARTS = 'image_name_parts';
+    public const KEEP_ASPECT_RATIO = 'keep_aspect_ratio';
+    public const KEEP_FRAME = 'keep_frame';
+    public const KEEP_TRANSPARENCY = 'keep_transparency';
+    public const CONSTRAIN_ONLY = 'constrain_only';
+    public const BACKGROUND_COLOR = 'background_color';
+    public const RESIZE = 'resize';
+    /**
+     * @var AdapterFactory
+     */
+    private $adapterFactory;
+    /**
+     * @var FileInfoFactory
+     */
+    private $fileInfoFactory;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+    /**
+     * @var FileInfo[]
+     */
+    private $fileInfoCache = [];
+
+    /**
+     * Image constructor.
+     * @param AdapterFactory $adapterFactory
+     * @param FileInfoFactory $fileInfoFactory
+     * @param Filesystem $filesystem
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(
+        AdapterFactory $adapterFactory,
+        FileInfoFactory $fileInfoFactory,
+        Filesystem $filesystem,
+        StoreManagerInterface $storeManager
+    ) {
+        $this->adapterFactory = $adapterFactory;
+        $this->fileInfoFactory = $fileInfoFactory;
+        $this->filesystem = $filesystem;
+        $this->storeManager = $storeManager;
+    }
+
+    /**
+     * @param $path
+     * @return FileInfo
+     */
+    private function getFileInfo($path)
+    {
+        if (!array_key_exists($path, $this->fileInfoCache)) {
+            $this->fileInfoCache[$path] = $this->fileInfoFactory->create(['filePath' => $path]);
+        }
+        return $this->fileInfoCache[$path];
+    }
+
+    /**
+     * @param $value
+     * @param array $arguments
+     * @return string
+     * @throws \Exception
+     */
+    public function formatHtml($value, $arguments = []): string
+    {
+        $path = $arguments['path'] ?? '';
+        $fileInfo = $this->getFileInfo($path);
+        $filePath = $fileInfo->getFilePath((string)$value);
+        $absolutePath = $fileInfo->getAbsoluteFilePath($value);
+        if (!$absolutePath) {
+            return '';
+        }
+        $destinationPath = $this->getDestinationRelativePath($filePath, $arguments);
+        $mediaDir = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $absoluteDestinationPath = $mediaDir->getAbsolutePath($destinationPath);
+
+        $store = $this->storeManager->getStore();
+        $mediaBaseUrl = $store->getBaseUrl(
+            \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+        );
+        if (!$mediaDir->isFile($absoluteDestinationPath)) {
+            /** @var AbstractAdapter $adapter */
+            $adapter = $this->adapterFactory->create();
+            $adapter->open($absolutePath);
+            $imageParams = $this->getImageSettings($arguments);
+            $adapter->keepAspectRatio($imageParams[self::KEEP_ASPECT_RATIO]);
+            $adapter->keepFrame($imageParams[self::KEEP_FRAME]);
+            $adapter->keepTransparency($imageParams[self::KEEP_TRANSPARENCY]);
+            $adapter->constrainOnly($imageParams[self::CONSTRAIN_ONLY]);
+            $adapter->backgroundColor($imageParams[self::BACKGROUND_COLOR]);
+            if (isset($imageParams['resize_width'])) {
+                $adapter->resize($imageParams['resize_width'], $imageParams['resize_height']);
+            }
+            $adapter->save($absoluteDestinationPath);
+        }
+        return $mediaBaseUrl . trim($destinationPath, '/');
+    }
+
+    /**
+     * @param $value
+     * @param array $params
+     * @return null|string
+     */
+    private function getDestinationRelativePath($value, array $params = [])
+    {
+        $value = (string)$value;
+        $imageNameParts = [];
+        $parts = explode('/', $value);
+        $totalParts = count($parts);
+        $imageParams = $this->getImageSettings($params);
+        $mainImageNameParts = isset($params[self::IMAGE_NAME_PARTS])
+            ? (int)$params[self::IMAGE_NAME_PARTS]
+            : self::DEFAULT_IMAGE_NAME_PARTS;
+        for ($i = $totalParts - 1; $i > $totalParts - (1 + $mainImageNameParts); $i--) {
+            $imageNameParts[] = $parts[$i];
+            unset($parts[$i]);
+        }
+        $imageName = implode('/', array_reverse($imageNameParts));
+        $basePath = implode('/', $parts);
+        return $basePath . '/cache/' . hash('md5', json_encode($imageParams)) . '/' . $imageName;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    private function getImageSettings(array $params)
+    {
+        $result = [
+            self::KEEP_ASPECT_RATIO => $params[self::KEEP_ASPECT_RATIO] ?? true,
+            self::KEEP_FRAME => $params[self::KEEP_FRAME] ?? false,
+            self::KEEP_TRANSPARENCY => $params[self::KEEP_TRANSPARENCY] ?? false,
+            self::CONSTRAIN_ONLY => $params[self::CONSTRAIN_ONLY] ?? true,
+            self::BACKGROUND_COLOR => $params[self::BACKGROUND_COLOR] ?? null
+        ];
+        $resize = $params[self::RESIZE] ?? null;
+        if ($resize !== null) {
+            $width = null;
+            $height = null;
+            if (is_array($resize)) {
+                $width = $resize[0] ?? null;
+                $height = $resize[1] ?? null;
+            } elseif (is_integer($resize)) {
+                $width = $resize;
+            }
+            $result['resize_width'] = $width;
+            $result['resize_height'] = $height;
+        }
+        return $result;
+    }
+}
+{% endif %}

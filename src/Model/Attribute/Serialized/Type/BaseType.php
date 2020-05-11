@@ -23,6 +23,9 @@ namespace App\Model\Attribute\Serialized\Type;
 
 use App\Model\Attribute\Serialized;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class BaseType
 {
@@ -57,6 +60,10 @@ class BaseType
     /**
      * @var array
      */
+    private $processor;
+    /**
+     * @var array
+     */
     private $templates;
 
     /**
@@ -74,6 +81,7 @@ class BaseType
         $this->canBeRequired = (bool)($data['can_be_required'] ?? false);
         $this->multiple = (bool)($data['multiple'] ?? false);
         $this->sourceModel = $data['source_model'] ?? null;
+        $this->processor = $data['processor'] ?? [];
         $this->templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
     }
 
@@ -127,9 +135,9 @@ class BaseType
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function renderForm(): string
     {
@@ -141,9 +149,9 @@ class BaseType
     /**
      * @param string $template
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function renderTemplate(string $template): string
     {
@@ -161,5 +169,21 @@ class BaseType
                 'indent' => $this->serialized->isExpanded() ? '' : str_repeat(' ', 4)
             ]
         );
+    }
+
+    /**
+     * @param $type
+     * @return array
+     */
+    public function getProcessorTypes($type): array
+    {
+        $processorType = $this->processor[$type] ?? null;
+        if ($processorType === null) {
+            return [];
+        }
+        if (!is_array($processorType)) {
+            return [$processorType];
+        }
+        return $processorType;
     }
 }

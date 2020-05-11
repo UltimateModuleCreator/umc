@@ -5,6 +5,13 @@ namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|ca
 
 use {{ entity.getInterface() }};
 use Magento\Framework\Model\AbstractModel;
+{% if entity.hasAttributeType('serialized') %}
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+{% endif %}
 use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
 
 class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|camel|ucfirst }}Interface
@@ -35,7 +42,12 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
      */
     protected $_eventObject = '{{ entity.getNameSingular()|snake }}';
     //phpcs:enable
-
+{% if entity.hasAttributeType('serialized') %}
+    /**
+     * @var Json
+     */
+    private $json;
+{% endif %}
     /**
      * Initialize resource model
      *
@@ -48,7 +60,29 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
         //phpcs:enable
     }
 
+{% if entity.hasAttributeType('serialized') %}
+    /**
+     * {{ entity.getNameSingular()|camel|ucfirst }} constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param Json $json
+     * @param AbstractResource $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        Json $json,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->json = $json;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
 
+{% endif %}
     /**
      * Get {{ entity.getLabelSingular() }} id
      *
@@ -87,6 +121,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     {
         return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}});
     }
+{{ attribute.getTypeInstance().renderAdditionalModel() }}
 {% endfor %}
 {% if entity.isStore() %}
 

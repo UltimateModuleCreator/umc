@@ -60,6 +60,8 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
     public function get{{ attribute.getCode()|camel|ucfirst }}();
 
+{{ attribute.getTypeInstance().renderAdditionalInterface() }}
+
 {% endfor %}
 {% if entity.isStore() %}
 

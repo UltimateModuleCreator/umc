@@ -17,20 +17,20 @@ class Index extends Action
     /**
      * @var string
      */
-    public const META_DESCRIPTION_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_description';
+    public const META_DESCRIPTION_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_description';
     /**
      * @var string
      */
-    public const META_KEYWORDS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_keywords';
+    public const META_KEYWORDS_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_keywords';
     /**
      * @var string
      */
-    public const META_TITLE_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_title';
+    public const META_TITLE_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_title';
 {% endif %}
     /**
      * @var string
      */
-    const BREADCRUMBS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
+    const BREADCRUMBS_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */

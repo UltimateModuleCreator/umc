@@ -1,0 +1,18 @@
+{% if not module.isUmcCrud() and module.isFrontend()%}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter;
+
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+
+interface FormatterInterface extends ArgumentInterface
+{
+    /**
+     * @param $value
+     * @param array $arguments
+     * @return string
+     */
+    public function formatHtml($value, $arguments = []): string;
+}
+{% endif %}

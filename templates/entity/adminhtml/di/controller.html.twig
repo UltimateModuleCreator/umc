@@ -20,7 +20,7 @@
     <type name="{{ entity.getAdminController('InlineEdit') }}">
         <arguments>
             <argument name="entityUiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
-            <argument name="dataProcessor" xsi:type="object">{{ entity.getSaveDataProcessor() }}</argument>
+            <argument name="dataProcessor" xsi:type="object">{{ entity.getSaveDataProcessorInlineEdit() }}</argument>
             <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
         </arguments>
     </type>

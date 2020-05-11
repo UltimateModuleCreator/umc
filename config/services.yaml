@@ -22,6 +22,8 @@ parameters:
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_serialized: true
+      processor:
+        frontend: text
       templates:
         backend:
           grid: attribute/grid/text.html.twig
@@ -49,6 +51,8 @@ parameters:
       schema_type: varchar
       schema_attributes: 'length="50"'
       can_be_serialized: true
+      processor:
+        frontend: options
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -80,6 +84,8 @@ parameters:
       processor:
         provider: multiselect
         save: multiselect
+        inlineEdit: multiselect
+        frontend: options
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -107,6 +113,8 @@ parameters:
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
       can_be_serialized: true
+      processor:
+        frontend: options
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -140,6 +148,8 @@ parameters:
       processor:
         provider: multiselect
         save: multiselect
+        frontend: options
+        inlineEdit: multiselect
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -167,6 +177,8 @@ parameters:
       schema_type: varchar
       schema_attributes: ' length="3"'
       can_be_serialized: true
+      processor:
+        frontend: options
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -197,6 +209,8 @@ parameters:
       processor:
         provider: multiselect
         save: multiselect
+        frontend: options
+        inlineEdit: multiselect
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -227,6 +241,8 @@ parameters:
       can_be_serialized: true
       processor:
         save: date
+        frontend: date
+        inlineEdit: date
       templates:
         backend:
           grid: attribute/grid/date.html.twig
@@ -253,6 +269,8 @@ parameters:
       schema_type: decimal
       schema_attributes: 'scale="4" precision="12"'
       can_be_serialized: true
+      processor:
+        frontend: text
       templates:
         backend:
           grid: attribute/grid/text.html.twig
@@ -279,6 +297,8 @@ parameters:
       schema_type: int
       schema_attributes: 'padding="11"'
       can_be_serialized: true
+      processor:
+        frontend: options
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -307,6 +327,7 @@ parameters:
       processor:
         provider: file
         save: file
+        frontend: file
       templates:
         backend:
           form: attribute/form/file.html.twig
@@ -329,6 +350,7 @@ parameters:
       processor:
         provider: image
         save: image
+        frontend: image
       templates:
         backend:
           grid: attribute/grid/image.html.twig
@@ -350,6 +372,8 @@ parameters:
       schema_type: int
       schema_attributes: 'padding="11"'
       can_be_serialized: true
+      processor:
+        frontend: text
       templates:
         backend:
           grid: attribute/grid/text.html.twig
@@ -379,6 +403,8 @@ parameters:
       processor:
         provider: multiselect
         save: multiselect
+        frontend: options
+        inlineEdit: multiselect
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -404,6 +430,8 @@ parameters:
       schema_type: text
       schema_attributes: ''
       can_be_serialized: true
+      processor:
+        frontend: text
       templates:
         backend:
           grid: attribute/grid/text.html.twig
@@ -429,6 +457,8 @@ parameters:
       schema_type: mediumtext
       schema_attributes: ''
       can_be_serialized: false
+      processor:
+        frontend: editor
       templates:
         backend:
           form: attribute/form/wysiwyg.html.twig
@@ -455,6 +485,8 @@ parameters:
       schema_type: smallint
       schema_attributes: 'padding="2"'
       can_be_serialized: true
+      processor:
+        frontend: options
       templates:
         backend:
           grid: attribute/grid/select.html.twig
@@ -485,6 +517,8 @@ parameters:
         provider: dynamicRows
         save: dynamicRows
       templates:
+        interface: attribute/interface/serialized.html.twig
+        model: attribute/model/serialized.html.twig
         backend:
           form: attribute/form/serialized.html.twig
         frontend:

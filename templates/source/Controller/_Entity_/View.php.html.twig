@@ -13,7 +13,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Store\Model\ScopeInterface;
 use {{ entity.getRepoInterface() }};
 {% if entity.isFrontendList() %}
-use {{ entity.getModel('\\Url') }};
+use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
 {% endif %}
 {% if entity.isStore() %}
 use Magento\Store\Model\StoreManagerInterface;
