@@ -147,6 +147,19 @@ class BaseType
     }
 
     /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderFrontend(): string
+    {
+        return !empty($this->templates['serialized']['frontend'])
+            ? $this->renderTemplate($this->templates['serialized']['frontend'])
+            : '';
+    }
+
+    /**
      * @param string $template
      * @return string
      * @throws LoaderError

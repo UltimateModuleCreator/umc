@@ -8,6 +8,14 @@
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">true</param>
                 </dndConfig>
+{% if attribute.getNote() %}
+                <notice>{{ attribute.getNote() }}</notice>
+{% endif %}
+{% if attribute.getTooltip() %}
+                <tooltip>
+                    <description> {{ attribute.getTooltip() }}</description>
+                </tooltip>
+{% endif %}
             </settings>
             <container name="record">
                 <argument name="data" xsi:type="array">

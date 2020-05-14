@@ -5,7 +5,7 @@
         <referenceContainer name="content">
             <block name="{{ entity.getNameSingular()|hyphen }}-view" template="{{ module.getNamespace()|camel|ucfirst }}_{{ module.getModuleName()|camel|ucfirst }}::{{ entity.getNameSingular()|snake }}/view.phtml">
                 <arguments>
-                    <argument name="somethingView" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel\ucfirst }}\View</argument>
+                    <argument name="{{ entity.getNameSingular()|camel }}View" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View</argument>
                     <argument name="formatter" xsi:type="object">{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter</argument>
                 </arguments>
             </block>

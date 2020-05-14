@@ -1,0 +1,7 @@
+<?= $formatter->formatHtml(
+    $item['{{ field.getCode() }}'],
+    [
+        'type' => 'options',
+        'source' => \{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\Source\Catalog\ProductAttribute::class
+    ]
+);?>

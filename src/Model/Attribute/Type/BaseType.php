@@ -387,12 +387,11 @@ class BaseType
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * //TODO: set additional params from template itself
      */
     public function renderFrontendList()
     {
-        return !empty($this->templates['frontend']['list'])
-            ? $this->renderTemplate($this->templates['frontend']['list'])
-            : '';
+        return $this->renderFrontend(['indent' => str_repeat(' ', 36)]);
     }
 
     /**
@@ -400,27 +399,41 @@ class BaseType
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * //TODO: set additional params from template itself
      */
     public function renderFrontendView()
     {
-        return !empty($this->templates['frontend']['view'])
-            ? $this->renderTemplate($this->templates['frontend']['view'])
-            : '';
+        return $this->renderFrontend(['indent' => str_repeat(' ', 16)]);
     }
 
     /**
-     * @param null|string $template
+     * @param array $params
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function renderTemplate(?string $template): string
+    public function renderFrontend($params = [])
+    {
+        return !empty($this->templates['frontend'])
+            ? $this->renderTemplate($this->templates['frontend'], $params)
+            : '';
+    }
+
+    /**
+     * @param string|null $template
+     * @param array $params
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function renderTemplate(?string $template, $params = []): string
     {
         $entity = $this->attribute->getEntity();
         $module = $entity->getModule();
-        return $this->twig->render(
-            $template,
+        $params = array_merge(
+            $params,
             [
                 'type' => $this,
                 'attribute' => $this->attribute,
@@ -428,5 +441,6 @@ class BaseType
                 'module' => $module
             ]
         );
+        return $this->twig->render($template, $params);
     }
 }

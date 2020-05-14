@@ -1,0 +1,23 @@
+    /**
+     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}})
+    {
+        if (is_array(${{ attribute.getCode()|camel}})) {
+            $selectTwo = implode(',', ${{ attribute.getCode()|camel}});
+        }
+        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
+    }
+
+    /**
+     * @param bool $asArray
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}
+     */
+    public function get{{ attribute.getCode()|camel|ucfirst }}($asArray = false)
+    {
+        ${{ attribute.getCode()|camel}} = $this->getData(self::{{ attribute.getCode()|upper}});
+        return ($asArray)
+            ? (${{ attribute.getCode()|camel}} ? explode(',', ${{ attribute.getCode()|camel}}) : [])
+            : ${{ attribute.getCode()|camel}};
+    }

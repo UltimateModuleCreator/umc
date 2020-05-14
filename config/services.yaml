@@ -25,17 +25,15 @@ parameters:
       processor:
         frontend: text
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/text.html.twig
           form: attribute/form/text.html.twig
-        frontend:
-          view: attribute/frontend/view/text.html.twig
-          list: attribute/frontend/list/text.html.twig
+        frontend: attribute/frontend/text.html.twig
         serialized:
           backend: attribute/form/serialized/text.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/text.html.twig
     product_attribute:
       label: Product Attribute
       grid_filter_type: select
@@ -54,17 +52,15 @@ parameters:
       processor:
         frontend: options
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/product_attribute.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/product_attribute.html.twig
     product_attribute_multiselect:
       label: Product Attribute Multiselect
       class: App\Model\Attribute\Type\ProductAttribute
@@ -87,17 +83,15 @@ parameters:
         inlineEdit: multiselect
         frontend: options
       templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/product_attribute.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/product_attribute.html.twig
     product_attribute_set:
       label: Product Attribute Set
       grid_filter_type: select
@@ -116,18 +110,16 @@ parameters:
       processor:
         frontend: options
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/product_attribute_set.html.twig
         schema_fk: attribute/schema_fk/product_attribute_set.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/product_attribute_set.html.twig
     product_attribute_set_multiselect:
       label: Product Attribute Set Multiselect
       class: App\Model\Attribute\Type\ProductAttributeSet
@@ -151,17 +143,15 @@ parameters:
         frontend: options
         inlineEdit: multiselect
       templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/product_attribute_set.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/product_attribute_set.html.twig
     country:
       label: Country
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -183,14 +173,10 @@ parameters:
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/country.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/country.html.twig
     country_multiselect:
       label: Country Multiselect
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -212,17 +198,15 @@ parameters:
         frontend: options
         inlineEdit: multiselect
       templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/country.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/country.html.twig
     date:
       label: Date
       can_be_name: false
@@ -244,17 +228,15 @@ parameters:
         frontend: date
         inlineEdit: date
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/date.html.twig
           form: attribute/form/date.html.twig
-        frontend:
-          view: attribute/frontend/view/date.html.twig
-          list: attribute/frontend/list/date.html.twig
+        frontend: attribute/frontend/date.html.twig
         serialized:
-          backend: false
-          frontend:
-            list: false
-            view: false
+          backend: attribute/form/serialized/date.html.twig
+          frontend: attribute/frontend/serialized/date.html.twig
     decimal:
       label: Decimal
       grid_filter_type: textRange
@@ -272,12 +254,12 @@ parameters:
       processor:
         frontend: text
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/text.html.twig
           form: attribute/form/text.html.twig
-        frontend:
-          view: attribute/frontend/view/text.html.twig
-          list: attribute/frontend/list/text.html.twig
+        frontend: attribute/frontend/text.html.twig
         serialized:
           backend: attribute/form/serialized/text.html.twig
           frontend:
@@ -300,17 +282,15 @@ parameters:
       processor:
         frontend: options
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/option.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/option.html.twig
     file:
       label: File
       can_be_name: false
@@ -329,11 +309,11 @@ parameters:
         save: file
         frontend: file
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           form: attribute/form/file.html.twig
-        frontend:
-          view: attribute/frontend/view/file.html.twig
-          list: attribute/frontend/list/file.html.twig
+        frontend: attribute/frontend/file.html.twig
     image:
       label: Image
       can_be_name: false
@@ -352,12 +332,12 @@ parameters:
         save: image
         frontend: image
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/image.html.twig
           form: attribute/form/file.html.twig
-        frontend:
-          view: attribute/frontend/view/image.html.twig
-          list: attribute/frontend/list/image.html.twig
+        frontend: attribute/frontend/image.html.twig
     integer:
       label: Integer
       can_be_name: true
@@ -375,17 +355,15 @@ parameters:
       processor:
         frontend: text
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/text.html.twig
           form: attribute/form/text.html.twig
-        frontend:
-          view: attribute/frontend/view/text.html.twig
-          list: attribute/frontend/list/text.html.twig
+        frontend: attribute/frontend/text.html.twig
         serialized:
           backend: attribute/form/serialized/text.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/text.html.twig
     multiselect:
       label: Multiselect
       can_be_name: false
@@ -406,17 +384,15 @@ parameters:
         frontend: options
         inlineEdit: multiselect
       templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/select.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/option.html.twig
         serialized:
           backend: attribute/form/serialized/select.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/option.html.twig
     textarea:
       label: Textarea (no editor)
       can_be_name: true
@@ -433,17 +409,15 @@ parameters:
       processor:
         frontend: text
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/text.html.twig
           form: attribute/form/textarea.html.twig
-        frontend:
-          view: attribute/frontend/view/text.html.twig
-          list: attribute/frontend/list/text.html.twig
+        frontend: attribute/frontend/text.html.twig
         serialized:
           backend: attribute/form/serialized/textarea.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/text.html.twig
     wysiwyg:
       label: Wysiwyg
       can_be_name: false
@@ -460,16 +434,14 @@ parameters:
       processor:
         frontend: editor
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           form: attribute/form/wysiwyg.html.twig
-        frontend:
-          view: attribute/frontend/view/wysiwyg.html.twig
-          list: attribute/frontend/list/wysiwyg.html.twig
+        frontend: attribute/frontend/editor.html.twig
         serialized:
           backend: false
-          frontend:
-            list: false
-            view: false
+          frontend: false
     yesno:
       label: Yes/No
       source_model: Magento\Config\Model\Config\Source\Yesno
@@ -488,17 +460,15 @@ parameters:
       processor:
         frontend: options
       templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
         backend:
           grid: attribute/grid/select.html.twig
           form: attribute/form/yesno.html.twig
-        frontend:
-          view: attribute/frontend/view/select.html.twig
-          list: attribute/frontend/list/select.html.twig
+        frontend: attribute/frontend/yesno.html.twig
         serialized:
           backend: attribute/form/serialized/yesno.html.twig
-          frontend:
-            list: false
-            view: false
+          frontend: attribute/frontend/serialized/yesno.html.twig
     serialized:
       label: Serialized
       class: \App\Model\Attribute\Type\Serialized
@@ -517,13 +487,11 @@ parameters:
         provider: dynamicRows
         save: dynamicRows
       templates:
-        interface: attribute/interface/serialized.html.twig
+        interface: attribute/interface/array.html.twig
         model: attribute/model/serialized.html.twig
         backend:
           form: attribute/form/serialized.html.twig
-        frontend:
-          view: attribute/frontend/view/serialized.html.twig
-          list: attribute/frontend/list/serialized.html.twig
+        frontend: attribute/frontend/serialized.html.twig
 
   menu_type_config:
     '':
@@ -923,8 +891,6 @@ services:
         $files:
           - '%kernel.project_dir%/config/source/module.yml'
           - '%kernel.project_dir%/config/source/entity.yml'
-#          - '%kernel.project_dir%/config/source/attribute.yml'
-#          - '%kernel.project_dir%/config/source/entity-unit-test.yml'
 
     App\Service\Builder:
       arguments:
@@ -951,8 +917,8 @@ services:
           admin_menu: '@App\Service\Form\OptionProvider\AdminMenu'
     App\Util\CodingStandardsFactory:
       arguments:
-        $standards: [PSR1, PSR2, PSR12, '%kernel.project_dir%/vendor/magento-ecg/coding-standard/EcgM2']
-        $phpcsPath: '%kernel.project_dir%/vendor/squizlabs/php_codesniffer/bin/phpcs'
+        $standards: [PSR1, PSR2, PSR12, '%kernel.project_dir%/vendor/magento/magento-coding-standard/Magento2']
+        $phpcsPath: '%kernel.project_dir%/vendor/bin/phpcs'
 
     App\Model\Module\Factory:
       arguments:

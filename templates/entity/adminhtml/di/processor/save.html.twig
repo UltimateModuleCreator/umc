@@ -17,10 +17,10 @@
     <virtualType name="{{ entity.getVirtualType('SaveDataProcessorInlineEdit') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-                {% for type, attributes in entity.getAttributesWithProcessor('inlineEdit') %}
-                    {% set ucType = 'Save' ~ type|ucfirst ~ 'Processor' %}
+{% for type, attributes in entity.getAttributesWithProcessor('inlineEdit') %}
+{% set ucType = 'Save' ~ type|ucfirst ~ 'Processor' %}
                     <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
-                {% endfor %}
+{% endfor %}
             </argument>
         </arguments>
     </virtualType>

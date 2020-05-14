@@ -49,19 +49,7 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
     public function get{{ entity.getNameSingular()|camel|ucfirst }}Id();
 
 {% for attribute in entity.getAttributes() %}
-    /**
-     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
-     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
-     */
-    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}});
-
-    /**
-     * @return {{ attribute.getTypeInstance().getTypeHint() }}
-     */
-    public function get{{ attribute.getCode()|camel|ucfirst }}();
-
 {{ attribute.getTypeInstance().renderAdditionalInterface() }}
-
 {% endfor %}
 {% if entity.isStore() %}
 
@@ -69,12 +57,12 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
      * @param int[] $store
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    public function setStoreId(array $store);
+    public function setStoreId($store);
 
     /**
      * @return int[]
      */
-    public function isStoreId();
+    public function getStoreId();
 {% endif %}
 {% if entity.isSeo() %}
     /**

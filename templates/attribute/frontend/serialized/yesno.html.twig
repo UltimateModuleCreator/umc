@@ -1,0 +1,7 @@
+<?= $formatter->formatHtml(
+    $item['{{ field.getCode() }}'],
+    [
+        'type' => 'options',
+        'source' => \Magento\Config\Model\Config\Source\Yesno::class
+    ]
+);?>

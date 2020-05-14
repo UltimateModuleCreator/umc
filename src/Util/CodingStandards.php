@@ -23,7 +23,7 @@ namespace App\Util;
 
 class CodingStandards
 {
-    public const RESULT_KEY_PREFIX = 'PHPCS_';
+    public const RESULT_KEY_PREFIX = '_phpcs/';
     /**
      * @var ProcessFactory
      */
@@ -57,7 +57,6 @@ class CodingStandards
     }
 
     /**
-     * @param $moduleName
      * @return array
      */
     public function run(): array

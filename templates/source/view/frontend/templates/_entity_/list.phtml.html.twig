@@ -11,38 +11,41 @@ ${{ entity.getNameSingular()|camel }}Url = $block->getData('{{ entity.getNameSin
 {% endif %}
 ?>
 <?php if ($list{{ entity.getNameSingular()|camel|ucfirst }}): ?>
-<?php ${{entity.getNamePlural()|camel}} = $list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection();?>
-<?php if (${{entity.getNamePlural()|camel}}->getSize()): ?>
-<div class="{{entity.getNameSingular()|hyphen}}-toolbar toolbar top"><?= $list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml(); ?></div>
-<div class="{{entity.getNameSingular()|hyphen}}-list">
-    <?php foreach (${{entity.getNamePlural()|camel}} as ${{entity.getNameSingular()|camel}}): ?>
-    <?php /** @var \{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}Else ${{entity.getNameSingular()|camel}} */?>
-    <div class="{{entity.getNameSingular()|hyphen}}-item">
-        <div class="{{entity.getNameSingular()|hyphen}}-{{ entity.getNameAttribute.getCode()|hyphen }}">
-{% if $entity.isFrontendView() %}
-            <?php if (${{ entity.getNameSingular()|camel }}Url): ?>
-            <a href="<?= $block->escapeUrl(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameSingular()|camel|ucfirst}}Url(${{ entity.getNameSingular()|camel }})); ?>">
-                <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
-            </a>
-            <?php else: ?>
-                <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
-            <?php endif;?>
+    <?php ${{entity.getNamePlural()|camel}} = $list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection();?>
+    <?php if (${{entity.getNamePlural()|camel}}->getSize()): ?>
+        <div class="{{entity.getNameSingular()|hyphen}}-toolbar toolbar top"><?= $list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml(); ?></div>
+        <div class="{{entity.getNameSingular()|hyphen}}-list">
+            <?php foreach (${{entity.getNamePlural()|camel}} as ${{entity.getNameSingular()|camel}}): ?>
+                <?php /** @var \{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} ${{entity.getNameSingular()|camel}} */?>
+                <div class="{{entity.getNameSingular()|hyphen}}-item">
+                    <div class="{{entity.getNameSingular()|hyphen}}-{{ entity.getNameAttribute().getCode()|hyphen }}">
+{% if entity.isFrontendView() %}
+                        <?php if (${{ entity.getNameSingular()|camel }}Url): ?>
+                            <a href="<?= $block->escapeUrl(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameSingular()|camel|ucfirst}}Url(${{ entity.getNameSingular()|camel }})); ?>">
+                                <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
+                            </a>
+                        <?php else: ?>
+                            <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
+                        <?php endif;?>
 {% else %}
-            <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
+                        <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
 {% endif %}
-        </div>
-        <?php if ($formatter): ?>
-            <div class="{{entity.getNameSingular()|hyphen}}-details">
+                    </div>
+                    <?php if ($formatter): ?>
+                        <div class="{{entity.getNameSingular()|hyphen}}-details">
 {% for attribute in entity.getListAttributes() %}
+                            <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
 {{ attribute.getTypeInstance().renderFrontendList()|raw }}
+                            </div>
 {% endfor %}
-            </div>
-        <?php endif; ?>
-    </div>
-    <?php endforeach; ?>
-</div>
-<div class="{{entity.getNameSingular()|hyphen}}-toolbar toolbar bottom"><?= $list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml(); ?></div>
-<?php else: ?>
-<?= $block->escapeHtml(__('There are no {{ entity.getLabelPlural() }} at this moment')); ?>
-<?php endif ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="{{entity.getNameSingular()|hyphen}}-toolbar toolbar bottom"><?= $list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml(); ?></div>
+    <?php else: ?>
+            <?= $block->escapeHtml(__('There are no {{ entity.getLabelPlural() }} at this moment')); ?>
+    <?php endif ?>
 <?php endif;
+{% endif %}

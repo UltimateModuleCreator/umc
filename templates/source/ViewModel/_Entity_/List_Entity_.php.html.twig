@@ -82,7 +82,10 @@ class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterf
     }
 
     /**
+     * prepare collection and pager
+{% if entity.isStore() %}
      * @throws NoSuchEntityException
+{% endif %}
      */
     private function processCollection()
     {
@@ -92,7 +95,7 @@ class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterf
 {% if entity.isStore() %}
             $this->{{ entity.getNameSingular()|camel }}Collection->addStoreFilter($this->storeManager->getStore()->getId());
 {% endif %}
-            $this->{{ entity.getNameSingular()|camel }}Collection->setOrder({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ enitty.getNameAttribute().getCode()|upper }}, SortOrder::SORT_ASC);
+            $this->{{ entity.getNameSingular()|camel }}Collection->setOrder({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameAttribute().getCode()|upper }}, SortOrder::SORT_ASC);
             $this->pager = $this->blockFactory->createBlock(Pager::class);
             $this->pager->setCollection($this->{{ entity.getNameSingular()|camel }}Collection);
         }

@@ -1,6 +1,6 @@
 {
-    "magento-ecg/coding-standard": {
-        "version": "3.1"
+    "magento/magento-coding-standard": {
+        "version": "5"
     },
     "php": {
         "version": "7.2"
@@ -163,5 +163,8 @@
     },
     "twig/twig": {
         "version": "v2.5.0"
+    },
+    "webonyx/graphql-php": {
+        "version": "v0.13.8"
     }
 }

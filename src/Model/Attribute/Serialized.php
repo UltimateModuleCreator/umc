@@ -314,6 +314,6 @@ class Serialized
      */
     public function getProcessorTypes($type): array
     {
-        return $this->getTypeInstance()->getProcessorTypes();
+        return $this->getTypeInstance()->getProcessorTypes($type);
     }
 }

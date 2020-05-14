@@ -30,7 +30,7 @@ class Index extends Action
     /**
      * @var string
      */
-    const BREADCRUMBS_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
+    public const BREADCRUMBS_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */

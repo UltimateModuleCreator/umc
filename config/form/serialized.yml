@@ -47,7 +47,7 @@ rows:
       label: Show in frontend list page
       dataValidation: validate_required
       title: "This allows you to display the attribute in the entity list page on frontend"
-      additionalDataBind: 'enable: $parent.data.frontend_list'
+      additionalDataBind: 'enable: $parent.data.show_in_list'
       col: 4
     show_in_view:
       name: show_in_view
@@ -55,7 +55,7 @@ rows:
       has_default: true
       label: Show in frontend view page
       title: "This allows you to display the attribute in the entity view page on frontend"
-      additionalDataBind: 'enable: $parent.data.frontend_view'
+      additionalDataBind: 'enable: $parent.data.show_in_view'
       col: 4
   -
     note:

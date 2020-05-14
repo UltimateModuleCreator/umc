@@ -31,8 +31,8 @@ class Upload extends Action
     }
 
     /**
-    * @return \Magento\Framework\Controller\ResultInterface
-    */
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         try {
@@ -46,8 +46,8 @@ class Upload extends Action
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     protected function getFieldName()
     {
         return $this->getRequest()->getParam('field');

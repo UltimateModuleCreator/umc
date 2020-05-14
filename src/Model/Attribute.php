@@ -423,7 +423,7 @@ class Attribute
      * @param $type
      * @return array
      */
-    public function getProcessorType($type): array
+    public function getProcessorTypes($type): array
     {
         return $this->getTypeInstance()->getProcessorTypes($type);
     }

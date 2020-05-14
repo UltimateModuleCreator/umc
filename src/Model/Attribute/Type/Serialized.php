@@ -34,7 +34,7 @@ class Serialized extends BaseType
     /**
      * @var array
      */
-    private $processorsWithType = [];
+    private $processorsWithType;
     /**
      * @return bool
      */
@@ -73,23 +73,24 @@ class Serialized extends BaseType
      * @param $type
      * @return array
      */
-    public function getProcessorTypes($type): array
-    {
-        if ($this->processorsWithType === null) {
-            $this->processorsWithType = [];
-            $attribute = $this->getAttribute();
-            foreach ($attribute->getEntity()->getModule()->getProcessorTypes() as $processorType) {
-                $this->processorsWithType[$processorType] = array_reduce(
-                    $attribute->getSerialized(),
-                    function ($initial, \App\Model\Attribute\Serialized $serialized) use ($processorType) {
-                        return array_unique(
-                            array_merge($initial, $serialized->getProcessorTypes($processorType))
-                        );
-                    },
-                    []
-                );
-            }
-        }
-        return $this->processorsWithType[$type] ?? [];
-    }
+//    public function getProcessorTypes($type): array
+//    {
+//        if ($this->processorsWithType === null) {
+//            $this->processorsWithType = [];
+//            $attribute = $this->getAttribute();
+//            foreach ($attribute->getEntity()->getModule()->getProcessorTypes() as $processorType) {
+//                $this->processorsWithType[$processorType] = array_reduce(
+//                    $attribute->getSerialized(),
+//                    function ($initial, \App\Model\Attribute\Serialized $serialized) use ($processorType) {
+//                        return array_unique(
+//                            array_merge($initial, $serialized->getProcessorTypes($processorType))
+//                        );
+//                    },
+//                    []
+//                );
+//            }
+//            $this->processorsWithType = array_merge($this->processorsWithType, parent::getProcessorTypes($type));
+//        }
+//        return $this->processorsWithType[$type] ?? [];
+//    }
 }

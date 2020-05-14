@@ -166,13 +166,6 @@ class Module
     }
 
     /**
-     * @return bool
-     */
-    public function isConfigMenuParent(): bool
-    {
-        return $this->getMenuParent() === 'Magento_Config::config';
-    }
-    /**
      * @return int
      */
     public function getSortOrder(): int

@@ -1,0 +1,7 @@
+<?= $formatter->formatHtml(
+    $item['{{ field.getCode() }}'],
+    [
+        'type' => 'options',
+        'source' => \Magento\Directory\Model\Config\Source\Country::class
+    ]
+);?>

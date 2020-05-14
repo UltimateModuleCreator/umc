@@ -311,12 +311,12 @@ class EntityTest extends TestCase
     {
         $this->module->method('getProcessorTypes')->willReturn(['save', 'provider']);
         $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getProcessorType')->willReturnMap([
+        $attribute1->method('getProcessorTypes')->willReturnMap([
             ['save', ['processor']],
             ['provider', []]
         ]);
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getProcessorType')->willReturn([]);
+        $attribute2->method('getProcessorTypes')->willReturn([]);
         $this->attributeFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attribute1, $attribute2);
         $instance = $this->getInstance(['_attributes' => [[], []]]);
@@ -339,12 +339,12 @@ class EntityTest extends TestCase
     {
         $this->module->method('getProcessorTypes')->willReturn(['save', 'provider']);
         $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getProcessorType')->willReturnMap([
+        $attribute1->method('getProcessorTypes')->willReturnMap([
             ['save', ['processor']],
             ['provider', []]
         ]);
         $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getProcessorType')->willReturn([]);
+        $attribute2->method('getProcessorTypes')->willReturn([]);
         $this->attributeFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attribute1, $attribute2);
         $instance = $this->getInstance(['_attributes' => [[], []]]);
@@ -898,7 +898,7 @@ class EntityTest extends TestCase
             }
         );
         $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getProcessorType')->willReturnMap([
+        $attribute1->method('getProcessorTypes')->willReturnMap([
             ['save', ['processor']],
         ]);
         $this->attributeFactory->expects($this->once())->method('create')->willReturn($attribute1);
@@ -937,7 +937,7 @@ class EntityTest extends TestCase
             }
         );
         $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getProcessorType')->willReturnMap([
+        $attribute1->method('getProcessorTypes')->willReturnMap([
             ['provider', ['processor']],
         ]);
         $this->attributeFactory->expects($this->once())->method('create')->willReturn($attribute1);

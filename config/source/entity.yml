@@ -123,11 +123,11 @@
   label: "Entity frontend view action"
   scope: entity
 -
-  source: view/adminhtml/ui_component/_modulename___entity__index.xml
+  source: view/frontend/layout/_modulename___entity__index.xml
   label: "Entity frontend list layout handle"
   scope: entity
 -
-  source: view/adminhtml/ui_component/_modulename___entity__view.xml
+  source: view/frontend/layout/_modulename___entity__view.xml
   label: "Entity frontend list layout handle"
   scope: entity
 -

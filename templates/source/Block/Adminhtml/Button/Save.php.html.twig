@@ -58,16 +58,16 @@ class Save implements ButtonProviderInterface
     }
 
     /**
-    * @return bool
-    */
+     * @return bool
+     */
     private function hasOptions(): bool
     {
         return $this->uiConfig->getAllowSaveAndClose() || $this->uiConfig->getAllowSaveAndDuplicate();
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     private function getOptions(): array
     {
         $options = [];

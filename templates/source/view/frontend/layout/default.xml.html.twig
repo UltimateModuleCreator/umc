@@ -3,7 +3,7 @@
     <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
         <body>
             <referenceBlock name="footer_links">
-{% for entity module.getFooterLinksEntities() %}
+{% for entity in module.getFooterLinksEntities() %}
                 <block class="Magento\Framework\View\Element\Html\Link\Current" name="{{ module.getNamespace()|hyphen }}-{{ entity.getNameSingular()|hyphen }}-link">
                     <arguments>
                         <argument name="label" xsi:type="string" translate="true">{{ entity.getLabelPlural() }}</argument>

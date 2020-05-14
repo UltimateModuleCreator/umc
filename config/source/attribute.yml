@@ -1,6 +1,0 @@
-view/base/web/images/entity/placeholder/attribute.png:
-  destination: view/base/web/images/_entity_/placeholder/_code_.png
-  scope: attribute
-  is_image: true
-  label: "Attribute default image"
-  template: source/view/base/web/images/entity/placeholder/attribute.png.html.twig

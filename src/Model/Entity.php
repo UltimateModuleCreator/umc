@@ -282,7 +282,7 @@ class Entity
                 && ($this->cacheData['attribute']['product_attribute_set'][] = $attribute);
             $attribute->isFullText() && ($this->cacheData['attribute']['full_text'][] = $attribute);
             foreach ($this->getModule()->getProcessorTypes() as $processorType) {
-                $processors = $attribute->getProcessorType($processorType);
+                $processors = $attribute->getProcessorTypes($processorType);
                 foreach ($processors as $processor) {
                     $this->cacheData['attribute']['processor'][$processorType][$processor] =
                         $this->cacheData['attribute']['processor'][$processorType][$processor] ?? [];

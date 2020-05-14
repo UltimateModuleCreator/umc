@@ -24,11 +24,11 @@ class Multiselect implements DataModifierInterface
     }
 
     /**
-    * @param AbstractModel $model
-    * @param array $data
-    * @return array
-    * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-    */
+     * @param AbstractModel $model
+     * @param array $data
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function modifyData(AbstractModel $model, array $data): array
     {
         foreach ($this->fields as $field) {

@@ -11,13 +11,10 @@
 {% for entity in module.getEntities() %}
                 {% for i in range(0, aclParents|length) %}    {% endfor %}<resource id="{{ entity.getAclName() }}" title="{{ entity.getLabelPlural() }}"/>
 {% endfor %}
-                {% if module.isConfigMenuParent() and module.isFrontend() %}<resource id="{{ module.getAclName() }}_config" title="{{ module.getConfigTab() }} Section" />
-{% endif %}
             {% for i in range(0, aclParents|length) %}    {% endfor %}</resource>
 {% for index, parent in aclParents %}
             {% for i in range(0, aclParents|length - index - 1) %}    {% endfor %}</resource>
 {% endfor %}
-{% if module.isFrontend() and not module.isConfigMenuParent() %}
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
@@ -25,7 +22,6 @@
                         </resource>
                     </resource>
                 </resource>
-{% endif %}
             </resource>
         </resources>
     </acl>

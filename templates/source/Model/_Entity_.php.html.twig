@@ -104,32 +104,14 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
         return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, ${{ entity.getNameSingular()|camel }}Id);
     }
 {% for attribute in entity.getAttributes() %}
-
-    /**
-     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
-     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
-     */
-    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}})
-    {
-        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
-    }
-
-    /**
-     * @return {{ attribute.getTypeInstance().getTypeHint() }}
-     */
-    public function get{{ attribute.getCode()|camel|ucfirst }}()
-    {
-        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}});
-    }
-{{ attribute.getTypeInstance().renderAdditionalModel() }}
+{{ attribute.getTypeInstance().renderAdditionalModel()|raw }}
 {% endfor %}
 {% if entity.isStore() %}
-
     /**
      * @param array $storeId
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    public function setStoreId(array $storeId)
+    public function setStoreId($storeId)
     {
         return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::STORE_ID, $storeId);
     }
@@ -143,7 +125,6 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 {% endif %}
 {% if entity.isSeo() %}
-
     /**
      * @param string $metaTitle
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface

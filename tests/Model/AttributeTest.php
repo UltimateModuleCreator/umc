@@ -650,7 +650,7 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute::getProcessorType
+     * @covers \App\Model\Attribute::getProcessorTypes
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetProcessorType()
@@ -658,7 +658,7 @@ class AttributeTest extends TestCase
         $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
         $typeInstance->expects($this->once())->method('getProcessorTypes')->willReturn(['processor']);
         $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
-        $this->assertEquals(['processor'], $this->getInstance([])->getProcessorType('type'));
+        $this->assertEquals(['processor'], $this->getInstance([])->getProcessorTypes('type'));
     }
 
     /**
