@@ -22,7 +22,10 @@ namespace App\Service\Form\OptionProvider;
 use App\Service\Form\OptionProviderInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-class AttributeType implements OptionProviderInterface
+/**
+ * @deprecated
+ */
+class AttributeType// implements OptionProviderInterface
 {
     public const CONFIG_PARAM_NAME = 'attribute_type_config';
     public const GROUP_BY = 'input_type';

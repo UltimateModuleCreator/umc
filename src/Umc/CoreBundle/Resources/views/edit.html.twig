@@ -1,0 +1,46 @@
+{% extends "@UmcCore/base.html.twig" %}
+{% block body %}
+<form id="umc" method="post" action="{{ path('save') }}">
+    <div class="card">
+        <div class="card-header"><h1>New Module for {{ platform.getName() }} - v{{ version.getLabel() }}</h1></div>
+        <div class="card-body">
+            {% include formConfig.module.template with {form: formConfig.module, formKey:'module'} %}
+        </div>
+        <div class="card-footer">
+            <div class="float-right">
+                <button type="button" data-role="save" class="btn btn-danger btn" data-bind="{click: submitForm}">Save Module</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('ko/ko.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
+    <script type="text/javascript">
+        $.validate({
+            form: $('#umc'),
+            onError: function ($form) {
+                $form.find('.nav-item').each(function () {
+                    if ($($(this).attr('href')).find('.form-error').length) {
+                        $(this).find('.fa-exclamation-circle').show();
+                    } else {
+                        $(this).find('.fa-exclamation-circle').hide();
+                    }
+                })
+            },
+        })
+        if (typeof UMC === "undefined") {
+            UMC = {}
+        }
+        UMC.config = {{ koConfig|json_encode|raw }};
+        {#UMC.defaults = {{ defaults|json_encode|raw }};#}
+        UMC.defaults = {};
+        {#//ko.applyBindings(new UMC.Module({{ data|json_encode|raw }}));#}
+        ko.applyBindings(new UMC.Module([]));
+    </script>
+{% endblock %}

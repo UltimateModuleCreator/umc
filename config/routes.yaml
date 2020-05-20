@@ -38,3 +38,14 @@ download:
   controller: App\Controller\Download::run
   methods:
   - GET
+
+#platform:
+#  path: /platform
+#  controller: App\Umc\CoreBundle\Controller\PlatformController::run
+#  methods:
+#    - GET
+new:
+  path: /new/{platform}/{version}
+  controller: App\Umc\CoreBundle\Controller\NewController::run
+  methods:
+    - GET

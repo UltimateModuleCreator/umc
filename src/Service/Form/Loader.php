@@ -23,6 +23,9 @@ use App\Util\OptionGroup;
 use App\Util\YamlLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
+/**
+ * @deprecated
+ */
 class Loader
 {
     public const DEFAULT_GROUP = 'Misc';

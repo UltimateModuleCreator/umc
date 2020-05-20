@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="false" autowire="true" autoconfigure="true" />
+        <prototype namespace="App\Umc\CoreBundle\" resource="../../*" exclude="../../{DependencyInjection,Tests}" />
+        <!-- TODO: remove this when all is split into bundles -->
+        <prototype namespace="App\" resource="../../../../*" exclude="{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Controller,Model,Service,Twig}" />
+        <!-- service configuration -->
+        <service id="parameter.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Parameter">
+            <tag name="platform_pool.config_loader.modifier" priority="1" />
+            <tag name="form.config.modifier" priority="1000" />
+        </service>
+        <!--[+] platform pool configuration-->
+        <service id="App\Umc\CoreBundle\Model\Platform\Pool" class="App\Umc\CoreBundle\Model\Platform\Pool">
+            <argument key="$configLoader" type="service" id="platform_pool.config_loader" />
+        </service>
+        <service id="platform_pool.config_loader" class="App\Umc\CoreBundle\Config\Loader">
+            <argument key="$configClassName" type="string">\App\Umc\CoreBundle\Model\Platform\Config</argument>
+            <argument key="$modifier" type="service" id="platform_pool.config_loader.modifier.composite" />
+            <argument key="$providers" type="tagged_iterator" tag="platform.pool.provider" />
+        </service>
+        <service id="platform_pool.config_loader.modifier.composite" class="App\Umc\CoreBundle\Model\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="platform_pool.config_loader.modifier" />
+        </service>
+        <service id="platform_pool.config_loader.modifier.sorter" class="App\Umc\CoreBundle\Model\Config\Modifier\Sort">
+            <tag name="platform_pool.config_loader.modifier" />
+            <argument key="$fields" type="collection">
+                <argument key="/" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+            </argument>
+        </service>
+        <!--[-] platform pool configuration-->
+<!--        <service id="form.config.processor.option.expander" class="App\Umc\CoreBundle\Config\Modifier\Expand">-->
+<!--            <tag name="form.config.processor" priority="2000" />-->
+<!--            <argument key="$pool" type="service" id="form.config.processor.option.expander.pool" />-->
+<!--            <argument key="$fields" type="collection">-->
+<!--                <argument key="optionProvider" type="string">options</argument>-->
+<!--            </argument>-->
+<!--            <argument key="$silent">true</argument>-->
+<!--        </service>-->
+<!--        <service id="form.config.processor.option.expander.pool" class="App\Umc\CoreBundle\Config\Modifier\Expand\Pool">-->
+<!--            <argument key="$expands" type="tagged_iterator" tag="option.provider" />-->
+<!--        </service>-->
+<!--        <service id="App\Umc\CoreBundle\Model\OptionProvider\Pool" class="App\Umc\CoreBundle\Model\OptionProvider\Pool">-->
+<!--            <argument key="$providers" type="tagged_iterator" tag="option.provider" />-->
+<!--        </service>-->
+
+
+        <!--[+] controller composition -->
+        <service id="App\Umc\CoreBundle\Controller\NewController" class="App\Umc\CoreBundle\Controller\NewController">
+            <argument key="$formLoaderFactory" type="service" id="form.config.loader.factory" />
+            <argument key="$uiModifier" type="service" id="App\Umc\CoreBundle\Config\Form\Modifier\Tab" />
+        </service>
+        <service id="form.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\VersionAwareFactory">
+            <argument key="$modifier" type="service" id="form.config.modifier" />
+            <argument key="$configKey" type="string">form</argument>
+            <argument key="$className" type="string">App\Umc\CoreBundle\Config\Form\Config</argument>
+        </service>
+        <service id="form.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="form.config.modifier" />
+        </service>
+        <service id="form.config.modifier.remove" class="App\Umc\CoreBundle\Config\Modifier\Remove">
+            <tag name="form.config.modifier" priority="10" />
+            <argument key="$key" type="string">enabled</argument>
+        </service>
+        <service id="form.config.modifier.sort" class="App\Umc\CoreBundle\Config\Modifier\Sort">
+            <tag name="form.config.modifier" priority="20" />
+            <argument key="$fields" type="collection">
+                <argument key="tabs" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+                <argument key="fields" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+            </argument>
+        </service>
+        <!--[-] controller composition -->
+    </services>
+</container>

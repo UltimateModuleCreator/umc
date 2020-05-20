@@ -52,17 +52,17 @@ class Factory
      * @param array $licenseFormatter
      * @param array $menuConfig
      */
-    public function __construct(
-        StringUtil $stringUtil,
-        EntityFactory $entityFactory,
-        array $licenseFormatter,
-        array $menuConfig
-    ) {
-        $this->stringUtil = $stringUtil;
-        $this->entityFactory = $entityFactory;
-        $this->licenseFormatter = $licenseFormatter;
-        $this->menuConfig = $menuConfig;
-    }
+//    public function __construct(
+//        StringUtil $stringUtil,
+//        EntityFactory $entityFactory,
+//        array $licenseFormatter,
+//        array $menuConfig
+//    ) {
+//        $this->stringUtil = $stringUtil;
+//        $this->entityFactory = $entityFactory;
+//        $this->licenseFormatter = $licenseFormatter;
+//        $this->menuConfig = $menuConfig;
+//    }
 
     /**
      * @param array $data

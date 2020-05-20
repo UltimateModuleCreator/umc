@@ -1,0 +1,6 @@
+sylius:
+  code: sylius
+  name: Sylius
+  url: 'https://sylius.com/'
+  image: 'bundles/umcsylius/logo/sylius.png'
+  sort_order: 30

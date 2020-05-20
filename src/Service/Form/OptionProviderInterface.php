@@ -19,10 +19,10 @@ declare(strict_types=1);
 
 namespace App\Service\Form;
 
-interface OptionProviderInterface
+/**
+ * @deprecated
+ */
+interface OptionProviderInterface extends \App\Umc\CoreBundle\Model\OptionProvider\OptionProviderInterface
 {
-    /**
-     * @return array
-     */
-    public function getOptions(): array;
+
 }

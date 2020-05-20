@@ -1,0 +1,83 @@
+module:
+  code: module
+  panel:
+    default: New Module
+    field: module_name
+  children:
+    -
+      code: _entities
+      className: Entity
+      tabLabel: Entities
+      formKey: entity
+      sortable: sortableListEntities
+      addButton:
+        label: Add Entity
+  tabs:
+    -
+      label: Settings
+      code: base
+      sort_order: 10
+    -
+      label: Menu
+      code: menu
+      sort_order: 20
+
+  fields:
+    -
+      name: namespace
+      type: text
+      has_default: true
+      label: Namespace
+      dataValidation: validate_required validate_custom
+      dataValidationRegexp: "^[A-Z][a-zA-Z0-9]+"
+      dataValidationErrorMsg: "Namespace must be alphanumerical and start with a capital letter"
+      title: "This is the folder name of your new extension. Your company name should go here. Use only letters and numbers. Start with a capital letter."
+      sort_order: 10
+      tab: base
+    -
+      name: module_name
+      type: text
+      label: Module Name
+      dataValidation: custom
+      dataValidationRegexp: "^[A-Z][a-zA-Z0-9]+"
+      dataValidationErrorMsg: "Module name must be alphanumerical and start with a capital letter"
+      title: "This is your extension/module name. It should be something meaningful and not very long. Try to use a noun in singular form. Start with a capital letter."
+      sort_order: 20
+      tab: base
+    -
+      name: license
+      type: textarea
+      has_default: true
+      label: License
+      required: false
+      title: The text you put here will be added at the top of (almost) each file in the module you create. Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year. If you don't want any License text on your files just leave this field empty.
+      tab: base
+      sort_order: 30
+    -
+      name: menu_text
+      type: text
+      label: Admin menu title
+      dataValidation: validate_required
+      title: This is the title that will be added to the menu.
+      sort_order: 40
+      tab: menu
+    -
+      name: menu_parent
+      type: choice
+      has_default: true
+      label: Admin parent menu ID
+      required: false
+#      additionalDataBind: 'select2: {}'
+      title: This is the parent menu id of the module menu. Leave empty to add in top menu.
+      options: '%admin_menu%'
+      sort_order: 50
+      tab: menu
+    -
+      name: sort_order
+      type: text
+      label: Admin menu sort order
+      dataValidation: validate_required number
+      dataValidationErrorMsg: "Sort order must be a number"
+      title: This is the sort order in the menu.
+      tab: menu
+      sort_order: 60

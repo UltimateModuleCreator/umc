@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -19,15 +18,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Util;
+namespace App\Umc\CoreBundle\Tests\Unit\Util;
 
-use App\Util\StringUtil;
+use App\Umc\CoreBundle\Util\StringUtil;
 use PHPUnit\Framework\TestCase;
 
 class StringUtilTest extends TestCase
 {
     /**
-     * @covers \App\Util\StringUtil::camel()
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::camel()
      */
     public function testCamel()
     {
@@ -40,7 +39,7 @@ class StringUtilTest extends TestCase
     }
 
     /**
-     * @covers \App\Util\StringUtil::snake()
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::snake()
      */
     public function testSnake()
     {
@@ -52,7 +51,7 @@ class StringUtilTest extends TestCase
     }
 
     /**
-     * @covers \App\Util\StringUtil::ucfirst()
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::ucfirst()
      */
     public function testUcfirst()
     {
@@ -64,7 +63,7 @@ class StringUtilTest extends TestCase
     }
 
     /**
-     * @covers \App\Util\StringUtil::hyphen()
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::hyphen()
      */
     public function testHyphen()
     {
@@ -76,7 +75,7 @@ class StringUtilTest extends TestCase
     }
 
     /**
-     * @covers \App\Util\StringUtil::snakeArray
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::snakeArray
      */
     public function testSnakeArray()
     {
@@ -87,7 +86,7 @@ class StringUtilTest extends TestCase
     }
 
     /**
-     * @covers \App\Util\StringUtil::glueClassParts
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::glueClassParts
      */
     public function testGlueClassParts()
     {

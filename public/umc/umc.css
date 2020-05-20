@@ -63,21 +63,11 @@
     font-size:18px;
     opacity: 0.6;
 }
-.no-padding {
-    padding: 0 !important;
-    margin: 0 !important;
-}
+
 .drag-placeholder {
     width: 100%;
     height: 100px!important;
     background-color: #cccccc;
-}
-
-.h-drag-placeholder {
-    width: 16%;
-    height: 280px!important;
-    background-color: #cccccc;
-    float:left;
 }
 
 .sort-handle {
@@ -148,4 +138,34 @@ footer {
 .dropdown-menu span {
     padding: 10px;
     font-weight: bold;
+}
+
+.nav-md .container.body .right_col {
+    padding-bottom: 20px;
+}
+
+.not-supported {
+    opacity: 0.7;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -5px;
+    padding-bottom: 15px;
+}
+
+.nav-item h4 {
+    display: inline;
+}
+
+.nav-item .fa-exclamation-circle {
+    font-size: 15px;
+    margin-left: 5px;
+}
+
+.card-header h4 {
+    margin-top: 10px;
+}
+
+#umc .card {
+    margin-bottom: 5px;
 }

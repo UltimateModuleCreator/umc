@@ -1,0 +1,54 @@
+module:
+  tabs:
+    -
+      label: Config
+      code: magento_config
+      sort_order: 30
+  fields:
+    -
+      name: frontend
+      type: checkbox
+      label: Create Frontend
+      required: false
+      title: Create files for frontend
+      has_default: true
+      sort_order: 90
+      tab: base
+    -
+      name: front_key
+      type: text
+      label: Frontend URL Key
+      required: false
+      additionalDataBind: 'enable: data.frontend'
+      title: This is the url key for the module in case you add any entities that support frontend. Leave empty to autogenerate
+      sort_order: 100
+      tab: base
+    -
+      name: umc_crud
+      type: checkbox
+      label: I have Umc_Crud module installed
+      required: false
+      title: Umc_Crud description goes here
+      has_default: true
+      sort_order: 1000
+      tab: base
+    -
+      name: menu_parent
+      options: '%magento_admin_menu%'
+    -
+      name: config_tab
+      type: text
+      label: Store -> Config tab name.
+      required: false
+      title: If at least one entity has frontend files then a section in Stores->Configuration will be created. Fill in the tab name here. Leave empty to use the namespace.
+      tab: magento_config
+      sort_order: 120
+    -
+      name: config_tab_position
+      type: text
+      label: Stores -> Configuration tab position
+      required: false
+      dataValidation: validate_number
+      title: If at least one entity has frontend files then a section in System->Configuration will be created. Fill in the tab position. The higher the number the lower it will appear in the list.
+      tab: magento_config
+      sort_order: 130

@@ -1,4 +1,19 @@
 {
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "a2759dd6123694c8d901d0ec80006e044c2e6457"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
+    },
+    "doctrine/lexer": {
+        "version": "1.2.0"
+    },
     "magento/magento-coding-standard": {
         "version": "5"
     },
@@ -19,6 +34,18 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "config/packages/sensio_framework_extra.yaml"
+        ]
     },
     "squizlabs/php_codesniffer": {
         "version": "3.0",
@@ -74,9 +101,6 @@
             "ref": "e921bdbfe20cdefa3b82f379d1cd36df1bc8d115"
         }
     },
-    "symfony/form": {
-        "version": "v4.1.4"
-    },
     "symfony/framework-bundle": {
         "version": "3.3",
         "recipe": {
@@ -92,15 +116,6 @@
     "symfony/http-kernel": {
         "version": "v4.1.4"
     },
-    "symfony/inflector": {
-        "version": "v4.1.4"
-    },
-    "symfony/intl": {
-        "version": "v4.1.4"
-    },
-    "symfony/options-resolver": {
-        "version": "v4.1.4"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -110,16 +125,10 @@
             "ref": "1a47f76dcd9d5d4da1fab54fb15450bae3704c5e"
         }
     },
-    "symfony/polyfill-intl-icu": {
-        "version": "v1.9.0"
-    },
     "symfony/polyfill-mbstring": {
         "version": "v1.9.0"
     },
     "symfony/process": {
-        "version": "v4.1.4"
-    },
-    "symfony/property-access": {
         "version": "v4.1.4"
     },
     "symfony/routing": {

@@ -1,0 +1,342 @@
+magento_admin_menu:
+  flags:
+    extends: admin_menu
+  value:
+    'Magento_Backend::dashboard':
+      label: 'Dasboard (Magento_Backend::dashboard)'
+    'Magento_Sales::sales':
+      label: 'Sales (Magento_Sales::sales)'
+    'Magento_Sales::sales_operation':
+      label: '|--- Sales->Operations (Magento_Sales::sales_operation)'
+      parent: Magento_Sales::sales
+    'Magento_Sales::sales_order':
+      label: '|---|--- Sales->Operations->Orders(Magento_Sales::sales_order)'
+      parent: Magento_Sales::sales_operation
+    'Magento_Sales::sales_invoice':
+      label: '|---|--- Sales->Operations->Invoices (Magento_Sales::sales_invoice)'
+      parent: Magento_Sales::sales_operation
+    'Magento_Sales::sales_shipment':
+      label: '|---|--- Sales->Operations->Shipments (Magento_Sales::sales_shipment)'
+      parent: Magento_Sales::sales_operation
+    'Magento_Sales::sales_creditmemo':
+      label: '|---|--- Sales->Operations->Credit Memos (Magento_Sales::sales_creditmemo)'
+      parent: Magento_Sales::sales_operation
+    'Magento_Paypal::paypal_billing_agreement':
+      label: '|---|--- Sales->Operations->Billing Agreements (Magento_Paypal::paypal_billing_agreement)'
+      parent: Magento_Sales::sales_operation
+    'Magento_Sales::sales_transactions':
+      label: '|---|--- (Sales->Operations->Transactions (Magento_Sales::sales_transactions)'
+      parent: Magento_Sales::sales_operation
+    'Magento_Catalog::catalog':
+      label: 'Catalog (Magento_Catalog::catalog)'
+    'Magento_Catalog::catalog_products':
+      label: '|--- Catalog->Products (Magento_Catalog::products)'
+      parent: Magento_Catalog::catalog
+      acl:
+        - Magento_Catalog::catalog
+        - Magento_Catalog::catalog_inventory
+        - Magento_Catalog::products
+    'Magento_Catalog::catalog_categories':
+      label: '|--- Catalog->Categories (Magento_Catalog::categories)'
+      parent: Magento_Catalog::catalog
+      acl:
+        - Magento_Catalog::catalog
+        - Magento_Catalog::catalog_inventory
+        - Magento_Catalog::products
+    'Magento_Customer::customer':
+      label: 'Customers (Magento_Customer::customer)'
+    'Magento_Customer::customer_manage':
+      label: '|--- Customers->All Customers (Magento_Customer::customer_manage)'
+      parent: Magento_Catalog::customer
+    'Magento_Customer::customer_online':
+      label: '|--- Customers->Now Online (Magento_Customer::customer_online)'
+      parent: Magento_Catalog::customer
+    'Magento_Customer::customer_group':
+      label: '|--- Customers->Customer Groups (Magento_Customer::customer_group)'
+      parent: Magento_Catalog::customer
+    'Magento_Backend::marketing':
+      label: 'Marketing (Magento_Backend::marketing)'
+    'Magento_CatalogRule::promo':
+      label: '|--- Marketing->Promotions (Magento_CatalogRule::promo)'
+      parent: Magento_Backend::marketing
+    'Magento_CatalogRule::promo_catalog':
+      label: '|---|---Marketing->Promotions->Catalog Price Rules (Magento_CatalogRule::promo_catalog)'
+      parent: Magento_CatalogRule::promo
+    'Magento_SalesRule::promo_quote':
+      label: '|---|---Marketing->Promotions->Cart Price Rules (Magento_CatalogRule::promo_quote)'
+      parent: Magento_CatalogRule::promo
+    'Magento_Backend::marketing_communications':
+      label: '|---Marketing->Communications (Magento_Backend::marketing_communications)'
+      parent: Magento_Backend::marketing
+    'Magento_Email::template':
+      label: '|---|---Marketing->Communications->Email Templates (Magento_Email::template)'
+      parent: Magento_Backend::marketing_communications
+    'Magento_Newsletter::newsletter_template':
+      label: '|---|---Marketing->Communications->Newsletter Templates (Magento_Newsletter::newsletter_template)'
+      parent: Magento_Backend::marketing_communications
+    'Magento_Newsletter::newsletter_queue':
+      label: '|---|---Marketing->Communications->Newsletter Queue (Magento_Newsletter::newsletter_queue)'
+      parent: Magento_Backend::marketing_communications
+    'Magento_Newsletter::newsletter_subscriber':
+      label: '|---|---Marketing->Communications->Newsletter Subscribers (Magento_Newsletter::newsletter_subscriber)'
+      parent: Magento_Backend::marketing_communications
+    'Magento_Backend::marketing_seo':
+      label: '|--- Marketing->Seo & Search (Magento_Backend::marketing_seo)'
+      parent: Magento_Backend::marketing
+    'Magento_UrlRewrite::urlrewrite':
+      label: '|---|--- Marketing->Seo & Search->URL Rewrites (Magento_UrlRewrite::urlrewrite)'
+      parent: Magento_Backend::marketing_seo
+    'Magento_Search::search_terms':
+      label: '|---|--- Marketing->Seo & Search->Search Terms (Magento_Search::search_terms)'
+      parent: Magento_Backend::marketing_seo
+    'Magento_Search::search_synonyms':
+      label: '|---|--- Marketing->Seo & Search->Search Synonyms (Magento_Search::search_synonyms)'
+      parent: Magento_Backend::marketing_seo
+    'Magento_Sitemap::catalog_sitemap':
+      label: '|---|--- Marketing->Seo & Search->Site Map (Magento_Sitemap::catalog_sitemap)'
+      parent: Magento_Backend::marketing_seo
+    'Magento_Backend::marketing_user_content':
+      label: '|--- Marketing->User Content (Magento_Backend::marketing_user_content)'
+      parent: Magento_Backend::marketing
+    'Magento_Review::catalog_reviews_ratings_reviews_all':
+      label: '|---|--- Marketing->User Content->Reviews (Magento_Review::catalog_reviews_ratings_reviews_all)'
+      parent: Magento_Backend::marketing_user_content
+    'Magento_Backend::content':
+      label: 'Content (Magento_Backend::content)'
+    'Magento_Backend::content_elements':
+      label: '|---Content->Elements (Magento_Backend::content_elements)'
+      parent: Magento_Backend::content
+    'Magento_Cms::cms_page':
+      label: '|---|--- Content->Elements->Pages (Magento_Cms::cms_page)'
+      parent: Magento_Backend::content_elements
+    'Magento_Cms::cms_block':
+      label: '|---|--- Content->Elements->Blocks (Magento_Cms::cms_block)'
+      parent: Magento_Backend::content_elements
+    'Magento_Widget::cms_widget_instance':
+      label: '|---|--- Content->Elements->Widgets (Magento_Widget::cms_widget_instance)'
+      parent: Magento_Backend::content_elements
+    'Magento_Backend::system_design':
+      label: '|--- Content->Design (Magento_Backend::system_design)'
+      parent: Magento_Backend::content
+    'Magento_Theme::design_config':
+      label: '|---|--- Content->Design->Configuration (Magento_Theme::design_config)'
+      parent: Magento_Backend::system_design
+    'Magento_Theme::system_design_theme':
+      label: '|---|--- Content->Design->Themes (Magento_Theme::system_design_theme)'
+      parent: Magento_Backend::system_design
+    'Magento_Backend::system_design_schedule':
+      label: '|---|--- Content->Design->Schedule (Magento_Backend::system_design_schedule)'
+      parent: Magento_Backend::system_design
+    'Magento_Reports::report':
+      label: 'Reports (Magento_Reports::report)'
+    'Magento_Reports::report_marketing':
+      label: '|--- Reports->Marketing (Magento_Reports::report_marketing)'
+      parent: Magento_Reports::report
+    'Magento_Reports::report_shopcart_product':
+      label: '|---|--- Reports->Marketing->Products in Cart (Magento_Reports::report_shopcart_product)'
+      parent: Magento_Reports::report_marketing
+    'Magento_Search::report_search_term':
+      label: '|---|--- Reports->Marketing->Search Terms (Magento_Reports::report_search_term)'
+      parent: Magento_Reports::report_marketing
+    'Magento_Reports::report_shopcart_abandoned':
+      label: '|---|--- Reports->Marketing->Abandoned Carts (Magento_Reports::report_shopcart_abandoned)'
+      parent: Magento_Reports::report_marketing
+    'Magento_Newsletter::newsletter_problem':
+      label: '|---|--- Reports->Marketing->Newsletter Problem Reports (Magento_Reports::newsletter_problem)'
+      parent: Magento_Reports::report_marketing
+    'Magento_Review::report_review':
+      label: '|--- Reports->Reviews (Magento_Review::report_review)'
+      parent: Magento_Reports::report
+    'Magento_Review::report_review_customer':
+      label: '|---|--- Reports->Reviews->By Customers (Magento_Review::report_review_customer)'
+      parent: Magento_Review::report_review
+    'Magento_Review::report_review_product':
+      label: '|---|--- Reports->Reviews->By Products (Magento_Review::report_review_product)'
+      parent: Magento_Review::report_review
+    'Magento_Reports::report_salesroot':
+      label: '|--- Reports -> Sales (Magento_Reports::report_salesroot)'
+      parent: Magento_Reports::report
+    'Magento_Reports::report_salesroot_sales':
+      label: '|---|--- Reports -> Sales -> Orders (Magento_Reports::report_salesroot_sales)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Reports::report_salesroot_tax':
+      label: '|---|--- Reports -> Sales -> Tax (Magento_Reports::report_salesroot_tax)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Reports::report_salesroot_invoiced':
+      label: '|---|--- Reports -> Sales -> Invoiced (Magento_Reports::report_salesroot_invoiced)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Reports::report_salesroot_shipping':
+      label: '|---|--- Reports -> Sales -> Shipping (Magento_Reports::report_salesroot_shipping)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Reports::report_salesroot_refunded':
+      label: '|---|--- Reports -> Sales -> Refunded (Magento_Reports::report_salesroot_refunded)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Reports::report_salesroot_coupons':
+      label: '|---|--- Reports -> Sales -> Coupons (Magento_Reports::report_salesroot_coupons)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Paypal::report_salesroot_paypal_settlement_reports':
+      label: '|---|--- Reports -> Sales -> PayPal Settlement (Magento_Paypal::report_salesroot_paypal_settlement_reports)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Braintree::settlement_report':
+      label: '|---|--- Reports -> Sales -> Braintree Settlement (Magento_Braintree::settlement_report)'
+      parent: Magento_Reports::report_salesroot
+    'Magento_Reports::report_customers':
+      label: '|---Reports -> Customers (Magento_Reports::report_customers)'
+      parent: Magento_Reports::report
+    'Magento_Reports::report_customers_totals':
+      label: '|---|---Reports -> Customers -> Order Total (Magento_Reports::report_customers_totals)'
+      parent: Magento_Reports::report_customers
+    'Magento_Reports::report_customers_orders':
+      label: '|---|---Reports -> Customers -> Order Count (Magento_Reports::report_customers_orders)'
+      parent: Magento_Reports::report_customers
+    'Magento_Reports::report_customers_accounts':
+      label: '|---|---Reports -> Customers -> New (Magento_Reports::report_customers_accounts)'
+      parent: Magento_Reports::report_customers
+    'Magento_Reports::report_products':
+      label: '|---Reports -> Products (Magento_Reports::report_products)'
+      parent: Magento_Reports::report
+    'Magento_Reports::report_products_viewed':
+      label: '|---|---Reports -> Products -> Views (Magento_Reports::report_products_viewed)'
+      parent: Magento_Reports::report_products
+    'Magento_Reports::report_products_bestsellers':
+      label: '|---|---Reports -> Products -> Bestsellers (Magento_Reports::report_products_bestsellers)'
+      parent: Magento_Reports::report_products
+    'Magento_Reports::report_products_lowstock':
+      label: '|---|---Reports -> Products -> Low Stock (Magento_Reports::report_products_lowstock)'
+      parent: Magento_Reports::report_products
+    'Magento_Reports::report_products_sold':
+      label: '|---|---Reports -> Products -> Ordered (Magento_Reports::report_products_sold)'
+      parent: Magento_Reports::report_products
+    'Magento_Downloadable::report_products_downloads':
+      label: '|---|---Reports -> Products -> Downloads (Magento_Downloadable::report_products_downloads)'
+      parent: Magento_Reports::report_products
+    'Magento_Reports::report_statistics':
+      label: '|---Reports -> Statistics (Magento_Reports::report_statistics)'
+      parent: Magento_Reports::report
+    'Magento_Reports::report_statistics_refresh':
+      label: '|---|---Reports -> Statistics -> Refresh Statistics (Magento_Reports::report_statistics_refresh)'
+      parent: Magento_Reports::report_statistics
+    'Magento_Analytics::business_intelligence':
+      label: '|---Reports -> Business Intelligence (Magento_Analytics::business_intelligence)'
+      parent: Magento_Reports::report
+    'Magento_Analytics::advanced_reporting':
+      label: '|---!---Reports -> Business Intelligence -> Advanced Reporting (Magento_Analytics::advanced_reporting)'
+      parent: Magento_Analytics::business_intelligence
+    'Magento_Analytics::bi_essentials':
+      label: '|---!---Reports -> Business Intelligence -> BI Essentials (Magento_Analytics::bi_essentials)'
+      parent: Magento_Analytics::business_intelligence
+    'Magento_Backend::stores':
+      label: 'Stores (Magento_Backend::stores)'
+    'Magento_Backend::stores_settings':
+      label: '|--- Stores -> Settings (Magento_Backend::stores_settings)'
+      parent: Magento_Backend::stores
+    'Magento_Backend::system_store':
+      label: '|---|--- Stores -> Settings -> All Stores (Magento_Backend::system_store)'
+      parent: Magento_Backend::stores_settings
+    'Magento_Config::system_config':
+      label: '|---|--- Stores -> Settings -> Configuration (Magento_Config::system_config)'
+      parent: Magento_Backend::stores_settings
+    'Magento_CheckoutAgreements::sales_checkoutagreement':
+      label: '|---|--- Stores -> Settings -> Terms and Conditions (Magento_CheckoutAgreements::sales_checkoutagreement)'
+      parent: Magento_Backend::stores_settings
+    'Magento_Sales::system_order_statuses':
+      label: '|---|--- Stores -> Settings -> Order Status (Magento_Sales::system_order_statuses)'
+      parent: Magento_Backend::stores_settings
+    'Magento_Tax::sales_tax':
+      label: '|--- Stores -> Taxes (Magento_Tax::sales_tax)'
+      parent: Magento_Backend::stores
+    'Magento_Tax::sales_tax_rules':
+      label: '|---|--- Stores -> Taxes -> Tax rules (Magento_Tax::sales_tax_rules)'
+      parent: Magento_Tax::sales_tax
+    'Magento_Tax::sales_tax_rates':
+      label: '|---|--- Stores -> Taxes -> Tax zones and rates(Magento_Tax::sales_tax_rates)'
+      parent: Magento_Tax::sales_tax
+    'Magento_CurrencySymbol::system_currency':
+      label: '|--- Stores -> Currency (Magento_CurrencySymbol::system_currency)'
+      parent: Magento_Backend::stores
+    'Magento_CurrencySymbol::system_currency_rates':
+      label: '|---|--- Stores -> Currency -> Currency Rates (Magento_CurrencySymbol::system_currency_rates)'
+      parent: Magento_CurrencySymbol::system_currency
+    'Magento_CurrencySymbol::system_currency_symbols':
+      label: '|---|--- Stores -> Currency -> Currency Symbols (Magento_CurrencySymbol::system_currency_symbols)'
+      parent: Magento_CurrencySymbol::system_currency
+    'Magento_Backend::stores_attributes':
+      label: '|--- Stores -> Attributes (Magento_Backend::stores_attributes)'
+      parent: Magento_Backend::stores
+    'Magento_Catalog::catalog_attributes_attributes':
+      label: '|---|--- Stores -> Attributes -> Product (Magento_Catalog::catalog_attributes_attributes)'
+      parent: Magento_Backend::stores_attributes
+    'Magento_Catalog::catalog_attributes_sets':
+      label: '|---|--- Stores -> Attributes -> Attribute Set (Magento_Catalog::catalog_attributes_sets)'
+      parent: Magento_Backend::stores_attributes
+    'Magento_Review::catalog_reviews_ratings_ratings':
+      label: '|---|--- Stores -> Attributes -> Rating (Magento_Review::catalog_reviews_ratings_ratings)'
+      parent: Magento_Backend::stores_attributes
+    'Magento_Backend::system':
+      label: 'System (Magento_Backend::system)'
+    'Magento_Backend::system_convert':
+      label: '|--- System -> Data Transfer (Magento_Backend::system_convert)'
+      parent: Magento_Backend::system
+    'Magento_ImportExport::system_convert_import':
+      label: '|---|--- System -> Data Transfer -> Import (Magento_Review::catalog_reviews_ratings_ratings)'
+      parent: Magento_Backend::system_convert
+    'Magento_ImportExport::system_convert_export':
+      label: '|---|--- System -> Data Transfer -> Export (Magento_ImportExport::system_convert_export)'
+      parent: Magento_Backend::system_convert
+    'Magento_TaxImportExport::system_convert_tax':
+      label: '|---|--- System -> Data Transfer -> Import/Export Tax Rates (Magento_TaxImportExport::system_convert_tax)'
+      parent: Magento_Backend::system_convert
+    'Magento_ImportExport::system_convert_history':
+      label: '|---|--- System -> Data Transfer -> Import History (Magento_ImportExport::system_convert_history)'
+      parent: Magento_Backend::system_convert
+    'Magento_Integration::system_extensions':
+      label: '|--- System -> Extensions (Magento_Integration::system_extensions)'
+      parent: Magento_Backend::system
+    'Magento_Integration::system_integrations':
+      label: '|---|--- System -> Extensions -> Integrations (Magento_Integration::system_integrations)'
+      parent: Magento_Integration::system_extensions
+    'Magento_Backend::system_tools':
+      label: '|--- System -> Tools (Magento_Backend::system_tools)'
+      parent: Magento_Backend::system
+    'Magento_Backend::system_cache':
+      label: '|---|--- System -> Tools -> Cache Management (Magento_Backend::system_cache)'
+      parent: Magento_Backend::system_tools
+    'Magento_Backup::system_tools_backup':
+      label: '|---|--- System -> Tools -> Backup (Magento_Backup::system_tools_backup)'
+      parent: Magento_Backend::system_tools
+    'Magento_Indexer::system_index':
+      label: '|---|--- System -> Tools -> Index Management (Magento_Indexer::system_index)'
+      parent: Magento_Backend::system_tools
+    'Magento_Backend::setup_wizard':
+      label: '|---|--- System -> Tools -> Web Setup Wizard (Magento_Backend::setup_wizard)'
+      parent: Magento_Backend::system_tools
+    'Magento_User::system_acl':
+      label: '|---System -> Permissions (Magento_User::system_acl)'
+      parent: Magento_Backend::system
+    'Magento_User::system_acl_users':
+      label: '|---|--- System -> Permissions -> All Users (Magento_User::system_acl_users)'
+      parent: Magento_User::system_acl
+    'Magento_User::system_acl_locks':
+      label: '|---|--- System -> Permissions -> Locked Users (Magento_User::system_acl_locks)'
+      parent: Magento_User::system_acl
+    'Magento_User::system_acl_roles':
+      label: '|---|--- System -> Permissions -> User Roles (Magento_User::system_acl_roles)'
+      parent: Magento_User::system_acl
+    'Magento_Backend::system_other_settings':
+      label: '|---System -> Other Settings (Magento_Backend::system_other_settings)'
+      parent: Magento_Backend::system
+    'Magento_AdminNotification::system_adminnotification':
+      label: '|---|--- System -> Other Settings -> Notifications (Magento_AdminNotification::system_adminnotification)'
+      parent: Magento_Backend::system_other_settings
+    'Magento_Variable::system_variable':
+      label: '|---|--- System -> Other Settings -> Custom Variables (Magento_Variable::system_variable)'
+      parent: Magento_Backend::system_other_settings
+    'Magento_EncryptionKey::system_crypt_key':
+      label: '|---|--- System -> Other Settings -> Manage Encryption Key (Magento_EncryptionKey::system_crypt_key)'
+      parent: Magento_Backend::system_other_settings
+magento_attribute_type:
+  flags:
+    extends: attribute_type
+    sort: label
+    filter: disabled
+  values: []

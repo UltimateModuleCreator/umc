@@ -21,7 +21,10 @@ namespace App\Service\Form\OptionProvider;
 
 use App\Service\Form\OptionProviderInterface;
 
-class SerializedType implements OptionProviderInterface
+/**
+ * @deprecated
+ */
+class SerializedType //implements OptionProviderInterface
 {
     public const FILTER_FIELD = 'can_be_serialized';
     /**

@@ -2,12 +2,12 @@ if (typeof UMC === "undefined") {
     UMC = {config: {}}
 }
 UMC.initModel = function (model, data, config) {
-    var dataFields = config.fields;
-    var children = config.children || {};
+    const dataFields = config.fields;
+    const children = config.children || {};
     //init observables
     model.data = model.data || {};
-    for (var i = 0; i < dataFields.length; i++) {
-        var field = dataFields[i];
+    for (let i = 0; i < dataFields.length; i++) {
+        const field = dataFields[i];
         model.data[field] = ko.observable(data[field] || '');
     }
     if (config.children !== undefined && Object.entries(config.children).length !== 0) {
@@ -15,9 +15,9 @@ UMC.initModel = function (model, data, config) {
         model.visibleChildrenContainer = {};
         model.visibleChildrenContainerClass = {};
         model.children = {};
-        for (var child in children) {
+        for (let child in children) {
             if (children.hasOwnProperty(child)) {
-                var className = children[child];
+                let className = children[child];
                 model.children[child] = ko.observableArray((data[child] || []).map(function (childElement) {
                     return new UMC[className](childElement);
                 }));
@@ -36,13 +36,13 @@ UMC.initModel = function (model, data, config) {
             })
         };
         model.toggleChildContainer = function (group) {
-            value = model.visibleChildrenContainer[group]();
+            let value = model.visibleChildrenContainer[group]();
             model.visibleChildrenContainer[group](!value);
             model.visibleChildrenContainerClass[group]('fa fa-2x fa-chevron-' + (value ? 'up' : 'down'));
         };
         //define actions
         model.addChild = function (data, child) {
-            var className = config.children[child];
+            const className = config.children[child];
             model.children[child].push(new UMC[className](data));
         };
 
@@ -51,6 +51,9 @@ UMC.initModel = function (model, data, config) {
                 model.children[child].remove(obj);
             }
         };
+        model.hasChild = function (child) {
+            return model.children[child] !== undefined;
+        }
     }
     //init unique id
     model.uuidValue = ko.observable('');
@@ -101,10 +104,11 @@ UMC.initModel = function (model, data, config) {
     }
 };
 UMC.Module = function (data) {
-    var self = this;
+    let self = this;
     UMC.initModel(this, data, UMC.config.module);
     this.submitForm = function () {
         var form = $('#umc');
+        form.trigger('submit.validation');
         if (form.isValid()) {
             $('#body-loader').show();
             $.post({
@@ -196,7 +200,7 @@ UMC.Option = function (data) {
 
 UMC.Serialized = function (data) {
     var self = this;
-    UMC.initModel(this, data, UMC.config.serialized)
+    UMC.initModel(this, data, UMC.config.serialized);
     this.isDropdown = ko.pureComputed(function () {
         return self.data.type() === 'dropdown';
     });
@@ -242,7 +246,7 @@ UMC.getSortingConfig = function (placeholder) {
 
 ko.bindingHandlers.sortableListEntities = UMC.getSortingConfig('drag-placeholder');
 ko.bindingHandlers.sortableListAttributes = UMC.getSortingConfig('drag-placeholder');
-ko.bindingHandlers.sortableListOptions = UMC.getSortingConfig('h-drag-placeholder');
+ko.bindingHandlers.sortableListOptions = UMC.getSortingConfig('drag-placeholder');
 ko.bindingHandlers.sortableListSerialized = UMC.getSortingConfig('drag-placeholder');
 ko.bindingHandlers.select2 = {
     init: function (el, valueAccessor, allBindingsAccessor, viewModel) {
@@ -250,7 +254,7 @@ ko.bindingHandlers.select2 = {
             $(el).select2('destroy');
         });
 
-        var allBindings = allBindingsAccessor(),
+        let allBindings = allBindingsAccessor(),
             select2 = ko.utils.unwrapObservable(allBindings.select2);
 
         $(el).select2(select2);

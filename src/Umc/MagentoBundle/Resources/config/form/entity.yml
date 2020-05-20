@@ -1,0 +1,41 @@
+entity:
+  tabs:
+    -
+      label: Admin
+      code: admin
+      sort_order: 15
+  fields:
+    -
+      name: search
+      type: checkbox
+      has_default: true
+      label: Use in global search
+      title: The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders. If you set this to 'Yes' than it will search in your entity also.
+      tab: admin
+      sort_order: 20
+    -
+      name: store
+      type: checkbox
+      has_default: true
+      label: Associate to store views
+      title: Selecting "Yes" it will add a multiselect field in the add / edit form for the entity that will allow you to select the associated stores. Similar to CMS blocks and pages
+      tab: admin
+      sort_order: 10
+    -
+      name: top_menu
+      type: checkbox
+      has_default: true
+      label: Top menu Item
+      title: If the entity has frontend, a link to its list will be placed in the top menu
+      additionalDataBind: 'enable: data.frontend'
+      tab: frontend
+      sort_order: 50
+    -
+      name: footer_links
+      type: checkbox
+      has_default: true
+      label: Footer Links
+      title: If the entity has frontend, a link to its list will be placed in footer links to the list page
+      additionalDataBind: 'enable: data.frontend'
+      tab: frontend
+      sort_order: 60

@@ -21,32 +21,10 @@ namespace App\Util;
 
 use Symfony\Component\Yaml\Yaml;
 
-class YamlLoader
+/**
+ * @deprecated
+ */
+class YamlLoader extends \App\Umc\CoreBundle\Util\YamlLoader
 {
-    /**
-     * @param $file
-     * @return array
-     * @throws \Exception
-     */
-    public function load($file): array
-    {
-        try {
-            $values = Yaml::parseFile($file, 1);
-        } catch (\Exception $e) {
-            $values = null;
-        }
-        if (null === $values) {
-            throw new \Exception(sprintf('Could not load file %s', $file));
-        }
-        return $values;
-    }
 
-    /**
-     * @param array $array
-     * @return string
-     */
-    public function arrayToYaml(array $array): string
-    {
-        return Yaml::dump($array, 100, 2, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
-    }
 }

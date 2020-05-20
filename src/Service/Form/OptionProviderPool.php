@@ -19,40 +19,12 @@ declare(strict_types=1);
 
 namespace App\Service\Form;
 
-class OptionProviderPool
+use App\Umc\CoreBundle\Model\Config\Modifier\Expand\Pool;
+
+/**
+ * @deprecated
+ */
+class OptionProviderPool extends Pool
 {
-    /**
-     * @var OptionProviderInterface[]
-     */
-    private $providers;
 
-    /**
-     * OptionProviderPool constructor.
-     * @param OptionProviderInterface[] $providers
-     */
-    public function __construct(array $providers)
-    {
-        foreach ($providers as $provider) {
-            if (!($provider instanceof OptionProviderInterface)) {
-                throw new \InvalidArgumentException(
-                    "Option providers must implement " . OptionProviderInterface::class
-                );
-            }
-        }
-        $this->providers = $providers;
-    }
-
-    /**
-     * @param $code
-     * @return OptionProviderInterface
-     */
-    public function getProvider($code)
-    {
-        if (isset($this->providers[$code])) {
-            return $this->providers[$code];
-        }
-        throw new \InvalidArgumentException(
-            "Option provider with code " . $code . " does not exist."
-        );
-    }
 }

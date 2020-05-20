@@ -1,0 +1,84 @@
+entity:
+#  template: '@UmcCore/form/elements/form/entity.html.twig'
+  panel:
+    field: label_singular
+    default: New Entity
+  children:
+     -
+      code: _attributes
+      className: Attribute
+      tabLabel: Attributes
+      formKey: attribute
+      sortable: sortableListAttributes
+      addButton:
+        label: Add Attribute
+        split:
+          field: type
+          values: '%attribute_type%'
+#  settings_label: "Entity default settings"
+  tabs:
+    -
+      label: Name settings
+      code: name
+      sort_order: 10
+      cols: 2
+    -
+      label: Frontend
+      code: frontend
+      sort_order: 20
+      cols: 4
+  fields:
+    -
+      name: name_singular
+      type: text
+      label: Name Singular
+      dataValidation: validate_required
+      title: Each entity must have a label used for buttons, links, messages. This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form 'Post'
+      tab: name
+      sort_order: 10
+    -
+      name: name_plural
+      type: text
+      label: Name Plural
+      dataValidation: validate_required
+      title: "This is the plural value of the entity code. For example 'posts'."
+      tab: name
+      sort_order: 20
+    -
+      name: label_singular
+      type: text
+      label: Label Singular
+      dataValidation: validate_required
+      title: UMC generates the code in a 'human readable' form. It's easier to figure out what the code is about when the variables and methods have a propper name.For example it's easier to read foreach ($posts as $_post){...} or $post->getTags() than foreach ($list as $item){...} or $entity->getRelated('tags');The value you fill in here will be used for variable names, file names and table names.
+      tab: name
+      sort_order: 30
+    -
+      name: label_plural
+      type: text
+      label: Label Plural
+      dataValidation: validate_required
+      title: "This is the plural form of the label above. It will be used for lists. (For example: 'Posts'). Try to use English words for this label. It's not mandatory, but it makes the taxonomy more readable. I recommend the first letter to be uppercase."
+      tab: name
+      sort_order: 40
+    -
+      name: frontend
+      type: checkbox
+      has_default: true
+      label: Create Frontend view / list page
+      dataValidation: validate_required
+      additionalDataBind: 'enable: $parent.data.frontend'
+      title: If this is set to 'Yes', a page that lists your entities will be created. The page has a toolbar for pagination. You will also get a "view" page for your entity
+      tab: frontend
+      sort_order: 50
+
+    -
+      name: seo
+      type: checkbox
+      has_default: true
+      label: Add SEO attributes
+      dataValidation: validate_required
+      title: If this is set to 'Yes', 3 extra fields/attributes will be added to your entity, 'meta_title', 'meta_keywords' and 'meta_description'. The values of these fields/attributes will be added used for the details page of your entity.
+      additionalDataBind: 'enable: data.frontend && $parent.data.frontend'
+      tab: frontend
+      sort_order: 50
+

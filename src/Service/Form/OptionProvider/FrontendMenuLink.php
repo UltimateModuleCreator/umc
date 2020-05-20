@@ -21,7 +21,10 @@ namespace App\Service\Form\OptionProvider;
 
 use App\Service\Form\OptionProviderInterface;
 
-class FrontendMenuLink implements OptionProviderInterface
+/**
+ * @deprecated
+ */
+class FrontendMenuLink// implements OptionProviderInterface
 {
     public const NONE = 0;
     public const MAIN_MENU = 1;

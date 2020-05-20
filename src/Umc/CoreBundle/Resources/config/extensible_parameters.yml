@@ -1,0 +1,492 @@
+admin_menu:
+  value:
+    '':
+      label: '--Top Level--'
+attribute_type:
+  flags:
+    sort: label
+    filter: disabled
+  value:
+    text:
+      label: Text
+      grid_filter_type: text
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      type_hint: string
+      input_type: Text Input
+      schema_type: varchar
+      schema_attributes: 'length="255"'
+      can_be_serialized: true
+      processor:
+        frontend: text
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/text.html.twig
+        frontend: attribute/frontend/text.html.twig
+        serialized:
+          backend: attribute/form/serialized/text.html.twig
+          frontend: attribute/frontend/serialized/text.html.twig
+    product_attribute:
+      label: Product Attribute
+      grid_filter_type: select
+      class: App\Model\Attribute\Type\ProductAttribute
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttribute
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      type_hint: string
+      input_type: Select
+      schema_type: varchar
+      schema_attributes: 'length="50"'
+      can_be_serialized: true
+      processor:
+        frontend: options
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/product_attribute.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/product_attribute.html.twig
+    product_attribute_multiselect:
+      label: Product Attribute Multiselect
+      class: App\Model\Attribute\Type\ProductAttribute
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttribute
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+      schema_type: text
+      schema_attributes: ''
+      can_be_serialized: true
+      processor:
+        provider: multiselect
+        save: multiselect
+        inlineEdit: multiselect
+        frontend: options
+      templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/product_attribute.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/product_attribute.html.twig
+    product_attribute_set:
+      label: Product Attribute Set
+      grid_filter_type: select
+      class: App\Model\Attribute\Type\ProductAttributeSet
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttributeSet
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      type_hint: int
+      input_type: Select
+      schema_type: smallint
+      schema_attributes: 'unsigned="true" padding="5"'
+      can_be_serialized: true
+      processor:
+        frontend: options
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/product_attribute_set.html.twig
+        schema_fk: attribute/schema_fk/product_attribute_set.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/product_attribute_set.html.twig
+    product_attribute_set_multiselect:
+      label: Product Attribute Set Multiselect
+      class: App\Model\Attribute\Type\ProductAttributeSet
+      serialized_class: App\Model\Attribute\Serialized\Type\ProductAttributeSet
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+      has_options: true
+      schema_type: text
+      schema_attributes: ''
+      can_be_serialized: true
+      processor:
+        provider: multiselect
+        save: multiselect
+        frontend: options
+        inlineEdit: multiselect
+      templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/product_attribute_set.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/product_attribute_set.html.twig
+    country:
+      label: Country
+      source_model: Magento\Config\Model\Config\Source\Locale\Country
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      type_hint: string
+      grid_filter_type: select
+      input_type: Select
+      has_options: true
+      schema_type: varchar
+      schema_attributes: ' length="3"'
+      can_be_serialized: true
+      processor:
+        frontend: options
+      templates:
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/country.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/country.html.twig
+    country_multiselect:
+      label: Country Multiselect
+      source_model: Magento\Config\Model\Config\Source\Locale\Country
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+      schema_type: text
+      schema_attributes: ''
+      can_be_serialized: true
+      processor:
+        provider: multiselect
+        save: multiselect
+        frontend: options
+        inlineEdit: multiselect
+      templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/country.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/country.html.twig
+    date:
+      label: Date
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      sql_type_constant: TYPE_DATETIME
+      sql_size: 'null'
+      type_hint: string
+      grid_filter_type: dateRange
+      input_type: Date
+      has_options: false
+      schema_type: timestamp
+      schema_attributes: ''
+      can_be_serialized: true
+      processor:
+        save: date
+        frontend: date
+        inlineEdit: date
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/date.html.twig
+          form: attribute/form/date.html.twig
+        frontend: attribute/frontend/date.html.twig
+        serialized:
+          backend: attribute/form/serialized/date.html.twig
+          frontend: attribute/frontend/serialized/date.html.twig
+    decimal:
+      label: Decimal
+      grid_filter_type: textRange
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      type_hint: float
+      input_type: Text Input
+      has_options: false
+      schema_type: decimal
+      schema_attributes: 'scale="4" precision="12"'
+      can_be_serialized: true
+      processor:
+        frontend: text
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/text.html.twig
+        frontend: attribute/frontend/text.html.twig
+        serialized:
+          backend: attribute/form/serialized/text.html.twig
+          frontend:
+            list: false
+            view: false
+    dropdown:
+      label: Dropdown
+      class: App\Model\Attribute\Type\Dropdown
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: true
+      can_be_required: true
+      full_text: false
+      type_hint: int
+      grid_filter_type: select
+      input_type: Select
+      schema_type: int
+      schema_attributes: 'padding="11"'
+      can_be_serialized: true
+      processor:
+        frontend: options
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/option.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/option.html.twig
+    file:
+      label: File
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: true
+      upload: true
+      type_hint: string
+      input_type: File
+      schema_type: varchar
+      schema_attributes: 'length="255"'
+      can_be_serialized: false
+      processor:
+        provider: file
+        save: file
+        frontend: file
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          form: attribute/form/file.html.twig
+        frontend: attribute/frontend/file.html.twig
+    image:
+      label: Image
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: false
+      full_text: false
+      upload: true
+      type_hint: string
+      input_type: File
+      schema_type: varchar
+      schema_attributes: 'length="255"'
+      can_be_serialized: false
+      processor:
+        provider: image
+        save: image
+        frontend: image
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/image.html.twig
+          form: attribute/form/file.html.twig
+        frontend: attribute/frontend/image.html.twig
+    integer:
+      label: Integer
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: false
+      type_hint: int
+      grid_filter_type: textRange
+      input_type: Text Input
+      has_options: false
+      schema_type: int
+      schema_attributes: 'padding="11"'
+      can_be_serialized: true
+      processor:
+        frontend: text
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/text.html.twig
+        frontend: attribute/frontend/text.html.twig
+        serialized:
+          backend: attribute/form/serialized/text.html.twig
+          frontend: attribute/frontend/serialized/text.html.twig
+    multiselect:
+      label: Multiselect
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: true
+      can_be_required: true
+      full_text: false
+      type_hint: string
+      multiple: true
+      grid_filter_type: 'false'
+      input_type: Multiselect
+      schema_type: text
+      schema_attributes: ''
+      can_be_serialized: true
+      processor:
+        provider: multiselect
+        save: multiselect
+        frontend: options
+        inlineEdit: multiselect
+      templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/multiselect.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/select.html.twig
+        frontend: attribute/frontend/option.html.twig
+        serialized:
+          backend: attribute/form/serialized/select.html.twig
+          frontend: attribute/frontend/serialized/option.html.twig
+    textarea:
+      label: Textarea (no editor)
+      can_be_name: true
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      type_hint: string
+      grid_filter_type: 'false'
+      input_type: Textarea
+      schema_type: text
+      schema_attributes: ''
+      can_be_serialized: true
+      processor:
+        frontend: text
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/text.html.twig
+          form: attribute/form/textarea.html.twig
+        frontend: attribute/frontend/text.html.twig
+        serialized:
+          backend: attribute/form/serialized/textarea.html.twig
+          frontend: attribute/frontend/serialized/text.html.twig
+    wysiwyg:
+      label: Wysiwyg
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: true
+      full_text: true
+      type_hint: string
+      grid_filter_type: 'false'
+      input_type: Textarea
+      schema_type: mediumtext
+      schema_attributes: ''
+      can_be_serialized: false
+      processor:
+        frontend: editor
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          form: attribute/form/wysiwyg.html.twig
+        frontend: attribute/frontend/editor.html.twig
+        serialized:
+          backend: false
+          frontend: false
+    yesno:
+      label: Yes/No
+      source_model: Magento\Config\Model\Config\Source\Yesno
+      can_be_name: false
+      can_show_in_grid: true
+      can_have_options: false
+      can_be_required: false
+      full_text: false
+      type_hint: int
+      grid_filter_type: select
+      input_type: Checkbox (toggle)
+      has_options: true
+      schema_type: smallint
+      schema_attributes: 'padding="2"'
+      can_be_serialized: true
+      processor:
+        frontend: options
+      templates:
+        interface: attribute/interface/default.html.twig
+        model: attribute/model/default.html.twig
+        backend:
+          grid: attribute/grid/select.html.twig
+          form: attribute/form/yesno.html.twig
+        frontend: attribute/frontend/yesno.html.twig
+        serialized:
+          backend: attribute/form/serialized/yesno.html.twig
+          frontend: attribute/frontend/serialized/yesno.html.twig
+    serialized:
+      label: Serialized
+      class: \App\Model\Attribute\Type\Serialized
+      can_be_name: false
+      can_show_in_grid: false
+      can_have_options: false
+      can_be_required: false
+      full_text: false
+      type_hint: string
+      multiple: false
+      input_type: Serialized Fields
+      schema_type: text
+      schema_attributes: ''
+      can_be_serialized: false
+      processor:
+        provider: dynamicRows
+        save: dynamicRows
+      templates:
+        interface: attribute/interface/array.html.twig
+        model: attribute/model/serialized.html.twig
+        backend:
+          form: attribute/form/serialized.html.twig
+        frontend: attribute/frontend/serialized.html.twig

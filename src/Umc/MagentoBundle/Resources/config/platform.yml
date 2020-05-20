@@ -1,0 +1,24 @@
+magento:
+  code: magento
+  name: Magento 2
+  url: 'https://magento.com/'
+  image: 'bundles/umcmagento/logo/magento.jpeg'
+  sort_order: 10
+  config:
+    form:
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/module.yml'
+      - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/form/module.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/entity.yml'
+      - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/form/entity.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/attribute.yml'
+      - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/form/attribute.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/option.yml'
+  versions:
+    -
+      label: 2.3.4+
+      code: 2-3-4
+      sort_weight: 20
+    -
+      label: 2.2.x
+      code: 2-3-x
+      sort_weight: 10

@@ -1,0 +1,16 @@
+<div class="form-group"{% if element.containerAttributes is defined %} {{ element.containerAttributes|raw }}{% endif %}>
+    <label
+        data-bind="attr: {for: uuid('{{ element.name }}')}"
+        {% if element.title %} title="{{ element.title }}" {% endif %}
+    >
+        {{ element.label }}
+    </label>
+    <input
+        type="text"
+        name="{{ element.name }}"
+        {% include '@UmcCore/edit/form/elements/validation.html.twig' with {element: element} %}
+        data-bind="value: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') }{% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"
+        class="form-control"
+        {% if element.title %} title="{{ element.title }}" {% endif %}
+    />
+</div>

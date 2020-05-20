@@ -22,7 +22,10 @@ namespace App\Service\Form\OptionProvider;
 use App\Service\Form\OptionProviderInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
-class AdminMenu implements OptionProviderInterface
+/**
+ * @deprecated
+ */
+class AdminMenu// implements OptionProviderInterface
 {
     public const CONFIG_PARAM_NAME = 'menu_type_config';
     /**

@@ -25,6 +25,9 @@ use App\Util\StringUtil;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
+/**
+ * @deprecated
+ */
 class CamelCase extends AbstractExtension
 {
     /**

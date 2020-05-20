@@ -1,0 +1,5 @@
+platform:
+  path: /platform
+  controller: App\Umc\CoreBundle\Controller\PlatformController::run
+  methods:
+    - GET
