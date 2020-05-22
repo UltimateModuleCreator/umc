@@ -97,6 +97,15 @@ class Platform
     }
 
     /**
+     * @return string|null
+     */
+    public function getDestinationFolder(): ?string
+    {
+        $result = $this->getConfig('destination');
+        return isset($result[0]) ? (string)$result[0] : null;
+    }
+
+    /**
      * @param null $key
      * @return array
      */

@@ -1,19 +1,34 @@
 {% extends "@UmcCore/base.html.twig" %}
 {% block body %}
-<form id="umc" method="post" action="{{ path('save') }}">
+<form id="umc" method="post" action="{{ path('save', {platform: platform.getCode(), version: version.getCode()}) }}">
     <div class="card">
-        <div class="card-header"><h1>New Module for {{ platform.getName() }} - v{{ version.getLabel() }}</h1></div>
+        <div class="card-header"><h1>{{ title }} for {{ platform.getName() }} - v{{ version.getLabel() }}</h1></div>
         <div class="card-body">
             {% include formConfig.module.template with {form: formConfig.module, formKey:'module'} %}
         </div>
         <div class="card-footer">
             <div class="float-right">
-                <button type="button" data-role="save" class="btn btn-danger btn" data-bind="{click: submitForm}">Save Module</button>
+                <button type="button" data-role="save" class="btn btn-danger btn">Save Module</button>
             </div>
         </div>
     </div>
-
 </form>
+<div class="modal fade" tabindex="-1" role="dialog" id="response-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -33,7 +48,17 @@
                     }
                 })
             },
-        })
+            onSuccess: function ($form) {
+                $form.find('.fa-exclamation-circle').hide();
+            }
+        });
+        $('#umc').bind(
+            'submit.validation',
+            function (evt) {
+                evt.stopImmediatePropagation();
+                return false
+            }
+        );
         if (typeof UMC === "undefined") {
             UMC = {}
         }
@@ -41,6 +66,41 @@
         {#UMC.defaults = {{ defaults|json_encode|raw }};#}
         UMC.defaults = {};
         {#//ko.applyBindings(new UMC.Module({{ data|json_encode|raw }}));#}
-        ko.applyBindings(new UMC.Module([]));
+        window.moduleInstance = new UMC.Model({{ data|json_encode|raw }}, 'module');
+        ko.applyBindings(window.moduleInstance);
+        $('#umc').find('button[data-role=save]').on('click', function (e) {
+            const form = $('#umc');
+            form.trigger('submit.validation');
+            if (form.isValid()) {
+                $('#body-loader').show();
+                $.post({
+                    url: form.attr('action'),
+                    data: {data: moduleInstance.toParams()},
+                    complete: function (response) {
+                        $('#body-loader').hide();
+                        var isJson = response.responseJSON !== undefined;
+                        if (isJson) {
+                            var data = response.responseJSON;
+                            if (data.success === undefined) {
+                                var content = 'Got this answer back. I don\'t understand it<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                            } else {
+                                var className = (data.success) ? 'alert-success' : 'alert-error';
+                                var content = '<div class="alert ' + className + '">' + data.message + '</div>';
+                                if (data.link && data.module) {
+                                    content += '<br /><a class="btn btn-primary col-lg-12" href="' + data.link + '">Download module ' + data.module + '</a>';
+                                    $('[data-role=umc-title]').html(data.module);
+                                }
+                            }
+                        } else {
+                            var content = response.responseText;
+                        }
+                        var modal = $('#response-modal');
+                        modal.find('.modal-body').html(content);
+                        modal.modal('show');
+                    }
+                });
+            }
+        });
+
     </script>
 {% endblock %}

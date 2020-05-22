@@ -81,4 +81,12 @@ entity:
       additionalDataBind: 'enable: data.frontend && $parent.data.frontend'
       tab: frontend
       sort_order: 50
+    -
+      name: search
+      type: checkbox
+      has_default: true
+      label: Use in global search
+      title: The admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders. If you set this to 'Yes' than it will search in your entity also.
+      tab: admin
+      sort_order: 20
 

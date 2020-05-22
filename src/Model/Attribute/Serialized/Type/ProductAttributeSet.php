@@ -21,29 +21,10 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute\Serialized\Type;
 
-class ProductAttributeSet extends BaseType
+/**
+ * @deprecated
+ */
+class ProductAttributeSet extends \App\Umc\CoreBundle\Model\Attribute\Type\ProductAttributeSet
 {
-    /**
-     * @return string
-     */
-    public function getSourceModel(): string
-    {
-        $module = $this->getSerialized()->getAttribute()->getEntity()->getModule();
-        $parts = [
-            $module->getUmcCrudNamespace(),
-            $module->getUmcModuleName(),
-            'Source',
-            'Catalog',
-            'ProductAttributeSet'
-        ];
-        return implode('\\', $parts);
-    }
 
-    /**
-     * @return bool
-     */
-    public function isProductAttributeSet(): bool
-    {
-        return true;
-    }
 }

@@ -23,44 +23,10 @@ namespace App\Model\Attribute\Type;
 
 use App\Model\Attribute;
 
-class Factory
+/**
+ * @deprecated
+ */
+class Factory extends \App\Umc\CoreBundle\Model\Attribute\Type\Factory
 {
-    /**
-     * @var string
-     */
-    private const DEFAULT_TYPE_CLASS = BaseType::class;
-    /**
-     * @var array
-     */
-    private $typeMap;
-    /**
-     * @var \Twig\Environment;
-     */
-    private $twig;
 
-    /**
-     * AttributeTypeFactory constructor.
-     * @param array $typeMap
-     */
-    public function __construct(\Twig\Environment $twig, array $typeMap)
-    {
-        $this->twig = $twig;
-        $this->typeMap = $typeMap;
-    }
-
-    /**
-     * @param Attribute $attribute
-     * @param array $data
-     * @return BaseType
-     */
-    public function create(Attribute $attribute): BaseType
-    {
-        $type = $attribute->getType();
-        if (!isset($this->typeMap[$type])) {
-            throw new \InvalidArgumentException("There is no config for attribute type {$type}");
-        }
-        $config = $this->typeMap[$type];
-        $class = $config['class'] ?? self::DEFAULT_TYPE_CLASS;
-        return new $class($this->twig, $attribute, $config);
-    }
 }

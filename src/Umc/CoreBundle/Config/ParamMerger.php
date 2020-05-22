@@ -31,6 +31,7 @@ class ParamMerger
     const SORT_FLAG = 'sort';
     const FILTER_FLAG = 'filter';
     const EXTEND_FLAG = 'extends';
+    const NOT = '!';
     /**
      * @param ParameterBagInterface $parameterBag
      * @param $params
@@ -44,19 +45,31 @@ class ParamMerger
             $flags = $item[self::FLAGS] ?? [];
             $parameter = [];
             if (isset($flags[self::EXTEND_FLAG])) {
-                try {
-                    $parameter = $parameterBag->get($flags[self::EXTEND_FLAG]);
-                } catch (ParameterNotFoundException $e) {
-                    $parameter = [];
+                if (isset($parameters[$flags[self::EXTEND_FLAG]])) {
+                    $parameter = $parameters[$flags[self::EXTEND_FLAG]];
+                } else {
+                    try {
+                        $parameter = $parameterBag->get($flags[self::EXTEND_FLAG]);
+                    } catch (ParameterNotFoundException $e) {
+                        $parameter = [];
+                    }
                 }
             }
             $parameter = array_replace_recursive($parameter, $item[self::VALUE] ?? []);
             if (isset($flags[self::FILTER_FLAG])) {
                 $field = $flags[self::FILTER_FLAG];
+                if (substr($field, 0, strlen(self::NOT)) === self::NOT) {
+                    $not = true;
+                    $field = substr($field, strlen(self::NOT));
+                } else {
+                    $not = false;
+                }
                 $parameter = array_filter(
                     $parameter,
-                    function ($item) use ($field) {
-                        return !isset($item[$field]) || !$item[$field];
+                    function ($item) use ($field, $not) {
+                        return ($not)
+                            ? isset($item[$field]) && $item[$field]
+                            : !isset($item[$field]) || !$item[$field];
                     }
                 );
             }

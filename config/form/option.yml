@@ -23,7 +23,7 @@ rows:
   -
     default_radio:
       name: default_radio
-      type: radio
+      type: checkbox
       label: "Default"
       title: "Default"
       containerAttributes: 'data-bind="visible: $parent.isDropdown"'

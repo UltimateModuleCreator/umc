@@ -1,26 +1,29 @@
 attribute:
-#  template: '@UmcCore/form/elements/form/attribute.html.twig'
   panel:
     field: label
     default: New Attribute
   children:
-#    -
-#      code: _serialized
-#      className: Serialized
-#      tabLabel: Dynamic Rows
-#      formKey: serialized
-#      sortable: sortableListSerialized
-#      visible: "hasSerialized"
+    -
+      code: _dynamic
+      className: Dynamic
+      tabLabel: Dynamic Rows
+      formKey: dynamic
+      sortable: sortableListDynamic
+      visible: "data.type() === 'dynamic'"
+      addButton:
+        label: Add Dynamic field
+        split:
+          field: type
+          values: '%magento_dynamic_rows_type%'
     -
       code: _option
       className: Option
       tabLabel: Options
       formKey: option
       sortable: sortableListOptions
-      visible: "hasOptions"
+      visible: "data.type() === 'dropdown' || data.type() === 'multiselect'"
       addButton:
         label: Add Option
-#  settings_label: "Attribute default settings"
   tabs:
     -
       label: Name settings
@@ -77,7 +80,7 @@ attribute:
       has_default: false
       label: Acts as name
       title: Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.
-      additionalDataBind: 'click: $parent.nameChange, enable:data.type() === "text"'
+      additionalDataBind: "click: function (value) {return $parent.radioChange(value, '_attributes', 'is_name')}, enable:data.type() === 'text'"
       tab: name
       sort_order: 40
     -

@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Model\Module;
+use App\Umc\CoreBundle\Model\Module;
 use App\Util\CodingStandardsFactory;
 use App\Util\YamlLoader;
 

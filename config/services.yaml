@@ -940,7 +940,7 @@ services:
 #        $menuConfig: '%menu_type_config%'
 #    App\Model\Attribute\Serialized\Type\Factory:
 #      arguments:
-#        $typeMap: '%attribute_type_config%'
+#        $typeMap: '%attribute_type%'
 
     App\Model\Settings:
       arguments:
@@ -949,7 +949,7 @@ services:
 
     App\Model\Attribute\Type\Factory:
       arguments:
-        $typeMap: '%attribute_type_config%'
+        $typeMap: '%attribute_type%'
 
 #    App\Twig\SnakeCase:
 #      tags: ['twig.extension']

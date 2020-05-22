@@ -13,6 +13,9 @@ magento:
       - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/attribute.yml'
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/form/attribute.yml'
       - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/option.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/dynamic.yml'
+    destination: '%kernel.project_dir%/var/umc/magento/'
+    module_factory: 'magento.module.factory'
   versions:
     -
       label: 2.3.4+

@@ -21,47 +21,10 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute\Serialized;
 
-use App\Model\Attribute;
-use App\Model\Attribute\Serialized;
-use App\Model\Attribute\Serialized\Option\Factory as OptionFactory;
-use App\Model\Attribute\Serialized\Type\Factory as TypeFactory;
-use App\Util\StringUtil;
-
-class Factory
+/**
+ * @deprecated
+ */
+class Factory extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Factory
 {
-    /**
-     * @var OptionFactory
-     */
-    private $optionFactory;
-    /**
-     * @var StringUtil
-     */
-    private $stringUtil;
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
 
-    /**
-     * Factory constructor.
-     * @param OptionFactory $optionFactory
-     * @param StringUtil $stringUtil
-     * @param TypeFactory $typeFactory
-     */
-    public function __construct(OptionFactory $optionFactory, StringUtil $stringUtil, TypeFactory $typeFactory)
-    {
-        $this->optionFactory = $optionFactory;
-        $this->stringUtil = $stringUtil;
-        $this->typeFactory = $typeFactory;
-    }
-
-    /**
-     * @param Attribute $attribute
-     * @param array $data
-     * @return Serialized
-     */
-    public function create(Attribute $attribute, array $data = []): Serialized
-    {
-        return new Serialized($this->optionFactory, $this->typeFactory, $this->stringUtil, $attribute, $data);
-    }
 }

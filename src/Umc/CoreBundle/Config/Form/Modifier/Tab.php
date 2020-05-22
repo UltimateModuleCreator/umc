@@ -40,5 +40,4 @@ class Tab implements ModifierInterface
         }
         return $config;
     }
-
 }

@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
  */
 class AttributeType// implements OptionProviderInterface
 {
-    public const CONFIG_PARAM_NAME = 'attribute_type_config';
+    public const CONFIG_PARAM_NAME = 'attribute_type';
     public const GROUP_BY = 'input_type';
     public const DEFAULT_GROUP = 'Misc';
     /**

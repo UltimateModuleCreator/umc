@@ -21,10 +21,10 @@ declare(strict_types=1);
 
 namespace App\Service\Generator;
 
-use App\Model\Attribute;
-use App\Model\Entity;
-use App\Model\Module;
-use App\Util\StringUtil;
+use App\Umc\CoreBundle\Model\Attribute;
+use App\Umc\CoreBundle\Model\Entity;
+use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Util\StringUtil;
 
 class AttributeGenerator implements GeneratorInterface
 {

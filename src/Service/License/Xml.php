@@ -23,6 +23,9 @@ namespace App\Service\License;
 
 use App\Model\Module;
 
+/**
+ * @deprecated
+ */
 class Xml implements ProcessorInterface
 {
     /**

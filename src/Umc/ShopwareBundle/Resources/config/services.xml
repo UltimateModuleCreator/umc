@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="false" autowire="true" autoconfigure="true" />
-        <service id="shopware.platform.pool.provider" class="App\Umc\CoreBundle\Model\Config\Provider">
+        <service id="shopware.platform.pool.provider" class="App\Umc\CoreBundle\Config\Provider">
             <argument key="$file" type="string">%kernel.project_dir%/src/Umc/ShopwareBundle/Resources/config/platform.yml</argument>
             <tag name="platform.pool.provider" />
         </service>

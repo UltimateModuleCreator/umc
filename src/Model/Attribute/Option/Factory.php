@@ -21,18 +21,10 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute\Option;
 
-use App\Model\Attribute;
-use App\Model\Attribute\Option;
-
-class Factory
+/**
+ * @deprecated
+ */
+class Factory extends \App\Umc\CoreBundle\Model\Attribute\Option\Factory
 {
-    /**
-     * @param Attribute $attribute
-     * @param array $data
-     * @return Option
-     */
-    public function create(Attribute $attribute, array $data = []): Option
-    {
-        return new Option($attribute, $data);
-    }
+
 }

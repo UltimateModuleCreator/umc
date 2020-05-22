@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace App\Service\Generator;
 
-use App\Model\Module;
+use App\Umc\CoreBundle\Model\Module;
 
 interface GeneratorInterface
 {

@@ -21,29 +21,10 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute\Type;
 
-class ProductAttribute extends BaseType
+/**
+ * @deprecated
+ */
+class ProductAttribute extends \App\Umc\CoreBundle\Model\Attribute\Type\ProductAttribute
 {
-    /**
-     * @return string
-     */
-    public function getSourceModel(): string
-    {
-        $module = $this->getAttribute()->getEntity()->getModule();
-        $parts = [
-            $module->getUmcCrudNamespace(),
-            $module->getUmcModuleName(),
-            'Source',
-            'Catalog',
-            'ProductAttribute'
-        ];
-        return implode('\\', $parts);
-    }
 
-    /**
-     * @return bool
-     */
-    public function isProductAttribute(): bool
-    {
-        return true;
-    }
 }

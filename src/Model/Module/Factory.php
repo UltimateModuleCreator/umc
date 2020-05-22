@@ -21,55 +21,10 @@ declare(strict_types=1);
 
 namespace App\Model\Module;
 
-use App\Model\Entity\Factory as EntityFactory;
-use App\Model\Module;
-use App\Service\License\ProcessorInterface;
-use App\Util\StringUtil;
-
-class Factory
+/**
+ * @deprecated
+ */
+class Factory extends \App\Umc\CoreBundle\Model\Module\Factory
 {
-    /**
-     * @var EntityFactory
-     */
-    private $entityFactory;
-    /**
-     * @var StringUtil
-     */
-    private $stringUtil;
-    /**
-     * @var ProcessorInterface[]
-     */
-    private $licenseFormatter;
-    /**
-     * @var array
-     */
-    private $menuConfig;
 
-    /**
-     * ModuleFactory constructor.
-     * @param StringUtil $stringUtil
-     * @param EntityFactory $entityFactory
-     * @param array $licenseFormatter
-     * @param array $menuConfig
-     */
-//    public function __construct(
-//        StringUtil $stringUtil,
-//        EntityFactory $entityFactory,
-//        array $licenseFormatter,
-//        array $menuConfig
-//    ) {
-//        $this->stringUtil = $stringUtil;
-//        $this->entityFactory = $entityFactory;
-//        $this->licenseFormatter = $licenseFormatter;
-//        $this->menuConfig = $menuConfig;
-//    }
-
-    /**
-     * @param array $data
-     * @return Module
-     */
-    public function create(array $data = []): Module
-    {
-        return new Module($this->stringUtil, $this->entityFactory, $this->licenseFormatter, $this->menuConfig, $data);
-    }
 }

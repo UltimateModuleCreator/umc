@@ -27,7 +27,7 @@ attribute:
       has_default: true
       label: Filterable in admin grid
       title: If this is set to yes, your field will be filtrable in the admin grid
-      additionalDataBind: 'enable:canFilterInAdmin'
+      additionalDataBind: 'enable: data.type() !== "image" && data.type() !== "product_attribute_multiselect" && data.type() !== "multiselect" && data.type() !== "file" && data.type() !== "wysiwyg" && data.type() !== "dynamic" && data.admin_grid()'
       tab: admin
       sort_order: 90
     -

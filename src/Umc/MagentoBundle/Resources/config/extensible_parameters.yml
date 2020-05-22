@@ -340,3 +340,9 @@ magento_attribute_type:
     sort: label
     filter: disabled
   values: []
+magento_dynamic_rows_type:
+  flags:
+    extends: magento_attribute_type
+    sort: label
+    filter: '!can_be_dynamic'
+  values: []

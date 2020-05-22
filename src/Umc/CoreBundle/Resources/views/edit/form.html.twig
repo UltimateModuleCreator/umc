@@ -16,14 +16,16 @@
             {% endif %}
         {% endfor %}
         {% for id, child in form.children %}
+            {% if formConfig[child.formKey] is defined %}
             <a class="nav-item nav-link{% if active %} active {% endif %}"
                data-bind="if: hasChild('{{ child.code }}'), {% if child.visible is defined %} visible: {{ child.visible }}, {% endif %}attr: {id: uuid('nav-{{ formKey }}-{{ child.formKey }}-tab'), href: '#' + uuid('nav-{{ formKey }}-{{ child.formKey }}'), 'area-controls':  uuid('nav-{{ formKey }}-{{ child.formKey }}')}"
                data-toggle="tab"
                role="tab"
                aria-selected="true">
-                <h4>{{ child.tabLabel }}</h4>
+                <h4>{{ child.tabLabel }} (<span data-bind="{text: childrenCount('{{ child.code }}') }"></span>)</h4>
                 <i class="fa fa-exclamation-circle" style="display: none"></i>
             </a>
+            {% endif %}
             {% set active = false %}
         {% endfor %}
     {% endif %}
@@ -59,7 +61,8 @@
         {% endif %}
     {% endfor %}
     {% for id, child in form.children %}
-        <div class="tab-pane fade border-top-0 card"
+        {% if formConfig[child.formKey] is defined %}
+            <div class="tab-pane fade border-top-0 card"
              data-bind="if: hasChild('{{ child.code }}'), attr: {id: uuid('nav-{{ formKey }}-{{ child.formKey }}'), 'area-labelledby': uuid('nav-{{ formKey }}-{{ child.formKey }}-tab')}"
              role="tabpanel">
             <div class="card-header">
@@ -142,6 +145,7 @@
                 <div class="clear"></div>
             </div>
         </div>
+        {% endif %}
         {% set active = false %}
     {% endfor %}
     {% endblock %}

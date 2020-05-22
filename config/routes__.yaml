@@ -1,0 +1,51 @@
+#index:
+#  path: /
+#  controller: App\Controller\Index::run
+#  methods:
+#    - GET
+#edit:
+#  path: /edit
+#  controller: App\Controller\Edit::run
+#  methods:
+#    - GET
+#save:
+#  path: /save
+#  controller: App\Controller\Save::run
+#  methods:
+#    - POST
+#files:
+#  path: /files
+#  controller: App\Controller\Files::run
+#  methods:
+#  - GET
+#settings:
+#  path: /settings
+#  controller: App\Controller\Settings::run
+#  methods:
+#  - GET
+#save-settings:
+#  path: /save-settings
+#  controller: App\Controller\SaveSettings::run
+#  methods:
+#  - POST
+#docs:
+#  path: /docs
+#  controller: App\Controller\Docs::run
+#  methods:
+#  - GET
+#download:
+#  path: /download
+#  controller: App\Controller\Download::run
+#  methods:
+#  - GET
+
+#platform:
+#  path: /platform
+#  controller: App\Umc\CoreBundle\Controller\PlatformController::run
+#  methods:
+#    - GET
+#new:
+#  path: /new/{platform}/{version}
+#  controller: App\Umc\CoreBundle\Controller\NewController::run
+#  methods:
+#    - GET

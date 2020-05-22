@@ -21,18 +21,10 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute\Serialized\Option;
 
-use App\Model\Attribute\Serialized;
-use App\Model\Attribute\Serialized\Option;
-
-class Factory
+/**
+ * @deprecated
+ */
+class Factory extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Option\Factory
 {
-    /**
-     * @param Serialized $field
-     * @param array $data
-     * @return Option
-     */
-    public function create(Serialized $field, array $data = []): Option
-    {
-        return new Option($field, $data);
-    }
+
 }

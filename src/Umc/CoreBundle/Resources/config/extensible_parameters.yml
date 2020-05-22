@@ -19,7 +19,7 @@ attribute_type:
       input_type: Text Input
       schema_type: varchar
       schema_attributes: 'length="255"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: text
       templates:
@@ -46,7 +46,7 @@ attribute_type:
       input_type: Select
       schema_type: varchar
       schema_attributes: 'length="50"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: options
       templates:
@@ -74,7 +74,7 @@ attribute_type:
       input_type: Multiselect
       schema_type: text
       schema_attributes: ''
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         provider: multiselect
         save: multiselect
@@ -104,7 +104,7 @@ attribute_type:
       input_type: Select
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: options
       templates:
@@ -134,7 +134,7 @@ attribute_type:
       has_options: true
       schema_type: text
       schema_attributes: ''
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         provider: multiselect
         save: multiselect
@@ -164,7 +164,7 @@ attribute_type:
       has_options: true
       schema_type: varchar
       schema_attributes: ' length="3"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: options
       templates:
@@ -189,7 +189,7 @@ attribute_type:
       input_type: Multiselect
       schema_type: text
       schema_attributes: ''
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         provider: multiselect
         save: multiselect
@@ -220,7 +220,7 @@ attribute_type:
       has_options: false
       schema_type: timestamp
       schema_attributes: ''
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         save: date
         frontend: date
@@ -248,7 +248,7 @@ attribute_type:
       has_options: false
       schema_type: decimal
       schema_attributes: 'scale="4" precision="12"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: text
       templates:
@@ -276,7 +276,7 @@ attribute_type:
       input_type: Select
       schema_type: int
       schema_attributes: 'padding="11"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: options
       templates:
@@ -301,7 +301,7 @@ attribute_type:
       input_type: File
       schema_type: varchar
       schema_attributes: 'length="255"'
-      can_be_serialized: false
+      can_be_dynamic: false
       processor:
         provider: file
         save: file
@@ -324,7 +324,7 @@ attribute_type:
       input_type: File
       schema_type: varchar
       schema_attributes: 'length="255"'
-      can_be_serialized: false
+      can_be_dynamic: false
       processor:
         provider: image
         save: image
@@ -349,7 +349,7 @@ attribute_type:
       has_options: false
       schema_type: int
       schema_attributes: 'padding="11"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: text
       templates:
@@ -375,7 +375,7 @@ attribute_type:
       input_type: Multiselect
       schema_type: text
       schema_attributes: ''
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         provider: multiselect
         save: multiselect
@@ -403,7 +403,7 @@ attribute_type:
       input_type: Textarea
       schema_type: text
       schema_attributes: ''
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: text
       templates:
@@ -428,7 +428,7 @@ attribute_type:
       input_type: Textarea
       schema_type: mediumtext
       schema_attributes: ''
-      can_be_serialized: false
+      can_be_dynamic: false
       processor:
         frontend: editor
       templates:
@@ -454,7 +454,7 @@ attribute_type:
       has_options: true
       schema_type: smallint
       schema_attributes: 'padding="2"'
-      can_be_serialized: true
+      can_be_dynamic: true
       processor:
         frontend: options
       templates:
@@ -467,9 +467,9 @@ attribute_type:
         serialized:
           backend: attribute/form/serialized/yesno.html.twig
           frontend: attribute/frontend/serialized/yesno.html.twig
-    serialized:
-      label: Serialized
-      class: \App\Model\Attribute\Type\Serialized
+    dynamic:
+      label: Dynamic rows
+      class: \App\Model\Attribute\Type\Dynamic
       can_be_name: false
       can_show_in_grid: false
       can_have_options: false
@@ -477,10 +477,10 @@ attribute_type:
       full_text: false
       type_hint: string
       multiple: false
-      input_type: Serialized Fields
+      input_type: Dynamic Rows
       schema_type: text
       schema_attributes: ''
-      can_be_serialized: false
+      can_be_dynamic: false
       processor:
         provider: dynamicRows
         save: dynamicRows

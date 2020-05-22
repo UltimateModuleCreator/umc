@@ -5,3 +5,7 @@ controllers:
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+
+umc_core:
+    resource: ../../src/Umc/CoreBundle/Controller/
+    type: annotation

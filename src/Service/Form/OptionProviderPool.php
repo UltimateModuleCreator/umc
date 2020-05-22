@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace App\Service\Form;
 
-use App\Umc\CoreBundle\Model\Config\Modifier\Expand\Pool;
+use App\Umc\CoreBundle\Config\Modifier\Expand\Pool;
 
 /**
  * @deprecated

@@ -21,14 +21,14 @@ declare(strict_types=1);
 
 namespace App\Service\Generator;
 
-use App\Model\Entity;
-use App\Model\Module;
-use App\Util\StringUtil;
+use App\Umc\CoreBundle\Model\Entity;
+use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Util\StringUtil;
 
 class EntityGenerator implements GeneratorInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
     /**
@@ -41,7 +41,7 @@ class EntityGenerator implements GeneratorInterface
      * @param \Twig_Environment $twig
      * @param StringUtil $stringUtil
      */
-    public function __construct(\Twig_Environment $twig, StringUtil $stringUtil)
+    public function __construct(\Twig\Environment $twig, StringUtil $stringUtil)
     {
         $this->twig = $twig;
         $this->stringUtil = $stringUtil;

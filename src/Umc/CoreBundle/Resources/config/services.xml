@@ -21,10 +21,10 @@
             <argument key="$modifier" type="service" id="platform_pool.config_loader.modifier.composite" />
             <argument key="$providers" type="tagged_iterator" tag="platform.pool.provider" />
         </service>
-        <service id="platform_pool.config_loader.modifier.composite" class="App\Umc\CoreBundle\Model\Config\Modifier\Composite">
+        <service id="platform_pool.config_loader.modifier.composite" class="App\Umc\CoreBundle\Config\Modifier\Composite">
             <argument key="$modifiers" type="tagged_iterator" tag="platform_pool.config_loader.modifier" />
         </service>
-        <service id="platform_pool.config_loader.modifier.sorter" class="App\Umc\CoreBundle\Model\Config\Modifier\Sort">
+        <service id="platform_pool.config_loader.modifier.sorter" class="App\Umc\CoreBundle\Config\Modifier\Sort">
             <tag name="platform_pool.config_loader.modifier" />
             <argument key="$fields" type="collection">
                 <argument key="/" type="collection">
@@ -32,25 +32,26 @@
                 </argument>
             </argument>
         </service>
-        <!--[-] platform pool configuration-->
-<!--        <service id="form.config.processor.option.expander" class="App\Umc\CoreBundle\Config\Modifier\Expand">-->
-<!--            <tag name="form.config.processor" priority="2000" />-->
-<!--            <argument key="$pool" type="service" id="form.config.processor.option.expander.pool" />-->
-<!--            <argument key="$fields" type="collection">-->
-<!--                <argument key="optionProvider" type="string">options</argument>-->
-<!--            </argument>-->
-<!--            <argument key="$silent">true</argument>-->
-<!--        </service>-->
-<!--        <service id="form.config.processor.option.expander.pool" class="App\Umc\CoreBundle\Config\Modifier\Expand\Pool">-->
-<!--            <argument key="$expands" type="tagged_iterator" tag="option.provider" />-->
-<!--        </service>-->
-<!--        <service id="App\Umc\CoreBundle\Model\OptionProvider\Pool" class="App\Umc\CoreBundle\Model\OptionProvider\Pool">-->
-<!--            <argument key="$providers" type="tagged_iterator" tag="option.provider" />-->
-<!--        </service>-->
 
+        <service id="App\Umc\CoreBundle\Service\License\Pool" class="App\Umc\CoreBundle\Service\License\Pool">
+            <argument id="$processors" type="tagged_iterator" tag="licence.processor" />
+        </service>
+        <service id="license.processor.php" class="App\Umc\CoreBundle\Service\License\Processor">
+            <argument id="prefix" type="string"><![CDATA[\n\n]]></argument>
+            <argument id="suffix" type="string"><![CDATA[\n]]></argument>
+            <argument id="code" type="string">php</argument>
+            <tag name="licence.processor" />
+        </service>
+
+        <service id="license.processor.xml" class="App\Umc\CoreBundle\Service\License\Processor">
+            <argument id="prefix" type="string"><![CDATA[\n<!--\n]]></argument>
+            <argument id="suffix" type="string"><![CDATA[-->\n]]></argument>
+            <argument id="code" type="string">xml</argument>
+            <tag name="licence.processor" />
+        </service>
 
         <!--[+] controller composition -->
-        <service id="App\Umc\CoreBundle\Controller\NewController" class="App\Umc\CoreBundle\Controller\NewController">
+        <service id="App\Umc\CoreBundle\Controller\EditController" class="App\Umc\CoreBundle\Controller\EditController">
             <argument key="$formLoaderFactory" type="service" id="form.config.loader.factory" />
             <argument key="$uiModifier" type="service" id="App\Umc\CoreBundle\Config\Form\Modifier\Tab" />
         </service>
@@ -78,5 +79,11 @@
             </argument>
         </service>
         <!--[-] controller composition -->
+        <service id="App\Umc\CoreBundle\Model\Attribute\Serialized\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Serialized\Type\Factory">
+            <argument key="$typeMap" type="string">%attribute_type%</argument>
+        </service>
+        <service id="App\Umc\CoreBundle\Model\Attribute\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
+            <argument key="$typeMap" type="string">%attribute_type%</argument>
+        </service>
     </services>
 </container>

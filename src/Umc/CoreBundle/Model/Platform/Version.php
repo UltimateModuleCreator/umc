@@ -87,6 +87,21 @@ class Version
     }
 
     /**
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getModuleFactoryServiceId()
+    {
+        $config = $this->getConfig('module_factory');
+        if (!isset($config[0])) {
+            throw new \Exception( //TODO use custom exception
+                "Missing Module factory for platform {$this->getPlatform()->getName()}: {$this->getLabel()}"
+            );
+        }
+        return $config[0];
+    }
+
+    /**
      * @return Platform
      */
     public function getPlatform(): Platform
@@ -100,14 +115,5 @@ class Version
     public function setPlatform(Platform $platform): void
     {
         $this->platform = $platform;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttributeConfigKey(): string
-    {
-        $value = $this->getConfig('attribute_config_key', true);
-        return (string)($value[0] ?? '');
     }
 }

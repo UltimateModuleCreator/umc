@@ -28,15 +28,16 @@ option:
       tab: base
     -
       name: default_radio
-      type: radio
+      type: checkbox
       label: "Default"
       title: "Default"
-      containerAttributes: 'data-bind="visible: $parent.isDropdown"'
+      containerAttributes: "data-bind=\"visible: $parent.data.type() === 'dropdown'\""
+      additionalDataBind: "click: function (value) {return $parent.radioChange(value, '_option', 'default_radio')}"
       tab: base
     -
       name: default_checkbox
       type: checkbox
       label: "Default"
       title: "Default"
-      containerAttributes: 'data-bind="visible: $parent.isMultiselect"'
+      containerAttributes: "data-bind=\"visible: $parent.data.type() === 'multiselect'\""
       tab: base

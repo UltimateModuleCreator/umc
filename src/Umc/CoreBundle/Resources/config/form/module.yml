@@ -18,8 +18,8 @@ module:
       code: base
       sort_order: 10
     -
-      label: Menu
-      code: menu
+      label: Admin
+      code: admin
       sort_order: 20
 
   fields:
@@ -60,7 +60,7 @@ module:
       dataValidation: validate_required
       title: This is the title that will be added to the menu.
       sort_order: 40
-      tab: menu
+      tab: admin
     -
       name: menu_parent
       type: choice
@@ -71,7 +71,7 @@ module:
       title: This is the parent menu id of the module menu. Leave empty to add in top menu.
       options: '%admin_menu%'
       sort_order: 50
-      tab: menu
+      tab: admin
     -
       name: sort_order
       type: text
@@ -79,5 +79,23 @@ module:
       dataValidation: validate_required number
       dataValidationErrorMsg: "Sort order must be a number"
       title: This is the sort order in the menu.
-      tab: menu
+      tab: admin
       sort_order: 60
+    -
+      name: frontend
+      type: checkbox
+      label: Create Frontend
+      required: false
+      title: Create files for frontend
+      has_default: true
+      sort_order: 90
+      tab: base
+    -
+      name: front_key
+      type: text
+      label: Frontend URL Key
+      required: false
+      additionalDataBind: 'enable: data.frontend'
+      title: This is the url key for the module in case you add any entities that support frontend. Leave empty to autogenerate
+      sort_order: 100
+      tab: base

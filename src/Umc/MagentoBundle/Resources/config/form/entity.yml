@@ -6,14 +6,6 @@ entity:
       sort_order: 15
   fields:
     -
-      name: search
-      type: checkbox
-      has_default: true
-      label: Use in global search
-      title: The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders. If you set this to 'Yes' than it will search in your entity also.
-      tab: admin
-      sort_order: 20
-    -
       name: store
       type: checkbox
       has_default: true

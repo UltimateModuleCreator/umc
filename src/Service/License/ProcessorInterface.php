@@ -23,6 +23,9 @@ namespace App\Service\License;
 
 use App\Model\Module;
 
+/**
+ * @deprecated
+ */
 interface ProcessorInterface
 {
     public function process(Module $module): string;
