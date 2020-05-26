@@ -20,72 +20,11 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model;
 
-use App\Umc\CoreBundle\Model\Attribute\Factory as AttributeFactory;
-use App\Umc\CoreBundle\Model\Module;
-use App\Umc\CoreBundle\Util\StringUtil;
-
+/**
+ * @method getModule() : Module
+ */
 class Entity extends \App\Umc\CoreBundle\Model\Entity
 {
-    /**
-     * @var bool bool
-     */
-    protected $store;
-    /**
-     * @var bool;
-     */
-    protected $topMenu;
-    /**
-     * @var bool
-     */
-    protected $footerLinks;
-    /**
-     * @var \App\Umc\MagentoBundle\Model\Module
-     */
-    protected $module;
-
-    /**
-     * Entity constructor.
-     * @param StringUtil $stringUtil
-     * @param AttributeFactory $attributeFactory
-     * @param Module | \App\Umc\MagentoBundle\Model\Module $module
-     * @param array $data
-     */
-    public function __construct(
-        StringUtil $stringUtil,
-        AttributeFactory $attributeFactory,
-        Module $module,
-        array $data = []
-    ) {
-        parent::__construct($stringUtil, $attributeFactory, $module, $data);
-        $this->store = (bool)($data['store'] ?? false);
-        $this->topMenu = (bool)($data['top_menu'] ?? false);
-        $this->footerLinks = (bool)($data['footer_links'] ?? false);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFooterLinks(): bool
-    {
-        return $this->isFrontend() && $this->footerLinks;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStore(): bool
-    {
-        return $this->store;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTopMenu(): bool
-    {
-        return $this->isFrontend() && $this->topMenu;
-    }
-
     /**
      * @return string
      */
@@ -120,14 +59,15 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
                 $dependencies[] = 'magento/module-widget';
             }
         }
-        if ($this->isUpload()) {
+        if ($this->getAttributesWithFlag('upload')) {
             $dependencies[] = "magento/module-media-storage";
             $dependencies[] = "magento/module-store";
         }
         if ($this->isStore()) {
             $dependencies[] = "magento/module-store";
         }
-        if ($this->isProductAttribute() || $this->isProductAttributeSet()) {
+        if ($this->getAttributesWithFlag('product_attribute')
+            || $this->getAttributesWithFlag('product_attribute_set')) {
             $dependencies[] = "magento/module-catalog";
             $dependencies[] = "magento/module-eav";
         }
@@ -150,14 +90,15 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
                 $dependencies[] = 'Magento_Widget';
             }
         }
-        if ($this->isUpload()) {
+        if ($this->getAttributesWithFlag('upload')) {
             $dependencies[] = "Magento_MediaStorage";
             $dependencies[] = "Magento_Store";
         }
         if ($this->isStore()) {
             $dependencies[] = "Magento_Store";
         }
-        if ($this->isProductAttributeSet() || $this->isProductAttribute()) {
+        if ($this->getAttributesWithFlag('product_attribute')
+            || $this->getAttributesWithFlag('product_attribute_set')) {
             $dependencies[] = "Magento_Catalog";
             $dependencies[] = "Magento_Eav";
         }
@@ -170,7 +111,7 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
      */
     public function getAclName(): string
     {
-        return $this->module->getAclName() . '_' . $this->stringUtil->snake($this->getNameSingular());
+        return $this->getModule()->getAclName() . '_' . $this->stringUtil->snake($this->getNameSingular());
     }
 
     /**
@@ -260,17 +201,20 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
     }
 
     /**
+     * @param bool $short
      * @return string
      */
-    public function getInterface(): string
+    public function getInterface($short = false): string
     {
-        $parts = [
-            $this->module->getNamespace(),
-            $this->module->getModuleName(),
-            'Api',
-            'Data',
-            $this->getNameSingular(),
-        ];
+        if (!$short) {
+            $parts = [
+                $this->module->getNamespace(),
+                $this->module->getModuleName(),
+                'Api',
+                'Data',
+            ];
+        }
+        $parts[] = $this->getNameSingular();
         return $this->stringUtil->glueClassParts($parts) . 'Interface';
     }
 
@@ -407,9 +351,7 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
     public function toArray(): array
     {
         $result = parent::toArray();
-        $result['store'] = $this->store;
-        $result['top_menu'] = $this->topMenu;
-        $result['footer_links'] = $this->footerLinks;
+
         return $result;
     }
 

@@ -37,7 +37,7 @@ attribute:
       cols: 6
     -
       label: Frontend
-      code: frotnend
+      code: frontend
       sort_order: 30
     -
       label: Misc
@@ -70,7 +70,7 @@ attribute:
       has_default: true
       label: Attribute Type
       dataValidation: validate_required
-      options: '%magento_attribute_type%'
+      options: '%attribute_type%'
       title: This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.
       tab: name
       sort_order: 30
@@ -121,22 +121,6 @@ attribute:
       tab: frontend
       sort_order: 130
 
-    -
-      name: note
-      type: text
-      required: false
-      label: Note
-      title: This will be added as a comment under the field in the admin add/edit form.
-      tab: misc
-      sort_order: 150
-    -
-      name: tooltip
-      type: text
-      required: false
-      label: Tooltip
-      title: This will be added as a tooltip in the admin add / edit form
-      tab: misc
-      sort_order: 160
     -
       name: default_value
       type: textarea

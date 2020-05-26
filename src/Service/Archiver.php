@@ -24,6 +24,9 @@ namespace App\Service;
 use App\Util\FinderFactory;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * @deprecated
+ */
 class Archiver
 {
     /**

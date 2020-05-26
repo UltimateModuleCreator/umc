@@ -2,6 +2,9 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="module.destination.root" type="string">%kernel.project_dir%/var/umc/</parameter>
+    </parameters>
     <services>
         <defaults public="false" autowire="true" autoconfigure="true" />
         <prototype namespace="App\Umc\CoreBundle\" resource="../../*" exclude="../../{DependencyInjection,Tests}" />
@@ -79,11 +82,35 @@
             </argument>
         </service>
         <!--[-] controller composition -->
-        <service id="App\Umc\CoreBundle\Model\Attribute\Serialized\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Serialized\Type\Factory">
+        <service id="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory">
             <argument key="$typeMap" type="string">%attribute_type%</argument>
         </service>
         <service id="App\Umc\CoreBundle\Model\Attribute\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
             <argument key="$typeMap" type="string">%attribute_type%</argument>
+        </service>
+        <service id="default.generator.pool" class="App\Umc\CoreBundle\Service\Generator\Pool" public="true">
+            <argument key="$generators" type="collection">
+                <argument key="module" type="service" id="default.generator.module" />
+                <argument key="entity" type="service" id="default.generator.entity" />
+            </argument>
+        </service>
+        <service id="default.generator.module" class="App\Umc\CoreBundle\Service\Generator\Module" />
+        <service id="default.generator.entity" class="App\Umc\CoreBundle\Service\Generator\Entity" />
+
+        <service id="App\Umc\CoreBundle\Service\Builder" class="App\Umc\CoreBundle\Service\Builder">
+            <argument key="$configLoaderFactory" type="service" id="source.config.loader.factory" />
+        </service>
+        <service id="source.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\VersionAwareFactory">
+            <argument key="$modifier" type="service" id="form.config.modifier" />
+            <argument key="$configKey" type="string">source</argument>
+            <argument key="$className" type="string">App\Umc\CoreBundle\Config\Source\Config</argument>
+        </service>
+        <service id="source.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="source.config.modifier" />
+        </service>
+        <service id="source.config.modifier.remove" class="App\Umc\CoreBundle\Config\Modifier\Remove">
+            <tag name="source.config.modifier" priority="10" />
+            <argument key="$key" type="string">enabled</argument>
         </service>
     </services>
 </container>

@@ -1,0 +1,25 @@
+{{ indent }}<?php ${{ attribute.getCode()|camel }} = ${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}(true);?>
+{{ indent }}<?php if (count(${{ attribute.getCode()|camel }}) > 0): ?>
+{{ indent }}<div class="{ entity.getNameSingular()|hyphem }}-{{ attribute.getCode()|hyphen }}">
+{{ indent }}    <strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')); ?></strong>
+{{ indent }}</div>
+{{ indent }}<table>
+{{ indent }}    <tr>
+{{ indent }}        <th>#</th>
+{% for field in attribute.getDynamic() %}
+{% if field.isShowInView() %}
+{{ indent }}        <th><?= $block->escapeHtml(__('{{ field.getLabel() }}:')); ?></th>
+{% endif %}
+{% endfor %}
+{{ indent }}    </tr>
+{{ indent }}    <?php foreach (${{ attribute.getCode()|camel }} as $index => $item): ?>
+{{ indent }}    <td><?= $block->escapeHtml($index + 1);?></td>
+{% for field in attribute.getDynamic() %}
+{% if field.isShowInView() %}
+{{ indent }}    <td>{{field.getTypeInstance().renderTemplate('serialized_frontend', {mode: 'view'})|raw}}</td>
+{% endif %}
+{% endfor %}
+{{ indent }}    </td>
+{{ indent }}    <?php endforeach;?>
+{{ indent }}</table>
+{{ indent }}<?php endif;?>

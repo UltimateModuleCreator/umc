@@ -23,6 +23,9 @@ use App\Umc\CoreBundle\Model\Module;
 use App\Util\CodingStandardsFactory;
 use App\Util\YamlLoader;
 
+/**
+ * @deprecated
+ */
 class Builder
 {
     /**

@@ -19,15 +19,12 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use Symfony\Component\Finder\Finder;
+use App\Umc\CoreBundle\Service\FileFinderFactory;
 
-class FinderFactory
+/**
+ * @deprecated
+ */
+class FinderFactory extends FileFinderFactory
 {
-    /**
-     * @return Finder
-     */
-    public function create(): Finder
-    {
-        return new Finder();
-    }
+
 }

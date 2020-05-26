@@ -24,7 +24,7 @@ namespace App\Model\Attribute\Serialized;
 /**
  * @deprecated
  */
-class Option extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Option
+class Option extends \App\Umc\CoreBundle\Model\Attribute\Dynamic\Option
 {
 
 }

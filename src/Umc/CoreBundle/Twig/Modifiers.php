@@ -51,6 +51,12 @@ class Modifiers extends AbstractExtension
             new TwigFilter('camel', [$this->stringUtils, 'camel']),
             new TwigFilter('hyphen', [$this->stringUtils, 'hyphen']),
             new TwigFilter('ucfirst', [$this->stringUtils, 'ucfirst']),
+            new TwigFilter(
+                'repeat',
+                function ($string, $length = 1) {
+                    return str_repeat($string, $length);
+                }
+            ),
         ];
     }
 

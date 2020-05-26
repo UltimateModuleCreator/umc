@@ -1,0 +1,148 @@
+<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_form.{{ entity.getNameSingular()|camel|lower }}_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">{{ entity.getLabelSingular()|ucfirst }} Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="{{ entity.getVirtualType('ButtonBack') }}"/>
+            <button name="delete" class="{{ entity.getVirtualType('ButtonDelete') }}"/>
+            <button name="reset" class="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Block\Adminhtml\Button\Reset"/>
+            <button name="save" class="{{ entity.GetVirtualType('ButtonSave') }}"/>
+        </buttons>
+        <namespace>{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>{{ module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_form.{{ entity.getNameSingular()|camel|lower }}_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="{{ entity.getNameSingular()|camel|lower }}_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="{{ module.getModuleName()|camel|lower }}/{{ entity.getNameSingular()|camel|lower }}/save"/>
+        </settings>
+        <dataProvider class="{{ entity.getVirtualType('UiFormDataProvider') }}" name="{{ entity.getNameSingular()|camel|lower }}_form_data_source" />
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">{{ entity.getLabelSingular()|ucfirst }} Information</label>
+        </settings>
+        <field name="{{ entity.getPk() }}" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>{{ entity.getPk() }}</dataScope>
+            </settings>
+        </field>
+{% if entity.isFrontend() %}
+        <field name="is_active" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">is_active</item>
+                    <item name="default" xsi:type="string">1</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Is Active</label>
+                <dataScope>is_active</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+{% endif %}
+{% for attribute in entity.getAttributes() %}
+{{ attribute.getTypeInstance().renderTemplate('form')|raw }}
+{% endfor %}
+{% if entity.isStore() %}
+    <field name="store_id" formElement="multiselect">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                <item name="default" xsi:type="number">0</item>
+            </item>
+        </argument>
+        <settings>
+            <validation>
+                <rule name="required-entry" xsi:type="boolean">true</rule>
+            </validation>
+            <dataType>int</dataType>
+            <label translate="true">Store View</label>
+            <dataScope>store_id</dataScope>
+        </settings>
+        <formElements>
+            <multiselect>
+                <settings>
+                    <options class="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Source\StoreView" />
+                </settings>
+            </multiselect>
+        </formElements>
+    </field>
+{% endif %}
+    </fieldset>
+{% if entity.isSeo() %}
+    <fieldset name="meta">
+        <settings>
+            <label translate="true">Meta Data</label>
+        </settings>
+        <field name="meta_title" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Meta Title</label>
+                <dataScope>meta_title</dataScope>
+            </settings>
+        </field>
+        <field name="meta_description" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Meta Description</label>
+                <dataScope>meta_description</dataScope>
+            </settings>
+        </field>
+        <field name="meta_keywords" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Meta Keywords</label>
+                <dataScope>meta_keywords</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+{% endif %}
+</form>

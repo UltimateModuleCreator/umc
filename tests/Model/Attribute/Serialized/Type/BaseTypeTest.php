@@ -93,12 +93,12 @@ class BaseTypeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute\Serialized\Type\BaseType::getSerialized
+     * @covers \App\Model\Attribute\Serialized\Type\BaseType::getDynamic
      * @covers \App\Model\Attribute\Serialized\Type\BaseType::__construct
      */
     public function testGetSerialized()
     {
-        $this->assertEquals($this->serialized, $this->getInstance([])->getSerialized());
+        $this->assertEquals($this->serialized, $this->getInstance([])->getDynamic());
     }
 
     /**

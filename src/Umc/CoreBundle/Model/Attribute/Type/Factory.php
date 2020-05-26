@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Model\Attribute\Type;
 
 use App\Umc\CoreBundle\Model\Attribute;
+use Twig\Environment as Twig;
 
 class Factory
 {
@@ -34,15 +35,16 @@ class Factory
      */
     private $typeMap;
     /**
-     * @var \Twig\Environment;
+     * @var Twig;
      */
     private $twig;
 
     /**
-     * AttributeTypeFactory constructor.
+     * Factory constructor.
+     * @param Twig $twig
      * @param array $typeMap
      */
-    public function __construct(\Twig\Environment $twig, array $typeMap)
+    public function __construct(Twig $twig, array $typeMap)
     {
         $this->twig = $twig;
         $this->typeMap = $typeMap;
@@ -50,7 +52,6 @@ class Factory
 
     /**
      * @param Attribute $attribute
-     * @param array $data
      * @return BaseType
      */
     public function create(Attribute $attribute): BaseType

@@ -38,12 +38,4 @@ class ProductAttribute extends BaseType
         ];
         return implode('\\', $parts);
     }
-
-    /**
-     * @return bool
-     */
-    public function isProductAttribute(): bool
-    {
-        return true;
-    }
 }

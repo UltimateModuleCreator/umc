@@ -44,6 +44,10 @@ class Loader
      */
     private $modifier;
     /**
+     * @var ProcessorFactory
+     */
+    private $processorFactory;
+    /**
      * @var array
      */
     private $config;
@@ -52,25 +56,33 @@ class Loader
      * Loader constructor.
      * @param ParameterBagInterface $parameterBag
      * @param ModifierInterface $modifier
-     * @param array $providers
+     * @param ProcessorFactory $processorFactory
+     * @param iterable $providers
      * @param string $configClassName
      */
     public function __construct(
         ParameterBagInterface $parameterBag,
         ModifierInterface $modifier,
+        ProcessorFactory $processorFactory,
         iterable $providers,
         string $configClassName
     ) {
         $this->parameterBag = $parameterBag;
         $this->configClassName = $configClassName;
+        $this->processorFactory = $processorFactory;
         $this->modifier = $modifier;
         $this->providers = [];
         foreach ($providers as $provider) {
-            if (!$provider instanceof Provider) {
-                throw new \InvalidArgumentException("Config providers must be instance of " . Provider::class);
-            }
-            $this->providers[] = $provider;
+            $this->addProvider($provider);
         }
+    }
+
+    /**
+     * @param Provider $provider
+     */
+    private function addProvider(Provider $provider)
+    {
+        $this->providers[] = $provider;
     }
 
     /**
@@ -79,7 +91,7 @@ class Loader
     public function getConfig(): array
     {
         if ($this->config === null) {
-            $processor = new Processor();
+            $processor = $this->processorFactory->create();
             $config = $this->instantiateConfigClass();
             $configuration = $processor->processConfiguration(
                 $config,

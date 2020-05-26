@@ -116,7 +116,7 @@ class EditController extends AbstractController
      */
     private function loadModuleData(Platform $platform, Platform\Version $version, $module)
     {
-        return $this->moduleRepository->load($module, $platform, $version)['module'];
+        return $this->moduleRepository->load($module, $version)['module'];
     }
 
     /**

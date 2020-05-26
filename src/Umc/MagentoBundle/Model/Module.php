@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model;
 
-use App\Umc\CoreBundle\Model\Entity;
+use App\Umc\MagentoBundle\Model\Entity;
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
 use App\Umc\CoreBundle\Util\StringUtil;
 
@@ -36,14 +36,6 @@ class Module extends \App\Umc\CoreBundle\Model\Module
      * @var bool
      */
     protected $umcCrud;
-    /**
-     * @var string
-     */
-    protected $configTab;
-    /**
-     * @var int
-     */
-    protected $configTabPosition;
 
     /**
      * Module constructor.
@@ -59,26 +51,8 @@ class Module extends \App\Umc\CoreBundle\Model\Module
         array $data = []
     ) {
         parent::__construct($stringUtil, $entityFactory, $data);
-        $this->configTab = (string)($data['config_tab'] ?? '');
-        $this->configTabPosition = (int)($data['config_tab_position'] ?? '');
         $this->umcCrud = (bool)($data['umc_crud'] ?? false);
         $this->menuConfig = $menuConfig;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfigTab(): string
-    {
-        return $this->configTab ? $this->configTab : $this->getModuleName();
-    }
-
-    /**
-     * @return int
-     */
-    public function getConfigTabPosition(): int
-    {
-        return $this->configTabPosition;
     }
 
     /**
@@ -96,8 +70,6 @@ class Module extends \App\Umc\CoreBundle\Model\Module
     {
         $result = parent::toArray();
         $result['umc_crud'] = $this->umcCrud;
-        $result['config_tab'] = $this->configTab;
-        $result['config_tab_position'] = $this->configTabPosition;
         return $result;
     }
 
@@ -203,76 +175,6 @@ class Module extends \App\Umc\CoreBundle\Model\Module
         };
         $this->cacheData['menu_parents'] = array_reverse($parents);
         return $this->cacheData['menu_parents'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStore(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->getStoreEntities()) > 0;
-    }
-
-    /**
-     * @return Entity[]
-     */
-    public function getStoreEntities()
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['store'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductAttribute(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->cacheData['entity']['product_attribute']) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductAttributeSet(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->cacheData['entity']['product_attribute_set']) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasTopMenu(): bool
-    {
-        return count($this->getMainMenuEntities()) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasFooterMenu(): bool
-    {
-        return count($this->getFooterLinksEntities()) > 0;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMainMenuEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['main_menu'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getFooterLinksEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['footer_links'];
     }
 
     /**

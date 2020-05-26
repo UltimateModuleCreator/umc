@@ -23,12 +23,10 @@ namespace App\Service\Generator;
 
 use App\Umc\CoreBundle\Model\Module;
 
-interface GeneratorInterface
+/**
+ * @deprecated
+ */
+interface GeneratorInterface extends \App\Umc\CoreBundle\Service\Generator\GeneratorInterface
 {
-    /**
-     * @param Module $module
-     * @param array $fileConfig
-     * @return array
-     */
-    public function generateContent(Module $module, array $fileConfig): array;
+
 }

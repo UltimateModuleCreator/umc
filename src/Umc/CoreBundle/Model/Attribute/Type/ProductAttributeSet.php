@@ -21,6 +21,9 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Model\Attribute\Type;
 
+/**
+ * @method getAttribute(): \App\Umc\MagentoBundle\Model\Attribute
+ */
 class ProductAttributeSet extends BaseType
 {
     /**
@@ -37,13 +40,5 @@ class ProductAttributeSet extends BaseType
             'ProductAttributeSet'
         ];
         return implode('\\', $parts);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductAttributeSet(): bool
-    {
-        return true;
     }
 }

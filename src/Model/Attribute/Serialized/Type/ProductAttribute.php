@@ -24,7 +24,7 @@ namespace App\Model\Attribute\Serialized\Type;
 /**
  * @deprecated
  */
-class ProductAttribute extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Type\ProductAttribute
+class ProductAttribute extends \App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\ProductAttribute
 {
 
 }

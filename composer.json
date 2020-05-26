@@ -22,7 +22,8 @@
     },
     "require-dev": {
         "symfony/dotenv": "*",
-        "symfony/phpunit-bridge": "^5.0"
+        "symfony/phpunit-bridge": "^5.0",
+        "symfony/profiler-pack": "^1.0"
     },
     "config": {
         "preferred-install": {

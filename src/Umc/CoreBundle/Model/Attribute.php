@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Model;
 
-use App\Umc\CoreBundle\Model\Attribute\Serialized;
-use App\Umc\CoreBundle\Model\Attribute\Serialized\Factory as SerializedFactory;
+use App\Umc\CoreBundle\Model\Attribute\Dynamic;
+use App\Umc\CoreBundle\Model\Attribute\Dynamic\Factory as DynamicFactory;
 use App\Umc\CoreBundle\Model\Attribute\Type\BaseType;
 use App\Umc\CoreBundle\Model\Attribute\Type\Factory as TypeFactory;
 use App\Umc\CoreBundle\Model\Attribute\Option;
@@ -34,109 +34,89 @@ class Attribute
     /**
      * @var BaseType
      */
-    private $typeInstance;
+    protected $typeInstance;
     /**
      * @var TypeFactory
      */
-    private $typeFactory;
+    protected $typeFactory;
     /**
      * @var Entity
      */
-    private $entity;
+    protected $entity;
     /**
      * @var OptionFactory
      */
-    private $optionFactory;
+    protected $optionFactory;
     /**
-     * @var SerializedFactory
+     * @var DynamicFactory
      */
-    private $serializedFactory;
-    /**
-     * @var string
-     */
-    private $code;
+    protected $dynamicFactory;
     /**
      * @var string
      */
-    private $label;
+    protected $code;
     /**
      * @var string
      */
-    private $type;
-    /**
-     * @var bool
-     */
-    private $isName;
-    /**
-     * @var bool
-     */
-    private $required;
-    /**
-     * @var bool
-     */
-    private $showInList;
-    /**
-     * @var bool
-     */
-    private $showInView;
-    /**
-     * @var bool
-     */
-    private $adminGrid;
-    /**
-     * @var bool
-     */
-    private $adminGridHidden;
-    /**
-     * @var bool
-     */
-    private $adminGridFilter;
+    protected $label;
     /**
      * @var string
      */
-    private $note;
-    /**
-     * @var string
-     */
-    private $tooltip;
+    protected $type;
     /**
      * @var bool
      */
-    private $fullText;
+    protected $isName;
     /**
      * @var bool
      */
-    private $expanded;
+    protected $adminGrid;
+    /**
+     * @var bool
+     */
+    protected $required;
+    /**
+     * @var bool
+     */
+    protected $showInList;
+    /**
+     * @var bool
+     */
+    protected $showInView;
     /**
      * @var string
      */
-    private $defaultValue;
+    protected $defaultValue;
     /**
      * @var Option[]
      */
-    private $options;
+    protected $options;
     /**
-     * @var Serialized[]
+     * @var Attribute\Dynamic[]
      */
-    private $serialized;
+    protected $dynamic;
     /**
      * @var StringUtil
      */
-    private $stringUtil;
+    protected $stringUtil;
     /**
-     * @var Serialized[]
+     * @var Attribute\Dynamic[]
      */
-    private $serializedWithOptions;
+    protected $dynamicWithOptions;
     /**
      * @var string;
      */
-    private $optionType;
+    protected $optionType;
+    /**
+     * @var bool
+     */
+    protected $areOptionsNumeric;
 
     /**
      * Attribute constructor.
      * @param TypeFactory $typeFactory
      * @param OptionFactory $optionFactory
-     * @param SerializedFactory $serializedFactory
+     * @param DynamicFactory $dynamicFactory
      * @param StringUtil $stringUtil
      * @param Entity $entity
      * @param array $data
@@ -144,14 +124,14 @@ class Attribute
     public function __construct(
         TypeFactory $typeFactory,
         OptionFactory $optionFactory,
-        SerializedFactory $serializedFactory,
+        DynamicFactory $dynamicFactory,
         StringUtil $stringUtil,
         Entity $entity,
         array $data = []
     ) {
         $this->typeFactory = $typeFactory;
         $this->optionFactory = $optionFactory;
-        $this->serializedFactory = $serializedFactory;
+        $this->dynamicFactory = $dynamicFactory;
         $this->stringUtil = $stringUtil;
         $this->entity = $entity;
         $this->code = (string)($data['code'] ?? '');
@@ -161,25 +141,18 @@ class Attribute
         $this->required = (bool)($data['required'] ?? false);
         $this->showInList = (bool)($data['show_in_list'] ?? false);
         $this->showInView = (bool)($data['show_in_view'] ?? false);
-        $this->adminGrid = (bool)($data['admin_grid'] ?? false);
-        $this->adminGridHidden = (bool)($data['admin_grid_hidden'] ?? false);
-        $this->adminGridFilter = (bool)($data['admin_grid_filter'] ?? false);
-        $this->note = (string)($data['note'] ?? '');
-        $this->tooltip = (string)($data['tooltip'] ?? '');
         $this->defaultValue = (string)($data['default_value'] ?? '');
-        $this->fullText = (bool)($data['full_text'] ?? false);
-        $this->expanded = (bool)($data['expanded'] ?? false);
         $this->options = array_map(
             function ($option) {
                 return $this->optionFactory->create($this, $option);
             },
             $data['_options'] ?? []
         );
-        $this->serialized = array_map(
-            function ($serialized) {
-                return $this->serializedFactory->create($this, $serialized);
+        $this->dynamic = array_map(
+            function ($dynamic) {
+                return $this->dynamicFactory->create($this, $dynamic);
             },
-            $data['_serialized'] ?? []
+            $data['_dynamic'] ?? []
         );
     }
 
@@ -220,7 +193,7 @@ class Attribute
      */
     public function isName(): bool
     {
-        return $this->isName && $this->getTypeInstance()->isCanBeName();
+        return $this->isName && $this->getTypeInstance()->getFlag('can_be_name');
     }
 
     /**
@@ -228,7 +201,7 @@ class Attribute
      */
     public function isRequired(): bool
     {
-        return $this->required && $this->getTypeInstance()->isCanBeRequired();
+        return $this->required && $this->getTypeInstance()->getFlag('can_be_required');
     }
 
     /**
@@ -236,7 +209,7 @@ class Attribute
      */
     public function isShowInList(): bool
     {
-        return $this->getEntity()->isFrontendList() && $this->showInList;
+        return $this->getEntity()->isFrontend() && $this->showInList;
     }
 
     /**
@@ -244,47 +217,7 @@ class Attribute
      */
     public function isShowInView(): bool
     {
-        return $this->getEntity()->isFrontendView() && $this->showInView;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAdminGrid(): bool
-    {
-        return $this->adminGrid && $this->getTypeInstance()->isCanShowInGrid();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAdminGridHidden(): bool
-    {
-        return $this->isAdminGrid() && $this->adminGridHidden;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAdminGridFilter(): bool
-    {
-        return $this->isAdminGrid() && $this->adminGridFilter && $this->getTypeInstance()->isCanFilterInGrid();
-    }
-
-    /**
-     * @return string
-     */
-    public function getNote(): string
-    {
-        return $this->note;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTooltip(): string
-    {
-        return $this->tooltip;
+        return $this->getEntity()->isFrontend() && $this->showInView;
     }
 
     /**
@@ -314,51 +247,35 @@ class Attribute
     /**
      * @return bool
      */
-    public function isSerialized(): bool
+    public function isDynamic(): bool
     {
-        return $this->type === 'serialized';
+        return $this->type === 'dynamic';
     }
 
     /**
-     * @return Serialized[]
+     * @return Attribute\Dynamic[]
      */
-    public function getSerialized(): array
+    public function getDynamic(): array
     {
-        return $this->isSerialized() ? $this->serialized : [];
+        return $this->isDynamic() ? $this->dynamic : [];
     }
 
     /**
-     * @return Serialized[]
+     * @return Attribute\Dynamic[]
      */
-    public function getSerializedWithOptions(): array
+    public function getDynamicWithOptions(): array
     {
-        if ($this->serializedWithOptions === null) {
-            $this->serializedWithOptions = array_values(
+        if ($this->dynamicWithOptions === null) {
+            $this->dynamicWithOptions = array_values(
                 array_filter(
-                    $this->getSerialized(),
-                    function (Serialized $serialized) {
-                        return $serialized->isManualOptions();
+                    $this->getDynamic(),
+                    function (Dynamic $dynamic) {
+                        return $dynamic->isManualOptions();
                     }
                 )
             );
         }
-        return $this->serializedWithOptions;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFullText(): bool
-    {
-        return $this->getTypeInstance()->isFullText() && $this->fullText;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExpanded(): bool
-    {
-        return $this->expanded;
+        return $this->dynamicWithOptions;
     }
 
     /**
@@ -375,48 +292,26 @@ class Attribute
     /**
      * @return bool
      */
-    public function isUpload(): bool
+    public function isManualOptions(): bool
     {
-        return $this->getTypeInstance()->isUpload();
+        return $this->getTypeInstance()->getFlag('manual_options');
     }
 
     /**
      * @return bool
      */
-    public function isManualOptions(): bool
+    public function areOptionsNumerical(): bool
     {
-        return $this->getTypeInstance()->isCanHaveOptions();
-    }
-
-    /**
-     * @return string
-     */
-    public function getOptionType(): string
-    {
-        if ($this->optionType === null) {
-            $this->optionType = 'number';
+        if ($this->areOptionsNumeric === null) {
+            $this->areOptionsNumeric = true;
             foreach ($this->getOptions() as $option) {
                 if (!is_numeric($option->getValue())) {
-                    $this->optionType = 'string';
+                    $this->areOptionsNumeric = false;
                     break;
                 }
             }
         }
-        return $this->optionType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOptionSourceVirtualType(): string
-    {
-        $parts = [
-            $this->getEntity()->getModule()->getModuleName(),
-            $this->getEntity()->getNameSingular(),
-            'Source',
-            $this->getCode()
-        ];
-        return $this->stringUtil->glueClassParts($parts, '');
+        return $this->areOptionsNumeric;
     }
 
     /**
@@ -437,19 +332,21 @@ class Attribute
     }
 
     /**
-     * @return bool
+     * @return array
+     * //TODO: cache flags
      */
-    public function isProductAttribute(): bool
+    public function getFlags()
     {
-        return $this->getTypeInstance()->isProductAttribute();
+        $flags = [];
+        $this->isShowInList() && $flags[] = 'show_in_list';
+        $this->isShowInView() && $flags[] = 'show_in_view';
+        $flags = array_merge($flags, $this->getTypeInstance()->getFlags());
+        return $flags;
     }
 
-    /**
-     * @return bool
-     */
-    public function isProductAttributeSet(): bool
+    public function getProcessors(): array
     {
-        return $this->getTypeInstance()->isProductAttributeSet();
+        return $this->getTypeInstance()->getProcessors();
     }
 
     /**
@@ -465,25 +362,18 @@ class Attribute
             'required' => $this->required,
             'show_in_list' => $this->showInList,
             'show_in_view' => $this->showInView,
-            'admin_grid' => $this->adminGrid,
-            'admin_grid_hidden' => $this->adminGridHidden,
-            'admin_grid_filter' => $this->adminGridFilter,
-            'note' => $this->note,
-            'tooltip' => $this->tooltip,
             'default_value' => $this->defaultValue,
-            'full_text' => $this->fullText,
-            'expanded' => $this->expanded,
             '_options' => array_map(
                 function (Option $option) {
                     return $option->toArray();
                 },
                 $this->options
             ),
-            '_serialized' => array_map(
-                function (Serialized $serialized) {
-                    return $serialized->toArray();
+            '_dynamic' => array_map(
+                function (Dynamic $dynamic) {
+                    return $dynamic->toArray();
                 },
-                $this->serialized
+                $this->dynamic
             ),
         ];
     }

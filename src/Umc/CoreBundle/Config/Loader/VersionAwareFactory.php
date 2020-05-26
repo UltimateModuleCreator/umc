@@ -21,6 +21,7 @@ namespace App\Umc\CoreBundle\Config\Loader;
 
 use App\Umc\CoreBundle\Config\Loader;
 use App\Umc\CoreBundle\Config\Modifier\ModifierInterface;
+use App\Umc\CoreBundle\Config\ProcessorFactory;
 use App\Umc\CoreBundle\Config\Provider\Factory;
 use App\Umc\CoreBundle\Model\Platform\Version;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -40,6 +41,10 @@ class VersionAwareFactory
      */
     private $modifier;
     /**
+     * @var ProcessorFactory
+     */
+    private $processorFactory;
+    /**
      * @var string
      */
     private $configKey;
@@ -57,6 +62,7 @@ class VersionAwareFactory
      * @param Factory $providerFactory
      * @param ParameterBagInterface $parameterBag
      * @param ModifierInterface $modifier
+     * @param ProcessorFactory $processorFactory
      * @param string $configKey
      * @param string $className
      * @param bool $usePlatform
@@ -65,6 +71,7 @@ class VersionAwareFactory
         Factory $providerFactory,
         ParameterBagInterface $parameterBag,
         ModifierInterface $modifier,
+        ProcessorFactory $processorFactory,
         string $configKey,
         string $className,
         bool $usePlatform = true
@@ -72,6 +79,7 @@ class VersionAwareFactory
         $this->providerFactory = $providerFactory;
         $this->parameterBag = $parameterBag;
         $this->modifier = $modifier;
+        $this->processorFactory = $processorFactory;
         $this->configKey = $configKey;
         $this->className = $className;
         $this->usePlatform = $usePlatform;
@@ -90,6 +98,12 @@ class VersionAwareFactory
             },
             $files
         );
-        return new Loader($this->parameterBag, $this->modifier, $providers, $this->className);
+        return new Loader(
+            $this->parameterBag,
+            $this->modifier,
+            $this->processorFactory,
+            $providers,
+            $this->className
+        );
     }
 }

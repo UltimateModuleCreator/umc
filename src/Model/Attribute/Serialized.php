@@ -24,7 +24,7 @@ namespace App\Model\Attribute;
 /**
  * @deprecated
  */
-class Serialized extends \App\Umc\CoreBundle\Model\Attribute\Serialized
+class Serialized extends \App\Umc\CoreBundle\Model\Attribute\Dynamic
 {
 
 }

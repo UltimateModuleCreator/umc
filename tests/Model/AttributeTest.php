@@ -238,13 +238,13 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute::isSerialized
+     * @covers \App\Model\Attribute::isDynamic
      * @covers \App\Model\Attribute::__construct
      */
     public function testIsSerialized()
     {
-        $this->assertTrue($this->getInstance(['type' => 'serialized'])->isSerialized());
-        $this->assertFalse($this->getInstance([])->isSerialized());
+        $this->assertTrue($this->getInstance(['type' => 'serialized'])->isDynamic());
+        $this->assertFalse($this->getInstance([])->isDynamic());
     }
 
     /**
@@ -483,7 +483,7 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Attribute::getSerialized
+     * @covers \App\Model\Attribute::getDynamic
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetSerialized()
@@ -492,12 +492,12 @@ class AttributeTest extends TestCase
         $this->serializedFactory->expects($this->once())->method('create')->willReturn($serialized);
         $this->assertEquals(
             [$serialized],
-            $this->getInstance(['_serialized' => [[]], 'type' => 'serialized'])->getSerialized()
+            $this->getInstance(['_serialized' => [[]], 'type' => 'serialized'])->getDynamic()
         );
     }
 
     /**
-     * @covers \App\Model\Attribute::getSerialized
+     * @covers \App\Model\Attribute::getDynamic
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetSerializedNotSerialized()
@@ -506,12 +506,12 @@ class AttributeTest extends TestCase
         $this->serializedFactory->expects($this->once())->method('create')->willReturn($serialized);
         $this->assertEquals(
             [],
-            $this->getInstance(['_serialized' => [[]], 'type' => 'text'])->getSerialized()
+            $this->getInstance(['_serialized' => [[]], 'type' => 'text'])->getDynamic()
         );
     }
 
     /**
-     * @covers \App\Model\Attribute::getSerializedWithOptions
+     * @covers \App\Model\Attribute::getDynamicWithOptions
      * @covers \App\Model\Attribute::__construct
      */
     public function testGetSerializedWithOptions()
@@ -524,7 +524,7 @@ class AttributeTest extends TestCase
             ->willReturnOnConsecutiveCalls($serialized1, $serialized2);
         $this->assertEquals(
             [$serialized2],
-            $this->getInstance(['_serialized' => [[], []], 'type' => 'serialized'])->getSerializedWithOptions()
+            $this->getInstance(['_serialized' => [[], []], 'type' => 'serialized'])->getDynamicWithOptions()
         );
     }
 

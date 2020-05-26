@@ -30,7 +30,7 @@ use Twig\Error\SyntaxError;
 /**
  * @deprecated
  */
-class BaseType extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Type\BaseType
+class BaseType extends \App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\BaseType
 {
 
 }

@@ -90,12 +90,27 @@ class Version
      * @return mixed
      * @throws \Exception
      */
-    public function getModuleFactoryServiceId()
+    public function getModuleFactoryServiceId(): string
     {
         $config = $this->getConfig('module_factory');
         if (!isset($config[0])) {
             throw new \Exception( //TODO use custom exception
                 "Missing Module factory for platform {$this->getPlatform()->getName()}: {$this->getLabel()}"
+            );
+        }
+        return $config[0];
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getGeneratorPoolServiceId(): string
+    {
+        $config = $this->getConfig('generator_pool');
+        if (!isset($config[0])) {
+            throw new \Exception( //TODO use custom exception
+                "Missing Generator pool for platform {$this->getPlatform()->getName()}: {$this->getLabel()}"
             );
         }
         return $config[0];

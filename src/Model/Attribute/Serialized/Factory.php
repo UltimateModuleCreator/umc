@@ -24,7 +24,7 @@ namespace App\Model\Attribute\Serialized;
 /**
  * @deprecated
  */
-class Factory extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Factory
+class Factory extends \App\Umc\CoreBundle\Model\Attribute\Dynamic\Factory
 {
 
 }

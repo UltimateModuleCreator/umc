@@ -23,6 +23,9 @@ namespace App\Service;
 
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * @deprecated
+ */
 class WriterFactory
 {
     /**

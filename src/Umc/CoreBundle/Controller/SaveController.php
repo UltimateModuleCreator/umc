@@ -19,18 +19,14 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Controller;
 
-use App\Model\Module\Factory;
-use App\Service\Builder;
 use App\Umc\CoreBundle\Model\Module\Factory\Locator;
 use App\Umc\CoreBundle\Model\Platform\Pool;
 use App\Umc\CoreBundle\Repository\Module;
+use App\Umc\CoreBundle\Service\Builder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Yaml\Yaml;
 
 class SaveController extends AbstractController
 {
@@ -47,10 +43,6 @@ class SaveController extends AbstractController
      */
     private $repository;
     /**
-     * @var Locator
-     */
-    private $moduleFactoryLocator;
-    /**
      * @var Builder
      */
     private $builder;
@@ -60,18 +52,15 @@ class SaveController extends AbstractController
      * @param RequestStack $requestStack
      * @param Pool $platformPool
      * @param Module $repository
-     * @param Locator $moduleFactoryLocator
      * @param Builder $builder
      */
-    public function __construct(RequestStack $requestStack, Pool $platformPool, Module $repository, Locator $moduleFactoryLocator, Builder $builder)
+    public function __construct(RequestStack $requestStack, Pool $platformPool, Module $repository, Builder $builder)
     {
         $this->requestStack = $requestStack;
         $this->platformPool = $platformPool;
         $this->repository = $repository;
-        $this->moduleFactoryLocator = $moduleFactoryLocator;
         $this->builder = $builder;
     }
-
 
     /**
      * @Route("/save/{platform}/{version?}", methods={"POST"}, name="save")
@@ -84,29 +73,10 @@ class SaveController extends AbstractController
         try {
             $platformInstance = $this->platformPool->getPlatform($platform);
             $versionInstance = $platformInstance->getVersion($version);
-//            $response = [];
             $data = $this->requestStack->getCurrentRequest()->get('data');
-//            $response = $data;
-//
-//            $content = [
-//                'meta' => [
-//                    'platform' => $platformInstance->getCode(),
-//                    'version' => $versionInstance->getCode()
-//                ],
-//                'module' => $data
-//            ];
-//            $this->repository->save('dummy', $data, $platformInstance, $versionInstance);
-//            $response = [
-//                'success' => true,
-//                'module' => $data,
-//            ];
-            $factory = $this->moduleFactoryLocator->getFactory($versionInstance);
-            $module = $factory->create($data);
-//            echo "<pre>"; print_r($module->toArray());exit;
-            $this->builder->buildModule($module);
+            $module = $this->builder->build($versionInstance, $data);
             $response['success'] = true;
             $response['message'] = "You have created the module " . $module->getExtensionName();
-//            $response['link'] = $this->generateUrl('download', ['module' => $module->getExtensionName()]);
             $response['module'] = $module->getExtensionName();
         } catch (\Exception $e) {
             $response['success'] = false;

@@ -1,0 +1,151 @@
+{% if entity.isFrontend() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\View\Result\Page;
+use Magento\Store\Model\ScopeInterface;
+use {{ entity.getRepoInterface() }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+{% if entity.isStore() %}
+use Magento\Store\Model\StoreManagerInterface;
+{% endif %}
+
+class View extends Action
+{
+    /**
+     * @var string
+     */
+    public const BREADCRUMBS_CONFIG_PATH = '{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     */
+    private ${{ entity.getNameSingular()|camel }}Repository;
+    /**
+     * @var Url
+     */
+    protected $urlModel;
+{% if entity.isStore() %}
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+{% endif %}
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @param Context $context
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository
+     * @param Url $urlModel
+{% if entity.isStore() %}
+     * @param StoreManagerInterface $storeManager
+{% endif %}
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        Context $context,
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface ${{ entity.getNameSingular()|camel }}Repository,
+        Url $urlModel,
+{% if entity.isStore() %}
+        StoreManagerInterface $storeManager,
+{% endif %}
+        ScopeConfigInterface $scopeConfig
+    ) {
+        $this->{{ entity.getNameSingular()|camel }}Repository = ${{ entity.getNameSingular()|camel }}Repository;
+        $this->urlModel = $urlModel;
+{% if entity.isStore() %}
+        $this->storeManager = $storeManager;
+{% endif %}
+        $this->scopeConfig = $scopeConfig;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Forward|\Magento\Framework\View\Result\Page
+     */
+    public function execute()
+    {
+        try {
+            ${{ entity.getPk()|camel }} = (int)$this->getRequest()->getParam('id');
+            ${{ entity.getNameSingular()|camel }} = $this->{{ entity.getNameSingular()|camel }}Repository->get(${{ entity.getPk()|camel }});
+
+            if (!${{ entity.getNameSingular()|camel }}->getIsActive()) {
+                return $this->getNoRouteResult();
+            }
+{% if entity.isStore() %}
+            $validStores = [$this->storeManager->getStore()->getId(), 0];
+            if (!count(array_intersect($validStores, ${{ entity.getNameSingular()|camel }}->getStoreId()))) {
+                return $this->getNoRouteResult();
+            }
+{% endif %}
+        } catch (\Exception $e) {
+            return $this->getNoRouteResult();
+        }
+
+        /** @var Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+{% if entity.isSeo() %}
+        $resultPage->getConfig()->setDescription(${{ entity.getNameSingular()|camel }}->getMetaDescription());
+        $resultPage->getConfig()->setKeywords(${{ entity.getNameSingular()|camel }}->getMetaKeywords());
+        $title = ${{ entity.getNameSingular()|camel }}->getMetaTitle();
+        if (!$title) {
+            $title = ${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}();
+        }
+        $resultPage->getConfig()->getTitle()->set($title);
+{% else %}
+        $resultPage->getConfig()->getTitle()->set(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }});
+{% endif %}
+        $pageMainTitle = $resultPage->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle && $pageMainTitle instanceof \Magento\Theme\Block\Html\Title) {
+            $pageMainTitle->setPageTitle(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());
+        }
+        if ($this->scopeConfig->isSetFlag(self::BREADCRUMBS_CONFIG_PATH, ScopeInterface::SCOPE_STORE)) {
+            /** @var \Magento\Theme\Block\Html\Breadcrumbs $breadcrumbsBlock */
+            $breadcrumbsBlock = $resultPage->getLayout()->getBlock('breadcrumbs');
+            if ($breadcrumbsBlock) {
+                $breadcrumbsBlock->addCrumb(
+                    'home',
+                    [
+                        'label' => __('Home'),
+                        'link'  => $this->_url->getUrl('')
+                    ]
+                );
+                $breadcrumbsBlock->addCrumb(
+                    '{{ entity.getNamePlural() }}',
+                    [
+                        'label' => __('{{ entity.getLabelPlural() }}'),
+                        'link'  => $this->urlModel->getListUrl()
+                    ]
+                );
+                $breadcrumbsBlock->addCrumb(
+                    '{{ entity.getNameSingular()|camel }}-' . ${{ entity.getNameSingular()|camel }}->getId(),
+                    [
+                        'label' => ${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}()
+                    ]
+                );
+            }
+        }
+        return $resultPage;
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Forward
+     */
+    private function getNoRouteResult()
+    {
+        /** @var Forward $resultForward */
+        $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+        $resultForward->forward('noroute');
+        return $resultForward;
+    }
+}
+{% endif %}

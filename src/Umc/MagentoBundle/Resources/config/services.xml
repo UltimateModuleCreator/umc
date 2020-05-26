@@ -2,9 +2,7 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
-    <parameters>
-        <parameter key="module.destination.root" type="string">%kernel.project_dir%/var/umc/</parameter>
-    </parameters>
+
     <services>
         <defaults public="false" autowire="true" autoconfigure="true" />
         <prototype namespace="App\Umc\MagentoBundle\" resource="../../*" exclude="../../{DependencyInjection,Test}" />
@@ -16,10 +14,18 @@
         <service id="magento.module.factory" class="App\Umc\MagentoBundle\Model\Module\Factory" public="true">
             <argument key="$moduleClassName" type="string">\App\Umc\MagentoBundle\Model\Module</argument>
             <argument key="$entityFactory" type="service" id="magento.entity.factory" />
-            <argument key="$menuConfig" type="collection">%magento_admin_menu%</argument>
+            <argument key="$menuConfig" type="string">%magento_admin_menu%</argument>
         </service>
         <service id="magento.entity.factory" class="App\Umc\CoreBundle\Model\Entity\Factory">
             <argument key="$className">\App\Umc\MagentoBundle\Model\Entity</argument>
+            <argument key="$attributeFactory" type="service" id="magento.attribute.factory" />
+        </service>
+        <service id="magento.attribute.factory" class="App\Umc\CoreBundle\Model\Attribute\Factory">
+            <argument key="$className">\App\Umc\MagentoBundle\Model\Attribute</argument>
+            <argument key="$typeFactory" type="service" id="magento.attribute.type.factory" />
+        </service>
+        <service id="magento.attribute.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
+            <argument key="$typeMap" type="string">%magento_attribute_type%</argument>
         </service>
     </services>
 </container>

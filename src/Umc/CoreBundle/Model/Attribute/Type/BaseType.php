@@ -42,34 +42,6 @@ class BaseType
      */
     private $label;
     /**
-     * @var string|null
-     */
-    private $gridFilterType;
-    /**
-     * @var bool
-     */
-    private $canBeName;
-    /**
-     * @var bool
-     */
-    private $canShowInGrid;
-    /**
-     * @var bool
-     */
-    private $canFilterInGrid;
-    /**
-     * @var bool
-     */
-    private $canHaveOptions;
-    /**
-     * @var bool
-     */
-    private $canBeRequired;
-    /**
-     * @var bool
-     */
-    private $fullText;
-    /**
      * @var string
      */
     private $typeHint;
@@ -82,10 +54,6 @@ class BaseType
      */
     private $schemaAttributes;
     /**
-     * @var bool
-     */
-    private $upload;
-    /**
      * @var string[]
      */
     private $processor;
@@ -96,11 +64,23 @@ class BaseType
     /**
      * @var string|null
      */
-    private $sourceModel;
+    private $gridFilterType;
+    /**
+     * @var bool
+     */
+    private $canFilterInGrid;
+    /**
+     * @var string|null
+     */
+    protected $sourceModel;
     /**
      * @var array
      */
     private $templates;
+    /**
+     * @var array
+     */
+    private $flags;
 
     /**
      * AttributeType constructor.
@@ -114,19 +94,14 @@ class BaseType
         $this->attribute = $attribute;
         $this->label = (string)($data['label'] ?? null);
         $this->gridFilterType = (string)($data['grid_filter_type'] ?? '');
-        $this->canBeName = (bool)($data['can_be_name'] ?? false);
-        $this->canShowInGrid = (bool)($data['can_show_in_grid'] ?? false);
         $this->canFilterInGrid = (bool)($data['can_filter_in_grid'] ?? false);
-        $this->canHaveOptions = (bool)($data['can_have_options'] ?? false);
-        $this->canBeRequired = (bool)($data['can_be_required'] ?? false);
-        $this->fullText = (bool)($data['full_text'] ?? false);
         $this->typeHint = (string)($data['type_hint'] ?? 'string');
         $this->schemaType = (string)($data['schema_type'] ?? 'varchar');
         $this->schemaAttributes = (string)($data['schema_attributes'] ?? '');
-        $this->upload = (bool)($data['upload'] ?? false);
         $this->multiple = (bool)($data['multiple'] ?? false);
         $this->processor = $data['processor'] ?? [];
         $this->sourceModel = $data['source_model'] ?? null;
+        $this->flags = $data['flags'] ?? [];
         $this->templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
     }
 
@@ -152,46 +127,6 @@ class BaseType
     public function getGridFilterType(): ?string
     {
         return $this->gridFilterType;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCanBeName(): bool
-    {
-        return $this->canBeName;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCanShowInGrid(): bool
-    {
-        return $this->canShowInGrid;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCanHaveOptions(): bool
-    {
-        return $this->canHaveOptions;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCanBeRequired(): bool
-    {
-        return $this->canBeRequired;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFullText(): bool
-    {
-        return $this->fullText;
     }
 
     /**
@@ -227,13 +162,12 @@ class BaseType
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function isUpload(): bool
+    public function getProcessors(): array
     {
-        return $this->upload;
+        return $this->processor;
     }
-
     /**
      * @param $type
      * @return array
@@ -259,22 +193,6 @@ class BaseType
     }
 
     /**
-     * @return bool
-     */
-    public function isProductAttribute(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductAttributeSet(): bool
-    {
-        return false;
-    }
-
-    /**
      * @return string
      */
     public function getDefaultValue(): string
@@ -291,145 +209,36 @@ class BaseType
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getAttributeColumnSettingsStringXml(): string
+    public function getFlags()
     {
-        $attributes = $this->getSchemaAttributes();
-        if (strlen($attributes) > 0) {
-            $attributes .= ' ';
+        return array_keys(array_filter($this->flags));
+    }
+
+    /**
+     * @param string $flag
+     * @return bool
+     */
+    public function getFlag(string $flag)
+    {
+        return in_array($flag, $this->getFlags());
+    }
+
+    /**
+     * @param string $templateKey
+     * @param array $params
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderTemplate(string $templateKey, $params = []): string
+    {
+        $template = $this->templates[$templateKey] ?? null;
+        if ($template === null) {
+            return '';
         }
-        $attributes .= 'nullable="' . ($this->getAttribute()->isRequired() ? 'false' : 'true') . '"';
-        return $attributes;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSourceModel(): string
-    {
-        return $this->sourceModel ?? $this->attribute->getOptionSourceVirtualType();
-    }
-
-    /**
-     * @return string
-     */
-    public function getIndexDeleteType(): string
-    {
-        return $this->getAttribute()->isRequired() ? 'CASCADE' : 'SET NULL';
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function renderGrid(): string
-    {
-        return !empty($this->templates['backend']['grid'])
-            ? $this->renderTemplate($this->templates['backend']['grid'])
-            : '';
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function renderSchemaFk(): string
-    {
-        return isset($this->templates['schema_fk']) ? $this->renderTemplate($this->templates['schema_fk']) : '';
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function renderForm(): string
-    {
-        return !empty($this->templates['backend']['form'])
-            ? $this->renderTemplate($this->templates['backend']['form'])
-            : '';
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function renderAdditionalInterface(): string
-    {
-        return !empty($this->templates['interface'])
-            ? $this->renderTemplate($this->templates['interface'])
-            : '';
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function renderAdditionalModel(): string
-    {
-        return !empty($this->templates['model'])
-            ? $this->renderTemplate($this->templates['model'])
-            : '';
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * //TODO: set additional params from template itself
-     */
-    public function renderFrontendList()
-    {
-        return $this->renderFrontend(['indent' => str_repeat(' ', 36)]);
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * //TODO: set additional params from template itself
-     */
-    public function renderFrontendView()
-    {
-        return $this->renderFrontend(['indent' => str_repeat(' ', 16)]);
-    }
-
-    /**
-     * @param array $params
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function renderFrontend($params = [])
-    {
-        return !empty($this->templates['frontend'])
-            ? $this->renderTemplate($this->templates['frontend'], $params)
-            : '';
-    }
-
-    /**
-     * @param string|null $template
-     * @param array $params
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    private function renderTemplate(?string $template, $params = []): string
-    {
         $entity = $this->attribute->getEntity();
         $module = $entity->getModule();
         $params = array_merge(

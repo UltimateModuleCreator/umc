@@ -76,6 +76,15 @@ class Module
      */
     protected $license;
     /**
+     * @var string
+     */
+    protected $configTab;
+    /**
+     * @var int
+     */
+    protected $configTabPosition;
+
+    /**
      * @var bool[]
      */
     protected $flags = [];
@@ -83,6 +92,10 @@ class Module
      * @var array
      */
     protected $cacheData = [];
+    /**
+     * @var array
+     */
+    protected $cacheEntityData;
 
     /**
      * Module constructor.
@@ -109,6 +122,8 @@ class Module
         $this->license = (string)($data['license'] ?? '');
         $this->frontend = (bool)($data['frontend'] ?? false);
         $this->frontKey = (string)($data['front_key'] ?? '');
+        $this->configTab = (string)($data['config_tab'] ?? '');
+        $this->configTabPosition = (int)($data['config_tab_position'] ?? '');
         foreach (($data['_entities'] ?? []) as $entity) {
             $this->entities[] = $this->entityFactory->create($this, $entity);
         }
@@ -127,7 +142,7 @@ class Module
      */
     public function getNamespace(): string
     {
-        return $this->namespace;
+        return $this->stringUtil->ucfirst($this->stringUtil->camel($this->namespace));
     }
 
     /**
@@ -135,7 +150,7 @@ class Module
      */
     public function getModuleName(): string
     {
-        return $this->moduleName;
+        return $this->stringUtil->ucfirst($this->stringUtil->camel($this->moduleName));
     }
 
     /**
@@ -171,6 +186,22 @@ class Module
     }
 
     /**
+     * @return string
+     */
+    public function getConfigTab(): string
+    {
+        return $this->configTab ? $this->configTab : $this->getModuleName();
+    }
+
+    /**
+     * @return int
+     */
+    public function getConfigTabPosition(): int
+    {
+        return $this->configTabPosition;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -184,6 +215,8 @@ class Module
             'front_key' => $this->frontKey,
             'license' => $this->license,
             'frontend' => $this->frontend,
+            'config_tab' => $this->configTab,
+            'config_tab_position' => $this->configTabPosition,
             '_entities' => array_map(
                 function (Entity $entity) {
                     return $entity->toArray();
@@ -232,83 +265,11 @@ class Module
     }
 
     /**
-     * @param $type
-     * @return bool
-     */
-    public function hasAttributeType($type): bool
-    {
-        if (isset($this->flags['attribute_type'][$type])) {
-            return $this->flags['attribute_type'][$type];
-        }
-        foreach ($this->getEntities() as $entity) {
-            if ($entity->hasAttributeType($type)) {
-                $this->flags['attribute_type'][$type] = true;
-                return $this->flags['attribute_type'][$type];
-            }
-        }
-        $this->flags['attribute_type'][$type] = false;
-        return $this->flags['attribute_type'][$type];
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSearchableEntities(): bool
-    {
-        return count($this->getSearchableEntities()) > 0;
-    }
-
-    /**
-     * @return Entity[]
-     */
-    public function getSearchableEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['search'];
-    }
-
-    /**
      * @return bool
      */
     public function isFrontend(): bool
     {
         return $this->frontend;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFrontendViewEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['frontend_view'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getFrontendEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['frontend'];
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getFrontendListEntities(): array
-    {
-        return $this->getFrontendEntities();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUpload(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->cacheData['entity']['with_upload']) > 0;
     }
 
     /**
@@ -319,68 +280,78 @@ class Module
         if (isset($this->cacheData['entity'])) {
             return;
         }
-        $this->cacheData = [
-            'entity' => [
-                'frontend_view' => [],
-                'frontend_list' => [],
-                'frontend' => [],
-                'search' => [],
-                'main_menu' => [],
-                'footer_links' => [],
-                'with_upload' => [],
-                'store' => [],
-                'image' => [],
-                'file' => [],
-                'product_attribute' => [],
-                'product_attribute_set' => [],
-                'option_attribute' => [],
-            ]
-        ];
-        foreach ($this->getProcessorTypes() as $processorType) {
-            $this->cacheData['entity']['processor'][$processorType] = [];
-        }
+//        $this->cacheData = [
+//            'entity' => [
+//                'frontend_view' => [],
+//                'frontend_list' => [],
+//                'frontend' => [],
+//                'search' => [],
+//                'main_menu' => [],
+//                'footer_links' => [],
+//                'with_upload' => [],
+//                'store' => [],
+//                'image' => [],
+//                'file' => [],
+//                'product_attribute' => [],
+//                'product_attribute_set' => [],
+//                'option_attribute' => [],
+//            ]
+//        ];
+//        foreach ($this->getProcessorTypes() as $processorType) {
+//            $this->cacheData['entity']['processor'][$processorType] = [];
+//        }
         foreach ($this->getEntities() as $entity) {
-            if ($entity->isFrontend()) {
-                $this->cacheData['entity']['frontend'][] = $entity;
-            }
-            if ($entity->isSearch()) {
-                $this->cacheData['entity']['search'][] = $entity;
-            }
-//            if ($entity->getMenuLink() === FrontendMenuLink::MAIN_MENU) {
-//                $this->cacheData['entity']['main_menu'][] = $entity;
+            $this->cacheEntityData($entity);
+//            if ($entity->isFrontend()) {
+//                $this->cacheData['entity']['frontend'][] = $entity;
 //            }
-//            if ($entity->getMenuLink() === FrontendMenuLink::FOOTER) {
-//                $this->cacheData['entity']['footer_links'][] = $entity;
+//            if ($entity->isSearch()) {
+//                $this->cacheData['entity']['search'][] = $entity;
 //            }
-            if ($entity->isUpload()) {
-                $this->cacheData['entity']['with_upload'][] = $entity;
-            }
-            if ($entity->isStore()) {
-                $this->cacheData['entity']['store'][] = $entity;
-            }
-            if ($entity->hasAttributeType('image')) {
-                $this->cacheData['entity']['image'][] = $entity;
-            }
-            if ($entity->hasAttributeType('file')) {
-                $this->cacheData['entity']['file'][] = $entity;
-            }
-            if ($entity->isProductAttribute()) {
-                $this->cacheData['entity']['product_attribute'][] = $entity;
-            }
-            if ($entity->isProductAttributeSet()) {
-                $this->cacheData['entity']['product_attribute_set'][] = $entity;
-            }
-            if ($entity->hasOptionAttributes()) {
-                $this->cacheData['entity']['option_attribute'][] = $entity;
-            }
-            foreach ($this->getProcessorTypes() as $processorType) {
-                foreach ($entity->getAttributesWithProcessor($processorType) as $type => $attributes) {
-                    $this->cacheData['entity']['processor'][$processorType][$type] =
-                        $this->cacheData['entity']['processor'][$processorType][$type] ?? [];
-                    $this->cacheData['entity']['processor'][$processorType][$type][] = $entity;
-                }
-            }
+//            if ($entity->hasAttributeType('image')) {
+//                $this->cacheData['entity']['image'][] = $entity;
+//            }
+//            if ($entity->hasAttributeType('file')) {
+//                $this->cacheData['entity']['file'][] = $entity;
+//            }
+//            foreach ($this->getProcessorTypes() as $processorType) {
+//                foreach ($entity->getAttributesWithProcessor($processorType) as $type => $attributes) {
+//                    $this->cacheData['entity']['processor'][$processorType][$type] =
+//                        $this->cacheData['entity']['processor'][$processorType][$type] ?? [];
+//                    $this->cacheData['entity']['processor'][$processorType][$type][] = $entity;
+//                }
+//            }
         }
+    }
+
+    /**
+     * @param Entity $entity
+     */
+    public function cacheEntityData(Entity $entity): void
+    {
+        foreach ($entity->getFlags() as $flag) {
+            $this->cacheData[$flag] = $this->cacheData[$flag] ?? [];
+            $this->cacheData[$flag][] = $entity;
+        }
+    }
+
+    /**
+     * @param $flag
+     * @return Entity[]
+     */
+    public function getEntitiesWithFlag($flag): array
+    {
+        $this->initEntityCacheData();
+        return $this->cacheData[$flag] ?? [];
+    }
+
+    /**
+     * @param $flag
+     * @return bool
+     */
+    public function hasEntitiesWithFlag($flag): bool
+    {
+        return count($this->getEntitiesWithFlag($flag)) > 0;
     }
 
     /**
@@ -402,41 +373,6 @@ class Module
     {
         $this->initEntityCacheData();
         return isset($this->cacheData['entity']['processor'][$processorType][$type]);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOptionAttribute(): bool
-    {
-        $this->initEntityCacheData();
-        return count($this->cacheData['entity']['option_attribute']) > 0;
-    }
-
-    /**
-     * @return Entity[]
-     */
-    public function getFileEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['file'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isImage(): bool
-    {
-        return count($this->getImageEntities()) > 0;
-    }
-
-    /**
-     * @return Entity[]
-     */
-    public function getImageEntities(): array
-    {
-        $this->initEntityCacheData();
-        return $this->cacheData['entity']['image'];
     }
 
     /**

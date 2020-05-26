@@ -22,47 +22,35 @@ namespace App\Umc\CoreBundle\Model\Module\Factory;
 
 use App\Umc\CoreBundle\Model\Module\Factory;
 use App\Umc\CoreBundle\Model\Platform\Version;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class Locator implements ContainerAwareInterface
+class Locator
 {
     /**
-     * @var ContainerInterface
+     * @var \App\Umc\CoreBundle\Service\Locator
      */
-    private $container;
-    /**
-     * @var Factory[]
-     */
-    private $cache = [];
+    private $serviceLocator;
 
     /**
      * Locator constructor.
-     * @param ContainerInterface $container
+     * @param \App\Umc\CoreBundle\Service\Locator $serviceLocator
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(\App\Umc\CoreBundle\Service\Locator $serviceLocator)
     {
-        $this->container = $container;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
      * @param Version $version
      * @return Factory
      * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function getFactory(Version $version): Factory
     {
-        $platform = $version->getPlatform();
-        $cacheKey = $platform->getCode() . '##' . $version->getCode();
-        if (!array_key_exists($cacheKey, $this->cache)) {
-            $serviceId = $version->getModuleFactoryServiceId();
-            $this->cache[$cacheKey] = $this->container->get($serviceId);
+        $factory = $this->serviceLocator->getService($version->getModuleFactoryServiceId());
+        if (!$factory instanceof Factory) {
+            throw new \InvalidArgumentException("Module factory should be instance of " . Factory::class);
         }
-        return $this->cache[$cacheKey];
-    }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
+        return $factory;
     }
 }

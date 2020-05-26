@@ -24,7 +24,7 @@ namespace App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Model\Attribute\Type\Factory as TypeFactory;
 use App\Umc\CoreBundle\Model\Attribute\Option\Factory as OptionFactory;
-use App\Umc\CoreBundle\Model\Attribute\Serialized\Factory as SerializedFactory;
+use App\Umc\CoreBundle\Model\Attribute\Dynamic\Factory as DynamicFactory;
 use App\Umc\CoreBundle\Model\Entity;
 use App\Umc\CoreBundle\Util\StringUtil;
 
@@ -39,9 +39,9 @@ class Factory
      */
     private $optionFactory;
     /**
-     * @var SerializedFactory
+     * @var DynamicFactory
      */
-    private $serializedFactory;
+    private $dynamicFactory;
     /**
      * @var StringUtil
      */
@@ -55,20 +55,20 @@ class Factory
      * Factory constructor.
      * @param TypeFactory $typeFactory
      * @param OptionFactory $optionFactory
-     * @param SerializedFactory $serializedFactory
+     * @param DynamicFactory $dynamicFactory
      * @param StringUtil $stringUtil
      * @param string $className
      */
     public function __construct(
         TypeFactory $typeFactory,
         OptionFactory $optionFactory,
-        SerializedFactory $serializedFactory,
+        DynamicFactory $dynamicFactory,
         StringUtil $stringUtil,
         string $className = Attribute::class
     ) {
         $this->typeFactory = $typeFactory;
         $this->optionFactory = $optionFactory;
-        $this->serializedFactory = $serializedFactory;
+        $this->dynamicFactory = $dynamicFactory;
         $this->stringUtil = $stringUtil;
         $this->className = $className;
     }
@@ -84,7 +84,7 @@ class Factory
         return new $className(
             $this->typeFactory,
             $this->optionFactory,
-            $this->serializedFactory,
+            $this->dynamicFactory,
             $this->stringUtil,
             $entity,
             $data

@@ -1,0 +1,25 @@
+{% if entity.isFrontend() %}
+<?php{{ module.getFormattedLicense('php') }}
+/** @var \Magento\Framework\View\Element\Template $block
+/** @var ${{ entity.getNameSingular()|camel }}View \{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\\View
+/** @var $formatter \{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter */
+${{ entity.getNameSingular()|camel }}View = $block->getData('{{ entity.getNameSingular()|camel }}View');
+$formatter = $block->getData('formatter');
+?>
+<?php if (${{ entity.getNameSingular()|camel }}View && $formatter && ${{ entity.getNameSingular()|camel }} = ${{ entity.getNameSingular()|camel }}View->get{{ entity.getNameSingular()|camel|ucfirst }}()): ?>
+    <div class="{{ entity.getNameSingular()|hyphen }}-view">
+        <div class="{{ entity.getNameSingular()|hyphen }}-{{ entity.getNameAttribute().getCode()|hyphen }}">
+            <?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());?>
+        </div>
+        <?php if ($formatter): ?>
+            <div class="{{entity.getNameSingular()|hyphen}}-details">
+{% for attribute in entity.getAttributesWithFlag('show_in_view') %}
+                <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
+{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(16)})|raw }}
+                </div>
+{% endfor %}
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif;
+{% endif %}

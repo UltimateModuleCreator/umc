@@ -21,11 +21,10 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Repository;
 
 use App\Umc\CoreBundle\Config\Provider;
-use App\Umc\CoreBundle\Model\Platform;
+use App\Umc\CoreBundle\Model\Platform\Version;
 use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Yaml\Yaml;
 
 class Module
@@ -61,45 +60,53 @@ class Module
     }
 
     /**
-     * @param string $name
-     * @param array $data
-     * @param Platform $platform
-     * @param Platform\Version $version
+     * @param \App\Umc\CoreBundle\Model\Module $module
+     * @param Version $version
      */
-    public function save(string $name, array $data, Platform $platform, Platform\Version $version)
+    public function save(\App\Umc\CoreBundle\Model\Module $module, Version $version)
     {
         $destination = $this->parameterBag->get(self::DESTINATION_PARAM_NAME);
-        $name = basename($name);
-        $file = $platform->getCode() . '/' . $version->getCode() . '/' . $name . '.yml';
+        $name = $module->getExtensionName();
+        $platform = $version->getPlatform();
+        $file = $this->getRoot($version) . '/' . $name . '.yml';
         $content = [
             'meta' => [
                 'platform' => $platform->getCode(),
                 'version' => $version->getCode()
             ],
-            'module' => $data
+            'module' => $module->toArray()
         ];
         $this->filesystem->dumpFile(
-            rtrim($destination, '/') . '/' . $file,
+            $file,
             Yaml::dump($content, 100, 2, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE)
         );
     }
 
     /**
      * @param string $name
-     * @param Platform $platform
-     * @param Platform\Version $version
+     * @param Version $version
      * @return array
      * @throws Exception
      */
-    public function load(string $name, Platform $platform, Platform\Version $version)
+    public function load(string $name, Version $version)
     {
         $name = basename($name);
-        $source = $this->parameterBag->get(self::DESTINATION_PARAM_NAME);
-        $file = $source . '/' . $platform->getCode() . '/' . $version->getCode() . '/' . $name . '.yml';
+        $file = $this->getRoot($version) . '/' . $name . '.yml';
         if (!$this->filesystem->exists($file)) {
             //TODO: create separate exception type
             throw new Exception("Module {$name} was not created for .... ");
         }
         return $this->providerFactory->create($file)->getConfig();
+    }
+
+    /**
+     * @param Version $version
+     * @return string
+     */
+    public function getRoot(Version $version)
+    {
+        $source = $this->parameterBag->get(self::DESTINATION_PARAM_NAME);
+        $platform = $version->getPlatform();
+        return $source . '/' . $platform->getCode() . '/' . $version->getCode();
     }
 }

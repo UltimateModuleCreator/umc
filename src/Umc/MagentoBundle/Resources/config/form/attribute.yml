@@ -39,3 +39,19 @@ attribute:
       additionalDataBind: "enable: data.type() === 'dynamic'"
       tab: admin
       sort_order: 100
+    -
+      name: note
+      type: text
+      required: false
+      label: Note
+      title: This will be added as a comment under the field in the admin add/edit form.
+      tab: misc
+      sort_order: 150
+    -
+      name: tooltip
+      type: text
+      required: false
+      label: Tooltip
+      title: This will be added as a tooltip in the admin add / edit form
+      tab: misc
+      sort_order: 160

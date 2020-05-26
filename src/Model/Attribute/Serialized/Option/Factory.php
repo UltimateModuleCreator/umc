@@ -24,7 +24,7 @@ namespace App\Model\Attribute\Serialized\Option;
 /**
  * @deprecated
  */
-class Factory extends \App\Umc\CoreBundle\Model\Attribute\Serialized\Option\Factory
+class Factory extends \App\Umc\CoreBundle\Model\Attribute\Dynamic\Option\Factory
 {
 
 }

@@ -63,6 +63,18 @@ class Entity
      */
     protected $seo;
     /**
+     * @var bool bool
+     */
+    protected $store;
+    /**
+     * @var bool;
+     */
+    protected $topMenu;
+    /**
+     * @var bool
+     */
+    protected $footerLinks;
+    /**
      * @var Attribute[]
      */
     protected $attributes = [];
@@ -74,6 +86,10 @@ class Entity
      * @var array
      */
     protected $cacheData = [];
+    /**
+     * @var array
+     */
+    protected $attributeCache;
 
     /**
      * Entity constructor.
@@ -98,6 +114,9 @@ class Entity
         $this->search = (bool)($data['search'] ?? false);
         $this->frontend = (bool)($data['frontend'] ?? false);
         $this->seo = (bool)($data['seo'] ?? false);
+        $this->store = (bool)($data['store'] ?? false);
+        $this->topMenu = (bool)($data['top_menu'] ?? false);
+        $this->footerLinks = (bool)($data['footer_links'] ?? false);
         $this->attributes = array_map(
             function (array $attribute) {
                 return $this->attributeFactory->create($this, $attribute);
@@ -171,6 +190,30 @@ class Entity
     }
 
     /**
+     * @return bool
+     */
+    public function isFooterLinks(): bool
+    {
+        return $this->isFrontend() && $this->footerLinks;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStore(): bool
+    {
+        return $this->store;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTopMenu(): bool
+    {
+        return $this->isFrontend() && $this->topMenu;
+    }
+
+    /**
      * @return Attribute|null
      */
     public function getNameAttribute(): ?Attribute
@@ -195,6 +238,9 @@ class Entity
             'label_plural' => $this->labelPlural,
             'search' => $this->search,
             'seo' => $this->seo,
+            'store' => $this->store,
+            'top_menu' => $this->topMenu,
+            'footer_links' => $this->footerLinks,
             '_attributes' => array_map(
                 function (Attribute $attribute) {
                     return $attribute->toArray();
@@ -209,53 +255,93 @@ class Entity
      */
     private function initAttributeCacheData(): void
     {
+        if ($this->attributeCache !== null) {
+            return;
+        }
+        $this->attributeCache['by_flag'] = $this->attributeCache['by_flag'] ?? [];
+        $this->attributeCache['by_type'] = $this->attributeCache['by_type'] ?? [];
+        $this->attributeCache['by_processor'] = $this->attributeCache['processor'] ?? [];
         if (isset($this->cacheData['attribute'])) {
             return;
         }
-        $this->cacheData['attribute']['by_type'] = [];
-        $this->cacheData['attribute']['upload'] = [];
-        $this->cacheData['attribute']['with_options'] = [];
-        $this->cacheData['attribute']['codes'] = [];
-        $this->cacheData['attribute']['data_processor_required'] = [];
-        $this->cacheData['attribute']['product_attribute'] = [];
-        $this->cacheData['attribute']['product_attribute_set'] = [];
-        $this->cacheData['attribute']['full_text'] = [];
-        $this->cacheData['attribute']['show_in_list'] = [];
-        $this->cacheData['attribute']['show_in_view'] = [];
         foreach ($this->getModule()->getProcessorTypes() as $processorType) {
             $this->cacheData['attribute']['processor'][$processorType] = [];
         }
         foreach ($this->getAttributes() as $attribute) {
-            $type = $attribute->getType();
-            $this->cacheData['attribute']['by_type'][$type] = $this->cacheData['attribute']['by_type'][$type] ?? [];
-            $this->cacheData['attribute']['by_type'][$type][] = $attribute;
-            $this->cacheData['attribute']['codes'][] = $attribute->getCode();
-            $attribute->isUpload() && ($this->cacheData['attribute']['upload'][] = $attribute);
-            $attribute->isShowInList() && ($this->cacheData['attribute']['show_in_list'][] = $attribute);
-            $attribute->isShowInView() && ($this->cacheData['attribute']['show_in_view'][] = $attribute);
-            $attribute->isManualOptions() && ($this->cacheData['attribute']['with_options'][] = $attribute);
-            $attribute->isProductAttribute() && ($this->cacheData['attribute']['product_attribute'][] = $attribute);
-            $attribute->isProductAttributeSet()
-            && ($this->cacheData['attribute']['product_attribute_set'][] = $attribute);
-            $attribute->isFullText() && ($this->cacheData['attribute']['full_text'][] = $attribute);
-            foreach ($this->getModule()->getProcessorTypes() as $processorType) {
-                $processors = $attribute->getProcessorTypes($processorType);
-                foreach ($processors as $processor) {
-                    $this->cacheData['attribute']['processor'][$processorType][$processor] =
-                        $this->cacheData['attribute']['processor'][$processorType][$processor] ?? [];
-                    $this->cacheData['attribute']['processor'][$processorType][$processor][] = $attribute;
-                }
-            }
+            $this->cacheAttributeData($attribute);
         }
     }
 
     /**
-     * @return bool
+     * @param Attribute $attribute
      */
-    public function isProductAttribute(): bool
+    protected function cacheAttributeData(Attribute $attribute)
+    {
+        $type = $attribute->getType();
+        $this->attributeCache['by_type'][$type] = $this->attributeCache['by_type'][$type] ?? [];
+        $this->attributeCache['by_type'][$type][] = $attribute;
+        foreach ($attribute->getFlags() as $flag) {
+            $this->attributeCache['by_flag'][$flag] = $this->attributeCache['by_flag'][$flag] ?? [];
+            $this->attributeCache['by_flag'][$flag][] = $attribute;
+        }
+        foreach ($attribute->getProcessors() as $code => $value) {
+            $this->attributeCache['by_processor'][$code][$value] =
+                $this->attributeCache['by_processor'][$code][$value] ?? [];
+            $this->attributeCache['by_processor'][$code][$value][] = $attribute;
+        }
+    }
+
+    /**
+     * @param $flag
+     * @return Attribute[]
+     */
+    public function getAttributesWithFlag($flag)
     {
         $this->initAttributeCacheData();
-        return count($this->cacheData['attribute']['product_attribute']) > 0;
+        return $this->attributeCache['by_flag'][$flag] ?? [];
+    }
+
+    /**
+     * @param $flag
+     * @return bool
+     */
+    public function hasAttributesWithFlag($flag): bool
+    {
+        return count($this->getAttributesWithFlag($flag)) > 0;
+    }
+
+    /**
+     * @return array
+     * //TODO: cache flags
+     */
+    public function getFlags()
+    {
+        $flags = [];
+        $this->isSearch() && $flags[] = 'search';
+        $this->isFrontend() && $flags[] = 'frontend';
+        $this->isStore() && $flags[] = 'store';
+        $this->isFooterLinks() && $flags[] = 'footer_link';
+        $this->isTopMenu() && $flags[] = 'top_menu';
+        $this->initAttributeCacheData();
+        $flags = array_merge(
+            $flags,
+            array_map(
+                function (string $flag) {
+                    return 'attribute_' . $flag;
+                },
+                array_keys($this->attributeCache['by_flag'])
+            )
+        );
+        $flags = array_merge(
+            $flags,
+            array_map(
+                function (string $flag) {
+                    return 'attribute_type_' . $flag;
+                },
+                array_keys($this->attributeCache['by_type'])
+            )
+        );
+        return $flags;
     }
 
     /**
@@ -265,54 +351,7 @@ class Entity
     public function getAttributesWithProcessor($type): array
     {
         $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['processor'][$type] ?? [];
-    }
-
-    /**
-     * @param $processor
-     * @param $processorType
-     * @return Attribute[]
-     */
-    public function getAttributesWithProcessorType($processor, $processorType): array
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['processor'][$processor][$processorType] ?? [];
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getListAttributes()
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['show_in_list'];
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getViewAttributes()
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['show_in_view'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getFullTextAttributes(): array
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['full_text'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductAttributeSet(): bool
-    {
-        $this->initAttributeCacheData();
-        return count($this->cacheData['attribute']['product_attribute_set']) > 0;
+        return $this->attributeCache['by_processor'][$type] ?? [];
     }
 
     /**
@@ -326,15 +365,6 @@ class Entity
     }
 
     /**
-     * @return bool
-     */
-    public function isUpload(): bool
-    {
-        $this->initAttributeCacheData();
-        return count($this->cacheData['attribute']['upload']) > 0;
-    }
-
-    /**
      * @return Attribute[]
      */
     public function getOptionAttributes(): array
@@ -344,21 +374,13 @@ class Entity
     }
 
     /**
-     * @return bool
-     */
-    public function hasOptionAttributes(): bool
-    {
-        return count($this->getOptionAttributes()) > 0;
-    }
-
-    /**
      * @param string $type
      * @return Attribute[]
      */
     public function getAttributesWithType(string $type): array
     {
         $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['by_type'][$type] ?? [];
+        return $this->attributeCache['by_type'][$type] ?? [];
     }
 
     /**
@@ -366,38 +388,6 @@ class Entity
      */
     public function isFrontend(): bool
     {
-        return $this->module->isFrontend() && $this->frontend;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasImageAttributes(): bool
-    {
-        return count($this->getImageAttributes()) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasFileAttributes(): bool
-    {
-        return count($this->getFileAttributes()) > 0;
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getImageAttributes(): array
-    {
-        return $this->getAttributesWithType('image');
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getFileAttributes(): array
-    {
-        return $this->getAttributesWithType('file');
+        return $this->getModule()->isFrontend() && $this->frontend;
     }
 }

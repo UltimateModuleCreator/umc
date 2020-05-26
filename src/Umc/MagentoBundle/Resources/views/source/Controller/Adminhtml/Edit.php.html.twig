@@ -1,0 +1,60 @@
+{% if not module.isUmcCrud() %}
+<?php{{ module.getFormattedLicense('php') }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiManagerInterface;
+
+class Edit extends Action implements HttpGetActionInterface
+{
+    /**
+     * @var EntityUiManagerInterface
+     */
+    private $entityUiManager;
+    /**
+     * @var EntityUiConfig
+     */
+    private $uiConfig;
+
+    /**
+     * Edit constructor.
+     * @param Context $context
+     * @param EntityUiManagerInterface $entityUiManager
+     * @param EntityUiConfig $uiConfig
+     */
+    public function __construct(Context $context, EntityUiManagerInterface $entityUiManager, EntityUiConfig $uiConfig)
+    {
+        $this->entityUiManager = $entityUiManager;
+        $this->uiConfig = $uiConfig;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    public function execute()
+    {
+        $id = (int)$this->getRequest()->getParam($this->uiConfig->getRequestParamName());
+        $entity = $this->entityUiManager->get($id);
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $activeMenu = $this->uiConfig->getMenuItem();
+        if ($activeMenu) {
+            $resultPage->setActiveMenu($activeMenu);
+        }
+        $resultPage->getConfig()->getTitle()->prepend($this->uiConfig->getListPageTitle());
+        if (!$entity->getId()) {
+            $resultPage->getConfig()->getTitle()->prepend($this->uiConfig->getNewLabel());
+        } else {
+            $resultPage->getConfig()->getTitle()->prepend($entity->getData($this->uiConfig->getNameAttribute()));
+        }
+        return $resultPage;
+    }
+}
+{% endif %}

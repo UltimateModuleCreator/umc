@@ -19,6 +19,9 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute;
 
+/**
+ * @deprecated
+ */
 class Dynamic extends Serialized
 {
 

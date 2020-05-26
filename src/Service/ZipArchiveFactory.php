@@ -21,13 +21,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-class ZipArchiveFactory
+/**
+ * @deprecated
+ */
+class ZipArchiveFactory extends \App\Umc\CoreBundle\Service\ZipArchiveFactory
 {
-    /**
-     * @return \ZipArchive
-     */
-    public function create(): \ZipArchive
-    {
-        return new \ZipArchive();
-    }
+
 }

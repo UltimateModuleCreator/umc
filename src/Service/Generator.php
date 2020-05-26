@@ -23,6 +23,9 @@ use App\Umc\CoreBundle\Model\Module;
 use App\Service\Generator\GeneratorInterface;
 use App\Service\Source\Reader;
 
+/**
+ * @deprecated
+ */
 class Generator
 {
     /**

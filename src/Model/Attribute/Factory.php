@@ -21,13 +21,6 @@ declare(strict_types=1);
 
 namespace App\Model\Attribute;
 
-use App\Model\Attribute;
-use App\Model\Attribute\Type\Factory as TypeFactory;
-use App\Model\Attribute\Option\Factory as OptionFactory;
-use App\Model\Attribute\Serialized\Factory as SerializedFactory;
-use App\Model\Entity;
-use App\Util\StringUtil;
-
 /**
  * @deprecated
  */
