@@ -1,8 +1,8 @@
-{% if not module.isUmcCrud() and module.isFrontend() and module.isProcessorWithType('frontend', 'date') %}
+{% if not module.isUmcCrud() and module.isFrontend() and module.hasEntitiesWithFlag('attribute_processor_frontend_options') %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;

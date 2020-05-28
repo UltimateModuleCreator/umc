@@ -7,7 +7,7 @@
         <arguments>
             <argument name="metadata" xsi:type="array">
 {% for entity in module.getEntities() %}
-                <item name="{{ module.getNamespace()|camel|ucfirst }}\{{module.getModuleName()|camel|ucfirst }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" xsi:type="array">
+                <item name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">{{ entity.getMainTableName() }}</item>
                     <item name="identifierField" xsi:type="string">{{ entity.getPk() }}</item>
                 </item>
@@ -112,34 +112,34 @@
 {% endfor %}
 {% endfor %}
 {% endfor %}
-{% if not module.isUmcCrud() and module.isFrontend() and module.isProcessorWithType('frontend', 'editor') %}
-    <type name="{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Wysiwyg">
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('frontend') and module.hasEntitiesWithFlag('attribute_processor_frontend_editor') %}
+    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg">
         <arguments>
             <argument name="filter" xsi:type="object">Magento\Widget\Model\Template\Filter</argument>
         </arguments>
     </type>
 {% endif %}
-{% if not module.isUmcCrud() and module.isFrontend() %}
-    <type name="{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter">
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('frontend') %}
+    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter">
         <arguments>
             <argument name="formatterMap" xsi:type="array">
-{% if module.isProcessorWithType('frontend', 'date') %}
-                <item name="date" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Date</item>
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_date') %}
+                <item name="date" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date</item>
 {% endif %}
-{% if module.isProcessorWithType('frontend', 'text') %}
-                <item name="text" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Text</item>
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_text') %}
+                <item name="text" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Text</item>
 {% endif %}
-{% if module.isProcessorWithType('frontend', 'editor') %}
-                <item name="editor" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Wysiwyg</item>
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_editor') %}
+                <item name="editor" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg</item>
 {% endif %}
-{% if module.isProcessorWithType('frontend', 'options') %}
-                <item name="options" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Options</item>
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_options') %}
+                <item name="options" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Options</item>
 {% endif %}
-{% if module.isProcessorWithType('frontend', 'image') %}
-                <item name="image" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\Image</item>
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_image') %}
+                <item name="image" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Image</item>
 {% endif %}
-{% if module.isProcessorWithType('frontend', 'file') %}
-                <item name="file" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\File</item>
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_file') %}
+                <item name="file" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File</item>
 {% endif %}
             </argument>
         </arguments>

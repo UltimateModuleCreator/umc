@@ -346,17 +346,20 @@ magento_attribute_type:
       type_hint: string
       schema_type: varchar
       schema_attributes: 'length="255"'
-      processor:
-        frontend: text
+      flags:
+        processor_frontend: true
+        processor_frontend_text: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_text: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/text.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/text.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/text.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     product_attribute:
       grid_filter_type: select
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttribute
@@ -364,17 +367,20 @@ magento_attribute_type:
       type_hint: string
       schema_type: varchar
       schema_attributes: 'length="50"'
-      processor:
-        frontend: options
+      flags:
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
     product_attribute_multiselect:
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttribute
       serialized_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttribute
@@ -383,20 +389,26 @@ magento_attribute_type:
       schema_type: text
       schema_attributes: ''
       can_be_dynamic: true
-      processor:
-        provider: multiselect
-        save: multiselect
-        inlineEdit: multiselect
-        frontend: options
+      flags:
+        processor_save: true
+        processor_save_multiselect: true
+        processor_provider: true
+        processor_provider_multiselect: true
+        processor_inline_edit: true
+        processor_inline_edit_multiselect: true
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/array.html.twig"
         model: "@UmcMagento/attribute/model/multiselect.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
     product_attribute_set:
       grid_filter_type: select
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttributeSet
@@ -404,8 +416,12 @@ magento_attribute_type:
       type_hint: int
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
-      processor:
-        frontend: options
+      flags:
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
@@ -413,9 +429,8 @@ magento_attribute_type:
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute_set.html.twig"
         schema_fk: "@UmcMagento/attribute/schema_fk/product_attribute_set.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
     product_attribute_set_multiselect:
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttributeSet
       serialized_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttributeSet
@@ -423,20 +438,26 @@ magento_attribute_type:
       grid_filter_type: 'false'
       schema_type: text
       schema_attributes: ''
-      processor:
-        provider: multiselect
-        save: multiselect
-        frontend: options
-        inlineEdit: multiselect
+      flags:
+        processor_provider: true
+        processor_provider_multiselect: true
+        processor_save: true
+        processor_save_multiselect: true
+        processor_inline_edit: true
+        processor_inline_edit_multiselect: true
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/array.html.twig"
         model: "@UmcMagento/attribute/model/multiselect.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute_set.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
     country:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -444,17 +465,20 @@ magento_attribute_type:
       grid_filter_type: select
       schema_type: varchar
       schema_attributes: ' length="3"'
-      processor:
-        frontend: options
+      flags:
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/country.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/country.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/country.html.twig"
     country_multiselect:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       source_model: Magento\Config\Model\Config\Source\Locale\Country
@@ -462,20 +486,26 @@ magento_attribute_type:
       grid_filter_type: 'false'
       schema_type: text
       schema_attributes: ''
-      processor:
-        provider: multiselect
-        save: multiselect
-        frontend: options
-        inlineEdit: multiselect
+      flags:
+        processor_save: true
+        processor_save_multiselect: true
+        processor_provider: true
+        processor_provider_multiselect: true
+        processor_inline_edit: true
+        processor_inline_edit_multiselect: true
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/array.html.twig"
         model: "@UmcMagento/attribute/model/multiselect.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/country.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/country.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/country.html.twig"
     date:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
@@ -483,64 +513,76 @@ magento_attribute_type:
       input_type: Date
       schema_type: timestamp
       schema_attributes: ''
-      processor:
-        save: date
-        frontend: date
-        inlineEdit: date
+      flags:
+        processor_save: true
+        processor_save_date: true
+        processor_frontend: true
+        processor_frontend_date: true
+        processor_inline_edit: true
+        processor_inline_edit_date: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_date: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/date.html.twig"
         form: "@UmcMagento/attribute/form/date.html.twig"
         frontend: "@UmcMagento/attribute/frontend/date.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/date.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/date.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/date.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/date.html.twig"
     decimal:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       grid_filter_type: textRange
       type_hint: float
       schema_type: decimal
       schema_attributes: 'scale="4" precision="12"'
-      processor:
-        frontend: text
+      flags:
+        processor_frontend: true
+        processor_frontend_text: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_text: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/text.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/text.html.twig"
-          frontend:
-            list: false
-            view: false
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/text.html.twig"
+        serrialized_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     dropdown:
       class: App\Umc\MagentoBundle\Model\Attribute\Type\Dropdown
       type_hint: int
       grid_filter_type: select
       schema_type: int
       schema_attributes: 'padding="11"'
-      processor:
-        frontend: options
+      flags:
+        processor_frontend: true
+        processor_frontend_options:
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/option.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/option.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/option.html.twig"
     file:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
       schema_type: varchar
       schema_attributes: 'length="255"'
-      processor:
-        provider: file
-        save: file
-        frontend: file
+      flags:
+        processor_save: true
+        processor_save_file: true
+        processor_provider: true
+        processor_provider_file: true
+        processor_frontend: true
+        processor_frontend_file: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
@@ -552,10 +594,13 @@ magento_attribute_type:
       schema_type: varchar
       schema_attributes: 'length="255"'
       can_be_dynamic: false
-      processor:
-        provider: image
-        save: image
-        frontend: image
+      flags:
+        processor_save: true
+        processor_save_image: true
+        processor_provider: true
+        processor_provider_image: true
+        processor_frontend: true
+        processor_frontend_image: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
@@ -569,17 +614,20 @@ magento_attribute_type:
       schema_type: int
       schema_attributes: 'padding="11"'
       can_be_dynamic: true
-      processor:
-        frontend: text
+      flags:
+        processor_frontend: true
+        processor_frontend_text: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_text: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/text.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/text.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/text.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     multiselect:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
@@ -587,53 +635,60 @@ magento_attribute_type:
       schema_type: text
       schema_attributes: ''
       can_be_dynamic: true
-      processor:
-        provider: multiselect
-        save: multiselect
-        frontend: options
-        inlineEdit: multiselect
+      flags:
+        processor_save: true
+        processor_save_multiselect: true
+        processor_provider: true
+        processor_provider_multiselect: true
+        processor_inline_edit: true
+        processor_inline_edit_multiselect: true
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/array.html.twig"
         model: "@UmcMagento/attribute/model/multiselect.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/option.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/select.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/option.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/option.html.twig"
     textarea:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
       grid_filter_type: 'false'
       schema_type: text
       schema_attributes: ''
-      processor:
-        frontend: text
+      flags:
+        processor_frontend: true
+        processor_frontend_text: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_text: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/textarea.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/textarea.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/textarea.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     wysiwyg:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
       grid_filter_type: 'false'
       schema_type: mediumtext
       schema_attributes: ''
-      processor:
-        frontend: editor
+      flags:
+        processor_frontend: true
+        processor_frontend_editor: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         form: "@UmcMagento/attribute/form/wysiwyg.html.twig"
         frontend: "@UmcMagento/attribute/frontend/editor.html.twig"
-        serialized:
-          backend: false
-          frontend: false
     yesno:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       source_model: Magento\Config\Model\Config\Source\Yesno
@@ -641,31 +696,35 @@ magento_attribute_type:
       grid_filter_type: select
       schema_type: smallint
       schema_attributes: 'padding="2"'
-      processor:
-        frontend: options
+      flags:
+        processor_frontend: true
+        processor_frontend_options: true
+      dynamic_flags:
+        processor_frontend: true
+        processor_frontend_options: true
       templates:
         interface: "@UmcMagento/attribute/interface/default.html.twig"
         model: "@UmcMagento/attribute/model/default.html.twig"
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/yesno.html.twig"
         frontend: "@UmcMagento/attribute/frontend/yesno.html.twig"
-        serialized:
-          backend: "@UmcMagento/attribute/form/dynamic/yesno.html.twig"
-          frontend: "@UmcMagento/attribute/frontend/dynamic/yesno.html.twig"
+        dynamic_form: "@UmcMagento/attribute/form/dynamic/yesno.html.twig"
+        dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/yesno.html.twig"
     dynamic:
       class: \App\Umc\MagentoBundle\Model\Attribute\Type\Dynamic
       type_hint: string
       multiple: false
       schema_type: text
       schema_attributes: ''
-      processor:
-        provider: dynamicRows
-        save: dynamicRows
+      flags:
+        processor_provider: true
+        processor_provider_dynamic_rows: true
+        processor_save: true
+        processor_save_dynamic_rows: true
       templates:
         interface: "@UmcMagento/attribute/interface/array.html.twig"
         model: "@UmcMagento/attribute/model/dynamic.html.twig"
-        backend:
-          form: "@UmcMagento/attribute/form/dynamic.html.twig"
+        form: "@UmcMagento/attribute/form/dynamic.html.twig"
         frontend: "@UmcMagento/attribute/frontend/dynamic.html.twig"
 magento_dynamic_rows_type:
   flags:

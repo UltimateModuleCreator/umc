@@ -20,8 +20,10 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model\Attribute\Type;
 
+use App\Umc\MagentoBundle\Model\Attribute;
+
 /**
- * @method getAttribute() : Attribute
+ * @method getAttribute(): Attribute
  */
 class BaseType extends \App\Umc\CoreBundle\Model\Attribute\Type\BaseType
 {

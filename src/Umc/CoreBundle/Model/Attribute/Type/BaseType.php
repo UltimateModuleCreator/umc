@@ -58,10 +58,6 @@ class BaseType
      */
     private $processor;
     /**
-     * @var bool
-     */
-    private $multiple;
-    /**
      * @var string|null
      */
     private $gridFilterType;
@@ -98,7 +94,6 @@ class BaseType
         $this->typeHint = (string)($data['type_hint'] ?? 'string');
         $this->schemaType = (string)($data['schema_type'] ?? 'varchar');
         $this->schemaAttributes = (string)($data['schema_attributes'] ?? '');
-        $this->multiple = (bool)($data['multiple'] ?? false);
         $this->processor = $data['processor'] ?? [];
         $this->sourceModel = $data['source_model'] ?? null;
         $this->flags = $data['flags'] ?? [];
@@ -184,13 +179,6 @@ class BaseType
         return $processorType;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMultiple(): bool
-    {
-        return $this->multiple;
-    }
 
     /**
      * @return string
@@ -198,14 +186,6 @@ class BaseType
     public function getDefaultValue(): string
     {
         return implode(',', array_map('trim', explode("\n", $this->attribute->getRawDefaultValue())));
-    }
-
-    /**
-     * @return string
-     */
-    public function getMultipleText(): string
-    {
-        return $this->isMultiple() ? 'true' : 'false';
     }
 
     /**

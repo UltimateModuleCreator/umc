@@ -12,7 +12,7 @@
 {% endif %}
         </arguments>
     </type>
-    <virtualType name="{{ module.getNamespace() }}{{module.getModuleName()|camel|ucfirst }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
+    <virtualType name="{{ module.getNamespace() }}{{module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
             <argument name="model" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\Document</argument>

@@ -1,6 +1,8 @@
 dynamic:
   panel:
-    field: label
+    fields:
+      -
+        field: label
     default: New Dynamic Field
   children:
     -

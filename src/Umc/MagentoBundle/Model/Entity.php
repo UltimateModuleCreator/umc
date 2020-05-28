@@ -55,11 +55,11 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
         $dependencies = [];
         if ($this->isFrontend()) {
             $dependencies[] = 'magento/module-theme';
-            if ($this->hasAttributeType('wysiwyg')) {
+            if ($this->hasAttributesWithType('wysiwyg')) {
                 $dependencies[] = 'magento/module-widget';
             }
         }
-        if ($this->getAttributesWithFlag('upload')) {
+        if ($this->hasAttributesWithFlag('upload')) {
             $dependencies[] = "magento/module-media-storage";
             $dependencies[] = "magento/module-store";
         }
@@ -67,7 +67,7 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
             $dependencies[] = "magento/module-store";
         }
         if ($this->getAttributesWithFlag('product_attribute')
-            || $this->getAttributesWithFlag('product_attribute_set')) {
+            || $this->hasAttributesWithType('product_attribute_set')) {
             $dependencies[] = "magento/module-catalog";
             $dependencies[] = "magento/module-eav";
         }
@@ -86,7 +86,7 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
         $dependencies = [];
         if ($this->isFrontend()) {
             $dependencies[] = 'Magento_Theme';
-            if ($this->hasAttributeType('wysiwyg')) {
+            if ($this->hasAttributesWithType('wysiwyg')) {
                 $dependencies[] = 'Magento_Widget';
             }
         }
@@ -346,23 +346,13 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
     }
 
     /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        $result = parent::toArray();
-
-        return $result;
-    }
-
-    /**
      * @return string
      */
     public function getSaveDataProcessor(): string
     {
-        return (count($this->getAttributesWithProcessor('save')) > 0)
+        return ($this->hasAttributesWithFlag('processor_save'))
             ? $this->getVirtualType('SaveDataProcessor')
-            : $this->module->getNullSaveDataProcessor();
+            : $this->getModule()->getNullSaveDataProcessor();
     }
 
     /**
@@ -370,9 +360,9 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
      */
     public function getSaveDataProcessorInlineEdit(): string
     {
-        return (count($this->getAttributesWithProcessor('inlineEdit')) > 0)
+        return ($this->hasAttributesWithFlag('processor_inline_edit'))
             ? $this->getVirtualType('SaveDataProcessorInlineEdit')
-            : $this->module->getNullSaveDataProcessor();
+            : $this->getModule()->getNullSaveDataProcessor();
     }
 
     /**
@@ -380,9 +370,9 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
      */
     public function getFormDataModifier(): string
     {
-        return (count($this->getAttributesWithProcessor('provider')) > 0)
+        return ($this->hasAttributesWithFlag('processor_provider'))
             ? $this->getVirtualType('FormDataModifier')
-            : $this->module->getNullFormDataModifier();
+            : $this->getModule()->getNullFormDataModifier();
     }
 
     /**

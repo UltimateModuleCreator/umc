@@ -23,6 +23,13 @@
         <service id="magento.attribute.factory" class="App\Umc\CoreBundle\Model\Attribute\Factory">
             <argument key="$className">\App\Umc\MagentoBundle\Model\Attribute</argument>
             <argument key="$typeFactory" type="service" id="magento.attribute.type.factory" />
+            <argument key="$dynamicFactory" type="service" id="magento.attribute.dynamic.factory" />
+        </service>
+        <service id="magento.attribute.dynamic.factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Factory">
+            <argument key="$typeFactory" type="service" id="magento.attribute.dynamic.type.factory" />
+        </service>
+        <service id="magento.attribute.dynamic.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory">
+            <argument key="$typeMap" type="string">%magento_dynamic_rows_type%</argument>
         </service>
         <service id="magento.attribute.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
             <argument key="$typeMap" type="string">%magento_attribute_type%</argument>

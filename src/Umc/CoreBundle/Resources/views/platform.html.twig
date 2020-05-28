@@ -1,0 +1,12 @@
+{% extends "@UmcCore/base.html.twig" %}
+{% block body %}
+    <h1>{{ platform.getName() }}</h1>
+    <div class="card">
+        <div class="card-header"><h4>Versions</h4></div>
+        <div class="card-body">
+            {% for version in platform.getVersions() %}
+                <a class="btn btn-primary" href="{{ path('edit', {platform: platform.getCode(), version: version.getCode()}) }}">{{ version.getLabel() }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

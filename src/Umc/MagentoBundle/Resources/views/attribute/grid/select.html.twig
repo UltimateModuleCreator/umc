@@ -1,7 +1,7 @@
         <column name="{{ attribute.getCode() }}" component="Magento_Ui/js/grid/columns/select">
             <settings>
                 <filter>{{ type.getGridFilterType() }}</filter>
-{% if not type.isMultiple() %}
+{% if not type.hasFlag('multiple') %}
                 <editor>
 {% if (attribute.isRequired()) %}
                     <validation>

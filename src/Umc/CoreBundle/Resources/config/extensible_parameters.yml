@@ -118,6 +118,9 @@ attribute_type:
       flags:
         can_show_in_grid: true
         can_be_required: true
+        product_attribute: true
+      dynamic_flags:
+        product_attribute: true
     product_attribute_set:
       label: Product Attribute Set
       input_type: Select
@@ -125,6 +128,9 @@ attribute_type:
       flags:
         can_show_in_grid: true
         can_be_required: true
+        product_attribute_set: true
+      dynamic_flags:
+        product_attribute_set: true
     product_attribute_multiselect:
       label: Product Attribute Multiselect
       input_type: Multiselect
@@ -133,16 +139,21 @@ attribute_type:
         can_show_in_grid: true
         can_be_required: true
         multiple: true
+        product_attribute: true
+      dynamic_flags:
+        product_attribute: true
     product_attribute_set_multiselect:
-      label: Product Attribute Set
+      label: Product Attribute Set Multiselect
       input_type: Multiselect
       can_be_dynamic: true
       flags:
         can_show_in_grid: true
         can_be_required: true
+        product_attribute_set: true
         multiple: true
+      dynamic_flags:
+        product_attribute_set: true
     dynamic:
       label: Dynamic rows
-      class: \App\Model\Attribute\Type\Dynamic
       input_type: Dynamic Rows
       can_be_dynamic: false

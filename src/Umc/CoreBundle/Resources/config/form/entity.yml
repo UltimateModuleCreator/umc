@@ -1,7 +1,9 @@
 entity:
 #  template: '@UmcCore/form/elements/form/entity.html.twig'
   panel:
-    field: label_singular
+    fields:
+      -
+        field: label_singular
     default: New Entity
   children:
      -

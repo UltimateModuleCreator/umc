@@ -1,11 +1,11 @@
-{% if not module.isUmcCrud() and module.isFrontend() %}
+{% if not module.isUmcCrud() and module.isFrontend() and module.hasEntitiesWithFlag('attribute_processor_frontend') %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel;
 
 use Magento\Framework\Escaper;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\Formatter\FormatterInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\FormatterInterface;
 
 class Formatter implements FormatterInterface
 {

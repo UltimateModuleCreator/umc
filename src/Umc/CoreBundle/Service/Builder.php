@@ -88,6 +88,14 @@ class Builder
     {
         $factory = $this->factoryLocator->getFactory($version);
         $module = $factory->create($data);
+//        foreach ($module->getEntities() as $entity) {
+//            foreach ($entity->getAttributes() as $attribute) {
+//                if ($attribute->getType() === 'dynamic') {
+//                    var_dump($attribute->getFlags());exit;
+//                }
+//            }
+//            var_dump($entity->getFlags());exit;
+//        }
         $loader = $this->configLoaderFactory->create($version);
         $generatorPool = $this->generatorPoolLocator->getGeneratorPool($version);
         $files = [];
@@ -103,7 +111,7 @@ class Builder
         }
         //archive;
         $this->archiver->createZip($root, $module->getExtensionName(), $repoRoot);
-        $this->filesystem->remove($root);
+        //$this->filesystem->remove($root);
         $this->repository->save($module, $version);
         return $module;
     }

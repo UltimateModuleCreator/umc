@@ -2,13 +2,13 @@
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\CollectionProviderInterface;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\EntityUiConfig;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\CollectionProviderInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
 
 class DataProvider extends AbstractDataProvider
 {

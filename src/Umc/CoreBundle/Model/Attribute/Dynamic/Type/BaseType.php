@@ -50,10 +50,6 @@ class BaseType
      */
     private $canBeRequired;
     /**
-     * @var bool
-     */
-    private $multiple;
-    /**
      * @var string|null
      */
     private $sourceModel;
@@ -61,6 +57,10 @@ class BaseType
      * @var array
      */
     private $processor;
+    /**
+     * @var array[]
+     */
+    private $flags;
     /**
      * @var array
      */
@@ -79,18 +79,9 @@ class BaseType
         $this->label = (string)($data['label'] ?? null);
         $this->canHaveOptions = (bool)($data['can_have_options'] ?? false);
         $this->canBeRequired = (bool)($data['can_be_required'] ?? false);
-        $this->multiple = (bool)($data['multiple'] ?? false);
         $this->sourceModel = $data['source_model'] ?? null;
-        $this->processor = $data['processor'] ?? [];
+        $this->flags = $data['dynamic_flags'] ?? [];
         $this->templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
-    }
-
-    /**
-     * @return string
-     */
-    public function getMultipleText(): string
-    {
-        return $this->multiple ? 'true' : 'false';
     }
 
     /**
@@ -118,19 +109,32 @@ class BaseType
     }
 
     /**
-     * @param string $template
+     * @return array
+     */
+    public function getFlags(): array
+    {
+        return array_keys(array_filter($this->flags));
+    }
+
+    /**
+     * @param string $templateKey
+     * @param array $params
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function renderTemplate(string $template): string
+    public function renderTemplate(string $templateKey, $params = []): string
     {
+        $template = $this->templates[$templateKey] ?? null;
+        if ($template === null) {
+            return '';
+        }
         $attribute = $this->dynamic->getAttribute();
         $entity = $attribute->getEntity();
         $module = $entity->getModule();
-        return $this->twig->render(
-            $template,
+        $params = array_merge(
+            $params,
             [
                 'type' => $this,
                 'field' => $this->dynamic,
@@ -140,21 +144,6 @@ class BaseType
                 'indent' => $this->dynamic->isExpanded() ? '' : str_repeat(' ', 4)
             ]
         );
-    }
-
-    /**
-     * @param $type
-     * @return array
-     */
-    public function getProcessorTypes($type): array
-    {
-        $processorType = $this->processor[$type] ?? null;
-        if ($processorType === null) {
-            return [];
-        }
-        if (!is_array($processorType)) {
-            return [$processorType];
-        }
-        return $processorType;
+        return $this->twig->render($template, $params);
     }
 }

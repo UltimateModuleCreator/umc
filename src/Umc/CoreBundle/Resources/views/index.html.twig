@@ -31,6 +31,7 @@
                         {% endif %}
                         <div class="card-footer text-center">
                             {% if platform.isSupported() %}
+                                <a href="{{ path("platform", {platform: platform.getCode()}) }}" class="button">View</a>
                                 <span class="btn-group">
                                     <a href="{{ path('new', {platform: platform.getCode()}) }}"
                                        class="btn-primary btn">Create module for {{ platform.getName() }}</a>

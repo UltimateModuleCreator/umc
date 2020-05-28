@@ -2,7 +2,7 @@
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Source;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 use Magento\Store\Ui\Component\Listing\Column\Store\Options;

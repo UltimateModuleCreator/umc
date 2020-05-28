@@ -1,6 +1,6 @@
 {{ indent }}<?php ${{ attribute.getCode()|camel }} = ${{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}(true);?>
 {{ indent }}<?php if (count(${{ attribute.getCode()|camel }}) > 0): ?>
-{{ indent }}<div class="{ entity.getNameSingular()|hyphem }}-{{ attribute.getCode()|hyphen }}">
+{{ indent }}<div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
 {{ indent }}    <strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')); ?></strong>
 {{ indent }}</div>
 {{ indent }}<table>
@@ -16,10 +16,10 @@
 {{ indent }}    <td><?= $block->escapeHtml($index + 1);?></td>
 {% for field in attribute.getDynamic() %}
 {% if field.isShowInView() %}
-{{ indent }}    <td>{{field.getTypeInstance().renderTemplate('serialized_frontend', {mode: 'view'})|raw}}</td>
+{{ indent }}    <td>{{field.getTypeInstance().renderTemplate('dynamic_frontend', {mode: 'view'})|raw}}</td>
 {% endif %}
 {% endfor %}
-{{ indent }}    </td>
+{{ indent }}    </tr>
 {{ indent }}    <?php endforeach;?>
 {{ indent }}</table>
 {{ indent }}<?php endif;?>

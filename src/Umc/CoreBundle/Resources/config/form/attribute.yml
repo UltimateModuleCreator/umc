@@ -1,6 +1,8 @@
 attribute:
   panel:
-    field: label
+    fields:
+      -
+        field: label
     default: New Attribute
   children:
     -

@@ -37,7 +37,7 @@
             <argument name="collectionProvider" xsi:type="object">{{ entity.getModel('UiCollectionProvider') }}</argument>
         </arguments>
     </type>
-{% if entity.hasAttributeType('image') %}
+{% if entity.hasAttributesWithType('image') %}
     <type name="{{ entity.getAdminController('Image\\Upload') }}">
         <arguments>
             <argument name="uploader" xsi:type="object">{{ entity.getVirtualType('ImageUploader') }}</argument>
@@ -56,7 +56,7 @@
         </arguments>
     </virtualType>
 {% endif %}
-{% if entity.hasAttributeType('file') %}
+{% if entity.hasAttributesWithType('file') %}
     <type name="{{ entity.getAdminController('File\\Upload') }}">
         <arguments>
             <argument name="uploader" xsi:type="object">{{ entity.getVirtualType('FileUploader') }}</argument>

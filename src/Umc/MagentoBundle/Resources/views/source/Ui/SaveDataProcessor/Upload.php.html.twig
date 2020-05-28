@@ -1,15 +1,15 @@
-{% if not module.isUmcCrud() and (module.isProcessorWithType('save', 'image') or module.isProcessorWithType('save', 'file')) %}
+{% if not module.isUmcCrud() and (module.hasEntitiesWithFlag('attribute_upload')) %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\SaveDataProcessor;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor;
 
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\FileInfo;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\Uploader;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\SaveDataProcessorInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
 
 class Upload implements SaveDataProcessorInterface
 {

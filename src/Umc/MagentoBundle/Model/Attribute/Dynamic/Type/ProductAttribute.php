@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
 
 declare(strict_types=1);
 
-namespace App\Umc\CoreBundle\Model\Attribute\Dynamic\Type;
+namespace App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type;
 
-class ProductAttributeSet extends BaseType
+class ProductAttribute extends BaseType
 {
     /**
      * @return string
@@ -34,7 +33,7 @@ class ProductAttributeSet extends BaseType
             $module->getUmcModuleName(),
             'Source',
             'Catalog',
-            'ProductAttributeSet'
+            'ProductAttribute'
         ];
         return implode('\\', $parts);
     }

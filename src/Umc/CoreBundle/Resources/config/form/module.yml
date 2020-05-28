@@ -2,7 +2,11 @@ module:
   code: module
   panel:
     default: New Module
-    field: module_name
+    fields:
+      -
+        field: namespace
+      -
+        field: module_name
   children:
     -
       code: _entities

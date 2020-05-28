@@ -1,8 +1,8 @@
-{% if not module.isUmcCrud() and module.hasEntityWithFlag('attribute_type_product_attribute_set') %}
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_product_attribute_set') %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Source\Catalog;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Catalog;
 
 use Magento\Framework\Option\ArrayInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;

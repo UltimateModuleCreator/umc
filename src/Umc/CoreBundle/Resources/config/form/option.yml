@@ -1,7 +1,9 @@
 option:
   code: option
   panel:
-    field: label
+    fields:
+      -
+        field: label
     default: New Option
   children: []
   tabs:

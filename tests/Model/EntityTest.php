@@ -102,28 +102,6 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Entity::hasAttributeType()
-     * @covers \App\Model\Entity::__construct()
-     */
-    public function testHasAttributeType()
-    {
-        /** @var Attribute | MockObject $attribute1 */
-        $attribute1 = $this->createMock(Attribute::class);
-        $attribute1->method('getType')->willReturn('text');
-        /** @var Attribute | MockObject $attribute2 */
-        $attribute2 = $this->createMock(Attribute::class);
-        $attribute2->method('getType')->willReturn('textarea');
-        $this->attributeFactory->expects($this->exactly(2))->method('create')
-            ->willReturnOnConsecutiveCalls($attribute1, $attribute2);
-        $entity = $this->getInstance([
-            '_attributes' => [[], []]
-        ]);
-        $this->assertTrue($entity->hasAttributeType('text'));
-        $this->assertTrue($entity->hasAttributeType('textarea'));
-        $this->assertFalse($entity->hasAttributeType('dummy'));
-    }
-
-    /**
      * @covers \App\Model\Entity::getAttributes
      * @covers \App\Model\Entity::__construct
      */

@@ -1,6 +1,6 @@
 shopware:
   code: shopware
-  name: Showpware 6
+  name: Shopware 6
   url: 'https://shopware.com/'
   image: 'bundles/umcshopware/logo/shopware.png'
   sort_order: 20

@@ -83,11 +83,6 @@ class Module
      * @var int
      */
     protected $configTabPosition;
-
-    /**
-     * @var bool[]
-     */
-    protected $flags = [];
     /**
      * @var array
      */
@@ -250,18 +245,7 @@ class Module
      */
     public function getExtensionName($separator = '_'): string
     {
-        $parts = [$this->getNamespace(), $this->getModuleName()];
-        return implode(
-            $separator,
-            array_map(
-                function (string $text) {
-                    return $this->stringUtil->ucfirst(
-                        $this->stringUtil->camel($text)
-                    );
-                },
-                $parts
-            )
-        );
+        return $this->getNamespace() . $separator . $this->getModuleName();
     }
 
     /**
@@ -275,52 +259,13 @@ class Module
     /**
      * loop once through the entities to check different settings
      */
-    protected function initEntityCacheData()
+    protected function initEntityCacheData(): void
     {
-        if (isset($this->cacheData['entity'])) {
-            return;
-        }
-//        $this->cacheData = [
-//            'entity' => [
-//                'frontend_view' => [],
-//                'frontend_list' => [],
-//                'frontend' => [],
-//                'search' => [],
-//                'main_menu' => [],
-//                'footer_links' => [],
-//                'with_upload' => [],
-//                'store' => [],
-//                'image' => [],
-//                'file' => [],
-//                'product_attribute' => [],
-//                'product_attribute_set' => [],
-//                'option_attribute' => [],
-//            ]
-//        ];
-//        foreach ($this->getProcessorTypes() as $processorType) {
-//            $this->cacheData['entity']['processor'][$processorType] = [];
-//        }
-        foreach ($this->getEntities() as $entity) {
-            $this->cacheEntityData($entity);
-//            if ($entity->isFrontend()) {
-//                $this->cacheData['entity']['frontend'][] = $entity;
-//            }
-//            if ($entity->isSearch()) {
-//                $this->cacheData['entity']['search'][] = $entity;
-//            }
-//            if ($entity->hasAttributeType('image')) {
-//                $this->cacheData['entity']['image'][] = $entity;
-//            }
-//            if ($entity->hasAttributeType('file')) {
-//                $this->cacheData['entity']['file'][] = $entity;
-//            }
-//            foreach ($this->getProcessorTypes() as $processorType) {
-//                foreach ($entity->getAttributesWithProcessor($processorType) as $type => $attributes) {
-//                    $this->cacheData['entity']['processor'][$processorType][$type] =
-//                        $this->cacheData['entity']['processor'][$processorType][$type] ?? [];
-//                    $this->cacheData['entity']['processor'][$processorType][$type][] = $entity;
-//                }
-//            }
+        if ($this->cacheEntityData === null) {
+            $this->cacheEntityData = [];
+            foreach ($this->getEntities() as $entity) {
+                $this->cacheEntityData($entity);
+            }
         }
     }
 
@@ -330,8 +275,8 @@ class Module
     public function cacheEntityData(Entity $entity): void
     {
         foreach ($entity->getFlags() as $flag) {
-            $this->cacheData[$flag] = $this->cacheData[$flag] ?? [];
-            $this->cacheData[$flag][] = $entity;
+            $this->cacheEntityData[$flag] = $this->cacheEntityData[$flag] ?? [];
+            $this->cacheEntityData[$flag][] = $entity;
         }
     }
 
@@ -342,7 +287,7 @@ class Module
     public function getEntitiesWithFlag($flag): array
     {
         $this->initEntityCacheData();
-        return $this->cacheData[$flag] ?? [];
+        return $this->cacheEntityData[$flag] ?? [];
     }
 
     /**
@@ -352,50 +297,5 @@ class Module
     public function hasEntitiesWithFlag($flag): bool
     {
         return count($this->getEntitiesWithFlag($flag)) > 0;
-    }
-
-    /**
-     * @param $processorType
-     * @return bool
-     */
-    public function isProcessor($processorType): bool
-    {
-        $this->initEntityCacheData();
-        return isset($this->cacheData['entity']['processor'][$processorType]);
-    }
-
-    /**
-     * @param $processorType
-     * @param $type
-     * @return bool
-     */
-    public function isProcessorWithType($processorType, $type)
-    {
-        $this->initEntityCacheData();
-        return isset($this->cacheData['entity']['processor'][$processorType][$type]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getMockObjectUse(): string
-    {
-        return "\n" . 'use PHPUnit\Framework\MockObject\MockObject;';
-    }
-
-    /**
-     * @return string
-     */
-    public function getMockObjectClass(): string
-    {
-        return "MockObject";
-    }
-
-    /**
-     * @return array
-     */
-    public function getProcessorTypes(): array
-    {
-        return ['save', 'provider', 'frontend', 'inlineEdit'];
     }
 }

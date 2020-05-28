@@ -44,19 +44,25 @@ class Factory
     /**
      * @var string
      */
-    private $className = Dynamic::class;
+    private $className;
 
     /**
      * Factory constructor.
      * @param OptionFactory $optionFactory
      * @param StringUtil $stringUtil
      * @param TypeFactory $typeFactory
+     * @param string $className
      */
-    public function __construct(OptionFactory $optionFactory, StringUtil $stringUtil, TypeFactory $typeFactory)
-    {
+    public function __construct(
+        OptionFactory $optionFactory,
+        StringUtil $stringUtil,
+        TypeFactory $typeFactory,
+        string $className = Dynamic::class
+    ) {
         $this->optionFactory = $optionFactory;
         $this->stringUtil = $stringUtil;
         $this->typeFactory = $typeFactory;
+        $this->className = $className;
     }
 
     /**
@@ -66,7 +72,7 @@ class Factory
      */
     public function create(Attribute $attribute, array $data = []): Dynamic
     {
-        $className = $$this->Factory;
+        $className = $this->className;
         return new $className($this->optionFactory, $this->typeFactory, $this->stringUtil, $attribute, $data);
     }
 }

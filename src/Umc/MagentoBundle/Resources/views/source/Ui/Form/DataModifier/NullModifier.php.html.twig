@@ -2,10 +2,10 @@
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifier;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier;
 
 use Magento\Framework\Model\AbstractModel;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifierInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
 
 class NullModifier implements DataModifierInterface
 {

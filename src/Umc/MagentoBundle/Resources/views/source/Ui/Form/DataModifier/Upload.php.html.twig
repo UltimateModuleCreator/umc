@@ -1,12 +1,12 @@
-{% if not module.isUmcCrud() and (module.isProcessorWithType('provider', 'image') or module.isProcessorWithType('provider', 'file')) %}
+{% if not module.isUmcCrud() and (module.hasEntitiesWithFlag('attribute_upload')) %}
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifier;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier;
 
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\FileInfo;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\Uploader;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Ui\Form\DataModifierInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;

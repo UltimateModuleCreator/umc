@@ -1,25 +1,27 @@
-{% for type, attributes in entity.getAttributesWithProcessor('save') %}
-{% include 'entity/adminhtml/di/processor/save/'~ type ~'.html.twig' with {module: module, enitity: entity, attributes: attributes} %}
+{% for type, attributes in entity.getAttributesWithFlagPrefix('processor_save_') %}
+{% include '@UmcMagento/entity/adminhtml/di/processor/save/'~ type ~'.html.twig' with {module: module, enitity: entity, attributes: attributes} %}
 {% endfor %}
-{% if entity.getAttributesWithProcessor('save')|length > 0 %}
+{% if entity.hasAttributesWithFlag('processor_save') %}
     <virtualType name="{{ entity.getVirtualType('SaveDataProcessor') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-{% for type, attributes in entity.getAttributesWithProcessor('save') %}
+{% for attribute in entity.getAttributesWithFlag('processor_save') %}
+{% for type in attribute.getFlagSuffixes('processor_save_') %}
 {% set ucType = 'Save' ~ type|ucfirst ~ 'Processor' %}
                 <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
+{% endfor %}
 {% endfor %}
             </argument>
         </arguments>
     </virtualType>
 {% endif %}
-{% if entity.getAttributesWithProcessor('inlineEdit')|length > 0 %}
+{% if entity.hasAttributesWithFlag('processor_inline_edit') %}
     <virtualType name="{{ entity.getVirtualType('SaveDataProcessorInlineEdit') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-{% for type, attributes in entity.getAttributesWithProcessor('inlineEdit') %}
+{% for type, attributes in entity.getAttributesWithFlagPrefix('processor_inline_edit_') %}
 {% set ucType = 'Save' ~ type|ucfirst ~ 'Processor' %}
-                    <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
+                <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
 {% endfor %}
             </argument>
         </arguments>

@@ -3,12 +3,12 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block name="{{ entity.getNameSingular()|hyphen }}-list" template="{{ module.getNamespace()|camel|ucfirst }}_{{ module.getModuleName()|camel|ucfirst }}::{{ entity.getNameSingular()|snake }}/list.phtml">
+            <block name="{{ entity.getNameSingular()|hyphen }}-list" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ entity.getNameSingular()|snake }}/list.phtml">
                 <arguments>
-                    <argument name="list{{ entity.getNameSingular()|camel|ucfirst }}" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}</argument>
+                    <argument name="list{{ entity.getNameSingular()|camel|ucfirst }}" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}</argument>
                     <argument name="formatter" xsi:type="object">{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter</argument>
     {% if entity.isFrontend() %}
-                    <argument name="{{ entity.getNameSingular()|camel }}Url" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url</argument>
+                    <argument name="{{ entity.getNameSingular()|camel }}Url" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url</argument>
     {% endif %}
                 </arguments>
             </block>

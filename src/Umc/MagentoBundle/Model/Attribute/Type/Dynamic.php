@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -19,23 +18,23 @@
 
 declare(strict_types=1);
 
-namespace App\Umc\CoreBundle\Model\Attribute\Dynamic\Type;
+namespace App\Umc\MagentoBundle\Model\Attribute\Type;
 
-class ProductAttribute extends BaseType
+use App\Umc\MagentoBundle\Model\Attribute;
+
+class Dynamic extends BaseType
 {
     /**
-     * @return string
+     * @return array
      */
-    public function getSourceModel(): string
+    public function getFlags()
     {
-        $module = $this->getDynamic()->getAttribute()->getEntity()->getModule();
-        $parts = [
-            $module->getUmcCrudNamespace(),
-            $module->getUmcModuleName(),
-            'Source',
-            'Catalog',
-            'ProductAttribute'
-        ];
-        return implode('\\', $parts);
+        $flags = parent::getFlags();
+        /** @var Attribute $attribute */
+        $attribute = $this->getAttribute();
+        foreach ($attribute->getDynamic() as $field) {
+            $flags = array_merge($flags, $field->getTypeInstance()->getFlags());
+        }
+        return array_unique($flags);
     }
 }

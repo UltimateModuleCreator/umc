@@ -1,13 +1,15 @@
-{% for type, attributes in entity.getAttributesWithProcessor('provider') %}
-{% include 'entity/adminhtml/di/processor/provider/'~ type ~'.html.twig' with {module: module, enitity: entity, attributes: attributes} %}
+{% for type, attributes in entity.getAttributesWithFlagPrefix('processor_provider_') %}
+{% include '@UmcMagento/entity/adminhtml/di/processor/provider/'~ type ~'.html.twig' with {module: module, enitity: entity, attributes: attributes} %}
 {% endfor %}
-{% if entity.getAttributesWithProcessor('provider')|length > 0 %}
+{% if entity.hasAttributesWithFlag('processor_provider') > 0 %}
     <virtualType name="{{ entity.getVirtualType('FormDataModifier') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-{% for type, attributes in entity.getAttributesWithProcessor('provider') %}
+{% for attribute in entity.getAttributesWithFlag('processor_provider') %}
+{% for type in attribute.getFlagSuffixes('processor_provider_') %}
 {% set ucType = 'Form' ~ type|ucfirst ~ 'Modifier' %}
                 <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
+{% endfor %}
 {% endfor %}
             </argument>
         </arguments>
@@ -19,6 +21,6 @@
             <argument name="requestFieldName" xsi:type="object">{{ entity.getPk() }}</argument>
             <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
             <argument name="dataModifier" xsi:type="object">{{ entity.getFormDataModifier() }}</argument>
-            <argument name="collectionProvider" xsi:type="object">{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}UiCollectionProvider</argument>
+            <argument name="collectionProvider" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}UiCollectionProvider</argument>
         </arguments>
     </virtualType>

@@ -8,7 +8,7 @@
                     <item name="filterOptions" xsi:type="boolean">true</item>
                     <item name="chipsEnabled" xsi:type="boolean">true</item>
                     <item name="disableLabel" xsi:type="boolean">true</item>
-                    <item name="multiple" xsi:type="boolean">{{ type.getMultipleText() }}</item>
+                    <item name="multiple" xsi:type="boolean">{% if attribute.hasFlag('multiple') %}true{% else %}false{% endif %}</item>
                 </item>
             </argument>
             <settings>

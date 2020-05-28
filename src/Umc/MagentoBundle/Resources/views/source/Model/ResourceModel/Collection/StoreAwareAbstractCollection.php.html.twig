@@ -2,10 +2,10 @@
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\Collection;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Collection;
 
 use Magento\Framework\EntityManager\MetadataPool;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\Store;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Store;
 
 class StoreAwareAbstractCollection extends AbstractCollection
 {

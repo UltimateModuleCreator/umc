@@ -111,6 +111,10 @@ class Attribute
      * @var bool
      */
     protected $areOptionsNumeric;
+    /**
+     * @var string[]
+     */
+    protected $flags;
 
     /**
      * Attribute constructor.
@@ -324,24 +328,42 @@ class Attribute
     }
 
     /**
-     * @return bool
-     */
-    public function isMultiple(): bool
-    {
-        return $this->getTypeInstance()->isMultiple();
-    }
-
-    /**
      * @return array
-     * //TODO: cache flags
      */
     public function getFlags()
     {
-        $flags = [];
-        $this->isShowInList() && $flags[] = 'show_in_list';
-        $this->isShowInView() && $flags[] = 'show_in_view';
-        $flags = array_merge($flags, $this->getTypeInstance()->getFlags());
-        return $flags;
+        if ($this->flags === null) {
+            $this->flags = [];
+            $this->isShowInList() && $this->flags[] = 'show_in_list';
+            $this->isShowInView() && $this->flags[] = 'show_in_view';
+            $this->flags = array_merge($this->flags, $this->getTypeInstance()->getFlags());
+        }
+        return $this->flags;
+    }
+
+    /**
+     * @param $flag
+     * @return bool
+     */
+    public function hasFlag($flag): bool
+    {
+        return in_array($flag, $this->getFlags());
+    }
+
+    /**
+     * @param $prefix
+     * @return array
+     * //TODO: cache suffix
+     */
+    public function getFlagSuffixes($prefix): array
+    {
+        $suffixes = [];
+        foreach ($this->getFlags() as $flag) {
+            if (substr($flag, 0, strlen($prefix)) === $prefix) {
+                $suffixes[] = substr($flag, strlen($prefix));
+            }
+        }
+        return $suffixes;
     }
 
     public function getProcessors(): array

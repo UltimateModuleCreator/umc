@@ -12,8 +12,8 @@
     <type name="Magento\Backend\Block\GlobalSearch">
         <arguments>
             <argument name="entityResources" xsi:type="array">
-{% for entity in module.module.getEntitiesWithFlag('search') %}
-                <item name="{{ module.getMenuText() }} {{ entity.getLabelPlural() }}" xsi:type="string">{{ module.getNamespace()|camel|ucfirst }}_{{ module.getModuleName()|camel|ucfirst }}::{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}</item>
+{% for entity in module.getEntitiesWithFlag('search') %}
+                <item name="{{ module.getMenuText() }} {{ entity.getLabelPlural() }}" xsi:type="string">{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|snake }}</item>
 {% endfor %}
             </argument>
             <argument name="entityPaths" xsi:type="array">

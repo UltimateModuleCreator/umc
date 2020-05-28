@@ -2,7 +2,7 @@
         <arguments>
             <argument name="fields" xsi:type="array">
 {% for attribute in attributes %}
-                    <item name="{{ attribute.getCode() }}" xsi:type="string">{{ attribute.getCode() }}</item>
+                <item name="{{ attribute.getCode() }}" xsi:type="string">{{ attribute.getCode() }}</item>
 {% endfor %}
             </argument>
             <argument name="strict" xsi:type="boolean">true</argument>

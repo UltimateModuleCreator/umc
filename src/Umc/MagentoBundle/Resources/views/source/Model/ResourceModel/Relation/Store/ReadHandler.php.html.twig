@@ -2,10 +2,10 @@
 <?php{{ module.getFormattedLicense('php') }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\Relation\Store;
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Relation\Store;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use {{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\Model\ResourceModel\StoreAwareAbstractModel;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel;
 
 class ReadHandler implements ExtensionInterface
 {

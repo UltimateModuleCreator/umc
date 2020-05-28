@@ -366,33 +366,6 @@ class ModuleTest extends TestCase
     }
 
     /**
-     * @covers \App\Model\Module::hasAttributeType
-     * @covers \App\Model\Module::__construct
-     */
-    public function testHasAttributeType()
-    {
-        $entity = $this->createMock(Entity::class);
-        $entity->method('hasAttributeType')->willReturnMap([
-            ['text', true],
-            ['select', false]
-        ]);
-        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
-        $data = [
-            '_entities' => [
-                ['data']
-            ]
-        ];
-        $module = $this->getInstance($data);
-        $this->assertTrue($module->hasAttributeType('text'));
-        //call twice for memozing
-        $this->assertTrue($module->hasAttributeType('text'));
-
-        $this->assertFalse($module->hasAttributeType('select'));
-        //call teice to test memozing
-        $this->assertFalse($module->hasAttributeType('select'));
-    }
-
-    /**
      * @covers \App\Model\Module::hasSearchableEntities
      * @covers \App\Model\Module::initEntityCacheData
      * @covers \App\Model\Module::__construct
@@ -796,7 +769,7 @@ class ModuleTest extends TestCase
     public function testGetFileEntities()
     {
         $entity = $this->createMock(Entity::class);
-        $entity->method('hasAttributeType')->willReturn(true);
+        $entity->method('hasAttributeWithFlag')->willReturn(true);
         $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
         $data = [
             '_entities' => [
@@ -819,7 +792,7 @@ class ModuleTest extends TestCase
     public function testIsImage()
     {
         $entity = $this->createMock(Entity::class);
-        $entity->method('hasAttributeType')->willReturn(true);
+        $entity->method('hasAttributeWithFlag')->willReturn(true);
         $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
         $data = [
             '_entities' => [
@@ -832,29 +805,6 @@ class ModuleTest extends TestCase
         $this->assertTrue($module->isImage());
 
         $this->assertFalse($this->getInstance([])->isImage());
-    }
-
-    /**
-     * @covers \App\Model\Module::getImageEntities
-     * @covers \App\Model\Module::initEntityCacheData
-     * @covers \App\Model\Module::__construct
-     */
-    public function testGetImageEntities()
-    {
-        $entity = $this->createMock(Entity::class);
-        $entity->method('hasAttributeType')->willReturn(true);
-        $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
-        $data = [
-            '_entities' => [
-                ['data']
-            ]
-        ];
-        $module = $this->getInstance($data);
-        $this->assertEquals([$entity], $module->getImageEntities());
-        //call twice to test memoizing
-        $this->assertEquals([$entity], $module->getImageEntities());
-
-        $this->assertEquals([], $this->getInstance([])->getImageEntities());
     }
 
     /**

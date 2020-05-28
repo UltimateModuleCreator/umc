@@ -1,7 +1,7 @@
 {% if entity.isFrontend() %}
 <?php{{ module.getFormattedLicense('php') }}
 /** @var \Magento\Framework\View\Element\Template $block
-/** @var ${{ entity.getNameSingular()|camel }}View \{{ module.getNamespace()|camel|ucfirst }}\{{ module.getModuleName()|camel|ucfirst }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\\View
+/** @var ${{ entity.getNameSingular()|camel }}View \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\\View
 /** @var $formatter \{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter */
 ${{ entity.getNameSingular()|camel }}View = $block->getData('{{ entity.getNameSingular()|camel }}View');
 $formatter = $block->getData('formatter');

@@ -90,6 +90,14 @@ class Entity
      * @var array
      */
     protected $attributeCache;
+    /**
+     * @var string[]
+     */
+    protected $flags;
+    /**
+     * @var array
+     */
+    protected $attributesByFlagPrefix = [];
 
     /**
      * Entity constructor.
@@ -214,6 +222,14 @@ class Entity
     }
 
     /**
+     * @return bool
+     */
+    public function isFrontend(): bool
+    {
+        return $this->getModule()->isFrontend() && $this->frontend;
+    }
+
+    /**
      * @return Attribute|null
      */
     public function getNameAttribute(): ?Attribute
@@ -236,6 +252,7 @@ class Entity
             'name_plural' => $this->namePlural,
             'label_singular' => $this->labelSingular,
             'label_plural' => $this->labelPlural,
+            'frontend' => $this->frontend,
             'search' => $this->search,
             'seo' => $this->seo,
             'store' => $this->store,
@@ -255,20 +272,14 @@ class Entity
      */
     private function initAttributeCacheData(): void
     {
-        if ($this->attributeCache !== null) {
-            return;
-        }
-        $this->attributeCache['by_flag'] = $this->attributeCache['by_flag'] ?? [];
-        $this->attributeCache['by_type'] = $this->attributeCache['by_type'] ?? [];
-        $this->attributeCache['by_processor'] = $this->attributeCache['processor'] ?? [];
-        if (isset($this->cacheData['attribute'])) {
-            return;
-        }
-        foreach ($this->getModule()->getProcessorTypes() as $processorType) {
-            $this->cacheData['attribute']['processor'][$processorType] = [];
-        }
-        foreach ($this->getAttributes() as $attribute) {
-            $this->cacheAttributeData($attribute);
+        if ($this->attributeCache === null) {
+            $this->attributeCache[] = [
+                'by_flag' => [],
+                'by_type' => []
+            ];
+            foreach ($this->getAttributes() as $attribute) {
+                $this->cacheAttributeData($attribute);
+            }
         }
     }
 
@@ -283,11 +294,6 @@ class Entity
         foreach ($attribute->getFlags() as $flag) {
             $this->attributeCache['by_flag'][$flag] = $this->attributeCache['by_flag'][$flag] ?? [];
             $this->attributeCache['by_flag'][$flag][] = $attribute;
-        }
-        foreach ($attribute->getProcessors() as $code => $value) {
-            $this->attributeCache['by_processor'][$code][$value] =
-                $this->attributeCache['by_processor'][$code][$value] ?? [];
-            $this->attributeCache['by_processor'][$code][$value][] = $attribute;
         }
     }
 
@@ -312,65 +318,37 @@ class Entity
 
     /**
      * @return array
-     * //TODO: cache flags
      */
     public function getFlags()
     {
-        $flags = [];
-        $this->isSearch() && $flags[] = 'search';
-        $this->isFrontend() && $flags[] = 'frontend';
-        $this->isStore() && $flags[] = 'store';
-        $this->isFooterLinks() && $flags[] = 'footer_link';
-        $this->isTopMenu() && $flags[] = 'top_menu';
-        $this->initAttributeCacheData();
-        $flags = array_merge(
-            $flags,
-            array_map(
-                function (string $flag) {
-                    return 'attribute_' . $flag;
-                },
-                array_keys($this->attributeCache['by_flag'])
-            )
-        );
-        $flags = array_merge(
-            $flags,
-            array_map(
-                function (string $flag) {
-                    return 'attribute_type_' . $flag;
-                },
-                array_keys($this->attributeCache['by_type'])
-            )
-        );
-        return $flags;
-    }
-
-    /**
-     * @param $type
-     * @return Attribute[][]
-     */
-    public function getAttributesWithProcessor($type): array
-    {
-        $this->initAttributeCacheData();
-        return $this->attributeCache['by_processor'][$type] ?? [];
-    }
-
-    /**
-     * @param $type
-     * @return bool
-     */
-    public function hasAttributeType($type): bool
-    {
-        $this->initAttributeCacheData();
-        return isset($this->cacheData['attribute']['by_type'][$type]);
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function getOptionAttributes(): array
-    {
-        $this->initAttributeCacheData();
-        return $this->cacheData['attribute']['with_options'];
+        if ($this->flags === null) {
+            $this->flags = [];
+            $this->isSearch() && $this->flags[] = 'search';
+            $this->isFrontend() && $this->flags[] = 'frontend';
+            $this->isStore() && $this->flags[] = 'store';
+            $this->isFooterLinks() && $this->flags[] = 'footer_link';
+            $this->isTopMenu() && $this->flags[] = 'top_menu';
+            $this->initAttributeCacheData();
+            $this->flags = array_merge(
+                $this->flags,
+                array_map(
+                    function (string $flag) {
+                        return 'attribute_' . $flag;
+                    },
+                    array_keys($this->attributeCache['by_flag'])
+                )
+            );
+            $this->flags = array_merge(
+                $this->flags,
+                array_map(
+                    function (string $flag) {
+                        return 'attribute_type_' . $flag;
+                    },
+                    array_keys($this->attributeCache['by_type'])
+                )
+            );
+        }
+        return $this->flags;
     }
 
     /**
@@ -384,10 +362,31 @@ class Entity
     }
 
     /**
+     * @param string $type
      * @return bool
      */
-    public function isFrontend(): bool
+    public function hasAttributesWithType(string $type): bool
     {
-        return $this->getModule()->isFrontend() && $this->frontend;
+        return count($this->getAttributesWithType($type)) > 0;
+    }
+
+    /**
+     * @param $prefix
+     * @return Attribute[][]
+     */
+    public function getAttributesWithFlagPrefix($prefix)
+    {
+        if (!isset($this->attributesByFlagPrefix[$prefix])) {
+            $this->attributesByFlagPrefix[$prefix] = [];
+            foreach ($this->getAttributes() as $attribute) {
+                $suffixes = $attribute->getFlagSuffixes($prefix);
+                foreach ($suffixes as $suffix) {
+                    $this->attributesByFlagPrefix[$prefix][$suffix] =
+                        $this->attributesByFlagPrefix[$prefix][$suffix] ?? [];
+                    $this->attributesByFlagPrefix[$prefix][$suffix][] = $attribute;
+                }
+            }
+        }
+        return $this->attributesByFlagPrefix[$prefix];
     }
 }
