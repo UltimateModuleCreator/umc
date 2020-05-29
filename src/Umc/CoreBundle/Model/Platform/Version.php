@@ -117,6 +117,15 @@ class Version
     }
 
     /**
+     * @param bool $withPlatform
+     * @return array
+     */
+    public function getCodingStandards($withPlatform = true)
+    {
+        return $this->getConfig('coding_standards', $withPlatform);
+    }
+
+    /**
      * @return Platform
      */
     public function getPlatform(): Platform

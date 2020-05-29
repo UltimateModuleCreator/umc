@@ -8,7 +8,7 @@
                             {{ indent }}<item name="filterOptions" xsi:type="boolean">true</item>
                             {{ indent }}<item name="chipsEnabled" xsi:type="boolean">true</item>
                             {{ indent }}<item name="disableLabel" xsi:type="boolean">true</item>
-                            {{ indent }}<item name="multiple" xsi:type="boolean">{% if field.hasFlag('multiple') %}true{% else %}false{% endif %}</item>
+                            {{ indent }}<item name="multiple" xsi:type="boolean">{% if field.getTypeInstance().hasFlag('multiple') %}true{% else %}false{% endif %}</item>
                         {{ indent }}</item>
                     {{ indent }}</argument>
                     {{ indent }}<settings>

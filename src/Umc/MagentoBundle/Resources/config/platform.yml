@@ -19,6 +19,11 @@ magento:
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/entity.yml'
     destination: '%kernel.project_dir%/var/umc/magento/'
     module_factory: 'magento.module.factory'
+    coding_standards:
+      - PSR1
+      - PSR2
+      - PSR12
+      - "%kernel.project_dir%/vendor/magento/magento-coding-standard/Magento2"
   versions:
     -
       label: 2.3.4+

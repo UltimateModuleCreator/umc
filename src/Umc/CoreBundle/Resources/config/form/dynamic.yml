@@ -1,4 +1,5 @@
 dynamic:
+  settings_label: "Dynamic Rows Default Settings"
   panel:
     fields:
       -

@@ -1,5 +1,6 @@
 option:
   code: option
+  settings_label: "Option Default Settings"
   panel:
     fields:
       -

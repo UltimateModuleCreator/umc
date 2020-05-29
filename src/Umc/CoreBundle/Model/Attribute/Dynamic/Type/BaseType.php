@@ -117,6 +117,15 @@ class BaseType
     }
 
     /**
+     * @param $flag
+     * @return bool
+     */
+    public function hasFlag($flag): bool
+    {
+        return in_array($flag, $this->getFlags());
+    }
+
+    /**
      * @param string $templateKey
      * @param array $params
      * @return string

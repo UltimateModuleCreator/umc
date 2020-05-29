@@ -19,12 +19,18 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Attribute\Serialized\Option;
+namespace App\Umc\CoreBundle\Service\Cs;
 
-/**
- * @deprecated
- */
-class Factory extends \App\Umc\CoreBundle\Model\Attribute\Dynamic\Option\Factory
+use Symfony\Component\Process\Process;
+
+class ProcessFactory
 {
-
+    /**
+     * @param array $data
+     * @return Process
+     */
+    public function create(array $data): Process
+    {
+        return new Process($data);
+    }
 }

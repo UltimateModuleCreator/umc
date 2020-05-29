@@ -18,12 +18,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Attribute\Type;
+namespace App\Umc\CoreBundle\Util;
 
-/**
- * @deprecated
- */
-class Dynamic extends \App\Umc\CoreBundle\Model\Attribute\Type\Dynamic
+class Menu
 {
 
 }

@@ -1,8 +1,19 @@
-Settings = function (data, fields) {
+if (typeof UMC === "undefined") {
+    UMC = {}
+}
+UMC.Settings = function (data, fields) {
     this.data = {};
-    for (field in fields) {
-        if (fields.hasOwnProperty(field)) {
-            this.data[fields[field]] = ko.observable(data[fields[field]] || '');
+    for (let group in fields) {
+        if (fields.hasOwnProperty(group)) {
+            this.data[group] = {};
+            for (let i = 0; i < fields[group].length; i++ ) {
+                let field = fields[group][i];
+                let value = '';
+                if (data[group] !== undefined) {
+                    value = data[group][field] || '';
+                }
+                this.data[group][field] = ko.observable(value);
+            }
         }
     }
     this.submitForm = function () {
@@ -26,10 +37,17 @@ Settings = function (data, fields) {
     };
 
     this.toParams = function () {
-        var data = {};
-        for (var field in this.data) {
-            if (this.data.hasOwnProperty(field)) {
-                data[field] = (typeof this.data[field] === "function") ? this.data[field]() : this.data[field];
+        let data = {};
+        for (let group in this.data) {
+            if (this.data.hasOwnProperty(group)) {
+                data[group] = {};
+                for (let field in this.data[group]) {
+                    if (this.data[group].hasOwnProperty(field)) {
+                        data[group][field] = (typeof this.data[group][field] === "function")
+                            ? this.data[group][field]()
+                            : this.data[group][field];
+                    }
+                }
             }
         }
         return data;

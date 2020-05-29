@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\Service;
 use App\Umc\CoreBundle\Config\Loader\VersionAwareFactory;
 use App\Umc\CoreBundle\Model\Platform\Version;
 use App\Umc\CoreBundle\Repository\Module;
+use App\Umc\CoreBundle\Service\Cs\Executor;
 use App\Umc\CoreBundle\Service\Generator\Pool;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -52,6 +53,10 @@ class Builder
      * @var Archiver
      */
     private $archiver;
+    /**
+     * @var Executor
+     */
+    private $csExecutor;
 
     /**
      * Builder constructor.
@@ -61,6 +66,7 @@ class Builder
      * @param VersionAwareFactory $configLoaderFactory
      * @param Filesystem $filesystem
      * @param Archiver $archiver
+     * @param Executor $executor
      */
     public function __construct(
         \App\Umc\CoreBundle\Model\Module\Factory\Locator $factoryLocator,
@@ -68,7 +74,8 @@ class Builder
         Module $repository,
         VersionAwareFactory $configLoaderFactory,
         Filesystem $filesystem,
-        Archiver $archiver
+        Archiver $archiver,
+        Executor $executor
     ) {
         $this->factoryLocator = $factoryLocator;
         $this->generatorPoolLocator = $generatorPoolLocator;
@@ -76,6 +83,7 @@ class Builder
         $this->configLoaderFactory = $configLoaderFactory;
         $this->filesystem = $filesystem;
         $this->archiver = $archiver;
+        $this->csExecutor = $executor;
     }
 
     /**
@@ -88,14 +96,6 @@ class Builder
     {
         $factory = $this->factoryLocator->getFactory($version);
         $module = $factory->create($data);
-//        foreach ($module->getEntities() as $entity) {
-//            foreach ($entity->getAttributes() as $attribute) {
-//                if ($attribute->getType() === 'dynamic') {
-//                    var_dump($attribute->getFlags());exit;
-//                }
-//            }
-//            var_dump($entity->getFlags());exit;
-//        }
         $loader = $this->configLoaderFactory->create($version);
         $generatorPool = $this->generatorPoolLocator->getGeneratorPool($version);
         $files = [];
@@ -105,14 +105,26 @@ class Builder
         }
         $repoRoot = $this->repository->getRoot($version);
         $root = $repoRoot . '/' . $module->getExtensionName();
+        $this->writeFiles($files, $root);
+        //run coding standards
+        $csResult = $this->csExecutor->run($version->getCodingStandards(), $root);
+        $this->writeFiles($csResult, $root);
+        //archive;
+        $this->archiver->createZip($root, $module->getExtensionName(), $repoRoot);
+        $this->filesystem->remove($root);
+        $this->repository->save($module, $version);
+        return $module;
+    }
+
+    /**
+     * @param $files
+     * @param $root
+     */
+    private function writeFiles($files, $root): void
+    {
         foreach ($files as $file => $content) {
             $filePath = $root . '/' . $file;
             $this->filesystem->dumpFile($filePath, $content);
         }
-        //archive;
-        $this->archiver->createZip($root, $module->getExtensionName(), $repoRoot);
-        //$this->filesystem->remove($root);
-        $this->repository->save($module, $version);
-        return $module;
     }
 }

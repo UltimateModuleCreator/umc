@@ -67,7 +67,6 @@ class EditController extends AbstractController
         $this->moduleRepository = $moduleRepository;
     }
 
-
     /**
      * @Route("/new/{platform}/{version?}", methods={"GET"}, name="new")
      * @Route("/edit/{platform}/{version}/{module}", methods={"GET"}, name="edit")

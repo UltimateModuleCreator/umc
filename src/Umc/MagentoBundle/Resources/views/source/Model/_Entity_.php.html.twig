@@ -117,8 +117,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
-    * @return int[]
-    */
+     * @return int[]
+     */
     public function getStoreId()
     {
         return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::STORE_ID);

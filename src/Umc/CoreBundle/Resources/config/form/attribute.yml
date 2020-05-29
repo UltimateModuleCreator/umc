@@ -1,4 +1,5 @@
 attribute:
+  settings_label: "Attribute Default Settings"
   panel:
     fields:
       -

@@ -70,9 +70,9 @@ class TopmenuPlugin
     }
 
     /**
-    * @param $data
-    * @return array|null
-    */
+     * @param $data
+     * @return array|null
+     */
     private function convertNodeData($data)
     {
         $currentHandle = $this->request->getFullActionName();
@@ -93,10 +93,10 @@ class TopmenuPlugin
     }
 
     /**
-    * @param Topmenu $subject
-    * @param array $result
-    * @return array
-    */
+     * @param Topmenu $subject
+     * @param array $result
+     * @return array
+     */
     public function afterGetCacheKeyInfo(Topmenu $subject, array $result)
     {
         $allHandles = array_reduce(

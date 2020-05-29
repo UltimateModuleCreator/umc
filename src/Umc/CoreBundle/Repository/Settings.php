@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -19,12 +18,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Attribute\Type;
+namespace App\Umc\CoreBundle\Repository;
 
-/**
- * @deprecated
- */
-class Serialized extends \App\Umc\CoreBundle\Model\Attribute\Type\Serialized
+class Settings
 {
 
 }

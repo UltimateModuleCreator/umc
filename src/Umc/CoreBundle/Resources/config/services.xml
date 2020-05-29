@@ -2,9 +2,6 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
-    <parameters>
-        <parameter key="module.destination.root" type="string">%kernel.project_dir%/var/umc/</parameter>
-    </parameters>
     <services>
         <defaults public="false" autowire="true" autoconfigure="true" />
         <prototype namespace="App\Umc\CoreBundle\" resource="../../*" exclude="../../{DependencyInjection,Tests}" />
@@ -14,6 +11,13 @@
         <service id="parameter.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Parameter">
             <tag name="platform_pool.config_loader.modifier" priority="1" />
             <tag name="form.config.modifier" priority="1000" />
+            <tag name="settings.config.modifier" priority="1000" />
+        </service>
+        <service id="App\Umc\CoreBundle\Service\Cs\Executor" class="App\Umc\CoreBundle\Service\Cs\Executor">
+            <argument key="$phpcsPath" type="string">%kernel.project_dir%/vendor/bin/phpcs</argument>
+        </service>
+        <service id="App\Umc\CoreBundle\Repository\Module" class="App\Umc\CoreBundle\Repository\Module">
+            <argument key="$root" type="string">%kernel.project_dir%/var/umc</argument>
         </service>
         <!--[+] platform pool configuration-->
         <service id="App\Umc\CoreBundle\Model\Platform\Pool" class="App\Umc\CoreBundle\Model\Platform\Pool">
@@ -54,6 +58,7 @@
         </service>
 
         <!--[+] controller composition -->
+        <!--[+] Edit controller -->
         <service id="App\Umc\CoreBundle\Controller\EditController" class="App\Umc\CoreBundle\Controller\EditController">
             <argument key="$formLoaderFactory" type="service" id="form.config.loader.factory" />
             <argument key="$uiModifier" type="service" id="App\Umc\CoreBundle\Config\Form\Modifier\Tab" />
@@ -68,6 +73,7 @@
         </service>
         <service id="form.config.modifier.remove" class="App\Umc\CoreBundle\Config\Modifier\Remove">
             <tag name="form.config.modifier" priority="10" />
+            <tag name="settings.config.modifier" priority="10" />
             <argument key="$key" type="string">enabled</argument>
         </service>
         <service id="form.config.modifier.sort" class="App\Umc\CoreBundle\Config\Modifier\Sort">
@@ -81,6 +87,32 @@
                 </argument>
             </argument>
         </service>
+        <!--[-] Edit controller -->
+        <!--[+] Settings controller -->
+        <service id="App\Umc\CoreBundle\Controller\SettingsController" class="App\Umc\CoreBundle\Controller\SettingsController">
+            <argument key="$formLoaderFactory" type="service" id="settings.config.loader.factory" />
+        </service>
+        <service id="settings.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\VersionAwareFactory">
+            <argument key="$modifier" type="service" id="settings.config.modifier" />
+            <argument key="$configKey" type="string">form</argument>
+            <argument key="$className" type="string">App\Umc\CoreBundle\Config\Form\Config</argument>
+        </service>
+        <service id="settings.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="settings.config.modifier" />
+        </service>
+        <service id="settings.config.modifier.remove.fields" class="App\Umc\CoreBundle\Config\Modifier\Remove">
+            <tag name="settings.config.modifier" priority="10" />
+            <argument key="$key" type="string">has_default</argument>
+        </service>
+        <service id="settings.config.modifier.sort" class="App\Umc\CoreBundle\Config\Modifier\Sort">
+            <tag name="settings.config.modifier" priority="20" />
+            <argument key="$fields" type="collection">
+                <argument key="fields" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+            </argument>
+        </service>
+        <!--[-] Edit controller -->
         <!--[-] controller composition -->
         <service id="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory">
             <argument key="$typeMap" type="string">%attribute_type%</argument>

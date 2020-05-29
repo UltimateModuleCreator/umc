@@ -1,0 +1,56 @@
+{% extends "@UmcCore/base.html.twig" %}
+{% block body %}
+<div class="card">
+    <div class="card-header"><h1>Existing Modules</h1></div>
+    <div class="card-body">
+        {% if groups|length > 0 %}
+            {% for group in groups %}
+                <div class="card">
+                    <div class="card-header"><h4>{{ group.platform.getName() }}</h4></div>
+                    <div class="card-body">
+                        {% if group.versions|length > 0 %}
+                        {% for version in group.versions %}
+                            <div class="card">
+                                <div class="card-header"><h4>{{ version.version.getLabel() }}</h4></div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Module</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Edit</th>
+                                            <th scope="col">Download</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if version.files|length > 0 %}
+                                            {% for module in version.files %}
+                                                <tr>
+                                                    <td>{{ module.name }}</td>
+                                                    <td>{{ module.date.format('Y-m-d H:i') }}</td>
+                                                    <td><a href="{{ url('edit', {platform: group.platform.getCode(), version: version.version.getCode(), "module":module.module_name}) }}">Edit</a></td>
+                                                    <td><a href="{{ url('download', {platform: group.platform.getCode(), version: version.version.getCode(), "module":module.module_name}) }}">Download</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="4">There are no modules for {{ group.platform.getName() }} - version {{ version.version.getLabel() }}.</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% else %}
+                            <span>There are no available versions for {{ group.platform.getName() }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <span>There are no modules created.</span>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

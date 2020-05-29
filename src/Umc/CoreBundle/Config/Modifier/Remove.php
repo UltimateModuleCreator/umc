@@ -45,7 +45,7 @@ class Remove implements ModifierInterface
         $processed = [];
         foreach ($config as $key => $item) {
             if (\is_array($item)) {
-                if (isset($item['enabled']) && !$item['enabled']) {
+                if (isset($item[$this->key]) && !$item[$this->key]) {
                     continue;
                 } else {
                     $processed[$key] = $this->modify($item);

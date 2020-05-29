@@ -31,10 +31,10 @@
                         {% endif %}
                         <div class="card-footer text-center">
                             {% if platform.isSupported() %}
-                                <a href="{{ path("platform", {platform: platform.getCode()}) }}" class="button">View</a>
+                                <span><a href="{{ path("platform", {platform: platform.getCode()}) }}" class="btn btn-primary">View</a></span>
                                 <span class="btn-group">
                                     <a href="{{ path('new', {platform: platform.getCode()}) }}"
-                                       class="btn-primary btn">Create module for {{ platform.getName() }}</a>
+                                       class="btn-primary btn">New Module</a>
                                     <a class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </a>

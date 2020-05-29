@@ -1,5 +1,5 @@
 entity:
-#  template: '@UmcCore/form/elements/form/entity.html.twig'
+  settings_label: "Entity Default Settings"
   panel:
     fields:
       -
@@ -17,7 +17,6 @@ entity:
         split:
           field: type
           values: '%attribute_type%'
-#  settings_label: "Entity default settings"
   tabs:
     -
       label: Name settings
