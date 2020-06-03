@@ -8,6 +8,9 @@
         <!-- TODO: remove this when all is split into bundles -->
         <prototype namespace="App\" resource="../../../../*" exclude="{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Controller,Model,Service,Twig}" />
         <!-- service configuration -->
+        <service id="App\Umc\CoreBundle\Repository\Settings" class="App\Umc\CoreBundle\Repository\Settings">
+            <argument key="$root" type="string">%kernel.project_dir%/var/umc/_settings</argument>
+        </service>
         <service id="parameter.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Parameter">
             <tag name="platform_pool.config_loader.modifier" priority="1" />
             <tag name="form.config.modifier" priority="1000" />
@@ -41,19 +44,19 @@
         </service>
 
         <service id="App\Umc\CoreBundle\Service\License\Pool" class="App\Umc\CoreBundle\Service\License\Pool">
-            <argument id="$processors" type="tagged_iterator" tag="licence.processor" />
+            <argument key="$processors" type="tagged_iterator" tag="licence.processor" />
         </service>
         <service id="license.processor.php" class="App\Umc\CoreBundle\Service\License\Processor">
-            <argument id="prefix" type="string"><![CDATA[\n\n]]></argument>
-            <argument id="suffix" type="string"><![CDATA[\n]]></argument>
-            <argument id="code" type="string">php</argument>
+            <argument key="$prefix" type="string"><![CDATA[\n\n]]></argument>
+            <argument key="$suffix" type="string"><![CDATA[\n]]></argument>
+            <argument key="$code" type="string">php</argument>
             <tag name="licence.processor" />
         </service>
 
         <service id="license.processor.xml" class="App\Umc\CoreBundle\Service\License\Processor">
-            <argument id="prefix" type="string"><![CDATA[\n<!--\n]]></argument>
-            <argument id="suffix" type="string"><![CDATA[-->\n]]></argument>
-            <argument id="code" type="string">xml</argument>
+            <argument key="$prefix" type="string"><![CDATA[\n<!--\n]]></argument>
+            <argument key="$suffix" type="string"><![CDATA[-->\n]]></argument>
+            <argument key="$code" type="string">xml</argument>
             <tag name="licence.processor" />
         </service>
 
@@ -63,7 +66,7 @@
             <argument key="$formLoaderFactory" type="service" id="form.config.loader.factory" />
             <argument key="$uiModifier" type="service" id="App\Umc\CoreBundle\Config\Form\Modifier\Tab" />
         </service>
-        <service id="form.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\VersionAwareFactory">
+        <service id="form.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory">
             <argument key="$modifier" type="service" id="form.config.modifier" />
             <argument key="$configKey" type="string">form</argument>
             <argument key="$className" type="string">App\Umc\CoreBundle\Config\Form\Config</argument>
@@ -92,7 +95,7 @@
         <service id="App\Umc\CoreBundle\Controller\SettingsController" class="App\Umc\CoreBundle\Controller\SettingsController">
             <argument key="$formLoaderFactory" type="service" id="settings.config.loader.factory" />
         </service>
-        <service id="settings.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\VersionAwareFactory">
+        <service id="settings.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory">
             <argument key="$modifier" type="service" id="settings.config.modifier" />
             <argument key="$configKey" type="string">form</argument>
             <argument key="$className" type="string">App\Umc\CoreBundle\Config\Form\Config</argument>
@@ -132,7 +135,7 @@
         <service id="App\Umc\CoreBundle\Service\Builder" class="App\Umc\CoreBundle\Service\Builder">
             <argument key="$configLoaderFactory" type="service" id="source.config.loader.factory" />
         </service>
-        <service id="source.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\VersionAwareFactory">
+        <service id="source.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory">
             <argument key="$modifier" type="service" id="form.config.modifier" />
             <argument key="$configKey" type="string">source</argument>
             <argument key="$className" type="string">App\Umc\CoreBundle\Config\Source\Config</argument>

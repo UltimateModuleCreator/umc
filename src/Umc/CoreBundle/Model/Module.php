@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\Model;
 
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
 use App\Service\License\ProcessorInterface;
+use App\Umc\CoreBundle\Service\License\Pool;
 use App\Umc\CoreBundle\Util\StringUtil;
 
 class Module
@@ -32,9 +33,9 @@ class Module
      */
     protected $entities = [];
     /**
-     * @var ProcessorInterface[]
+     * @var Pool[]
      */
-    protected $licenseFormatter;
+    protected $licensePool;
     /**
      * @var StringUtil
      */
@@ -96,19 +97,18 @@ class Module
      * Module constructor.
      * @param StringUtil $stringUtil
      * @param EntityFactory $entityFactory
-     * @param array $licenseFormatter
+     * @param Pool $licensePool
      * @param array $data
      */
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
-        //array $licenseFormatter,
-        //array $menuConfig,
+        Pool $licensePool,
         array $data = []
     ) {
         $this->stringUtil = $stringUtil;
         $this->entityFactory = $entityFactory;
-//        $this->licenseFormatter = $licenseFormatter;
+        $this->licensePool = $licensePool;
         $this->namespace = (string)($data['namespace'] ?? '');
         $this->moduleName = (string)($data['module_name'] ?? '');
         $this->menuText = (string)($data['menu_text'] ?? '');
@@ -228,15 +228,7 @@ class Module
      */
     public function getFormattedLicense(string $format): string
     {
-        return ''; //TODO; move this outside the module class
-        if (!isset($this->licenseFormatter[$format])) {
-            throw new \Exception("Unsupported licenese formatter {$format}");
-        }
-        $formatter = $this->licenseFormatter[$format];
-        if (!$formatter instanceof ProcessorInterface) {
-            throw new \Exception("License formatter should implement " . ProcessorInterface::class);
-        }
-        return $formatter->process($this);
+        return $this->licensePool->getProcessor($format)->process($this);
     }
 
     /**

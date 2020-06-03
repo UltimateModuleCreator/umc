@@ -14,11 +14,50 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
-.container {
-    max-width: 100%;
-    width: 100%;
-    padding: 0;
+
+/* [+] General styles */
+body {
+    color: #73879C;
+    background: #FFFFFF;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.471
 }
+.container {
+    /*max-width: 100%;*/
+    /*width: 100%;*/
+    /*padding: 0;*/
+}
+
+a {
+    color: #5A738E;
+    text-decoration: none
+}
+
+a,
+a:visited,
+a:focus,
+a:active,
+:visited,
+:focus,
+:active,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+    outline: 0
+}
+a:hover,
+a:focus {
+    color: #00aeef;
+    text-decoration: none
+}
+/* [-] General styles */
+
+/* [+] Body loader */
 .loading {
     width: 100%;
     height: 100%;
@@ -31,15 +70,25 @@
     z-index: 99;
     text-align: center;
 }
-
 .loading-icon {
     position: absolute;
     top: 300px;
     z-index: 100;
     font-size: 40px;
 }
+/* [-] Body loader */
+
+.top-nav {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100000;
+    width: 100%;
+}
 
 .sort-handle {
+    cursor: move;
     float:left;
 }
 .sort-handle a {
@@ -47,35 +96,18 @@
     padding: 5px;
 }
 
-.card-header .sort-handle a {
-    padding: 15px 10px 0 0;
-}
-
 .card-header .sort-handle h2 {
     float:left
 }
 
-.panel_toolbox {
-    min-width: auto;
-    margin-top: 8px;
-}
-.select2-container--bootstrap .select2-results__group {
-    font-size:18px;
-    opacity: 0.6;
+.card-header .nav-link {
+    padding: 0.25em;
 }
 
 .drag-placeholder {
     width: 100%;
     height: 100px!important;
     background-color: #cccccc;
-}
-
-.sort-handle {
-    cursor: move;
-}
-
-footer {
-    padding-top: 10px;
 }
 
 .toggle-check-input {

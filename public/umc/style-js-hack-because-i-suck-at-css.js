@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * UMC
  *
  * NOTICE OF LICENSE
@@ -15,19 +14,13 @@
  *
  */
 
-declare(strict_types=1);
-
-namespace App\Umc\CoreBundle\Service;
-
-use Symfony\Component\Finder\Finder;
-
-class FileFinderFactory
-{
-    /**
-     * @return Finder
-     */
-    public function create(): Finder
+jQuery('document').ready(function ($) {
+    function hackTheHeight()
     {
-        return new Finder();
+        $('.main_container').css('min-height', $(window).height());
     }
-}
+    $(window).resize(function ($) {
+        hackTheHeight();
+    })
+    hackTheHeight();
+});

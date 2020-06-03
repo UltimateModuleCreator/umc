@@ -67,25 +67,34 @@
              role="tabpanel">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-lg-9"><h4>{{ child.tabLabel }} for <span data-bind="text: panelTitle"></span></h4></div>
-                    <div class="col-lg-3">
-                        <ul class="nav navbar-right panel_toolbox">
-                                <li class="float-right">
-                                    <a title="Collapse All {{ child.tabLabel }}">
+                    <div class="col-9">
+                        <h4>{{ child.tabLabel }} for <span data-bind="text: panelTitle"></span></h4>
+                    </div>
+                    <div class="col-3">
+                        <nav class="navbar float-right">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a title="{{ child.addButton.label }}" href="#" class="nav-link">
+                                        <i data-bind="click: function (data, event) {addChild(UMC.defaults.{{ child.formKey }} || {}, '{{ child.code }}')}" class="fa fa-2x fa-plus"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a title="Collapse All {{ child.tabLabel }}" href="#" class="nav-link">
                                         <i class="fa fa-2x fa-bars" data-bind="click: collapseAllChildren('{{ child.code }}')"></i>
                                     </a>
                                 </li>
-                                <li class="float-right">
-                                    <a title="Expand All {{ child.tabLabel }}">
+                                <li class="nav-item">
+                                    <a title="Expand All {{ child.tabLabel }}" href="#" class="nav-link">
                                         <i class="fa fa-2x fa-stream" data-bind="click: expandAllChildren('{{ child.code }}')"></i>
                                     </a>
                                 </li>
-                            <li class="float-right">
-                                <a title="Collapse {{ child.tabLabel }} Section">
-                                    <i data-bind="click: toggleChildContainer('{{ child.code }}'), attr: {class: visibleChildrenContainerClass.{{ child.code }}}"></i>
-                                </a>
-                            </li>
-                        </ul>
+                                <li class="nav-item">
+                                    <a title="Collapse {{ child.tabLabel }} Section" href="#" class="nav-link">
+                                        <i data-bind="click: toggleChildContainer('{{ child.code }}'), attr: {class: visibleChildrenContainerClass.{{ child.code }}}"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -93,26 +102,32 @@
                 <div data-bind="foreach: children.{{ child.code }}, {% if child.sortable is defined %}{{ child.sortable }}{% endif %}: children.{{ child.code }}">
                     <div class="card">
                         <div class="card-header">
-                            <div class="sort-handle">
-                                <a title="Sort {{ child.tabLabel }}"><i class="fa fa-2x fa-grip-vertical"></i></a>
-                                <h2>
-                                    <span data-bind="html: panelTitle"></span>
-                                </h2>
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="sort-handle">
+                                        <a title="Sort {{ child.tabLabel }}"><i class="fa fa-2x fa-grip-vertical"></i></a>
+                                        <h2>
+                                            <span data-bind="html: panelTitle"></span>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <nav class="navbar float-right">
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item"">
+                                                <a data-bind="click: togglePanel" class="nav-link" href="#">
+                                                    <i data-bind="class: collapseClass"></i>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a data-bind="click: function (data, event) {$parent.removeChild(data, '{{ child.code }}')}" class="nav-link" href="#">
+                                                    <i class="fa fa-2x fa-trash"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
-                            <ul class="nav navbar-right panel_toolbox">
-                                <li class="float-right">
-                                    <a data-bind="click: togglePanel">
-                                        <i data-bind="class: collapseClass"></i>
-                                    </a>
-                                </li>
-                                <li class="float-right">
-                                    <a data-bind="click: function (data, event) {$parent.removeChild(data, '{{ child.code }}')}">
-                                        <i class="fa fa-2x fa-trash"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="clearfix"></div>
-
                         </div>
                         <div class="card-body" data-bind="visible: panelVisible">
                             {% include formConfig[child.formKey].template with {form: formConfig[child.formKey], formKey: child.formKey} %}
@@ -121,28 +136,25 @@
                 </div>
             </div>
             <div class="card-footer">
-                <div class="float-left">
-                    {% if child.addButton.split is defined %}
-                        <span class="btn-group">
-                            <button type="button" class="btn btn-primary" data-bind="click: function (data, event) {addChild(UMC.defaults.{{ child.formKey }} || {}, '{{ child.code }}')}">{{ child.addButton.label }}</button>
-                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            {% if child.addButton.split.values is defined %}
-                                <span class="dropdown-menu">
-                                    {% for key, item in child.addButton.split.values %}
-                                        <a class="dropdown-item" data-bind="click: function (data, event) {
-                                            addChild(Object.assign(UMC.defaults.{{ child.formKey }} || {}, { {{ child.addButton.split.field }}: '{{ key }}'}), '{{ child.code }}')
-                                        }">{{ item.label }}</a>
-                                    {% endfor %}
-                                </span>
-                            {% endif %}
-                        </span>
-                    {% else %}
-                        <button type="button" data-bind="click: function (data, event) {addChild(UMC.defaults.{{ child.formKey }} || {}, '{{ child.code }}')}" class="btn btn-primary btn">{{ child.addButton.label }}</button>
-                    {% endif %}
-                </div>
-                <div class="clear"></div>
+                {% if child.addButton.split is defined %}
+                    <span class="btn-group">
+                        <button type="button" class="btn btn-primary" data-bind="click: function (data, event) {addChild(UMC.defaults.{{ child.formKey }} || {}, '{{ child.code }}')}">{{ child.addButton.label }}</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        {% if child.addButton.split.values is defined %}
+                            <span class="dropdown-menu">
+                                {% for key, item in child.addButton.split.values %}
+                                    <a class="dropdown-item" href="#"  data-bind="click: function (data, event) {
+                                        addChild(Object.assign(UMC.defaults.{{ child.formKey }} || {}, { {{ child.addButton.split.field }}: '{{ key }}'}), '{{ child.code }}')
+                                    }">{{ item.label }}</a>
+                                {% endfor %}
+                            </span>
+                        {% endif %}
+                    </span>
+                {% else %}
+                    <button type="button" data-bind="click: function (data, event) {addChild(UMC.defaults.{{ child.formKey }} || {}, '{{ child.code }}')}" class="btn btn-primary btn">{{ child.addButton.label }}</button>
+                {% endif %}
             </div>
         </div>
         {% endif %}

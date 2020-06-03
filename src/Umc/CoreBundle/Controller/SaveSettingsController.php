@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Controller;
 
 use App\Umc\CoreBundle\Model\Platform\Pool;
+use App\Umc\CoreBundle\Repository\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,6 +34,10 @@ class SaveSettingsController extends AbstractController
      */
     private $pool;
     /**
+     * @var Settings
+     */
+    private $repository;
+    /**
      * @var RequestStack
      */
     private $requestStack;
@@ -40,11 +45,13 @@ class SaveSettingsController extends AbstractController
     /**
      * SaveSettingsController constructor.
      * @param Pool $pool
+     * @param Settings $repository
      * @param RequestStack $requestStack
      */
-    public function __construct(Pool $pool, RequestStack $requestStack)
+    public function __construct(Pool $pool, Settings $repository, RequestStack $requestStack)
     {
         $this->pool = $pool;
+        $this->repository = $repository;
         $this->requestStack = $requestStack;
     }
 
@@ -56,7 +63,22 @@ class SaveSettingsController extends AbstractController
      */
     public function run(string $platform, ?string $version = null): JsonResponse
     {
-        $data = $this->requestStack->getCurrentRequest()->get('settings');
-        var_dump($data);exit;
+        $response = [];
+        try {
+            $platformInstance = $this->pool->getPlatform($platform);
+            $versionInstance = $platformInstance->getVersion($version);
+            $data = $this->requestStack->getCurrentRequest()->get('settings');
+            if ($version === null) {
+                $this->repository->savePlatformConfig($platformInstance, $data);
+            } else {
+                $this->repository->saveVersionConfig($versionInstance, $data);
+            }
+            $response['success'] = true;
+            $response['message'] = "Default settings were saved";
+        } catch (\Exception $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage() . '<pre>' . $e->getTraceAsString() . '</pre>';
+        }
+        return new JsonResponse($response);
     }
 }

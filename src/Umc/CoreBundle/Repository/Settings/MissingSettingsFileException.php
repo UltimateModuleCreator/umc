@@ -1,5 +1,4 @@
 <?php
-
 /**
  * UMC
  *
@@ -18,9 +17,9 @@
 
 declare(strict_types=1);
 
-namespace App\Umc\CoreBundle\Util;
+namespace App\Umc\CoreBundle\Repository\Settings;
 
-class Menu
+class MissingSettingsFileException extends \Exception
 {
 
 }

@@ -66,8 +66,10 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
         if ($this->isStore()) {
             $dependencies[] = "magento/module-store";
         }
-        if ($this->getAttributesWithFlag('product_attribute')
-            || $this->hasAttributesWithType('product_attribute_set')) {
+        if (
+            $this->getAttributesWithFlag('product_attribute')
+            || $this->hasAttributesWithType('product_attribute_set')
+        ) {
             $dependencies[] = "magento/module-catalog";
             $dependencies[] = "magento/module-eav";
         }

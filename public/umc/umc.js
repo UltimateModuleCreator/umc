@@ -1,7 +1,13 @@
 if (typeof UMC === "undefined") {
-    UMC = {config: {}}
+    UMC = {
+        config: {},
+        defaults: {}
+    }
 }
-UMC.Model = function (data, configKey) {
+UMC.Model = function (data, configKey, subscribeFunction) {
+    if (data === null) {
+        data = UMC.defaults[configKey] || {};
+    }
     let self = this;
     let config = UMC.config[configKey] || {};
     let dataFields = config.fields || [];
@@ -10,6 +16,9 @@ UMC.Model = function (data, configKey) {
     for (let i = 0; i < dataFields.length; i++) {
         let field = dataFields[i];
         this.data[field] = ko.observable(data[field] || '');
+        if (subscribeFunction !== undefined) {
+            this.data[field].subscribe(subscribeFunction);
+        }
     }
 
     this.visibleChildrenContainer = {};
@@ -19,7 +28,7 @@ UMC.Model = function (data, configKey) {
         if (children.hasOwnProperty(child)) {
             let childConfig = children[child];
             this.children[child] = ko.observableArray((data[child] || []).map(function (childElement) {
-                return new UMC.Model(childElement, childConfig.formKey);
+                return new UMC.Model(childElement, childConfig.formKey, subscribeFunction);
             }));
             this.visibleChildrenContainer[child] = ko.observable(false);
             this.visibleChildrenContainerClass[child] = ko.observable('fa fa-2x fa-chevron-up');
@@ -42,7 +51,7 @@ UMC.Model = function (data, configKey) {
     };
     //define actions
     this.addChild = function (data, child) {
-        self.children[child].push(new UMC.Model(data, config.children[child].formKey));
+        self.children[child].push(new UMC.Model(data, config.children[child].formKey, subscribeFunction));
     };
 
     this.removeChild = function (obj, child) {

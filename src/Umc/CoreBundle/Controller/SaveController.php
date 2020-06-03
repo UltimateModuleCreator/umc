@@ -70,6 +70,7 @@ class SaveController extends AbstractController
      */
     public function run(string $platform, ?string $version = null): JsonResponse
     {
+        $response = [];
         try {
             $platformInstance = $this->platformPool->getPlatform($platform);
             $versionInstance = $platformInstance->getVersion($version);

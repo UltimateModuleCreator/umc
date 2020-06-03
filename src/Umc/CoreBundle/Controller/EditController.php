@@ -19,11 +19,12 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Controller;
 
-use App\Umc\CoreBundle\Config\Loader\VersionAwareFactory;
+use App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory;
 use App\Umc\CoreBundle\Config\Modifier\ModifierInterface;
 use App\Umc\CoreBundle\Model\Platform;
 use App\Umc\CoreBundle\Model\Platform\Pool;
 use App\Umc\CoreBundle\Repository\Module;
+use App\Umc\CoreBundle\Repository\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EditController extends AbstractController
 {
     /**
-     * @var VersionAwareFactory
+     * @var PlatformAwareFactory
      */
     private $formLoaderFactory;
     /**
@@ -47,24 +48,31 @@ class EditController extends AbstractController
      * @var Module
      */
     private $moduleRepository;
+    /**
+     * @var Settings
+     */
+    private $settingsRepository;
 
     /**
-     * NewController constructor.
-     * @param VersionAwareFactory $formLoaderFactory
+     * EditController constructor.
+     * @param PlatformAwareFactory $formLoaderFactory
      * @param Pool $platformPool
      * @param ModifierInterface $uiModifier
      * @param Module $moduleRepository
+     * @param Settings $settingsRepository
      */
     public function __construct(
-        VersionAwareFactory $formLoaderFactory,
+        PlatformAwareFactory $formLoaderFactory,
         Pool $platformPool,
         ModifierInterface $uiModifier,
-        Module $moduleRepository
+        Module $moduleRepository,
+        Settings $settingsRepository
     ) {
         $this->formLoaderFactory = $formLoaderFactory;
         $this->platformPool = $platformPool;
         $this->uiModifier = $uiModifier;
         $this->moduleRepository = $moduleRepository;
+        $this->settingsRepository = $settingsRepository;
     }
 
     /**
@@ -80,13 +88,12 @@ class EditController extends AbstractController
         try {
             $platformInstance = $this->platformPool->getPlatform($platform);
             $versionInstance = $platformInstance->getVersion($version);
-            $uiConfig = $this->formLoaderFactory->create($versionInstance)->getConfig();
+            $uiConfig = $this->formLoaderFactory->createByVersion($versionInstance)->getConfig();
             if ($module !== null) {
                 $data = $this->loadModuleData($platformInstance, $versionInstance, $module);
                 $title = $data['module_name'];
             } else {
-                //TODO: add defaults
-                $data = [];
+                $data = null;
                 $title = 'New Module';
             }
             return $this->render(
@@ -97,11 +104,12 @@ class EditController extends AbstractController
                     'version' => $versionInstance,
                     'koConfig' => $this->getKoConfig($uiConfig),
                     'data' => $data,
-                    'title' => $title
+                    'title' => $title,
+                    'defaults' => $this->settingsRepository->loadVersionConfig($versionInstance)
                 ]
             );
         } catch (\Exception $e) {
-            $this->addFlash('error', $e->getMessage() . $e->getTraceAsString());
+            $this->addFlash('danger', $e->getMessage() . $e->getTraceAsString());
             return new RedirectResponse($this->generateUrl('index'));
         }
     }

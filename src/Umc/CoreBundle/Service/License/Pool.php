@@ -33,19 +33,28 @@ class Pool
      */
     public function __construct(iterable $processors)
     {
-        array_walk(
-            $processors,
-            function (Processor $processor) {
-                $this->addProcessor($processor);
-            }
-        );
+        foreach ($processors as $processor) {
+            $this->addProcessor($processor);
+        }
     }
 
     /**
      * @param Processor $processor
      */
-    private function addProcessor(Processor $processor)
+    private function addProcessor(Processor $processor): void
     {
         $this->processors[$processor->getCode()] = $processor;
+    }
+
+    /**
+     * @param string $code
+     * @return Processor
+     */
+    public function getProcessor(string $code): Processor
+    {
+        if (!isset($this->processors[$code])) {
+            throw new \InvalidArgumentException("License processor with code {$code} does not exist");
+        }
+        return $this->processors[$code];
     }
 }

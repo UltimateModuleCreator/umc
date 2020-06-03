@@ -24,6 +24,7 @@ namespace App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
 use App\Umc\CoreBundle\Model\Module;
 use App\Service\License\ProcessorInterface;
+use App\Umc\CoreBundle\Service\License\Pool;
 use App\Umc\CoreBundle\Util\StringUtil;
 
 class Factory
@@ -37,30 +38,31 @@ class Factory
      */
     protected $stringUtil;
     /**
-     * @var ProcessorInterface[]
+     * @var Pool[]
      */
-    protected $licenseFormatter;
+    protected $licensePool;
     /**
      * @var string;
      */
     protected $moduleClassName;
 
     /**
-     * ModuleFactory constructor.
+     * Factory constructor.
      * @param StringUtil $stringUtil
      * @param EntityFactory $entityFactory
-     * @param array $licenseFormatter
+     * @param Pool $licensePool
+     * @param string $moduleClassName
      */
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
+        Pool $licensePool,
         string $moduleClassName = Module::class
-//        array $licenseFormatter
     ) {
         $this->stringUtil = $stringUtil;
         $this->entityFactory = $entityFactory;
         $this->moduleClassName = $moduleClassName;
-//        $this->licenseFormatter = $licenseFormatter;
+        $this->licensePool = $licensePool;
     }
 
     /**
@@ -69,8 +71,7 @@ class Factory
      */
     public function create(array $data = []): Module
     {
-        //return new Module($this->stringUtil, $this->entityFactory, $this->licenseFormatter, $this->menuConfig, $data);
         $className = $this->moduleClassName;
-        return new $className($this->stringUtil, $this->entityFactory, /*$this->licenseFormatter, [],*/ $data);
+        return new $className($this->stringUtil, $this->entityFactory, $this->licensePool, [], $data);
     }
 }

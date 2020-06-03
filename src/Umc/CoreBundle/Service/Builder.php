@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Service;
 
-use App\Umc\CoreBundle\Config\Loader\VersionAwareFactory;
+use App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory;
 use App\Umc\CoreBundle\Model\Platform\Version;
 use App\Umc\CoreBundle\Repository\Module;
 use App\Umc\CoreBundle\Service\Cs\Executor;
@@ -42,7 +42,7 @@ class Builder
      */
     private $repository;
     /**
-     * @var VersionAwareFactory
+     * @var PlatformAwareFactory
      */
     private $configLoaderFactory;
     /**
@@ -63,7 +63,7 @@ class Builder
      * @param \App\Umc\CoreBundle\Model\Module\Factory\Locator $factoryLocator
      * @param Pool\Locator $generatorPoolLocator
      * @param Module $repository
-     * @param VersionAwareFactory $configLoaderFactory
+     * @param PlatformAwareFactory $configLoaderFactory
      * @param Filesystem $filesystem
      * @param Archiver $archiver
      * @param Executor $executor
@@ -72,7 +72,7 @@ class Builder
         \App\Umc\CoreBundle\Model\Module\Factory\Locator $factoryLocator,
         Pool\Locator $generatorPoolLocator,
         Module $repository,
-        VersionAwareFactory $configLoaderFactory,
+        PlatformAwareFactory $configLoaderFactory,
         Filesystem $filesystem,
         Archiver $archiver,
         Executor $executor
@@ -96,7 +96,7 @@ class Builder
     {
         $factory = $this->factoryLocator->getFactory($version);
         $module = $factory->create($data);
-        $loader = $this->configLoaderFactory->create($version);
+        $loader = $this->configLoaderFactory->createByVersion($version);
         $generatorPool = $this->generatorPoolLocator->getGeneratorPool($version);
         $files = [];
         foreach ($loader->getConfig() as $value) {

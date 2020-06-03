@@ -23,10 +23,11 @@ use App\Umc\CoreBundle\Config\Loader;
 use App\Umc\CoreBundle\Config\Modifier\ModifierInterface;
 use App\Umc\CoreBundle\Config\ProcessorFactory;
 use App\Umc\CoreBundle\Config\Provider\Factory;
+use App\Umc\CoreBundle\Model\Platform;
 use App\Umc\CoreBundle\Model\Platform\Version;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class VersionAwareFactory
+class PlatformAwareFactory
 {
     /**
      * @var Factory
@@ -52,10 +53,6 @@ class VersionAwareFactory
      * @var string
      */
     private $className;
-    /**
-     * @var bool
-     */
-    private $usePlatform;
 
     /**
      * VersionAwareFactory constructor.
@@ -65,7 +62,6 @@ class VersionAwareFactory
      * @param ProcessorFactory $processorFactory
      * @param string $configKey
      * @param string $className
-     * @param bool $usePlatform
      */
     public function __construct(
         Factory $providerFactory,
@@ -73,8 +69,7 @@ class VersionAwareFactory
         ModifierInterface $modifier,
         ProcessorFactory $processorFactory,
         string $configKey,
-        string $className,
-        bool $usePlatform = true
+        string $className
     ) {
         $this->providerFactory = $providerFactory;
         $this->parameterBag = $parameterBag;
@@ -82,16 +77,31 @@ class VersionAwareFactory
         $this->processorFactory = $processorFactory;
         $this->configKey = $configKey;
         $this->className = $className;
-        $this->usePlatform = $usePlatform;
     }
 
     /**
      * @param Version $version
+     * @param bool $usePlatform
      * @return Loader
      */
-    public function create(Version $version)
+    public function createByVersion(Version $version, $usePlatform = true): Loader
     {
-        $files = $version->getConfig($this->configKey, $this->usePlatform);
+        $files = $version->getConfig($this->configKey, $usePlatform);
+        return $this->create($files);
+    }
+
+    public function createByPlatform(Platform $platform): Loader
+    {
+        $files = $platform->getConfig($this->configKey);
+        return $this->create($files);
+    }
+
+    /**
+     * @param $files
+     * @return Loader
+     */
+    private function create($files): Loader
+    {
         $providers = array_map(
             function ($file) {
                 return $this->providerFactory->create($file);

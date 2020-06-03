@@ -21,6 +21,7 @@ namespace App\Umc\MagentoBundle\Model\Module;
 
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
 use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Service\License\Pool;
 use App\Umc\CoreBundle\Util\StringUtil;
 
 class Factory extends \App\Umc\CoreBundle\Model\Module\Factory
@@ -34,17 +35,19 @@ class Factory extends \App\Umc\CoreBundle\Model\Module\Factory
      * Factory constructor.
      * @param StringUtil $stringUtil
      * @param EntityFactory $entityFactory
+     * @param Pool $licensePool
      * @param array $menuConfig
      * @param string $moduleClassName
      */
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
+        Pool $licensePool,
         array $menuConfig,
         string $moduleClassName = Module::class
     ) {
         $this->menuConfig = $menuConfig;
-        parent::__construct($stringUtil, $entityFactory, $moduleClassName);
+        parent::__construct($stringUtil, $entityFactory, $licensePool, $moduleClassName);
     }
 
     /**
@@ -54,6 +57,6 @@ class Factory extends \App\Umc\CoreBundle\Model\Module\Factory
     public function create(array $data = []): Module
     {
         $className = $this->moduleClassName;
-        return new $className($this->stringUtil, $this->entityFactory, $this->menuConfig, $data);
+        return new $className($this->stringUtil, $this->entityFactory, $this->licensePool, $this->menuConfig, $data);
     }
 }

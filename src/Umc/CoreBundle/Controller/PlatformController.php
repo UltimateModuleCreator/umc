@@ -53,7 +53,7 @@ class PlatformController extends AbstractController
             $instance = $this->pool->getPlatform($platform);
             return $this->render('@UmcCore/platform.html.twig', ['platform' => $instance]);
         } catch (\Exception $e) {
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('danger', $e->getMessage());
             return new RedirectResponse($this->generateUrl('index'));
         }
     }

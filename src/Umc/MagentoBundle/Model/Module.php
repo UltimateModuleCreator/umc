@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model;
 
+use App\Umc\CoreBundle\Service\License\Pool;
 use App\Umc\MagentoBundle\Model\Entity;
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
 use App\Umc\CoreBundle\Util\StringUtil;
@@ -41,16 +42,18 @@ class Module extends \App\Umc\CoreBundle\Model\Module
      * Module constructor.
      * @param StringUtil $stringUtil
      * @param EntityFactory $entityFactory
+     * @param Pool $licensePool
      * @param array $menuConfig
      * @param array $data
      */
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
+        Pool $licensePool,
         array $menuConfig,
         array $data = []
     ) {
-        parent::__construct($stringUtil, $entityFactory, $data);
+        parent::__construct($stringUtil, $entityFactory, $licensePool, $data);
         $this->umcCrud = (bool)($data['umc_crud'] ?? false);
         $this->menuConfig = $menuConfig;
     }

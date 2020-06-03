@@ -1,9 +1,13 @@
 {% extends "@UmcCore/base.html.twig" %}
+{% block additional_fixed_top %}
+    {{ parent() }}
+    <button type="button" class="btn btn-danger" data-bind="{click: submitForm}">Save Default Settings</button>
+{% endblock %}
 {% block body %}
     <form id="settings" action="{{ saveUrl }}" method="post">
         <div class="card">
             <div class="card-header">
-                <h3>Default settings</h3>
+                <h3>{{ title }}</h3>
             </div>
             <div class="card-body">
                 {% for key, form in config %}
@@ -19,11 +23,10 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            <div class="card-footer">
-                <button type="button" class="btn btn-danger" data-bind="{click: submitForm}">Save Default Settings</button>
-            </div>
+            <div class="card-footer"></div>
         </div>
     </form>
+    {% include '@UmcCore/modal.html.twig' with {id: "response-modal"} %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

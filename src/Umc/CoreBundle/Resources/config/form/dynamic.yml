@@ -55,11 +55,12 @@ dynamic:
       name: type
       type: choice
       has_default: true
-      label: Attribute Type
+      label: Field Type
       dataValidation: validate_required
       options: '%magento_dynamic_rows_type%'
       title: This is the field type.
       tab: name
+      additionalDataBind: "select2: {width: '100%'}"
     -
       name: required
       type: checkbox

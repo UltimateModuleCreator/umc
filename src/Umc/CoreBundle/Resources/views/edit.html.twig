@@ -1,4 +1,8 @@
 {% extends "@UmcCore/base.html.twig" %}
+{% block additional_fixed_top %}
+    {{ parent() }}
+    <button type="button" data-role="save" class="btn btn-danger btn">Save Module</button>
+{% endblock %}
 {% block body %}
 <form id="umc" method="post" action="{{ path('save', {platform: platform.getCode(), version: version.getCode()}) }}">
     <div class="card">
@@ -8,27 +12,12 @@
         </div>
         <div class="card-footer">
             <div class="float-right">
-                <button type="button" data-role="save" class="btn btn-danger btn">Save Module</button>
+
             </div>
         </div>
     </div>
 </form>
-<div class="modal fade" tabindex="-1" role="dialog" id="response-modal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+{% include '@UmcCore/modal.html.twig' with {id: "response-modal"} %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -37,8 +26,19 @@
     <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
     <script type="text/javascript">
+        $.fn.select2.defaults.set( "theme", "bootstrap" );
+    </script>
+    <script type="text/javascript">
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('UMC', JSON.stringify(window.moduleInstance.toParams()));
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        let mainForm = $('#umc');
         $.validate({
-            form: $('#umc'),
+            form: mainForm,
             onError: function ($form) {
                 $form.find('.nav-item').each(function () {
                     if ($($(this).attr('href')).find('.form-error').length) {
@@ -52,23 +52,29 @@
                 $form.find('.fa-exclamation-circle').hide();
             }
         });
-        $('#umc').bind(
+        mainForm.bind(
             'submit.validation',
             function (evt) {
                 evt.stopImmediatePropagation();
-                return false
+                return false;
             }
         );
         if (typeof UMC === "undefined") {
             UMC = {}
         }
         UMC.config = {{ koConfig|json_encode|raw }};
-        {#UMC.defaults = {{ defaults|json_encode|raw }};#}
-        UMC.defaults = {};
-        {#//ko.applyBindings(new UMC.Module({{ data|json_encode|raw }}));#}
-        window.moduleInstance = new UMC.Model({{ data|json_encode|raw }}, 'module');
+        UMC.defaults = {{ defaults|json_encode|raw }};
+        let moduleData = {{ data|json_encode|raw }};
+        if (moduleData === null && localStorage.getItem('UMC') !== null) {
+            if (confirm("It looks like you started creating a module. Do you want to resume it?")) {
+                moduleData = JSON.parse(localStorage.getItem('UMC'));//TODO: store modules based on platform & version
+            } else {
+                localStorage.removeItem("UMC")
+            }
+        }
+        window.moduleInstance = new UMC.Model(moduleData, 'module', saveToLocalStorage);
         ko.applyBindings(window.moduleInstance);
-        $('#umc').find('button[data-role=save]').on('click', function (e) {
+        $('button[data-role=save]').on('click', function (e) {
             const form = $('#umc');
             form.trigger('submit.validation');
             if (form.isValid()) {
@@ -78,23 +84,24 @@
                     data: {data: moduleInstance.toParams()},
                     complete: function (response) {
                         $('#body-loader').hide();
-                        var isJson = response.responseJSON !== undefined;
+                        let isJson = (response.responseJSON !== undefined);
                         if (isJson) {
-                            var data = response.responseJSON;
+                            let data = response.responseJSON;
                             if (data.success === undefined) {
-                                var content = 'Got this answer back. I don\'t understand it<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                                let content = 'Got this answer back. I don\'t understand it<pre>' + JSON.stringify(data, null, 2) + '</pre>';
                             } else {
-                                var className = (data.success) ? 'alert-success' : 'alert-error';
-                                var content = '<div class="alert ' + className + '">' + data.message + '</div>';
+                                let className = (data.success) ? 'alert-success' : 'alert-error';
+                                let content = '<div class="alert ' + className + '">' + data.message + '</div>';
                                 if (data.link && data.module) {
                                     content += '<br /><a class="btn btn-primary col-lg-12" href="' + data.link + '">Download module ' + data.module + '</a>';
                                     $('[data-role=umc-title]').html(data.module);
                                 }
+                                delete localStorage.UMC;
                             }
                         } else {
-                            var content = response.responseText;
+                            let content = response.responseText;
                         }
-                        var modal = $('#response-modal');
+                        let modal = $('#response-modal');
                         modal.find('.modal-body').html(content);
                         modal.modal('show');
                     }

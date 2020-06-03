@@ -6,7 +6,25 @@
                 <a href="{{ path('index') }}">
                     <i class="fas fa-list"></i>
                     <span>Platforms</span>
+                    <span class="fa fa-chevron-down"></span>
                 </a>
+                <ul class="nav child_menu">
+                    <li data-role="menu-edit">
+                        <a href="#">
+                            <i class="fas fa-edit"></i>
+                            <span>Create Module</span>
+                            <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li data-role="menu-edit">
+                                <a href="#">
+                                    <i class="fas fa-edit"></i>
+                                    <span>Create Module</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </li>
 {#            <li data-role="menu-edit">#}
 {#                <a href="{{ path('platform') }}">#}

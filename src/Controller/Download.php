@@ -67,7 +67,7 @@ class Download extends AbstractController
             }
             throw new \Exception("Module {$module} does not exist");
         } catch (\Exception $e) {
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('danger', $e->getMessage());
             return $this->redirectToRoute('index');
         }
     }

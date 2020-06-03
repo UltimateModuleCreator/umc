@@ -12,6 +12,7 @@ module:
     -
       name: menu_parent
       options: '%magento_admin_menu%'
+      additionalDataBind: "select2: {width: '100%'}"
     -
       name: config_tab
       type: text

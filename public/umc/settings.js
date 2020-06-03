@@ -17,7 +17,7 @@ UMC.Settings = function (data, fields) {
         }
     }
     this.submitForm = function () {
-        var form = $('#settings');
+        let form = $('#settings');
         $('#body-loader').show();
         $.post({
             url: form.attr('action'),
@@ -25,10 +25,10 @@ UMC.Settings = function (data, fields) {
             dataType: 'json',
             complete: function (response) {
                 $('#body-loader').hide();
-                var data = response.responseJSON;
-                var className = (data.success) ? 'alert-success' : 'alert-error';
-                var content = '<div class="alert ' + className + '">' + data.message + '</div>';
-                var modal = $('#response-modal');
+                let data = response.responseJSON;
+                let className = (data.success) ? 'alert-success' : 'alert-error';
+                let content = '<div class="alert ' + className + '">' + data.message + '</div>';
+                let modal = $('#response-modal');
                 modal.find('.modal-body').html(content);
                 modal.modal('show');
             }
@@ -43,9 +43,10 @@ UMC.Settings = function (data, fields) {
                 data[group] = {};
                 for (let field in this.data[group]) {
                     if (this.data[group].hasOwnProperty(field)) {
-                        data[group][field] = (typeof this.data[group][field] === "function")
+                         let value = (typeof this.data[group][field] === "function")
                             ? this.data[group][field]()
                             : this.data[group][field];
+                        data[group][field] = typeof value === "boolean" ? (value ? 1 : 0) : value;;
                     }
                 }
             }

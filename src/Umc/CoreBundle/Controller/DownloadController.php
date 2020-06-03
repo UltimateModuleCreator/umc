@@ -67,7 +67,7 @@ class DownloadController extends AbstractController
             return $this->file($filename);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            $this->addFlash('error', 'The requested module does not exist');
+            $this->addFlash('danger', 'The requested module does not exist');
             return $this->redirectToRoute('index');
         }
     }

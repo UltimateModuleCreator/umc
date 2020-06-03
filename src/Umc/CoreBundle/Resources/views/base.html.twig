@@ -8,27 +8,93 @@
             <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.css') }}" />
             <link rel="stylesheet" href="{{ asset('select2/select2.css') }}" />
             <link rel="stylesheet" href="{{ asset('select2/select2-bootstrap.css') }}" />
-            <link rel="stylesheet" href="{{ asset('gentelella/css/custom.css') }}" />
+{#            <link rel="stylesheet" href="{{ asset('gentelella/css/custom.css') }}" />#}
             <link rel="stylesheet" href="{{ asset('umc/umc.css') }}" />
         {% endblock %}
     </head>
-    <body class="nav-md">
-    <div id="body-loader" class="loading" style="display: none">
-        <span class="loading-icon fa fa-spinner">Wait for it....</span>
-    </div>
-    <div class="container body">
-        <div class="main_container">
-            <div class="col-md-3 left_col">
-                <div class="left_col scroll-view">
-                    <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="fa fa-puzzle-piece"></i> <span>UMC</span></a>
-                    </div>
-                    <div class="clearfix"></div>
-                    {% include 'menu.html.twig' %}
+    <body>
+        <div id="body-loader" class="loading" style="display: none">
+            <span class="loading-icon fa fa-spinner">Wait for it....</span>
+        </div>
+        {% block fixed_top %}
+        <div class="navbar sticky-top bg-light full-width">
+            {% block main_menu %}
+            <div class="float-left">
+                <div class="float-left">
+                    <i class="fa fa-2x fa-puzzle-piece" title="Ultimate Module Creator"></i>
                 </div>
+                {% set menuItems = get_main_menu() %}
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse">
+                        {% if menuItems|length > 0 %}
+                        <ul class="navbar-nav">
+                            {% for id,item in menuItems %}
+                                {% if item.children is defined %}
+                                    {% set children = item.children %}
+                                {% else %}
+                                    {% set children = [] %}
+                                {% endif %}
+                                <li class="nav-item {% if children|length > 0 %}dropdown{% endif %}">
+                                    <a class="nav-link {% if children|length > 0 %}dropdown-toggle{% endif %}" href="{{item.url}}" id="menu_{{ id }}"{% if children|length > 0 %} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.label }}</a>
+                                    {% if children|length > 0 %}
+                                    <div class="dropdown-menu" aria-labelledby="menu_{{ id }}">
+                                        {% for childId, child in children %}
+                                            <a class="dropdown-item" href="{{child.url}}">{{ child.label }}</a>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </nav>
+                {% endif %}
+
+{#                <ul class="nav nav-pills">#}
+{#                    {% for item in menuItems %}#}
+{#                        {% if item.children is defined %}#}
+{#                            {% set children = item.children%}#}
+{#                        {% else %}#}
+{#                            {% set children = [] %}#}
+{#                        {% endif %}#}
+{#                        <li class="nav-item dropdown">#}
+{#                            {% if children|length == 0 %}#}
+{#                                <a class="nav-link" href="{{ item.url }}">{{ item.label }}</a>#}
+{#                            {% else %}#}
+{#                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ item.url }}"#}
+{#                                   role="button" aria-haspopup="true" aria-expanded="false">{{ item.label }}</a>#}
+{#                                <div class="dropdown-menu">#}
+{#                                    {% for child in children %}#}
+{#                                        {% set grandchildren = child.children %}#}
+{#                                        {% if grandchildren|length > 0 %}#}
+{#                                            <div class="btn-group dropright">#}
+{#                                                <a href="{{child.url}}" class="btn">{{ child.label }}</a>#}
+{#                                                <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                                                </button>#}
+{#                                                <div class="dropdown-menu">#}
+{#                                                    <a class="dropdown-item" href="#">Label</a>#}
+{#                                                    <a class="dropdown-item" href="#">Label</a>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        {% else %}#}
+{#                                            <a class="dropdown-item" href="{{child.url}}">{{ child.label }}</a>#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                </div>#}
+{#                            {% endif %}#}
+{#                        </li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
             </div>
-            <!-- page content -->
-            <div class="right_col" role="main">
+            <div class="float-right">
+                {% block additional_fixed_top %}{% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        <div class="container-fluid">
+            <div class="main_container">
+                {% block flash_messages %}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
                         <div class="alert alert-{{ label }}">
@@ -36,35 +102,34 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
+                {% endblock %}
                 {% block body %}{% endblock %}
                 <div class="clear"></div>
             </div>
-            <!-- /page content -->
-            <!-- footer content -->
-            <footer>
-                <div class="float-right">
-                    <a href="https://github.com/UltimateModuleCreator/umc" target="_blank">Ultimate Module Creator v{{ appVersion() }}</a><br />
-                    Ui provided by <a href="https://colorlib.com">Colorlib</a> Gentelella - Bootstrap Admin Template
-                </div>
-                <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
         </div>
-    </div>
-    {% block javascripts %}
-    <!-- jQuery -->
-    <script type="text/javascript" src="{{ asset('jquery/jquery.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.js') }}"> </script>
-    <script type="text/javascript">
-        $.widget.bridge('uitooltip', $.ui.tooltip);
-        {% if selectedMenu is defined %}
-        $(document).ready(function () {
-            $('[data-role=menu-{{ selectedMenu }}]').addClass('active');
-        });
-        {% endif %}
-    </script>
-    <script type="text/javascript" src="{{ asset('bootstrap/js/popper.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"> </script>
-    {% endblock %}
+        <!-- footer content -->
+        <nav class="navbar fixed-bottom full-width">
+            <div class="float-right">
+                <a href="https://github.com/UltimateModuleCreator/umc" target="_blank">Ultimate Module Creator v{{ appVersion() }}</a><br />
+            </div>
+            <div class="clearfix"></div>
+        </nav>
+        <!-- /footer content -->
+        {% block javascripts %}
+        <!-- jQuery -->
+        <script type="text/javascript" src="{{ asset('jquery/jquery.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.js') }}"> </script>
+        <script type="text/javascript">
+            $.widget.bridge('uitooltip', $.ui.tooltip);
+            {% if selectedMenu is defined %}
+            $(document).ready(function () {
+                $('[data-role=menu-{{ selectedMenu }}]').addClass('active');
+            });
+            {% endif %}
+        </script>
+        <script type="text/javascript" src="{{ asset('bootstrap/js/popper.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"> </script>
+{#        <script type="text/javascript" src="{{ asset('umc/style-js-hack-because-i-suck-at-css.js') }}"> </script>#}
+        {% endblock %}
     </body>
 </html>

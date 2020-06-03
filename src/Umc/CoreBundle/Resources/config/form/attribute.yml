@@ -74,6 +74,7 @@ attribute:
       label: Attribute Type
       dataValidation: validate_required
       options: '%attribute_type%'
+      additionalDataBind: "select2: {width: '100%'}"
       title: This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.
       tab: name
       sort_order: 30

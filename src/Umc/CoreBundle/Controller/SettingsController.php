@@ -20,8 +20,9 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Controller;
 
-use App\Umc\CoreBundle\Config\Loader\VersionAwareFactory;
+use App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory;
 use App\Umc\CoreBundle\Model\Platform\Pool;
+use App\Umc\CoreBundle\Repository\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,23 +30,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class SettingsController extends AbstractController
 {
     /**
-     * @var VersionAwareFactory
+     * @var PlatformAwareFactory
      */
     private $formLoaderFactory;
     /**
      * @var Pool
      */
     private $platformPool;
+    /**
+     * @var Settings
+     */
+    private $repository;
 
     /**
      * SettingsController constructor.
-     * @param VersionAwareFactory $formLoaderFactory
+     * @param PlatformAwareFactory $formLoaderFactory
      * @param Pool $platformPool
+     * @param Settings $repository
      */
-    public function __construct(VersionAwareFactory $formLoaderFactory, Pool $platformPool)
+    public function __construct(PlatformAwareFactory $formLoaderFactory, Pool $platformPool, Settings $repository)
     {
         $this->formLoaderFactory = $formLoaderFactory;
         $this->platformPool = $platformPool;
+        $this->repository = $repository;
     }
 
     /**
@@ -57,15 +64,22 @@ class SettingsController extends AbstractController
     public function run($platform, $version = null): Response
     {
         try {
-            //TODO: handle for platform only
             $platformInstance = $this->platformPool->getPlatform($platform);
             $versionInstance = $platformInstance->getVersion($version);
-            $config = $this->formLoaderFactory->create($versionInstance)->getConfig();
+            $config = ($version === null)
+                ? $this->formLoaderFactory->createByPlatform($platformInstance)->getConfig()
+                : $this->formLoaderFactory->createByVersion($versionInstance)->getConfig();
             $fields = [];
             foreach ($config as $type => $settings) {
                 $fields[$type] = array_keys($settings['fields']);
             }
-            //TODO:read existing settings field to get the values
+            $title = "Default Settings for {$platformInstance->getName()}";
+            if ($version !== null) {
+                $title .= " version {$versionInstance->getLabel()}";
+            }
+            $values = ($version === null)
+                ? $this->repository->loadPlatformConfig($platformInstance)
+                : $this->repository->loadVersionConfig($versionInstance);
             return $this->render(
                 '@UmcCore/settings.html.twig',
                 [
@@ -74,12 +88,12 @@ class SettingsController extends AbstractController
                     'config' => $config,
                     'fields' => $fields,
                     'saveUrl' => $this->generateUrl('save-settings', ['platform' => $platform, 'version' => $version]),
-                    'values' => []
+                    'values' => $values,
+                    'title' => $title
                 ]
             );
         } catch (\Exception $e) {
-            echo $e->getMessage();exit;
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('danger', $e->getMessage());
             return $this->redirectToRoute('index');
         }
     }

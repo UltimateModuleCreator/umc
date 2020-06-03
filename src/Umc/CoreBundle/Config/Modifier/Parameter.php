@@ -46,5 +46,4 @@ class Parameter implements ModifierInterface
     {
         return $this->parameterBag->resolveValue($config);
     }
-
 }
