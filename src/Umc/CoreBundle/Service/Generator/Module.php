@@ -54,6 +54,9 @@ class Module implements GeneratorInterface
         if (!isset($fileConfig['source'])) {
             throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
         }
+        if (!isset($fileConfig['destination'])) {
+            throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
+        }
         $content = $this->twig->render($fileConfig['source'], ['module' => $module]);
         if (!trim($content)) {
             return [];

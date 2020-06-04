@@ -1,5 +1,5 @@
 {% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_product_attribute_set') %}
-<?php{{ module.getFormattedLicense('php') }}
+<?php{{ formatLicense(module, 'php')|raw }}
 declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Catalog;

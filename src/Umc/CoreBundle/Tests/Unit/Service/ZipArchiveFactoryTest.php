@@ -19,18 +19,19 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Umc\CoreBundle\Tests\Unit\Service;
 
-use App\Version;
+use App\Umc\CoreBundle\Service\ZipArchiveFactory;
 use PHPUnit\Framework\TestCase;
 
-class VersionTest extends TestCase
+class ZipArchiveFactoryTest extends TestCase
 {
     /**
-     * @covers \App\Version::getVersion()
+     * @covers \App\Umc\CoreBundle\Service\ZipArchiveFactory::create()
      */
-    public function testGetVersion()
+    public function testCreate()
     {
-        $this->assertStringStartsWith('4.', Version::getVersion());
+        $factory = new ZipArchiveFactory();
+        $this->assertInstanceOf(\ZipArchive::class, $factory->create());
     }
 }

@@ -95,4 +95,16 @@ class StringUtilTest extends TestCase
         $expected = 'Text\Text\TExt';
         $this->assertEquals($expected, $util->glueClassParts($parts));
     }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Util\StringUtil::repeat()
+     */
+    public function testRepeat()
+    {
+        $repeat = new StringUtil();
+        $this->assertEquals('rrr', $repeat->repeat('r', 3));
+        $this->assertEquals('r', $repeat->repeat('r'));
+        $this->assertEquals('', $repeat->repeat('r', 0));
+        $this->assertEquals('', $repeat->repeat('r', -1));
+    }
 }

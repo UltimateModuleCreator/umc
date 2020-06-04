@@ -22,6 +22,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Twig;
 
 use App\Umc\CoreBundle\Twig\Modifiers;
 use App\Umc\CoreBundle\Util\StringUtil;
+use App\Umc\CoreBundle\Version;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -49,7 +50,7 @@ class ModifiersTest extends TestCase
     public function testGetFilters()
     {
         $filters = $this->modifiers->getFilters();
-        $this->assertEquals(4, count($filters));
+        $this->assertEquals(5, count($filters));
         $this->assertInstanceOf(TwigFilter::class, $filters[0]);
     }
 
@@ -62,5 +63,6 @@ class ModifiersTest extends TestCase
         $functions = $this->modifiers->getFunctions();
         $this->assertEquals(1, count($functions));
         $this->assertInstanceOf(TwigFunction::class, $functions[0]);
+        $this->assertEquals(Version::getVersion(), $functions[0]->getCallable()());
     }
 }

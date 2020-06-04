@@ -47,15 +47,21 @@
             <argument key="$processors" type="tagged_iterator" tag="licence.processor" />
         </service>
         <service id="license.processor.php" class="App\Umc\CoreBundle\Service\License\Processor">
-            <argument key="$prefix" type="string"><![CDATA[\n\n]]></argument>
-            <argument key="$suffix" type="string"><![CDATA[\n]]></argument>
+            <argument key="$prefix" type="string"><![CDATA[
+
+]]></argument>
+            <argument key="$suffix" type="string"><![CDATA[
+]]></argument>
             <argument key="$code" type="string">php</argument>
             <tag name="licence.processor" />
         </service>
 
         <service id="license.processor.xml" class="App\Umc\CoreBundle\Service\License\Processor">
-            <argument key="$prefix" type="string"><![CDATA[\n<!--\n]]></argument>
-            <argument key="$suffix" type="string"><![CDATA[-->\n]]></argument>
+            <argument key="$prefix" type="string"><![CDATA[
+<!--
+]]></argument>
+            <argument key="$suffix" type="string"><![CDATA[-->
+]]></argument>
             <argument key="$code" type="string">xml</argument>
             <tag name="licence.processor" />
         </service>

@@ -1,4 +1,4 @@
-<?php{{ module.getFormattedLicense('php')|raw }}
+<?php{{ formatLicense(module, 'php')|raw }}
 declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
@@ -103,6 +103,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     {
         return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, ${{ entity.getNameSingular()|camel }}Id);
     }
+
 {% for attribute in entity.getAttributes() %}
 {{ attribute.getTypeInstance().renderTemplate('model')|raw }}
 {% endfor %}
@@ -123,6 +124,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     {
         return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::STORE_ID);
     }
+
 {% endif %}
 {% if entity.isSeo() %}
     /**
@@ -175,9 +177,9 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     {
         return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::META_KEYWORDS);
     }
+
 {% endif %}
 {% if entity.isFrontend() %}
-
     /**
      * @param int $isActive
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
@@ -194,8 +196,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     {
         return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::IS_ACTIVE);
     }
-{% endif %}
 
+{% endif %}
     /**
      * Get identities
      *

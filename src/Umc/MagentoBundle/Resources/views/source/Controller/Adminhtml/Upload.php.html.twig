@@ -1,5 +1,5 @@
 {% if not module.isUmcCrud() and module.getEntitiesWithFlag('attribute_upload')|length %}
-<?php{{ module.getFormattedLicense('php') }}
+<?php{{ formatLicense(module, 'php')|raw }}
 declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;

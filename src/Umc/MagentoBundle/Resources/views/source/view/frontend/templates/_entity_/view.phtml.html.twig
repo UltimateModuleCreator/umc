@@ -1,5 +1,5 @@
 {% if entity.isFrontend() %}
-<?php{{ module.getFormattedLicense('php') }}
+<?php{{ formatLicense(module, 'php')|raw }}
 /** @var \Magento\Framework\View\Element\Template $block
 /** @var ${{ entity.getNameSingular()|camel }}View \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\\View
 /** @var $formatter \{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter */

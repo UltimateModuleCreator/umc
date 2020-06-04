@@ -21,16 +21,10 @@ declare(strict_types=1);
 
 namespace App;
 
-class Version
+/**
+ * @deprecated
+ */
+class Version extends \App\Umc\CoreBundle\Version
 {
-    public const VERSION = '4.0.0';
-    public const BUILD = 'alpha1';
 
-    /**
-     * @return string
-     */
-    public static function getVersion(): string
-    {
-        return self::VERSION . ((self::BUILD) ? '-' . self::BUILD : '');
-    }
 }

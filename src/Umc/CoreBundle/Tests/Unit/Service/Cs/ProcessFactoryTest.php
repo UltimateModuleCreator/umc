@@ -1,6 +1,7 @@
 <?php
 
 /**
+ *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -13,18 +14,25 @@
  * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ *
  */
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Umc\CoreBundle\Tests\Unit\Service\Cs;
 
-use Symfony\Component\Yaml\Yaml;
+use App\Umc\CoreBundle\Service\Cs\ProcessFactory;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
-/**
- * @deprecated
- */
-class YamlLoader extends \App\Umc\CoreBundle\Util\YamlLoader
+class ProcessFactoryTest extends TestCase
 {
-
+    /**
+     * @covers \App\Umc\CoreBundle\Service\Cs\ProcessFactory::create
+     */
+    public function testCreate()
+    {
+        $factory = new ProcessFactory();
+        $this->assertInstanceOf(Process::class, $factory->create(['dummy']));
+    }
 }

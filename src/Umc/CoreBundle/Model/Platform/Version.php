@@ -94,7 +94,7 @@ class Version
     {
         $config = $this->getConfig('module_factory');
         if (!isset($config[0])) {
-            throw new \Exception( //TODO use custom exception
+            throw new ConfigException(
                 "Missing Module factory for platform {$this->getPlatform()->getName()}: {$this->getLabel()}"
             );
         }
@@ -109,7 +109,7 @@ class Version
     {
         $config = $this->getConfig('generator_pool');
         if (!isset($config[0])) {
-            throw new \Exception( //TODO use custom exception
+            throw new ConfigException(
                 "Missing Generator pool for platform {$this->getPlatform()->getName()}: {$this->getLabel()}"
             );
         }

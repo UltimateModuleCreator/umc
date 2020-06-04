@@ -26,7 +26,7 @@ UMC.Settings = function (data, fields) {
             complete: function (response) {
                 $('#body-loader').hide();
                 let data = response.responseJSON;
-                let className = (data.success) ? 'alert-success' : 'alert-error';
+                let className = (data.success) ? 'alert-success' : 'alert-danger';
                 let content = '<div class="alert ' + className + '">' + data.message + '</div>';
                 let modal = $('#response-modal');
                 modal.find('.modal-body').html(content);

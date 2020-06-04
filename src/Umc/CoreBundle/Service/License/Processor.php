@@ -64,7 +64,7 @@ class Processor
      * @param Module $module
      * @return string
      */
-    public function replaceVars(string $license, Module $module): string
+    private function replaceVars(string $license, Module $module): string
     {
         $replace = [
             '{{Namespace}}' => $module->getNamespace(),

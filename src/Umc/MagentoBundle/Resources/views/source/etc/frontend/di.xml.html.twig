@@ -1,5 +1,5 @@
 {% if module.hasEntitiesWithFlag('top_menu') %}
-<?xml version="1.0"?>{{ module.getFormattedLicense('xml')|raw }}
+<?xml version="1.0"?>{{ formatLicense(module, 'xml')|raw }}
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="add-{{ module.getModuleName()|hyphen }}-links-to-top-menu" type="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Plugin\Theme\Block\Html\TopmenuPlugin" />

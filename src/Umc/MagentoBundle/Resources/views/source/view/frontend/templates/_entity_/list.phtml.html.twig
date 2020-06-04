@@ -1,5 +1,5 @@
 {% if entity.isFrontend() %}
-<?php{{ module.getFormattedLicense('php') }}
+<?php{{ formatLicense(module, 'php')|raw }}
 /** @var \Magento\Framework\View\Element\Template $block */
 /** @var $list{{ entity.getNameSingular()|camel|ucfirst }} \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }} */
 $list{{ entity.getNameSingular()|camel|ucfirst }} = $block->getData('list{{ entity.getNameSingular()|camel|ucfirst }}');

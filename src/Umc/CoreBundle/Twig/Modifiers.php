@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Twig;
 
+use App\Umc\CoreBundle\Version;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use App\Umc\CoreBundle\Util\StringUtil;
@@ -51,12 +52,7 @@ class Modifiers extends AbstractExtension
             new TwigFilter('camel', [$this->stringUtils, 'camel']),
             new TwigFilter('hyphen', [$this->stringUtils, 'hyphen']),
             new TwigFilter('ucfirst', [$this->stringUtils, 'ucfirst']),
-            new TwigFilter(
-                'repeat',
-                function ($string, $length = 1) {
-                    return str_repeat($string, $length);
-                }
-            ),
+            new TwigFilter('repeat', [$this->stringUtils, 'repeat']),
         ];
     }
 
@@ -69,7 +65,7 @@ class Modifiers extends AbstractExtension
             new TwigFunction(
                 'appVersion',
                 function () {
-                    return \App\Version::getVersion();
+                    return Version::getVersion();
                 }
             )
         ];

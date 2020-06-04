@@ -18,29 +18,6 @@ services:
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
 
-    App\Controller\Index:
-      arguments:
-        $template: 'index.html.twig'
-    App\Controller\Docs:
-      arguments:
-        $template: 'docs.html.twig'
-    App\Controller\Edit:
-      arguments:
-        $template: 'edit.html.twig'
-        $basePath: '%module_list_path%/'
-    App\Controller\Files:
-      arguments:
-        $template: 'files.html.twig'
-    App\Controller\Settings:
-      arguments:
-        $template: 'settings.html.twig'
-    App\Service\ModuleList:
-      arguments:
-        $basePath: '%module_list_path%/'
-    App\Controller\Download:
-      arguments:
-        $path: '%module_list_path%/'
-
     App\Service\Form\Loader:
       arguments:
         $fileMap:
@@ -49,12 +26,6 @@ services:
           attribute: '%form_config_path%/attribute.yml'
           option: '%form_config_path%/option.yml'
           serialized: '%form_config_path%/serialized.yml'
-
-    App\Service\Source\Reader:
-      arguments:
-        $files:
-          - '%kernel.project_dir%/config/source/module.yml'
-          - '%kernel.project_dir%/config/source/entity.yml'
 
     App\Service\Builder:
       arguments:
@@ -76,7 +47,3 @@ services:
         $standards: [PSR1, PSR2, PSR12, '%kernel.project_dir%/vendor/magento/magento-coding-standard/Magento2']
         $phpcsPath: '%kernel.project_dir%/vendor/bin/phpcs'
 
-    App\Model\Settings:
-      arguments:
-        $path: '%defaults_path%'
-        $file: '%defaults_file%'

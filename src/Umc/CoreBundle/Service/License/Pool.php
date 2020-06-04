@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Service\License;
 
+use App\Umc\CoreBundle\Model\Module;
+
 class Pool
 {
     /**
@@ -56,5 +58,15 @@ class Pool
             throw new \InvalidArgumentException("License processor with code {$code} does not exist");
         }
         return $this->processors[$code];
+    }
+
+    /**
+     * @param Module $module
+     * @param $code
+     * @return string
+     */
+    public function process(Module $module, $code): string
+    {
+        return $this->getProcessor($code)->process($module);
     }
 }

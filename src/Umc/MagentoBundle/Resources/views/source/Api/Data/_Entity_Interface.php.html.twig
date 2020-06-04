@@ -1,4 +1,4 @@
-<?php{{ module.getFormattedLicense('php') }}
+<?php{{ formatLicense(module, 'php')|raw }}
 declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;

@@ -115,6 +115,10 @@ class Attribute
      * @var string[]
      */
     protected $flags;
+    /**
+     * @var string[]
+     */
+    protected $flagSuffixes;
 
     /**
      * Attribute constructor.
@@ -352,18 +356,19 @@ class Attribute
 
     /**
      * @param $prefix
-     * @return array
-     * //TODO: cache suffix
+     * @return string[]
      */
     public function getFlagSuffixes($prefix): array
     {
-        $suffixes = [];
-        foreach ($this->getFlags() as $flag) {
-            if (substr($flag, 0, strlen($prefix)) === $prefix) {
-                $suffixes[] = substr($flag, strlen($prefix));
+        if (!isset($this->flagSuffixes[$prefix])) {
+            $this->flagSuffixes = [];
+            foreach ($this->getFlags() as $flag) {
+                if (substr($flag, 0, strlen($prefix)) === $prefix) {
+                    $this->flagSuffixes[] = substr($flag, strlen($prefix));
+                }
             }
         }
-        return $suffixes;
+        return $this->flagSuffixes;
     }
 
     public function getProcessors(): array

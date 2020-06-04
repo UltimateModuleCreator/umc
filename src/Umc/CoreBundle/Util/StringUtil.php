@@ -88,6 +88,16 @@ class StringUtil
     }
 
     /**
+     * @param $string
+     * @param int $length
+     * @return string
+     */
+    public function repeat($string, $length = 1): string
+    {
+        return str_repeat($string, max($length, 0));
+    }
+
+    /**
      * @param $parts
      * @param string $glue
      * @return string

@@ -10,11 +10,6 @@
         <div class="card-body">
             {% include formConfig.module.template with {form: formConfig.module, formKey:'module'} %}
         </div>
-        <div class="card-footer">
-            <div class="float-right">
-
-            </div>
-        </div>
     </div>
 </form>
 {% include '@UmcCore/modal.html.twig' with {id: "response-modal"} %}
@@ -23,91 +18,18 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('ko/ko.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
     <script type="text/javascript">
         $.fn.select2.defaults.set( "theme", "bootstrap" );
     </script>
+    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('umc/edit.js') }}"> </script>
     <script type="text/javascript">
-        function saveToLocalStorage() {
-            try {
-                localStorage.setItem('UMC', JSON.stringify(window.moduleInstance.toParams()));
-            } catch (e) {
-                console.log(e);
-            }
-        }
-        let mainForm = $('#umc');
-        $.validate({
-            form: mainForm,
-            onError: function ($form) {
-                $form.find('.nav-item').each(function () {
-                    if ($($(this).attr('href')).find('.form-error').length) {
-                        $(this).find('.fa-exclamation-circle').show();
-                    } else {
-                        $(this).find('.fa-exclamation-circle').hide();
-                    }
-                })
-            },
-            onSuccess: function ($form) {
-                $form.find('.fa-exclamation-circle').hide();
-            }
-        });
-        mainForm.bind(
-            'submit.validation',
-            function (evt) {
-                evt.stopImmediatePropagation();
-                return false;
-            }
-        );
         if (typeof UMC === "undefined") {
             UMC = {}
         }
         UMC.config = {{ koConfig|json_encode|raw }};
         UMC.defaults = {{ defaults|json_encode|raw }};
-        let moduleData = {{ data|json_encode|raw }};
-        if (moduleData === null && localStorage.getItem('UMC') !== null) {
-            if (confirm("It looks like you started creating a module. Do you want to resume it?")) {
-                moduleData = JSON.parse(localStorage.getItem('UMC'));//TODO: store modules based on platform & version
-            } else {
-                localStorage.removeItem("UMC")
-            }
-        }
-        window.moduleInstance = new UMC.Model(moduleData, 'module', saveToLocalStorage);
-        ko.applyBindings(window.moduleInstance);
-        $('button[data-role=save]').on('click', function (e) {
-            const form = $('#umc');
-            form.trigger('submit.validation');
-            if (form.isValid()) {
-                $('#body-loader').show();
-                $.post({
-                    url: form.attr('action'),
-                    data: {data: moduleInstance.toParams()},
-                    complete: function (response) {
-                        $('#body-loader').hide();
-                        let isJson = (response.responseJSON !== undefined);
-                        if (isJson) {
-                            let data = response.responseJSON;
-                            if (data.success === undefined) {
-                                let content = 'Got this answer back. I don\'t understand it<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-                            } else {
-                                let className = (data.success) ? 'alert-success' : 'alert-error';
-                                let content = '<div class="alert ' + className + '">' + data.message + '</div>';
-                                if (data.link && data.module) {
-                                    content += '<br /><a class="btn btn-primary col-lg-12" href="' + data.link + '">Download module ' + data.module + '</a>';
-                                    $('[data-role=umc-title]').html(data.module);
-                                }
-                                delete localStorage.UMC;
-                            }
-                        } else {
-                            let content = response.responseText;
-                        }
-                        let modal = $('#response-modal');
-                        modal.find('.modal-body').html(content);
-                        modal.modal('show');
-                    }
-                });
-            }
-        });
-
+        $('#umc').umcedit({data: {{ data|json_encode|raw }}});
     </script>
 {% endblock %}

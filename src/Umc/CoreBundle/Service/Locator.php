@@ -46,9 +46,4 @@ class Locator
     {
         return $this->container->get($id);
     }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 }

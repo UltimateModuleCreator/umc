@@ -22,8 +22,6 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Model;
 
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
-use App\Service\License\ProcessorInterface;
-use App\Umc\CoreBundle\Service\License\Pool;
 use App\Umc\CoreBundle\Util\StringUtil;
 
 class Module
@@ -32,10 +30,6 @@ class Module
      * @var Entity[]
      */
     protected $entities = [];
-    /**
-     * @var Pool[]
-     */
-    protected $licensePool;
     /**
      * @var StringUtil
      */
@@ -97,18 +91,15 @@ class Module
      * Module constructor.
      * @param StringUtil $stringUtil
      * @param EntityFactory $entityFactory
-     * @param Pool $licensePool
      * @param array $data
      */
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
-        Pool $licensePool,
         array $data = []
     ) {
         $this->stringUtil = $stringUtil;
         $this->entityFactory = $entityFactory;
-        $this->licensePool = $licensePool;
         $this->namespace = (string)($data['namespace'] ?? '');
         $this->moduleName = (string)($data['module_name'] ?? '');
         $this->menuText = (string)($data['menu_text'] ?? '');
@@ -226,10 +217,10 @@ class Module
      * @return string
      * @throws \Exception
      */
-    public function getFormattedLicense(string $format): string
-    {
-        return $this->licensePool->getProcessor($format)->process($this);
-    }
+//    public function getFormattedLicense(string $format): string
+//    {
+//        return $this->licensePool->getProcessor($format)->process($this);
+//    }
 
     /**
      * @param string $separator

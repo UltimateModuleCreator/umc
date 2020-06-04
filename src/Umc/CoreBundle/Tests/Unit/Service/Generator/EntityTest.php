@@ -19,19 +19,20 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service\Generator;
+namespace App\Umc\CoreBundle\Tests\Unit\Service\Generator;
 
-use App\Model\Entity;
-use App\Model\Module;
-use App\Service\Generator\EntityGenerator;
-use App\Util\StringUtil;
+use App\Umc\CoreBundle\Model\Entity as EntityModel;
+use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Service\Generator\Entity;
+use App\Umc\CoreBundle\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
 
-class EntityGeneratorTest extends TestCase
+class EntityTest extends TestCase
 {
     /**
-     * @var \Twig_Environment | MockObject
+     * @var Environment | MockObject
      */
     private $twig;
     /**
@@ -39,31 +40,26 @@ class EntityGeneratorTest extends TestCase
      */
     private $module;
     /**
-     * @var EntityGenerator
+     * @var Entity
      */
     private $generator;
-    /**
-     * @var StringUtil | MockObject
-     */
-    private $stringUtil;
 
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->twig = $this->createMock(\Twig_Environment::class);
+        $this->twig = $this->createMock(Environment::class);
         $this->module = $this->createMock(Module::class);
-        $this->stringUtil = $this->createMock(StringUtil::class);
-        $this->stringUtil->method('camel')->willReturnArgument(0);
-        $this->generator = new EntityGenerator($this->twig, $this->stringUtil);
+        $stringUtil = $this->createMock(StringUtil::class);
+        $stringUtil->method('camel')->willReturnArgument(0);
+        $this->generator = new Entity($this->twig, $stringUtil);
     }
 
     /**
-     * @covers \App\Service\Generator\EntityGenerator::generateContent
-     * @covers \App\Service\Generator\EntityGenerator::processDestination
-     * @covers \App\Service\Generator\EntityGenerator::processFileConfig
-     * @covers \App\Service\Generator\EntityGenerator::__construct
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::generateContent
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::processDestination
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::__construct
      */
     public function testGenerateContent()
     {
@@ -84,17 +80,17 @@ class EntityGeneratorTest extends TestCase
                 $this->module,
                 [
                     'template' => 'template',
-                    'source' => 'path/_Entity_'
+                    'source' => 'path/_Entity_',
+                    'destination' => 'path/_Entity_'
                 ]
             )
         );
     }
 
     /**
-     * @covers \App\Service\Generator\EntityGenerator::generateContent
-     * @covers \App\Service\Generator\EntityGenerator::processDestination
-     * @covers \App\Service\Generator\EntityGenerator::processFileConfig
-     * @covers \App\Service\Generator\EntityGenerator::__construct
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::generateContent
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::processDestination
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::__construct
      * with empty generated content
      */
     public function testGenerateContentWithEmptyContent()
@@ -115,17 +111,17 @@ class EntityGeneratorTest extends TestCase
                 $this->module,
                 [
                     'scope' => 'entity',
-                    'source' => 'path/_Entity_'
+                    'source' => 'path/_Entity_',
+                    'destination' => 'path/_Entity_'
                 ]
             )
         );
     }
 
     /**
-     * @covers \App\Service\Generator\EntityGenerator::generateContent
-     * @covers \App\Service\Generator\EntityGenerator::processDestination
-     * @covers \App\Service\Generator\EntityGenerator::processFileConfig
-     * @covers \App\Service\Generator\EntityGenerator::__construct
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::generateContent
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::processDestination
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::__construct
      */
     public function testGenerateContentWithMissingSource()
     {
@@ -135,12 +131,24 @@ class EntityGeneratorTest extends TestCase
     }
 
     /**
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::generateContent
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::processDestination
+     * @covers \App\Umc\CoreBundle\Service\Generator\Entity::__construct
+     */
+    public function testGenerateContentWithMissingDestination()
+    {
+        $this->twig->expects($this->never())->method('render');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->generator->generateContent($this->module, ['source' => 'source']);
+    }
+
+    /**
      * @param $nameSingular
-     * @return MockObject | Entity
+     * @return MockObject | EntityModel
      */
     private function getEntityMock($nameSingular): MockObject
     {
-        $entity = $this->createMock(Entity::class);
+        $entity = $this->createMock(EntityModel::class);
         $entity->method('getModule')->willReturn($this->module);
         $entity->method('getNameSingular')->willReturn($nameSingular);
         return $entity;

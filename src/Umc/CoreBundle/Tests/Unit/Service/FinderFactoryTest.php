@@ -13,25 +13,25 @@
  * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ *
  */
 
 declare(strict_types=1);
 
-namespace App\Tests\Util;
+namespace App\Umc\CoreBundle\Tests\Unit\Service;
 
-use App\Util\FinderFactory;
+use App\Umc\CoreBundle\Service\FileFinderFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
 class FinderFactoryTest extends TestCase
 {
     /**
-     * check if not the same instance of Finder is returned
      * @covers \App\Util\FinderFactory::create()
      */
     public function testCreate()
     {
-        $factory = new FinderFactory();
+        $factory = new FileFinderFactory();
         $finder1 = $factory->create();
         $finder2 = $factory->create();
         $this->assertNotSame($finder1, $finder2);

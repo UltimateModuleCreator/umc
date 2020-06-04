@@ -61,6 +61,9 @@ class Entity implements GeneratorInterface
         if (!isset($fileConfig['source'])) {
             throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
         }
+        if (!isset($fileConfig['destination'])) {
+            throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
+        }
         $result = [];
         foreach ($module->getEntities() as $entity) {
             $destination = $this->processDestination($fileConfig['destination'], $entity);
