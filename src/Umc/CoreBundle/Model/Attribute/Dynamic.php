@@ -33,71 +33,71 @@ class Dynamic
     /**
      * @var string
      */
-    private $code;
+    protected $code;
     /**
      * @var string
      */
-    private $label;
+    protected $label;
     /**
      * @var string
      */
-    private $type;
+    protected $type;
     /**
      * @var bool
      */
-    private $expanded;
+    protected $expanded;
     /**
      * @var bool
      */
-    private $required;
+    protected $required;
     /**
      * @var bool
      */
-    private $showInList;
+    protected $showInList;
     /**
      * @var bool
      */
-    private $showInView;
+    protected $showInView;
     /**
      * @var string
      */
-    private $note;
+    protected $note;
     /**
      * @var string
      */
-    private $tooltip;
+    protected $tooltip;
     /**
      * @var string
      */
-    private $defaultValue;
+    protected $defaultValue;
     /**
      * @var Attribute
      */
-    private $attribute;
+    protected $attribute;
     /**
      * @var OptionFactory
      */
-    private $optionFactory;
+    protected $optionFactory;
     /**
      * @var StringUtil
      */
-    private $stringUtil;
+    protected $stringUtil;
     /**
      * @var Option[]
      */
-    private $options;
+    protected $options;
     /**
      * @var TypeFactory
      */
-    private $typeFactory;
+    protected $typeFactory;
     /**
      * @var BaseType
      */
-    private $typeInstance;
+    protected $typeInstance;
     /**
      * @var string
      */
-    private $optionType;
+    protected $optionType;
 
     /**
      * Dynamic constructor.
@@ -229,7 +229,7 @@ class Dynamic
      */
     public function isManualOptions(): bool
     {
-        return $this->getTypeInstance()->isCanHaveOptions();
+        return $this->getTypeInstance()->hasFlag('manual_options');
     }
 
     /**
@@ -255,21 +255,6 @@ class Dynamic
             }
         }
         return $this->optionType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOptionSourceVirtualType(): string
-    {
-        $parts = [
-            $this->getAttribute()->getEntity()->getModule()->getModuleName(),
-            $this->getAttribute()->getEntity()->getNameSingular(),
-            'Source',
-            $this->getAttribute()->getCode(),
-            $this->getCode()
-        ];
-        return $this->stringUtil->glueClassParts($parts, '');
     }
 
     /**
@@ -306,14 +291,5 @@ class Dynamic
             $this->typeInstance = $this->typeFactory->create($this);
         }
         return $this->typeInstance;
-    }
-
-    /**
-     * @param $type
-     * @return array
-     */
-    public function getProcessorTypes($type): array
-    {
-        return $this->getTypeInstance()->getProcessorTypes($type);
     }
 }

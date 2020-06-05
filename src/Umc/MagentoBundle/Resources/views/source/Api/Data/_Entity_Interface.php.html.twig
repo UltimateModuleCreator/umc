@@ -52,7 +52,6 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
 {{ attribute.getTypeInstance().renderTemplate('interface')|raw }}
 {% endfor %}
 {% if entity.isStore() %}
-
     /**
      * @param int[] $store
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
@@ -63,6 +62,7 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
      * @return int[]
      */
     public function getStoreId();
+
 {% endif %}
 {% if entity.isSeo() %}
     /**
@@ -97,6 +97,7 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
      * @return string
      */
     public function getMetaKeywords();
+    
 {% endif %}
 {% if entity.isFrontend() %}
     /**

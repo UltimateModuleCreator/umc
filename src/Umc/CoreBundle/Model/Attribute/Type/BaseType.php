@@ -157,30 +157,6 @@ class BaseType
     }
 
     /**
-     * @return array
-     */
-    public function getProcessors(): array
-    {
-        return $this->processor;
-    }
-    /**
-     * @param $type
-     * @return array
-     */
-    public function getProcessorTypes($type): array
-    {
-        $processorType = $this->processor[$type] ?? null;
-        if ($processorType === null) {
-            return [];
-        }
-        if (!is_array($processorType)) {
-            return [$processorType];
-        }
-        return $processorType;
-    }
-
-
-    /**
      * @return string
      */
     public function getDefaultValue(): string
@@ -200,7 +176,7 @@ class BaseType
      * @param string $flag
      * @return bool
      */
-    public function getFlag(string $flag)
+    public function hasFlag(string $flag)
     {
         return in_array($flag, $this->getFlags());
     }

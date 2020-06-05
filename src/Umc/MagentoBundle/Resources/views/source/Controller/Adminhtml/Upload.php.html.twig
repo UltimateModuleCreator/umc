@@ -1,4 +1,4 @@
-{% if not module.isUmcCrud() and module.getEntitiesWithFlag('attribute_upload')|length %}
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_upload') %}
 <?php{{ formatLicense(module, 'php')|raw }}
 declare(strict_types=1);
 

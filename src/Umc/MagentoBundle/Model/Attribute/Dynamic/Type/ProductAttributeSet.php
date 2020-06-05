@@ -20,10 +20,12 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type;
 
-use App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\BaseType;
 use App\Umc\MagentoBundle\Model\Attribute;
 use App\Umc\MagentoBundle\Model\Entity;
 
+/**
+ * @method getDynamic() : Dynamic
+ */
 class ProductAttributeSet extends BaseType
 {
     /**
@@ -46,4 +48,6 @@ class ProductAttributeSet extends BaseType
         ];
         return implode('\\', $parts);
     }
+
+
 }

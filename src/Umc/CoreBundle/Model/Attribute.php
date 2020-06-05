@@ -116,9 +116,9 @@ class Attribute
      */
     protected $flags;
     /**
-     * @var string[]
+     * @var string[][]
      */
-    protected $flagSuffixes;
+    protected $flagSuffixes = [];
 
     /**
      * Attribute constructor.
@@ -201,7 +201,7 @@ class Attribute
      */
     public function isName(): bool
     {
-        return $this->isName && $this->getTypeInstance()->getFlag('can_be_name');
+        return $this->isName && $this->getTypeInstance()->hasFlag('can_be_name');
     }
 
     /**
@@ -209,7 +209,7 @@ class Attribute
      */
     public function isRequired(): bool
     {
-        return $this->required && $this->getTypeInstance()->getFlag('can_be_required');
+        return $this->required && $this->getTypeInstance()->hasFlag('can_be_required');
     }
 
     /**
@@ -302,7 +302,7 @@ class Attribute
      */
     public function isManualOptions(): bool
     {
-        return $this->getTypeInstance()->getFlag('manual_options');
+        return $this->getTypeInstance()->hasFlag('manual_options');
     }
 
     /**
@@ -320,15 +320,6 @@ class Attribute
             }
         }
         return $this->areOptionsNumeric;
-    }
-
-    /**
-     * @param $type
-     * @return array
-     */
-    public function getProcessorTypes($type): array
-    {
-        return $this->getTypeInstance()->getProcessorTypes($type);
     }
 
     /**
@@ -361,19 +352,14 @@ class Attribute
     public function getFlagSuffixes($prefix): array
     {
         if (!isset($this->flagSuffixes[$prefix])) {
-            $this->flagSuffixes = [];
+            $this->flagSuffixes[$prefix] = [];
             foreach ($this->getFlags() as $flag) {
                 if (substr($flag, 0, strlen($prefix)) === $prefix) {
-                    $this->flagSuffixes[] = substr($flag, strlen($prefix));
+                    $this->flagSuffixes[$prefix][] = substr($flag, strlen($prefix));
                 }
             }
         }
-        return $this->flagSuffixes;
-    }
-
-    public function getProcessors(): array
-    {
-        return $this->getTypeInstance()->getProcessors();
+        return $this->flagSuffixes[$prefix];
     }
 
     /**

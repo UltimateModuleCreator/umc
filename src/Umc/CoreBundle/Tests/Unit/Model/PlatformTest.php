@@ -76,7 +76,21 @@ class PlatformTest extends TestCase
      */
     public function testGetConfig()
     {
-
+        $config = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => [
+                'sub1' => 'subval1',
+                'sub2' => 'subval2',
+            ]
+        ];
+        $platform = new Platform('code', ['config' => $config], []);
+        $this->assertEquals($config, $platform->getConfig());
+        $this->assertEquals(['value1'], $platform->getConfig('key1'));
+        $this->assertEquals(['sub1' => 'subval1', 'sub2' => 'subval2'], $platform->getConfig('key3'));
+        $this->assertEquals(['subval1'], $platform->getConfig('key3.sub1'));
+        $this->assertEquals([], $platform->getConfig('key3.dummy'));
+        $this->assertEquals([], $platform->getConfig('dummy'));
     }
 
     /**
@@ -95,37 +109,79 @@ class PlatformTest extends TestCase
 
     /**
      * @covers \App\Umc\CoreBundle\Model\Platform::getVersion
+     * @covers \App\Umc\CoreBundle\Model\Platform::addVersion
+     * @covers \App\Umc\CoreBundle\Model\Platform::getLatestVersion
      * @covers \App\Umc\CoreBundle\Model\Platform::__construct
      */
     public function testGetVersion()
     {
+        $version1 = $this->getVersionMock('v1');
+        $version2 = $this->getVersionMock('v2');
+        $platform = new Platform('code', [], [$version1, $version2]);
+        $this->assertEquals($version1, $platform->getVersion('v1'));
+        $this->assertEquals($version2, $platform->getVersion('v2'));
+        $this->assertEquals($version1, $platform->getVersion());
+    }
 
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Platform::getVersion
+     * @covers \App\Umc\CoreBundle\Model\Platform::addVersion
+     * @covers \App\Umc\CoreBundle\Model\Platform::__construct
+     */
+    public function testGetVersionWithMissingVersion()
+    {
+        $version = $this->getVersionMock('v1');
+        $platform = new Platform('code', [], [$version]);
+        $this->expectException(\InvalidArgumentException::class);
+        $platform->getVersion('dummy');
     }
 
     /**
      * @covers \App\Umc\CoreBundle\Model\Platform::getLatestVersion
+     * @covers \App\Umc\CoreBundle\Model\Platform::addVersion
      * @covers \App\Umc\CoreBundle\Model\Platform::__construct
      */
     public function testGetLatestVersion()
     {
-
+        $version1 = $this->getVersionMock('v1');
+        $version2 = $this->getVersionMock('v2');
+        $platform = new Platform('code', [], [$version1, $version2]);
+        $this->assertEquals($version1, $platform->getLatestVersion());
     }
 
     /**
+     * @covers \App\Umc\CoreBundle\Model\Platform::getLatestVersion
      * @covers \App\Umc\CoreBundle\Model\Platform::addVersion
      * @covers \App\Umc\CoreBundle\Model\Platform::__construct
      */
-    public function testAddVersion()
+    public function testGetLatestVersionWithMissingVersions()
     {
-
+        $platform = new Platform('code', [], []);
+        $this->expectException(\InvalidArgumentException::class);
+        $platform->getLatestVersion();
     }
 
     /**
      * @covers \App\Umc\CoreBundle\Model\Platform::isSupported
+     * @covers \App\Umc\CoreBundle\Model\Platform::addVersion
      * @covers \App\Umc\CoreBundle\Model\Platform::__construct
      */
     public function testIsSupported()
     {
+        $platform = new Platform('code', [], [$this->getVersionMock('v1')]);
+        $this->assertTrue($platform->isSupported());
+        $platform = new Platform('code', [], []);
+        $this->assertFalse($platform->isSupported());
+    }
 
+    /**
+     * @param $code
+     * @return Version|MockObject
+     */
+    private function getVersionMock($code)
+    {
+        $version = $this->createMock(Version::class);
+        $version->method('getCode')->willReturn($code);
+        return $version;
     }
 }

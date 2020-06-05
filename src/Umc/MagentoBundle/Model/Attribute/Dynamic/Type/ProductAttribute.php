@@ -20,6 +20,9 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type;
 
+/**
+ * @method getDynamic() : Dynamic
+ */
 class ProductAttribute extends BaseType
 {
     /**

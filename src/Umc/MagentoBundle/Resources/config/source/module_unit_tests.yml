@@ -1,0 +1,36 @@
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/BackTest.php"
+  label: "Admin back button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/DeleteTest.php"
+  label: "Admin delete button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/ResetTest.php"
+  label: "Admin reset button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/SaveTest.php"
+  label: "Admin save button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/DeleteTest.php"
+  label: "Admin delete controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/EditTest.php"
+  label: "Admin edit controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/IndexTest.php"
+  label: "Admin index controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/InlineEditTest.php"
+  label: "Admin inline edit controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/MassDeleteTest.php"
+  label: "Admin mass delete controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/NewActionTest.php"
+  label: "Admin new action controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/SaveTest.php"
+  label: "Admin save controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/UploadTest.php"
+  label: "Admin upload controller unit tests"

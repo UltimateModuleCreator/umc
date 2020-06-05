@@ -32,39 +32,39 @@ class BaseType
     /**
      * @var Environment
      */
-    private $twig;
+    protected $twig;
     /**
      * @var Dynamic
      */
-    private $dynamic;
+    protected $dynamic;
     /**
      * @var string
      */
-    private $label;
+    protected $label;
     /**
      * @var bool
      */
-    private $canHaveOptions;
+    protected $canHaveOptions;
     /**
      * @var bool
      */
-    private $canBeRequired;
+    protected $canBeRequired;
     /**
      * @var string|null
      */
-    private $sourceModel;
+    protected $sourceModel;
     /**
      * @var array
      */
-    private $processor;
+    protected $processor;
     /**
      * @var array[]
      */
-    private $flags;
+    protected $flags;
     /**
      * @var array
      */
-    private $templates;
+    protected $templates;
 
     /**
      * BaseType constructor.
@@ -77,7 +77,6 @@ class BaseType
         $this->twig = $twig;
         $this->dynamic = $dynamic;
         $this->label = (string)($data['label'] ?? null);
-        $this->canHaveOptions = (bool)($data['can_have_options'] ?? false);
         $this->canBeRequired = (bool)($data['can_be_required'] ?? false);
         $this->sourceModel = $data['source_model'] ?? null;
         $this->flags = $data['dynamic_flags'] ?? [];
@@ -85,19 +84,11 @@ class BaseType
     }
 
     /**
-     * @return bool
-     */
-    public function isCanHaveOptions(): bool
-    {
-        return $this->canHaveOptions;
-    }
-
-    /**
      * @return string
      */
     public function getSourceModel(): string
     {
-        return $this->sourceModel ?? $this->dynamic->getOptionSourceVirtualType();
+        return $this->sourceModel ?? '';
     }
 
     /**

@@ -27,27 +27,12 @@ use App\Umc\CoreBundle\Model\Attribute\Dynamic\Option;
 class Factory
 {
     /**
-     * @var string
-     */
-    private $className;
-
-    /**
-     * Factory constructor.
-     * @param string $className
-     */
-    public function __construct(string $className = Option::class)
-    {
-        $this->className = $className;
-    }
-
-    /**
      * @param Dynamic $field
      * @param array $data
      * @return Option
      */
     public function create(Dynamic $field, array $data = []): Option
     {
-        $className = $this->className;
-        return new $className($field, $data);
+        return new Option($field, $data);
     }
 }

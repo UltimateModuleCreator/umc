@@ -84,7 +84,7 @@ class Attribute extends \App\Umc\CoreBundle\Model\Attribute
      */
     public function isAdminGrid(): bool
     {
-        return $this->adminGrid && $this->getTypeInstance()->getFlag('can_show_in_grid');
+        return $this->adminGrid && $this->getTypeInstance()->hasFlag('can_show_in_grid');
     }
 
     /**
@@ -124,7 +124,7 @@ class Attribute extends \App\Umc\CoreBundle\Model\Attribute
      */
     public function isFullText(): bool
     {
-        return $this->getTypeInstance()->getFlag('full_text') && $this->fullText;
+        return $this->getTypeInstance()->hasFlag('full_text') && $this->fullText;
     }
 
     /**

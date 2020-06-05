@@ -29,6 +29,7 @@
             <exclude>
                 <directory suffix=".php">./src/*/*/Tests</directory>
                 <directory suffix=".php">./src/*/*/DependencyInjection</directory>
+                <file>./src/Umc/CoreBundle/Model/Platform/Config.php</file>
             </exclude>
         </whitelist>
     </filter>

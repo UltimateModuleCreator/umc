@@ -374,7 +374,7 @@ class Entity
      * @param $prefix
      * @return Attribute[][]
      */
-    public function getAttributesWithFlagPrefix($prefix)
+    public function getAttributesWithFlagPrefix($prefix): array
     {
         if (!isset($this->attributesByFlagPrefix[$prefix])) {
             $this->attributesByFlagPrefix[$prefix] = [];

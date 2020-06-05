@@ -27,20 +27,6 @@ use App\Umc\CoreBundle\Model\Attribute\Option;
 class Factory
 {
     /**
-     * @var string
-     */
-    private $optionClassName;
-
-    /**
-     * Factory constructor.
-     * @param string $optionClassName
-     */
-    public function __construct(string $optionClassName = Option::class)
-    {
-        $this->optionClassName = $optionClassName;
-    }
-
-    /**
      * @param Attribute $attribute
      * @param array $data
      * @return Option

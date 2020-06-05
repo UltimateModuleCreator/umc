@@ -56,6 +56,8 @@ attribute_type:
         manual_options: true
         can_show_in_grid: true
         can_be_required: true
+      dynamic_flags:
+        manual_options: true
     file:
       label: File
       can_be_dynamic: false
@@ -87,6 +89,9 @@ attribute_type:
         multiple: true
         can_show_in_grid: true
         can_be_required: true
+      dynamic_flags:
+        manual_options: true
+        multiple: true
     textarea:
       label: Textarea (no editor)
       can_be_name: false

@@ -132,16 +132,6 @@ class Module extends \App\Umc\CoreBundle\Model\Module
     /**
      * @return string
      */
-    public function getFrontKey(): string
-    {
-        return ($this->frontKey)
-            ? $this->frontKey
-            : str_replace('_', '', $this->stringUtil->snake($this->getModuleName()));
-    }
-
-    /**
-     * @return string
-     */
     public function getComposerExtensionName(): string
     {
         return $this->stringUtil->hyphen($this->getNamespace()) . '/module-' .

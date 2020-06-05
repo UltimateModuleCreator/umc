@@ -164,7 +164,7 @@ class Platform
     /**
      * @param Version $version
      */
-    public function addVersion(Version $version): void
+    private function addVersion(Version $version): void
     {
         $version->setPlatform($this);
         $this->versions[$version->getCode()] = $version;

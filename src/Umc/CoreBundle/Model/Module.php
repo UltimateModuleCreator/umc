@@ -188,6 +188,16 @@ class Module
     }
 
     /**
+     * @return string
+     */
+    public function getFrontKey(): string
+    {
+        return ($this->frontKey)
+            ? $this->frontKey
+            : str_replace('_', '', $this->stringUtil->snake($this->getModuleName()));
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -211,16 +221,6 @@ class Module
             )
         ];
     }
-
-    /**
-     * @param string $format
-     * @return string
-     * @throws \Exception
-     */
-//    public function getFormattedLicense(string $format): string
-//    {
-//        return $this->licensePool->getProcessor($format)->process($this);
-//    }
 
     /**
      * @param string $separator
@@ -255,7 +255,7 @@ class Module
     /**
      * @param Entity $entity
      */
-    public function cacheEntityData(Entity $entity): void
+    protected function cacheEntityData(Entity $entity): void
     {
         foreach ($entity->getFlags() as $flag) {
             $this->cacheEntityData[$flag] = $this->cacheEntityData[$flag] ?? [];

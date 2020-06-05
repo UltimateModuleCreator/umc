@@ -83,7 +83,7 @@ class Version
             $config = $config[$part] ?? [];
         }
         $config = is_array($config) ? $config : [$config];
-        return array_replace_recursive($this->getPlatform()->getConfig($key), $config);
+        return ($withPlatform) ? array_replace_recursive($this->getPlatform()->getConfig($key), $config) : $config;
     }
 
     /**
