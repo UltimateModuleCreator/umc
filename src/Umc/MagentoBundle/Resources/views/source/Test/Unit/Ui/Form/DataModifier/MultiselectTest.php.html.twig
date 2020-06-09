@@ -1,0 +1,35 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_provider_multiselect') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form\DataModifier;
+
+use Magento\Framework\Model\AbstractModel;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\Multiselect;
+
+class MultiselectTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\Multiselect
+     */
+    public function testModifyData()
+    {
+        $model = $this->createMock(AbstractModel::class);
+        $modifier = new Multiselect(['field1', 'field2', 'field3', 'field4']);
+        $data = [
+            'field1' => '1,2,3',
+            'field2' => [3, 4, 5],
+            'field3' => null,
+            'dummy' => 'dummy'
+        ];
+        $expected = [
+            'field1' => [1, 2, 3],
+            'field2' => [3, 4, 5],
+            'field3' => [],
+            'dummy' => 'dummy'
+        ];
+        $this->assertEquals($expected, $modifier->modifyData($model, $data));
+    }
+}
+{% endif %}

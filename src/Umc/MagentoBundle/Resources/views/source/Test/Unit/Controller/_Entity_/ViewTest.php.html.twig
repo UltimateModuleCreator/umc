@@ -1,0 +1,173 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+use Magento\Theme\Block\Html\Breadcrumbs;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+
+class ViewTest extends TestCase
+{
+    /**
+     * @var Context | MockObject
+     */
+    private $context;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface | MockObject
+     */
+    private ${{ entity.getNameSingular()|camel }}Repository;
+    /**
+     * @var Url | MockObject
+     */
+    private $urlModel;
+    /**
+     * @var ScopeConfigInterface | MockObject
+     */
+    private $scopeConfig;
+    /**
+     * @var RequestInterface | MockObject
+     */
+    private $request;
+    /**
+     * @var ResultFactory | MockObject
+     */
+    private $resultFactory;
+    /**
+     * @var Config | MockObject
+     */
+    private $pageConfig;
+    /**
+     * @var Title | MockObject
+     */
+    private $pageTitle;
+    /**
+     * @var LayoutInterface | MockObject
+     */
+    private $layout;
+    /**
+     * @var UrlInterface | MockObject
+     */
+    private $url;
+    /**
+     * @var Page | MockObject
+     */
+    private $page;
+    /**
+     * @var View
+     */
+    private $view;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->context = $this->createMock(Context::class);
+        $this->{{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);
+        $this->urlModel = $this->createMock(Url::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->layout = $this->createMock(LayoutInterface::class);
+        $this->page = $this->createMock(Page::class);
+        $this->resultFactory = $this->createMock(ResultFactory::class);
+        $this->pageConfig = $this->createMock(Config::class);
+        $this->page->method('getConfig')->willReturn($this->pageConfig);
+        $this->pageTitle = $this->createMock(Title::class);
+        $this->pageConfig->method('getTitle')->willReturn($this->pageTitle);
+        $this->page->method('getLayout')->willReturn($this->layout);
+        $this->url = $this->createMock(UrlInterface::class);
+        $this->context->method('getUrl')->willReturn($this->url);
+        $this->context->method('getResultFactory')->willReturn($this->resultFactory);
+
+        $this->view = new View(
+            $this->context,
+            $this->{{ entity.getNameSingular()|camel }}Repository,
+            $this->urlModel,
+            $this->scopeConfig
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::execute
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testExecute()
+    {
+        $this->request->method('getParam')->willReturn(1);
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(true));
+        $this->resultFactory->method('create')->willReturn($this->page);
+        $this->scopeConfig->method('isSetFlag')->willReturn(true);
+        $crumbs = $this->createMock(Breadcrumbs::class);
+        $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
+        $this->layout->expects($this->exactly(2))->method('getBlock')->willReturnMap([
+            ['page.main.title' , $titleBlock],
+            ['breadcrumbs', $crumbs]
+        ]);
+        $crumbs->expects($this->exactly(3))->method('addCrumb');
+        $this->assertEquals($this->page, $this->view->execute());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::execute
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testExecuteNoBreadcrumbs()
+    {
+        $this->request->method('getParam')->willReturn(1);
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(true));
+        $this->resultFactory->method('create')->willReturn($this->page);
+        $this->scopeConfig->method('isSetFlag')->willReturn(false);
+        $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
+        $this->layout->expects($this->once())->method('getBlock')->willReturn($titleBlock);
+        $this->assertEquals($this->page, $this->view->execute());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::execute
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::getNoRouteResult
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testExecuteWithException()
+    {
+        $this->request->method('getParam')->willReturn(1);
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willThrowException(
+            $this->createMock(NoSuchEntityException::class)
+        );
+        $forward = $this->createMock(Forward::class);
+        $this->resultFactory->method('create')->willReturn($forward);
+        $forward->expects($this->once())->method('forward');
+        $this->scopeConfig->expects($this->never())->method('isSetFlag');
+        $this->assertEquals($forward, $this->view->execute());
+    }
+
+    /**
+     * @param $isActive
+     * @return MockObject
+     * @throws \ReflectionException
+     */
+    private function get{{ entity.getNameSingular()|camel|ucfirst }}Mock($isActive)
+    {
+        $mock = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $mock->method('getIsActive')->willReturn($isActive);
+        return $mock;
+    }
+}
+{% endif %}

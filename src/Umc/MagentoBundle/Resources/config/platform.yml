@@ -18,6 +18,7 @@ magento:
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/module.yml'
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/module_unit_tests.yml'
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/entity.yml'
+      - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/entity_unit_tests.yml'
     destination: '%kernel.project_dir%/var/umc/magento/'
     module_factory: 'magento.module.factory'
     coding_standards:

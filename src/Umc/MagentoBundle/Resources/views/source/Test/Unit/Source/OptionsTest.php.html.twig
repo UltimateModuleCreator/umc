@@ -1,0 +1,56 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_manual_options') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Source;
+
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Options;
+
+class OptionsTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Options::toOptionArray
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Options::__construct
+     */
+    public function testToOptionArray()
+    {
+        $input = [
+            [
+                'label' => 'label1',
+                'value' => 'value1'
+            ],
+            [
+                'label' => 'label2',
+                'value' => 'value2',
+                'disabled' => true
+            ],
+            [
+                'value' => 'value3',
+                'disabled' => false
+            ],
+            [
+                'label' => 'label4',
+            ],
+            [
+                'label' => 'label5',
+                'value' => 'value5',
+                'disabled' => false
+            ],
+            'dummy'
+        ];
+        $expected = [
+            [
+                'label' => 'label1',
+                'value' => 'value1'
+            ],
+            [
+                'label' => 'label5',
+                'value' => 'value5'
+            ],
+        ];
+        $options = new Options($input);
+        $this->assertEquals($expected, $options->toOptionArray());
+    }
+}
+{% endif %}

@@ -8,12 +8,12 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
 use PHPUnit\Framework\TestCase;
-use Umc\Crud\Controller\Adminhtml\NewAction;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\NewAction;
 
 class NewActionTest extends TestCase
 {
     /**
-     * @covers \Umc\Crud\Controller\Adminhtml\NewAction::execute
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\NewAction::execute
      */
     public function testExecute()
     {

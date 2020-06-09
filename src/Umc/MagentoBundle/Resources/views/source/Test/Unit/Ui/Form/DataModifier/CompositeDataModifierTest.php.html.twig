@@ -1,0 +1,59 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_provider') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form\DataModifier;
+
+use Magento\Framework\Model\AbstractModel;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
+
+class CompositeDataModifierTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier::modifyData
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier::__construct
+     */
+    public function testModifyData()
+    {
+        $model = $this->createMock(AbstractModel::class);
+        $processor1 = $this->createMock(DataModifierInterface::class);
+        $processor1->method('modifyData')->willReturnCallback(
+            function (AbstractModel $model, array $data) {
+                $data['element1'] = ($data['element1'] ?? '') . '_processed1';
+                return $data;
+            }
+        );
+        $processor2 = $this->createMock(DataModifierInterface::class);
+        $processor2->method('modifyData')->willReturnCallback(
+            function (AbstractModel $model, array $data) {
+                $data['element1'] = ($data['element1'] ?? '') . '_processed2';
+                $data['element2'] = ($data['element2'] ?? '') . '_processed2';
+                return $data;
+            }
+        );
+        $compositeProcessor = new CompositeDataModifier([$processor1, $processor2]);
+        $data = [
+            'element1' => 'value1',
+            'element2' => 'value2',
+            'element3' => 'value3'
+        ];
+        $expected = [
+            'element1' => 'value1_processed1_processed2',
+            'element2' => 'value2_processed2',
+            'element3' => 'value3'
+        ];
+        $this->assertEquals($expected, $compositeProcessor->modifyData($model, $data));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier::__construct
+     */
+    public function testGetConstructor()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new CompositeDataModifier(['string value']);
+    }
+}
+{% endif %}

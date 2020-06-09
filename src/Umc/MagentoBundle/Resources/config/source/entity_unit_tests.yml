@@ -1,0 +1,8 @@
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/_Entity_/ViewTest.php"
+  label: "Entity view controller unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/_Entity_/IndexTest.php"
+  label: "Entity index controller unit test"
+  scope: entity

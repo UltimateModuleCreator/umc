@@ -1,0 +1,114 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Component\Listing;
+
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\ActionsColumn;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+
+class ActionsColumnTest extends TestCase
+{
+    /**
+     * @var ContextInterface | MockObject
+     */
+    private $context;
+    /**
+     * @var UiComponentFactory | MockObject
+     */
+    private $uiComponentFactory;
+    /**
+     * @var UrlInterface | MockObject
+     */
+    private $urlBuilder;
+    /**
+     * @var EntityUiConfig | MockObject
+     */
+    private $uiConfig;
+    /**
+     * @var UiComponentInterface | MockObject
+     */
+    private $component;
+    /**
+     * @var ActionsColumn
+     */
+    private $actionsColumn;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->context = $this->createMock(ContextInterface::class);
+        $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->uiConfig = $this->createMock(EntityUiConfig::class);
+        $this->component = $this->createMock(UiComponentInterface::class);
+        $this->actionsColumn = new ActionsColumn(
+            $this->context,
+            $this->uiComponentFactory,
+            $this->urlBuilder,
+            $this->uiConfig,
+            [],
+            [
+                'name' => 'actions'
+            ]
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\ActionsColumn::prepareDataSource
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\ActionsColumn::__construct
+     */
+    public function testPrepareDataSource()
+    {
+        $this->uiConfig->method('getEditUrlPath')->willReturn('edit_url');
+        $this->uiConfig->method('getDeleteUrlPath')->willReturn('delete_url');
+        $data = [
+            'data' => [
+                'items' => [
+                    [
+                        'field1' => 'value1',
+                        'field2' => 'value2'
+                    ]
+                ]
+            ]
+        ];
+        $this->urlBuilder->method('getUrl')->willReturnArgument(0);
+        $this->uiConfig->method('getDeleteMessage')->willReturn('Really?');
+        $this->uiConfig->method('getNameAttribute')->willReturn('field1');
+        $expected = [
+            'data' => [
+                'items' => [
+                    [
+                        'field1' => 'value1',
+                        'field2' => 'value2',
+                        'actions' => [
+                            'edit' => [
+                                'href' => 'edit_url',
+                                'label' => 'Edit'
+                            ],
+                            'delete' => [
+                                'href' => 'delete_url',
+                                'label' => 'Delete',
+                                'confirm' => [
+                                    'title' => 'Delete "${ $.$data.field1 }"',
+                                    'message' => 'Really?'
+                                ],
+                                'post' => true
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $this->actionsColumn->prepareDataSource($data));
+    }
+}
+{% endif %}

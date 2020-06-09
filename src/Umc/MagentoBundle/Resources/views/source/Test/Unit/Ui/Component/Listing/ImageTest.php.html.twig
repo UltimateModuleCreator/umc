@@ -1,0 +1,148 @@
+{% if not module.isUmcCrud() and  module.hasEntitiesWithFlag('attribute_type_image') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Component\Listing;
+
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+
+class ImageTest extends TestCase
+{
+    /**
+     * @var ContextInterface | MockObject
+     */
+    private $context;
+    /**
+     * @var UiComponentFactory | MockObject
+     */
+    private $uiComponentFactory;
+    /**
+     * @var StoreManagerInterface | MockObject
+     */
+    private $storeManager;
+    /**
+     * @var EntityUiConfig | MockObject
+     */
+    private $uiConfig;
+    /**
+     * @var FileInfo | MockObject
+     */
+    private $fileInfo;
+    /**
+     * @var UiComponentInterface | MockObject
+     */
+    private $component;
+    /**
+     * @var Store | MockObject
+     */
+    private $store;
+    /**
+     * @var Image
+     */
+    private $image;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->context = $this->createMock(ContextInterface::class);
+        $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->uiConfig = $this->createMock(EntityUiConfig::class);
+        $this->fileInfo = $this->createMock(FileInfo::class);
+        $this->component = $this->createMock(UiComponentInterface::class);
+        $this->store = $this->createMock(Store::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
+        $this->image = new Image(
+            $this->context,
+            $this->uiComponentFactory,
+            $this->storeManager,
+            $this->uiConfig,
+            $this->fileInfo,
+            [],
+            ['name' => 'imageField']
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image::prepareDataSource
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image::getUrl
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image::getEditUrl
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image::getAlt
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image::__construct
+     */
+    public function testPrepareDataSource()
+    {
+        $this->context->method('getUrl')->willReturn('edit_url');
+        $this->uiConfig->method('getNameAttribute')->willReturn('altField');
+        $this->fileInfo->method('isBeginsWithMediaDirectoryPath')->willReturnMap([
+            ['image', false],
+            ['inside/media', true]
+        ]);
+        $this->store->method('getBaseUrl')->willReturn('base_url/');
+        $this->fileInfo->method('getBaseFilePath')->willReturn('base_path');
+        $data = [
+            'data' => [
+                'items' => [
+                    [
+                        'imageField' => 'image',
+                        'altField' => 'alt image',
+                    ],
+                    [
+                        'imageField' => 'inside/media'
+                    ],
+                    [
+                        'imageField' => ''
+                    ],
+                    []
+                ]
+            ]
+        ];
+        $expected = [
+            'data' => [
+                'items' => [
+                    [
+                        'imageField' => 'image',
+                        'imageField_src' => 'base_url/base_path/image',
+                        'imageField_orig_src' => 'base_url/base_path/image',
+                        'imageField_alt' => 'alt image',
+                        'imageField_link' => 'edit_url',
+                        'altField' => 'alt image',
+                    ],
+                    [
+                        'imageField' => 'inside/media',
+                        'imageField_src' => 'inside/media',
+                        'imageField_orig_src' => 'inside/media',
+                        'imageField_alt' => null,
+                        'imageField_link' => 'edit_url',
+                    ],
+                    [
+                        'imageField' => '',
+                        'imageField_src' => '',
+                        'imageField_orig_src' => '',
+                        'imageField_alt' => null,
+                        'imageField_link' => 'edit_url'
+                    ],
+                    [
+                        'imageField_src' => '',
+                        'imageField_orig_src' => '',
+                        'imageField_alt' => null,
+                        'imageField_link' => 'edit_url'
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $this->image->prepareDataSource($data));
+    }
+}
+{% endif %}
