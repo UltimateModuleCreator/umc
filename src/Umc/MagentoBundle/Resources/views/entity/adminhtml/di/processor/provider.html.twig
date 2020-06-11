@@ -5,11 +5,9 @@
     <virtualType name="{{ entity.getVirtualType('FormDataModifier') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-{% for attribute in entity.getAttributesWithFlag('processor_provider') %}
-{% for type in attribute.getFlagSuffixes('processor_provider_') %}
+{% for type in entity.getAttributesWithFlagPrefix('processor_provider_')|keys %}
 {% set ucType = 'Form' ~ type|ucfirst ~ 'Modifier' %}
                 <item name="{{ type }}" xsi:type="object">{{ entity.getVirtualType(ucType) }}</item>
-{% endfor %}
 {% endfor %}
             </argument>
         </arguments>

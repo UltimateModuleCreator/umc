@@ -4,10 +4,10 @@
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="add-{{ module.getModuleName()|hyphen }}-links-to-top-menu" type="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Plugin\Theme\Block\Html\TopmenuPlugin" />
     </type>
-    <type name="{{ module.getNamespace()| }}\{{ module.getModuleName() }}\Plugin\Theme\Block\Html\TopmenuPlugin">
+    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Plugin\Theme\Block\Html\TopmenuPlugin">
         <arguments>
             <argument name="nodeData" xsi:type="array">
-{% for entity in module.getEntitiesWithFlag('top_menu')) %}
+{% for entity in module.getEntitiesWithFlag('top_menu') %}
                 <item name="{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" xsi:type="array">
                     <item name="name" xsi:type="string" translate="true">{{ entity.getLabelPlural() }}</item>
                     <item name="id" xsi:type="string">{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}</item>

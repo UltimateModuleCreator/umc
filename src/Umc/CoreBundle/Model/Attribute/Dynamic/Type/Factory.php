@@ -34,6 +34,10 @@ class Factory
      */
     private $typeMap;
     /**
+     * @var string
+     */
+    private $defaultType;
+    /**
      * @var \Twig\Environment;
      */
     private $twig;
@@ -42,10 +46,15 @@ class Factory
      * Factory constructor.
      * @param \Twig\Environment $twig
      * @param array $typeMap
+     * @param string $defaultType
      */
-    public function __construct(\Twig\Environment $twig, array $typeMap)
-    {
+    public function __construct(
+        \Twig\Environment $twig,
+        array $typeMap,
+        string $defaultType = self::DEFAULT_TYPE_CLASS
+    ) {
         $this->twig = $twig;
+        $this->defaultType = $defaultType;
         $this->typeMap = array_filter(
             $typeMap,
             function ($item) {
@@ -65,7 +74,7 @@ class Factory
             throw new \InvalidArgumentException("There is no config for dynamic type {$type}");
         }
         $config = $this->typeMap[$type];
-        $class = $config['dynamic_class'] ?? self::DEFAULT_TYPE_CLASS;
+        $class = $config['dynamic_class'] ?? $this->defaultType;
         return new $class($this->twig, $dynamic, $config);
     }
 }

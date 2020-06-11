@@ -26,13 +26,12 @@ ${{ entity.getNameSingular()|camel }}Url = $block->getData('{{ entity.getNameSin
                         <?php else: ?>
                             <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
                         <?php endif;?>
-                        <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
                     </div>
                     <?php if ($formatter): ?>
                         <div class="{{entity.getNameSingular()|hyphen}}-details">
 {% for attribute in entity.getAttributesWithFlag('show_in_list') %}
                             <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
-{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(36)})|raw }}
+{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(32), mode:'list'})|raw }}
                             </div>
 {% endfor %}
                         </div>

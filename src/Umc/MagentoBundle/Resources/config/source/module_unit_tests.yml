@@ -118,3 +118,26 @@
 -
   source: "@UmcMagento/source/Test/Unit/Ui/EntityUiConfigTest.php"
   label: "Entity Ui config unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/FormatterTest.php"
+  label: "Frontend value formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/WysiwygTest.php"
+  label: "Frontend wysiwyg formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/TextTest.php"
+  label: "Frontend text formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/OptionsTest.php"
+  label: "Frontend dropdown and multiselect formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/ImageTest.php"
+  label: "Frontend image formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/FileTest.php"
+  label: "Frontend file formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/DateTest.php"
+  label: "Frontend date formatter unit tests"
+
+

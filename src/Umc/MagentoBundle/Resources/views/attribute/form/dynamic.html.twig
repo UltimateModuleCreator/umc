@@ -33,8 +33,12 @@
                         <collapsible>true</collapsible>
                     </settings>
 {% endif %}
+{% set indent = '' %}
+{% if (attribute.isExpanded()) %}
+{% set indend = ' '|repeat(4) %}
+{% endif %}
 {% for field in attribute.getDynamic() %}
-{{ field.getTypeInstance().renderTemplate('dynamic_form')|raw }}
+{{ field.getTypeInstance().renderTemplate('dynamic_form', {indent: indent})|raw }}
 {% endfor %}
 {% if attribute.isExpanded() %}
                 </fieldset>

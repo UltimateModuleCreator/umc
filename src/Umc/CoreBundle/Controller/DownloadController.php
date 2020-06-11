@@ -66,7 +66,6 @@ class DownloadController extends AbstractController
             $filename = $this->repository->getRoot($versionInstance) . '/' . $module . '.zip';
             return $this->file($filename);
         } catch (\Exception $e) {
-            echo $e->getMessage();
             $this->addFlash('danger', 'The requested module does not exist');
             return $this->redirectToRoute('index');
         }

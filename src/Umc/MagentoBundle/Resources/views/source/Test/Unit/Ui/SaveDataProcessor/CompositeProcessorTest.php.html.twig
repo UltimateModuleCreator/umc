@@ -21,7 +21,7 @@ class CompositeProcessorTest extends TestCase
             function (array $data) {
                 $data['element1'] = ($data['element1'] ?? '') . '_processed1';
                 return $data;
-                }
+            }
         );
         $processor2 = $this->createMock(SaveDataProcessorInterface::class);
         $processor2->method('modifyData')->willReturnCallback(

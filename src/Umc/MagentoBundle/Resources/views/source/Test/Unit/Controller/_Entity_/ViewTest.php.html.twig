@@ -18,10 +18,14 @@ use Magento\Framework\View\Result\Page;
 use Magento\Theme\Block\Html\Breadcrumbs;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ entity.getRepoInterface() }};
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+{% if entity.isStore() %}
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+{% endif %}
 
 class ViewTest extends TestCase
 {
@@ -69,6 +73,12 @@ class ViewTest extends TestCase
      * @var Page | MockObject
      */
     private $page;
+{% if entity.isStore() %}
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+{% endif %}
     /**
      * @var View
      */
@@ -82,6 +92,12 @@ class ViewTest extends TestCase
         $this->context = $this->createMock(Context::class);
         $this->{{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);
         $this->urlModel = $this->createMock(Url::class);
+{% if entity.isStore() %}
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(StoreInterface::class);
+        $store->method('getId')->willReturn(1);
+        $this->storeManager->method('getStore')->willReturn($store);
+{% endif %}
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->request = $this->createMock(RequestInterface::class);
         $this->context->method('getRequest')->willReturn($this->request);
@@ -101,6 +117,9 @@ class ViewTest extends TestCase
             $this->context,
             $this->{{ entity.getNameSingular()|camel }}Repository,
             $this->urlModel,
+{% if entity.isStore() %}
+            $this->storeManager,
+{% endif %}
             $this->scopeConfig
         );
     }
@@ -112,7 +131,11 @@ class ViewTest extends TestCase
     public function testExecute()
     {
         $this->request->method('getParam')->willReturn(1);
+{% if entity.isStore %}
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(true, [0]));
+{% else %}
         $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(true));
+{% endif %}
         $this->resultFactory->method('create')->willReturn($this->page);
         $this->scopeConfig->method('isSetFlag')->willReturn(true);
         $crumbs = $this->createMock(Breadcrumbs::class);
@@ -132,7 +155,11 @@ class ViewTest extends TestCase
     public function testExecuteNoBreadcrumbs()
     {
         $this->request->method('getParam')->willReturn(1);
+{% if entity.isStore %}
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(true, [0]));
+{% else %}
         $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(true));
+{% endif %}
         $this->resultFactory->method('create')->willReturn($this->page);
         $this->scopeConfig->method('isSetFlag')->willReturn(false);
         $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
@@ -157,7 +184,21 @@ class ViewTest extends TestCase
         $this->scopeConfig->expects($this->never())->method('isSetFlag');
         $this->assertEquals($forward, $this->view->execute());
     }
-
+{% if entity.isStore() %}
+    /**
+     * @param $isActive
+     * @param $storeIds
+     * @return MockObject
+     * @throws \ReflectionException
+     */
+    private function get{{ entity.getNameSingular()|camel|ucfirst }}Mock($isActive, $storeIds)
+    {
+        $mock = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $mock->method('getIsActive')->willReturn($isActive);
+        $mock->method('getStoreId')->willReturn($storeIds);
+        return $mock;
+    }
+{% else %}
     /**
      * @param $isActive
      * @return MockObject
@@ -169,5 +210,6 @@ class ViewTest extends TestCase
         $mock->method('getIsActive')->willReturn($isActive);
         return $mock;
     }
+{% endif %}
 }
 {% endif %}

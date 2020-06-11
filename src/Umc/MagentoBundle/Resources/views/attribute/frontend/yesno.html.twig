@@ -1,5 +1,8 @@
 {{ indent }}<strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}:')); ?></strong>
 {{ indent }}<?= $formatter->formatHtml(
 {{ indent }}    ${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}(),
-{{ indent }}    ['type' => 'options', 'source' => \Magento\Config\Model\Config\Source\Yesno::class]
+{{ indent }}    [
+{{ indent }}        'type' => 'options',
+{{ indent }}        'source' => \Magento\Config\Model\Config\Source\Yesno::class
+{{ indent }}    ]
 {{ indent }}); ?>

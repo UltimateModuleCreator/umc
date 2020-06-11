@@ -363,7 +363,7 @@ magento_attribute_type:
     product_attribute:
       grid_filter_type: select
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttribute
-      serialized_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttribute
+      dynamic_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttribute
       type_hint: string
       schema_type: varchar
       schema_attributes: 'length="50"'
@@ -383,7 +383,7 @@ magento_attribute_type:
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
     product_attribute_multiselect:
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttribute
-      serialized_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttribute
+      dynamic_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttribute
       type_hint: string
       grid_filter_type: 'false'
       schema_type: text
@@ -412,7 +412,7 @@ magento_attribute_type:
     product_attribute_set:
       grid_filter_type: select
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttributeSet
-      serialized_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttributeSet
+      dynamic_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttributeSet
       type_hint: int
       schema_type: smallint
       schema_attributes: 'unsigned="true" padding="5"'
@@ -433,7 +433,7 @@ magento_attribute_type:
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
     product_attribute_set_multiselect:
       class: App\Umc\MagentoBundle\Model\Attribute\Type\ProductAttributeSet
-      serialized_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttributeSet
+      dynamic_class: App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\ProductAttributeSet
       type_hint: string
       grid_filter_type: 'false'
       schema_type: text

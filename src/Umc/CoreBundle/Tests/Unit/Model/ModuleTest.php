@@ -201,6 +201,7 @@ class ModuleTest extends TestCase
      * @covers \App\Umc\CoreBundle\Model\Module::initEntityCacheData
      * @covers \App\Umc\CoreBundle\Model\Module::cacheEntityData
      * @covers \App\Umc\CoreBundle\Model\Module::cacheEntityData
+     * @covers \App\Umc\CoreBundle\Model\Module::__construct
      */
     public function testGetEntitiesWithFlag()
     {
@@ -222,6 +223,7 @@ class ModuleTest extends TestCase
      * @covers \App\Umc\CoreBundle\Model\Module::initEntityCacheData
      * @covers \App\Umc\CoreBundle\Model\Module::cacheEntityData
      * @covers \App\Umc\CoreBundle\Model\Module::cacheEntityData
+     * @covers \App\Umc\CoreBundle\Model\Module::__construct
      */
     public function testHasEntitiesWithFlag()
     {

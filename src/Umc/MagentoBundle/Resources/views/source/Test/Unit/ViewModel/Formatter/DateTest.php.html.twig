@@ -1,0 +1,65 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('frontend') and module.hasEntitiesWithFlag('attribute_processor_frontend_date') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\Formatter;
+
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date;
+
+class DateTest extends TestCase
+{
+    /**
+     * @var TimezoneInterface | MockObject
+     */
+    private $localeDate;
+    /**
+     * @var Date
+     */
+    private $date;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->date = new Date($this->localeDate);
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date::formatHtml
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date::__construct
+     */
+    public function testFormatHtml()
+    {
+        $this->localeDate->expects($this->once())->method('formatDateTime')
+            ->with(new \DateTime('1984-04-04'), \IntlDateFormatter::LONG, \IntlDateFormatter::NONE, null, null)
+            ->willReturn('formatted');
+        $this->assertEquals('formatted', $this->date->formatHtml('1984-04-04'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date::formatHtml
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date::__construct
+     */
+    public function testFormatHtmlWithParams()
+    {
+        $this->localeDate->expects($this->once())->method('formatDateTime')
+            ->with(new \DateTime('1984-04-04'), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT, null, null)
+            ->willReturn('formatted');
+        $this->assertEquals(
+            'formatted',
+            $this->date->formatHtml(
+                '1984-04-04',
+                [
+                    'format' => \IntlDateFormatter::SHORT,
+                    'show_time' => true
+                ]
+            )
+        );
+    }
+}
+{% endif %}

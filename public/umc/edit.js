@@ -94,7 +94,7 @@ $.widget('umc.umcedit', {
                 localStorage.removeItem(this.options.localStorageKey);
             }
         }
-        this.moduleInstance = new UMC.Model(moduleData, 'module', this.saveToStorage);
+        this.moduleInstance = new UMC.Model(moduleData, 'module', this.saveToStorage.bind(this));
         ko.applyBindings(this.moduleInstance);
     },
     loader: function (show) {

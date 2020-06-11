@@ -132,7 +132,7 @@ class Dynamic
             function (array $option) {
                 return $this->optionFactory->create($this, $option);
             },
-            $data['_options'] ?? []
+            $data['_option'] ?? []
         );
     }
 
@@ -273,7 +273,7 @@ class Dynamic
             'note' => $this->note,
             'tooltip' => $this->tooltip,
             'default_value' => $this->defaultValue,
-            '_options' => array_map(
+            '_option' => array_map(
                 function (Option $option) {
                     return $option->toArray();
                 },

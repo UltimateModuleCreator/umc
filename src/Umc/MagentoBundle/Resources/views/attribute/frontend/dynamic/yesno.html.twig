@@ -1,7 +1,7 @@
-<?= $formatter->formatHtml(
-    $item['{{ field.getCode() }}'],
-    [
-        'type' => 'options',
-        'source' => \Magento\Config\Model\Config\Source\Yesno::class
-    ]
-);?>
+{{ indent }}<?= $formatter->formatHtml(
+{{ indent }}    $item['{{ field.getCode() }}'],
+{{ indent }}    [
+{{ indent }}        'type' => 'options',
+{{ indent }}        'source' => \Magento\Config\Model\Config\Source\Yesno::class
+{{ indent }}    ]
+{{ indent }});?>

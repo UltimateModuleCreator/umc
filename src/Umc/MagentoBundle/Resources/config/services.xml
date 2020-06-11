@@ -27,9 +27,11 @@
         </service>
         <service id="magento.attribute.dynamic.factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Factory">
             <argument key="$typeFactory" type="service" id="magento.attribute.dynamic.type.factory" />
+            <argument key="$className">\App\Umc\MagentoBundle\Model\Attribute\Dynamic</argument>
         </service>
         <service id="magento.attribute.dynamic.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory">
             <argument key="$typeMap" type="string">%magento_dynamic_rows_type%</argument>
+            <argument key="$defaultType">\App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\BaseType</argument>
         </service>
         <service id="magento.attribute.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
             <argument key="$typeMap" type="string">%magento_attribute_type%</argument>

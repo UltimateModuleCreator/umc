@@ -1,5 +1,8 @@
 {{ indent }}<strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}:')); ?></strong>
 {{ indent }}<?= $formatter->formatHtml(
 {{ indent }}    ${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}(),
-{{ indent }}    ['type' => 'options', 'source' => \{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\Source\Catalog\ProductAttributeSet::class]
+{{ indent }}    [
+{{ indent }}        'type' => 'options',
+{{ indent }}        'source' => \{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\Source\Catalog\ProductAttributeSet::class
+{{ indent }}    ]
 {{ indent }}); ?>

@@ -176,6 +176,9 @@
   source: "@UmcMagento/source/etc/frontend/routes.xml"
   label: "Frontend routes file"
 -
+  source: "@UmcMagento/source/etc/frontend/di.xml"
+  label: "Frontend di file"
+-
   source: "@UmcMagento/source/ViewModel/Formatter.php"
   label: "Frontend value formatter view model"
 -

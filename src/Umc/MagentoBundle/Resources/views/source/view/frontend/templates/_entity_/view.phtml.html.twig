@@ -15,7 +15,7 @@ $formatter = $block->getData('formatter');
             <div class="{{entity.getNameSingular()|hyphen}}-details">
 {% for attribute in entity.getAttributesWithFlag('show_in_view') %}
                 <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
-{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(16)})|raw }}
+{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(16), mode: 'view'})|raw }}
                 </div>
 {% endfor %}
             </div>

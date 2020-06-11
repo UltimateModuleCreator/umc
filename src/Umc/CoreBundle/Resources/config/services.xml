@@ -53,6 +53,8 @@
             <argument key="$suffix" type="string"><![CDATA[
 ]]></argument>
             <argument key="$code" type="string">php</argument>
+            <argument key="$default" type="string"><![CDATA[
+]]></argument>
             <tag name="licence.processor" />
         </service>
 

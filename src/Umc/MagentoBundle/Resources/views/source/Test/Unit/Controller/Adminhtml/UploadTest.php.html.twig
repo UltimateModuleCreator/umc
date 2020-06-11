@@ -60,22 +60,22 @@ class UploadTest extends TestCase
     }
     
     /**
-    * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::execute
-    * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::getFieldName
-    * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::__construct
-    */
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::execute
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::getFieldName
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::__construct
+     */
     public function testExecute()
     {
-    $this->uploader->method('saveFileToTmpDir')->willReturn(['result']);
-    $this->resultJson->expects($this->once())->method('setData')->with(['result']);
-    $this->assertEquals($this->resultJson, $this->upload->execute());
+        $this->uploader->method('saveFileToTmpDir')->willReturn(['result']);
+        $this->resultJson->expects($this->once())->method('setData')->with(['result']);
+        $this->assertEquals($this->resultJson, $this->upload->execute());
     }
     
     /**
-    * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::execute
-    * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::getFieldName
-    * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::__construct
-    */
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::execute
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::getFieldName
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload::__construct
+     */
     public function testExecuteWithException()
     {
         $this->uploader->method('saveFileToTmpDir')->willThrowException(new \Exception());

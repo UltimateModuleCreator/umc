@@ -70,7 +70,7 @@ class IndexTest extends TestCase
      * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Index::execute
      * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Index::_isAllowed
      * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Index::__construct
-    */
+     */
     public function testExecute()
     {
         $this->uiConfig->expects($this->once())->method('getMenuItem')->willReturn('SelectedMenu');

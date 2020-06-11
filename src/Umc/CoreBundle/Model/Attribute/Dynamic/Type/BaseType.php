@@ -141,7 +141,6 @@ class BaseType
                 'attribute' => $attribute,
                 'entity' => $entity,
                 'module' => $module,
-                'indent' => $this->dynamic->isExpanded() ? '' : str_repeat(' ', 4)
             ]
         );
         return $this->twig->render($template, $params);

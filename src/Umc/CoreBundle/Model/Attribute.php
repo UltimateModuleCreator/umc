@@ -147,6 +147,7 @@ class Attribute
         $this->type = (string)($data['type'] ?? 'text');
         $this->isName = (bool)($data['is_name'] ?? '');
         $this->required = (bool)($data['required'] ?? false);
+        $this->adminGrid = (bool)($data['admin_grid'] ?? false);
         $this->showInList = (bool)($data['show_in_list'] ?? false);
         $this->showInView = (bool)($data['show_in_view'] ?? false);
         $this->defaultValue = (string)($data['default_value'] ?? '');
@@ -154,7 +155,7 @@ class Attribute
             function ($option) {
                 return $this->optionFactory->create($this, $option);
             },
-            $data['_options'] ?? []
+            $data['_option'] ?? []
         );
         $this->dynamic = array_map(
             function ($dynamic) {
@@ -358,6 +359,7 @@ class Attribute
                     $this->flagSuffixes[$prefix][] = substr($flag, strlen($prefix));
                 }
             }
+            $this->flagSuffixes[$prefix] = array_unique($this->flagSuffixes[$prefix]);
         }
         return $this->flagSuffixes[$prefix];
     }
@@ -373,10 +375,11 @@ class Attribute
             'type' => $this->type,
             'is_name' => $this->isName,
             'required' => $this->required,
+            'admin_grid' => $this->adminGrid,
             'show_in_list' => $this->showInList,
             'show_in_view' => $this->showInView,
             'default_value' => $this->defaultValue,
-            '_options' => array_map(
+            '_option' => array_map(
                 function (Option $option) {
                     return $option->toArray();
                 },
