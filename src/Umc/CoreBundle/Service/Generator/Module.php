@@ -31,14 +31,20 @@ class Module implements GeneratorInterface
      * @var Twig
      */
     private $twig;
+    /**
+     * @var ContentProcessor
+     */
+    private $processor;
 
     /**
      * Module constructor.
      * @param Twig $twig
+     * @param ContentProcessor $processor
      */
-    public function __construct(Twig $twig)
+    public function __construct(Twig $twig, ContentProcessor $processor)
     {
         $this->twig = $twig;
+        $this->processor = $processor;
     }
 
     /**
@@ -62,7 +68,7 @@ class Module implements GeneratorInterface
             return [];
         }
         return [
-            $fileConfig['destination'] => str_replace('\n\r', PHP_EOL, $content)
+            $fileConfig['destination'] => $this->processor->process($content)
         ];
     }
 }

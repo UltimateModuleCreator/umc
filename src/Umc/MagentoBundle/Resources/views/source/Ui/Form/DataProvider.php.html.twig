@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form;
 
+{{ sortStart() }}
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\CollectionProviderInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+{{ sortEnd() }}
 
 class DataProvider extends AbstractDataProvider
 {

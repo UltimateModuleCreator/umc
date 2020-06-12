@@ -1,0 +1,142 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory;
+use {{ entity.getModel('Repo') }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }};
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}RepoTest extends TestCase
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory | MockObject
+     */
+    private $factory;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }} | MockObject
+     */
+    private $resource;
+    /**
+     * @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }} | MockObject
+     */
+    private ${{ entity.getNameSingular()|camel }};
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Repo
+     */
+    private ${{ entity.getNameSingular()|camel }}Repo;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->factory = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory::class);
+        $this->resource = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $this->{{ entity.getNameSingular()|camel }} = $this->createMock(\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $this->{{ entity.getNameSingular()|camel }}Repo = new {{ entity.getNameSingular()|camel|ucfirst }}Repo(
+            $this->factory,
+            $this->resource
+        );
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::save
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testSave()
+    {
+        $this->resource->expects($this->once())->method('save');
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}Repo->save($this->{{ entity.getNameSingular()|camel }}));
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::save
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testSaveWithSaveError()
+    {
+        $this->expectException(CouldNotSaveException::class);
+        $this->resource->expects($this->once())->method('save')->willThrowException(new \Exception());
+        $this->{{ entity.getNameSingular()|camel }}Repo->save($this->{{ entity.getNameSingular()|camel }});
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::get
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testGet()
+    {
+        $this->resource->expects($this->once())->method('load');
+        $this->factory->method('create')->willReturn($this->{{ entity.getNameSingular()|camel }});
+        $this->{{ entity.getNameSingular()|camel }}->method('getId')->willReturn(1);
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}Repo->get(1));
+        //call twice to test memoizing
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}Repo->get(1));
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::get
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testGetWithMissingId()
+    {
+        $this->resource->expects($this->once())->method('load');
+        $this->factory->method('create')->willReturn($this->{{ entity.getNameSingular()|camel }});
+        $this->{{ entity.getNameSingular()|camel }}->method('getId')->willReturn(null);
+        $this->expectException(NoSuchEntityException::class);
+        $this->{{ entity.getNameSingular()|camel }}Repo->get(1);
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::delete
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testDelete()
+    {
+        $this->resource->expects($this->once())->method('delete');
+        $this->assertTrue($this->{{ entity.getNameSingular()|camel }}Repo->delete($this->{{ entity.getNameSingular()|camel }}));
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::delete
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testDeleteWithError()
+    {
+        $this->resource->expects($this->once())->method('delete')->willThrowException(new \Exception());
+        $this->expectException(CouldNotDeleteException::class);
+        $this->{{ entity.getNameSingular()|camel }}Repo->delete($this->{{ entity.getNameSingular()|camel }});
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::deleteById
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testDeleteById()
+    {
+        $this->resource->expects($this->once())->method('load');
+        $this->factory->method('create')->willReturn($this->{{ entity.getNameSingular()|camel }});
+        $this->{{ entity.getNameSingular()|camel }}->method('getId')->willReturn(1);
+        $this->resource->expects($this->once())->method('delete');
+        $this->assertTrue($this->{{ entity.getNameSingular()|camel }}Repo->deleteById(1));
+    }
+
+    /**
+     * @covers \{{ entity.getModel('Repo') }}::clear
+     * @covers \{{ entity.getModel('Repo') }}::__construct
+     */
+    public function testClear()
+    {
+        $this->assertEquals([], $this->{{ entity.getNameSingular()|camel }}Repo->clear());
+    }
+}
+{% endif %}

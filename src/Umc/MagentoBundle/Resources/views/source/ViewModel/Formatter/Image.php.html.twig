@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfoFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -11,6 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Image\Adapter\AbstractAdapter;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Store\Model\StoreManagerInterface;
+{{ sortEnd() }}
 
 class Image implements FormatterInterface
 {

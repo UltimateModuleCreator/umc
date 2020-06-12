@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Component\Listing;
 
+{{ sortStart() }}
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing\Image;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+{{ sortEnd() }}
 
 class ImageTest extends TestCase
 {

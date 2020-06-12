@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Catalog;
 
+{{ sortStart() }}
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Option\ArrayInterface;
+{{ sortEnd() }}
 
 class ProductAttribute implements ArrayInterface
 {

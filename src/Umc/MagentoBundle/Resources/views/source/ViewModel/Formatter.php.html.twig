@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel;
 
+{{ sortStart() }}
 use Magento\Framework\Escaper;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\FormatterInterface;
+{{ sortEnd() }}
 
 class Formatter implements FormatterInterface
 {

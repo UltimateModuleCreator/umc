@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\Formatter;
 
+{{ sortStart() }}
 use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Option\ArrayInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Options;
+{{ sortEnd() }}
 
 class OptionsTest extends TestCase
 {

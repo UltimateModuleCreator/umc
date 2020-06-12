@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Source;
 
+{{ sortStart() }}
 use Magento\Framework\Escaper;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\System\Store;
@@ -11,6 +12,7 @@ use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\StoreView;
+{{ sortEnd() }}
 
 class StoreViewTest extends TestCase
 {

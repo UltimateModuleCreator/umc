@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
+{{ sortStart() }}
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
@@ -11,6 +12,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+{{ sortEnd() }}
 
 class FileInfo
 {

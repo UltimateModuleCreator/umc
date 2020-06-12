@@ -1,0 +1,77 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+{{ sortEnd() }}
+
+class UrlTest extends TestCase
+{
+    /**
+     * @var UrlInterface | MockObject
+     */
+    private $urlBuilder;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Interface | MockObject
+     */
+    private ${{ entity.getNameSingular()|camel }};
+    /**
+     * @var Url
+     */
+    private $url;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->{{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+        $this->url = new Url($this->urlBuilder);
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::getListUrl
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::__construct
+     */
+    public function testGetListUrl()
+    {
+        $this->urlBuilder->expects($this->once())->method('getUrl')->willReturnArgument(0);
+        $this->assertEquals('{{ entity.getFrontendRoute('index') }}', $this->url->getListUrl());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::get{{ entity.getNameSingular()|camel|ucfirst }}Url
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::get{{ entity.getNameSingular()|camel|ucfirst }}UrlById
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Url()
+    {
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+        ${{ entity.getNameSingular()|camel }}->method('getId')->willReturn(1);
+        $this->urlBuilder->expects($this->once())->method('getUrl')
+            ->with('{{ entity.getFrontendRoute('view') }}', ['id' => 1])
+            ->willReturn('url');
+        $this->assertEquals('url', $this->url->get{{ entity.getNameSingular()|camel|ucfirst }}Url(${{ entity.getNameSingular()|camel }}));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::get{{ entity.getNameSingular()|camel|ucfirst }}UrlById
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}UrlById()
+    {
+        $this->urlBuilder->expects($this->once())->method('getUrl')
+            ->with('{{ entity.getFrontendRoute('view') }}', ['id' => 1])
+            ->willReturn('url');
+        $this->assertEquals('url', $this->url->get{{ entity.getNameSingular()|camel|ucfirst }}UrlById(1));
+    }
+}
+{% endif %}

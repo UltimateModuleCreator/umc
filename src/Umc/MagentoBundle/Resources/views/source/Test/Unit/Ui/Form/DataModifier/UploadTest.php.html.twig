@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form\DataModifier;
 
+{{ sortStart() }}
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
@@ -14,6 +15,7 @@ use Psr\Log\LoggerInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\Upload;
+{{ sortEnd() }}
 
 class UploadTest extends TestCase
 {

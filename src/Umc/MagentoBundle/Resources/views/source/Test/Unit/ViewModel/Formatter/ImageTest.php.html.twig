@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\Formatter;
 
+{{ sortStart() }}
 use Magento\Framework\Filesystem;
 use Magento\Framework\Image\Adapter\AbstractAdapter;
 use Magento\Framework\Image\AdapterFactory;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfoFactory;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Image;
+{{ sortEnd() }}
 
 class ImageTest extends TestCase
 {

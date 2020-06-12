@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\CollectionProviderInterface;
+{{ sortEnd() }}
 
 class {{ entity.getNameSingular()|camel|ucfirst }}UiCollectionProvider implements CollectionProviderInterface
 {

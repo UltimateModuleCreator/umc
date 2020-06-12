@@ -1,0 +1,91 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel }}RepositoryInterface;
+use {{ entity.getModel() }};
+use {{ entity.getModel('Factory') }};
+use {{ entity.getModel('UiManager') }};
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}UiManagerTest extends TestCase
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface | MockObject
+     */
+    private $repository;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Factory | MockObject
+     */
+    private $factory;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }} | MockObject
+     */
+    private ${{ entity.getNameSingular()|camel }};
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}UiManager
+     */
+    private ${{ entity.getNameSingular()|camel }}UiManager;
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);
+        $this->factory = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Factory::class);
+        $this->{{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $this->{{ entity.getNameSingular()|camel }}UiManager = new {{ entity.getNameSingular()|camel|ucfirst }}UiManager(
+            $this->repository,
+            $this->factory
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}UiManager::get
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}UiManager::__construct
+     */
+    public function testGetWithId()
+    {
+        $this->repository->expects($this->once())->method('get')->with(1)->willReturn($this->{{ entity.getNameSingular()|camel }});
+        $this->factory->expects($this->never())->method('create');
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}UiManager->get(1));
+    }
+
+    /**
+     * @covers \{{ entity.getModel('UiManager') }}::get
+     * @covers \{{ entity.getModel('UiManager') }}::__construct
+     */
+    public function testGetWithoutId()
+    {
+        $this->repository->expects($this->never())->method('get');
+        $this->factory->expects($this->once())->method('create')->willReturn($this->{{ entity.getNameSingular()|camel }});
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}UiManager->get(null));
+    }
+
+    /**
+     * @covers \{{ entity.getModel('UiManager') }}::save
+     * @covers \{{ entity.getModel('UiManager') }}::__construct
+     */
+    public function testSave()
+    {
+        $this->repository->expects($this->once())->method('save');
+        $this->{{ entity.getNameSingular()|camel }}UiManager->save($this->{{ entity.getNameSingular()|camel }});
+    }
+
+    /**
+     * @covers \{{ entity.getModel('UiManager') }}::delete
+     * @covers \{{ entity.getModel('UiManager') }}::__construct
+     */
+    public function testDelete()
+    {
+        $this->repository->expects($this->once())->method('deleteById')->with(1);
+        $this->{{ entity.getNameSingular()|camel }}UiManager->delete(1);
+    }
+}
+{% endif %}

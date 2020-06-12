@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel;
 
+{{ sortStart() }}
 use Magento\Framework\Escaper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
+{{ sortEnd() }}
 
 class FormatterTest extends TestCase
 {

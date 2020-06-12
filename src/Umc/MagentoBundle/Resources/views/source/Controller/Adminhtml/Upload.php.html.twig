@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+{{ sortEnd() }}
 
 class Upload extends Action
 {

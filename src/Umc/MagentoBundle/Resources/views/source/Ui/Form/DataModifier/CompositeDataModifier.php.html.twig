@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier;
 
+{{ sortStart() }}
 use Magento\Framework\Model\AbstractModel;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
+{{ sortEnd() }}
 
 class CompositeDataModifier implements DataModifierInterface
 {

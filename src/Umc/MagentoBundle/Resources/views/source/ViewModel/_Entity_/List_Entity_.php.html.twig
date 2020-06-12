@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
 
+{{ sortStart() }}
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -13,6 +14,7 @@ use Magento\Theme\Block\Html\Pager;
 use {{ entity.getInterface() }};
 use {{ entity.getCollectionModel()}};
 use {{ entity.getCollectionModel()}}Factory;
+{{ sortEnd() }}
 
 class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterface
 {

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Block\Adminhtml\Button;
 
+{{ sortStart() }}
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Block\Adminhtml\Button\Reset;
+{{ sortEnd() }}
 
 class ResetTest extends TestCase
 {

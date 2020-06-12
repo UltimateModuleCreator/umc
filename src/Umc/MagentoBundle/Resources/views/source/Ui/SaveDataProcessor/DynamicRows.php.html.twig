@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor;
 
+{{ sortStart() }}
 use Magento\Framework\Serialize\Serializer\Json;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+{{ sortEnd() }}
 
 class DynamicRows implements SaveDataProcessorInterface
 {

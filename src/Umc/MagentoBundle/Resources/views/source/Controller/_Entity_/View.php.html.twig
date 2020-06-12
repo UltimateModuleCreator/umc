@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
 
+{{ sortStart() }}
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -16,6 +17,7 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity
 {% if entity.isStore() %}
 use Magento\Store\Model\StoreManagerInterface;
 {% endif %}
+{{ sortEnd() }}
 
 class View extends Action
 {

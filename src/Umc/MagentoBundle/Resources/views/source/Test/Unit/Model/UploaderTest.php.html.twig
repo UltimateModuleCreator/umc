@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
 
+{{ sortStart() }}
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaStorage\Helper\File\Storage\Database;
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileChecker;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
+{{ sortEnd() }}
 
 class UploaderTest extends TestCase
 {

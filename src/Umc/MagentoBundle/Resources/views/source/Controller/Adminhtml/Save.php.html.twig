@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiManagerInterface;
@@ -15,6 +16,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+{{ sortEnd() }}
 
 class Save extends Action implements HttpPostActionInterface
 {

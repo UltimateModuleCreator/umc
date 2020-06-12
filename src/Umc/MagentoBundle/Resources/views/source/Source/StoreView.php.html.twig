@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source;
 
+{{ sortStart() }}
 use Magento\Framework\Option\ArrayInterface;
 use Magento\Store\Ui\Component\Listing\Column\Store\Options;
+{{ sortEnd() }}
 
 class StoreView extends Options implements ArrayInterface
 {

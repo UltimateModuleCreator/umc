@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model\ResourceModel;
 
+{{ sortStart() }}
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -16,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel;
+{{ sortEnd() }}
 
 class StoreAwareAbstractModelTest extends TestCase
 {
@@ -128,7 +130,7 @@ class StoreAwareAbstractModelTest extends TestCase
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel::getEntityId
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel::_getLoadSelect
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel::__construct
-    */
+     */
     public function testLoadNoResult()
     {
         $this->connection->method('select')->willReturn($this->select);

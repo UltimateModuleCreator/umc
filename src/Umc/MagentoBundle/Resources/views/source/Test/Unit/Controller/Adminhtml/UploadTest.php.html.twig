@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Controller\Adminhtml;
 
+{{ sortStart() }}
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -12,6 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Upload;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Model\Uploader;
+{{ sortEnd() }}
 
 class UploadTest extends TestCase
 {

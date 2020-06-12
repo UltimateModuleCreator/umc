@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Plugin\Theme\Block\Html;
 
+{{ sortStart() }}
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Tree\NodeFactory;
 use Magento\Framework\DataObject;
 use Magento\Theme\Block\Html\Topmenu;
+{{ sortEnd() }}
 
 class TopmenuPlugin
 {

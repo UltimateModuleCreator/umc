@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\Adminhtml\Button;
 
+{{ sortStart() }}
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Ui\Component\Control\Container;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+{{ sortEnd() }}
 
 class Save implements ButtonProviderInterface
 {

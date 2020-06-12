@@ -139,5 +139,8 @@
 -
   source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/DateTest.php"
   label: "Frontend date formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Plugin/Theme/Block/Html/TopmenuPluginTest.php"
+  label: "Plugin for the top menu elements"
 
 

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
 
+{{ sortStart() }}
 use Magento\Framework\Filesystem\Io\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileChecker;
+{{ sortEnd() }}
 
 class FileCheckerTest extends TestCase
 {

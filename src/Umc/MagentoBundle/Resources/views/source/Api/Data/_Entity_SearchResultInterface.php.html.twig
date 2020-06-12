@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;
 
+{{ sortStart() }}
 use Magento\Framework\Api\SearchCriteriaInterface;
 use {{ entity.getInterface()}};
+{{ sortEnd() }}
 
 /**
  * @api

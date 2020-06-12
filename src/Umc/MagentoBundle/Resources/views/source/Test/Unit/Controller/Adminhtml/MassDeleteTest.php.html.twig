@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Controller\Adminhtml;
 
+{{ sortStart() }}
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
@@ -21,6 +22,7 @@ use {{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Ma
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\CollectionProviderInterface;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiConfig;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiManagerInterface;
+{{ sortEnd() }}
 
 class MassDeleteTest extends TestCase
 {

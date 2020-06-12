@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model\ResourceModel\Relation\Store;
 
+{{ sortStart() }}
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -12,6 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Relation\Store\SaveHandler;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel;
+{{ sortEnd() }}
 
 class SaveHandlerTest extends TestCase
 {

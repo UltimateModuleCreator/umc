@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\SaveDataProcessor;
 
+{{ sortStart() }}
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+{{ sortEnd() }}
 
 class CompositeProcessorTest extends TestCase
 {

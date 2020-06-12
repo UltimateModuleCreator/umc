@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Block\Adminhtml\Button;
 
+{{ sortStart() }}
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Block\Adminhtml\Button\Save;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiConfig;
+{{ sortEnd() }}
 
 class SaveTest extends TestCase
 {

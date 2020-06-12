@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model\ResourceModel\Collection;
 
+{{ sortStart() }}
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Collection\AbstractCollection;
+{{ sortEnd() }}
 
 class AbstractCollectionTest extends TestCase
 {

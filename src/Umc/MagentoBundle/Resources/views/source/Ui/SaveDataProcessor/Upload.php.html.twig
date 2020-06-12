@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+{{ sortEnd() }}
 
 class Upload implements SaveDataProcessorInterface
 {

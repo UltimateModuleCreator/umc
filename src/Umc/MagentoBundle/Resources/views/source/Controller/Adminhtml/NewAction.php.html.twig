@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
+{{ sortStart() }}
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
+{{ sortEnd() }}
 
 class NewAction extends Action
 {

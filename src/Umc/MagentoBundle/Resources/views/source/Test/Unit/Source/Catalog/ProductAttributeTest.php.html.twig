@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Source\Catalog;
 
+{{ sortStart() }}
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
@@ -14,6 +15,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Catalog\ProductAttribute;
+{{ sortEnd() }}
 
 class ProductAttributeTest extends TestCase
 {

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
+{{ sortEnd() }}
 
 class {{ entity.getNameSingular()|camel|ucfirst }}Repo implements {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
 {
@@ -74,6 +76,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Repo implements {{ entity.getN
     public function delete({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
     {
         try {
+            $id = ${{ entity.getNameSingular()|camel }}->getId();
             $this->resource->delete(${{ entity.getNameSingular()|camel }});
             unset($this->cache[$id]);
         } catch (\Exception $exception) {

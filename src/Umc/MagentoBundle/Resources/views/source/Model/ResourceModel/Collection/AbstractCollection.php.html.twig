@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Collection;
 
+{{ sortStart() }}
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection as DbCollection;
+{{ sortEnd() }}
 
 class AbstractCollection extends DbCollection implements SearchResultInterface
 {

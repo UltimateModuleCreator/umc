@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form\DataModifier;
 
+{{ sortStart() }}
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Serialize\Serializer\Json;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\DynamicRows;
+{{ sortEnd() }}
 
 class DynamicRowsTest extends TestCase
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form;
 
+{{ sortStart() }}
 use Magento\Framework\Api\Filter;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -15,6 +16,7 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\CollectionProvid
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataProvider;
+{{ sortEnd() }}
 
 class DataProviderTest extends TestCase
 {

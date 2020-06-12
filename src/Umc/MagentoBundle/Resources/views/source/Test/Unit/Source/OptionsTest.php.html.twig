@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Source;
 
+{{ sortStart() }}
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Options;
+{{ sortEnd() }}
 
 class OptionsTest extends TestCase
 {

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
+{{ sortStart() }}
 use {{ entity.getInterface() }};
 use Magento\Framework\Model\AbstractModel;
 {% if entity.hasAttributesWithType('dynamic') %}
@@ -13,6 +14,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 {% endif %}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
+{{ sortEnd() }}
 
 class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|camel|ucfirst }}Interface
 {

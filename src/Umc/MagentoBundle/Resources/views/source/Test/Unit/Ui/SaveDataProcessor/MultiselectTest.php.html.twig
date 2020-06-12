@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\SaveDataProcessor;
 
+{{ sortStart() }}
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\Multiselect;
+{{ sortEnd() }}
 
 class MultiselectTest extends TestCase
 {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiManagerInterface;
+{{ sortEnd() }}
 
 class {{ entity.getNameSingular()|camel|ucfirst }}UiManager implements EntityUiManagerInterface
 {

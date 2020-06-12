@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Controller\Adminhtml;
 
+{{ sortStart() }}
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Request\Http;
@@ -19,6 +20,7 @@ use {{ module.getNamespace }}\{{ module.getModuleName }}\Controller\Adminhtml\Sa
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiConfig;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiManagerInterface;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\SaveDataProcessorInterface;
+{{ sortEnd() }}
 
 class SaveTest extends TestCase
 {

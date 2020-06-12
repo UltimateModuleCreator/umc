@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Relation\Store;
 
+{{ sortStart() }}
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\StoreAwareAbstractModel;
+{{ sortEnd() }}
 
 class SaveHandler implements ExtensionInterface
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
 
+{{ sortStart() }}
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\Store;
@@ -11,6 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+{{ sortEnd() }}
 
 class FileInfoTest extends TestCase
 {

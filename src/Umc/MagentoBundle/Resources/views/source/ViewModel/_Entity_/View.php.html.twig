@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
 
+{{ sortStart() }}
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use {{ entity.getInterface() }};
 use {{ entity.getRepoInterface() }};
+{{ sortEnd() }}
 
 class View implements ArgumentInterface
 {

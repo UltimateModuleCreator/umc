@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
 
+{{ sortStart() }}
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+{{ sortEnd() }}
 
 class Index extends Action
 {

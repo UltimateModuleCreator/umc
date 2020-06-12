@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
 
+{{ sortStart() }}
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
@@ -12,6 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiManagerInterface;
+{{ sortEnd() }}
 
 class Delete extends Action implements HttpPostActionInterface
 {

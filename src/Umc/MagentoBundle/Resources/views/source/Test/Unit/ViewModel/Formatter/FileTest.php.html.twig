@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\Formatter;
 
+{{ sortStart() }}
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -12,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfoFactory;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File;
+{{ sortEnd() }}
 
 class FileTest extends TestCase
 {

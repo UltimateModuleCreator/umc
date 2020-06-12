@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Controller\Adminhtml;
 
+{{ sortStart() }}
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\NewAction;
+{{ sortEnd() }}
 
 class NewActionTest extends TestCase
 {

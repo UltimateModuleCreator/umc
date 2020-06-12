@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form\DataModifier;
 
+{{ sortStart() }}
 use Magento\Framework\Model\AbstractModel;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\CompositeDataModifier;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
+{{ sortEnd() }}
 
 class CompositeDataModifierTest extends TestCase
 {

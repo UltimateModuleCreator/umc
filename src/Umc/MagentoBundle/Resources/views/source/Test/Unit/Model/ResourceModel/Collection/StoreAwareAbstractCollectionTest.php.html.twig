@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model\ResourceModel\Collection;
 
+{{ sortStart() }}
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Collection\StoreAwareAbstractCollection;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\Store;
+{{ sortEnd() }}
 
 class StoreAwareAbstractCollectionTest extends TestCase
 {

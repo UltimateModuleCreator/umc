@@ -394,7 +394,7 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
      */
     public function getAdminRoute($route): string
     {
-        return $this->module->getAdminRoutePrefix() .
+        return $this->getModule()->getAdminRoutePrefix() .
             '/' . $this->stringUtil->snake($this->getNameSingular()) .
             '/' . $route;
     }

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
 
+{{ sortStart() }}
 use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Option\ArrayInterface;
+{{ sortEnd() }}
 
 class Options implements FormatterInterface
 {

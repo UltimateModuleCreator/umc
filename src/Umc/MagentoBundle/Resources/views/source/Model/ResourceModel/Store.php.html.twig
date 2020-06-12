@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel;
 
+{{ sortStart() }}
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Store\Model\StoreManagerInterface;
+{{ sortEnd() }}
 
 class Store
 {

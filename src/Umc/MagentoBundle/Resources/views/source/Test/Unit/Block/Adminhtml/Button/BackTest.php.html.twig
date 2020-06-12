@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Block\Adminhtml\Button;
 
+{{ sortStart() }}
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Block\Adminhtml\Button\Back;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiConfig;
+{{ sortEnd() }}
 
 class BackTest extends TestCase
 {

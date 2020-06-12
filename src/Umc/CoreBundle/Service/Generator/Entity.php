@@ -36,16 +36,22 @@ class Entity implements GeneratorInterface
      * @var StringUtil
      */
     private $stringUtil;
+    /**
+     * @var ContentProcessor
+     */
+    private $processor;
 
     /**
      * Entity constructor.
      * @param Twig $twig
-     * @param StringUtil $stringUtil\
+     * @param StringUtil $stringUtil
+     * @param ContentProcessor $processor
      */
-    public function __construct(Twig $twig, StringUtil $stringUtil)
+    public function __construct(Twig $twig, StringUtil $stringUtil, ContentProcessor $processor)
     {
         $this->twig = $twig;
         $this->stringUtil = $stringUtil;
+        $this->processor = $processor;
     }
 
     /**
@@ -69,7 +75,7 @@ class Entity implements GeneratorInterface
             $destination = $this->processDestination($fileConfig['destination'], $entity);
             $content = $this->twig->render($fileConfig['source'], ['entity' => $entity, 'module' => $module]);
             if (trim($content)) {
-                $result[$destination] = str_replace("\n\r", PHP_EOL, $content);
+                $result[$destination] = $this->processor->process($content);
             }
         }
         return $result;

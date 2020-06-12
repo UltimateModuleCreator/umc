@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\SaveDataProcessor;
 
+{{ sortStart() }}
 use Magento\Framework\Filesystem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -11,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\Upload;
+{{ sortEnd() }}
 
 class UploadTest extends TestCase
 {

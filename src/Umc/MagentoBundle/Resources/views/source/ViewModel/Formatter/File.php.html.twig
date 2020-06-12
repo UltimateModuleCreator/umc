@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace  {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
 
+{{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfoFactory;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\StoreManagerInterface;
+{{ sortEnd() }}
 
 class File implements FormatterInterface
 {

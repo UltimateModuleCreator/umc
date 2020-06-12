@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
 
+{{ sortStart() }}
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
@@ -17,6 +18,7 @@ use Magento\Theme\Block\Html\Breadcrumbs;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\Index;
+{{ sortEnd() }}
 
 class IndexTest extends TestCase
 {

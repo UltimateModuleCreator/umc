@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Block\Adminhtml\Button;
 
+{{ sortStart() }}
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Block\Adminhtml\Button\Delete;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiConfig;
 use {{ module.getNamespace }}\{{ module.getModuleName }}\Ui\EntityUiManagerInterface;
+{{ sortEnd() }}
 
 class DeleteTest extends TestCase
 {
