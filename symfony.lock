@@ -77,6 +77,9 @@
     "symfony/dependency-injection": {
         "version": "v4.1.4"
     },
+    "symfony/deprecation-contracts": {
+        "version": "v2.1.2"
+    },
     "symfony/dotenv": {
         "version": "v4.1.4"
     },
@@ -125,8 +128,17 @@
             "ref": "1a47f76dcd9d5d4da1fab54fb15450bae3704c5e"
         }
     },
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.17.0"
+    },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.17.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.9.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.17.0"
     },
     "symfony/process": {
         "version": "v4.1.4"
@@ -145,6 +157,9 @@
     },
     "symfony/stopwatch": {
         "version": "v5.0.8"
+    },
+    "symfony/string": {
+        "version": "v5.1.1"
     },
     "symfony/translation-contracts": {
         "version": "v1.1.7"

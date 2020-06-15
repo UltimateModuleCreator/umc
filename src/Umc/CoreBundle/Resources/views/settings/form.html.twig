@@ -11,7 +11,7 @@
                 {% endif %}
                 <div class="col-3">
                     {% set fieldName = formKey ~ '.' ~ field.name %}
-                    {% set field = field|merge({'name': fieldName, 'additionalDataBind': '', 'containerAttributes': ''}) %}
+                    {% set field = field|merge({'name': fieldName, 'additionalDataBind': 'disable: data.restore.restore', 'containerAttributes': ''}) %}
                     {% include field.template with {element: field} %}
                 </div>
                 {% set index = index + 1 %}

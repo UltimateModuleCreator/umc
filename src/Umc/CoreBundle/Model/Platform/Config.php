@@ -53,6 +53,7 @@ class Config implements ConfigurationInterface
                         ->scalarNode('destination')->end()
                         ->scalarNode('module_factory')->end()
                         ->scalarNode('generator_pool')->defaultValue('default.generator.pool')->end()
+                        ->scalarNode('validator_pool')->defaultValue('default.validator.pool')->end()
                     ->end()
                 ->end()
                 ->arrayNode('versions')

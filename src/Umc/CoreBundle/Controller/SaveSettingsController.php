@@ -68,10 +68,20 @@ class SaveSettingsController extends AbstractController
             $platformInstance = $this->pool->getPlatform($platform);
             $versionInstance = $platformInstance->getVersion($version);
             $data = $this->requestStack->getCurrentRequest()->get('settings');
+            $isDelete = (bool)($data['restore']['restore'] ?? false);
             if ($version === null) {
                 $this->repository->savePlatformConfig($platformInstance, $data);
+                if (!$isDelete) {
+                    $this->repository->savePlatformConfig($platformInstance, $data);
+                } else {
+                    $this->repository->deletePlatformConfig($platformInstance);
+                }
             } else {
-                $this->repository->saveVersionConfig($versionInstance, $data);
+                if (!$isDelete) {
+                    $this->repository->saveVersionConfig($versionInstance, $data);
+                } else {
+                    $this->repository->deleteVersionConfig($versionInstance);
+                }
             }
             $response['success'] = true;
             $response['message'] = "Default settings were saved";

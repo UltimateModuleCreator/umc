@@ -33,7 +33,6 @@ UMC.Settings = function (data, fields) {
                 modal.modal('show');
             }
         });
-        console.log(this.toParams());
     };
 
     this.toParams = function () {

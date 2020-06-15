@@ -20,11 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Service\Validator;
 
-interface ValidatorInterface
+class ValidationException extends \Exception
 {
-    /**
-     * @param object $object
-     * @return string[]
-     */
-    public function validate($object): array;
+
 }

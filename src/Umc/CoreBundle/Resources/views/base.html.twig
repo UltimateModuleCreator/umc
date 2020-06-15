@@ -20,11 +20,11 @@
         <div class="navbar sticky-top bg-light full-width">
             {% block main_menu %}
             <div class="float-left">
-                <div class="float-left">
+                <div class="float-left logo">
                     <i class="fa fa-2x fa-puzzle-piece" title="Ultimate Module Creator v{{ appVersion() }}"></i>
                 </div>
                 {% set menuItems = get_main_menu() %}
-                <nav class="navbar navbar-expand">
+                <nav class="navbar navbar-expand float-left">
                     <div class="collapse navbar-collapse">
                         {% if menuItems|length > 0 %}
                         <ul class="navbar-nav">

@@ -36,5 +36,66 @@
         <service id="magento.attribute.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
             <argument key="$typeMap" type="string">%magento_attribute_type%</argument>
         </service>
+        <!--[+] validators -->
+        <service id="magento.validator.pool" class="App\Umc\CoreBundle\Service\Validator\Pool" public="true">
+            <argument key="$validators" type="collection">
+                <argument key="module" type="service" id="magento.module.composite.validator" />
+                <argument key="entity" type="service" id="magento.entity.composite.validator" />
+                <argument key="attribute" type="service" id="magento.attribute.composite.validator" />
+            </argument>
+        </service>
+        <service id="magento.module.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.module.validator" />
+        </service>
+        <service id="magento.module.namespace.validator" class="App\Umc\CoreBundle\Service\Validator\RestrictedWords">
+            <argument key="$getter" type="string">getNamespace</argument>
+            <argument key="$restricted" type="collection">
+                <argument key="magento">Magento</argument>
+            </argument>
+            <argument key="$errorMessage">Namespace cannot be %s. Please be creative</argument>
+            <tag name="magento.module.validator" />
+        </service>
+
+        <service id="magento.entity.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.entity.validator" />
+        </service>
+        <service id="magento.entity.name_singular.validator" class="App\Umc\CoreBundle\Service\Validator\RestrictedWords">
+            <argument key="$getter" type="string">getNameSingular</argument>
+            <argument key="$restricted" type="collection">
+                <argument key="resource">resource</argument>
+                <argument key="result">result</argument>
+                <argument key="setup">setup</argument>
+                <argument key="attribute">attribute</argument>
+                <argument key="options">options</argument>
+                <argument key="system">system</argument>
+                <argument key="data">data</argument>
+                <argument key="collection">collection</argument>
+                <argument key="adminhtml">adminhtml</argument>
+                <argument key="url">url</argument>
+                <argument key="config">config</argument>
+            </argument>
+            <argument key="$errorMessage">Entity Name singular cannot be %s. It conflicts with the magento folder structure</argument>
+            <tag name="magento.entity.validator" />
+        </service>
+        <service id="App\Umc\CoreBundle\Service\Validator\EntityName" class="App\Umc\CoreBundle\Service\Validator\EntityName">
+            <tag name="magento.entity.validator" />
+        </service>
+
+        <service id="magento.attribute.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.attribute.validator" />
+        </service>
+        <service id="magento.attribute.code.validator" class="App\Umc\CoreBundle\Service\Validator\RestrictedWords">
+            <argument key="$getter" type="string">getCode</argument>
+            <argument key="$restricted" type="collection">
+                <argument key="namespace">namespace</argument>
+                <argument key="result">result</argument>
+                <argument key="created_at">created_at</argument>
+                <argument key="updated_at">updated_at</argument>
+                <argument key="data">data</argument>
+            </argument>
+            <argument key="$errorMessage">Attribute code cannot be '%s'. It conflicts with the magento method names</argument>
+            <tag name="magento.attribute.validator" />
+        </service>
+        <!--[-] validators -->
     </services>
 </container>

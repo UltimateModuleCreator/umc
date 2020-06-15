@@ -25,6 +25,8 @@ use App\Umc\CoreBundle\Model\Platform\Version;
 use App\Umc\CoreBundle\Repository\Module;
 use App\Umc\CoreBundle\Service\Cs\Executor;
 use App\Umc\CoreBundle\Service\Generator\Pool;
+use App\Umc\CoreBundle\Service\Validator\Locator as ValidatorLocator;
+use App\Umc\CoreBundle\Service\Validator\ValidationException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Builder
@@ -57,6 +59,10 @@ class Builder
      * @var Executor
      */
     private $csExecutor;
+    /**
+     * @var ValidatorLocator
+     */
+    private $validatorLocator;
 
     /**
      * Builder constructor.
@@ -67,6 +73,7 @@ class Builder
      * @param Filesystem $filesystem
      * @param Archiver $archiver
      * @param Executor $executor
+     * @param ValidatorLocator $validatorLocator
      */
     public function __construct(
         \App\Umc\CoreBundle\Model\Module\Factory\Locator $factoryLocator,
@@ -75,7 +82,8 @@ class Builder
         PlatformAwareFactory $configLoaderFactory,
         Filesystem $filesystem,
         Archiver $archiver,
-        Executor $executor
+        Executor $executor,
+        ValidatorLocator $validatorLocator
     ) {
         $this->factoryLocator = $factoryLocator;
         $this->generatorPoolLocator = $generatorPoolLocator;
@@ -84,6 +92,7 @@ class Builder
         $this->filesystem = $filesystem;
         $this->archiver = $archiver;
         $this->csExecutor = $executor;
+        $this->validatorLocator = $validatorLocator;
     }
 
     /**
@@ -96,6 +105,11 @@ class Builder
     {
         $factory = $this->factoryLocator->getFactory($version);
         $module = $factory->create($data);
+        $validator = $this->validatorLocator->getValidatorPool($version);
+        $errors = $validator->validate($module);
+        if (count($errors) > 0) {
+            throw new ValidationException(implode('<br />', $errors));
+        }
         $loader = $this->configLoaderFactory->createByVersion($version);
         $generatorPool = $this->generatorPoolLocator->getGeneratorPool($version);
         $files = [];

@@ -13,9 +13,9 @@
                                 </div>
                                 {% if platform.getUrl() %}
                                     <div class="col-3">
-                                        <ul class="nav navbar-right panel_toolbox">
-                                            <li class="float-right">
-                                                <a href="{{ platform.getUrl() }}" target="_blank" title="visit-page">
+                                        <ul class="nav float-right panel_toolbox">
+                                            <li>
+                                                <a href="{{ platform.getUrl() }}" target="_blank" title="Visit Page">
                                                     <i class="fa fa-2x fa-link"></i>
                                                 </a>
                                             </li>
@@ -30,28 +30,58 @@
                             </div>
                         {% endif %}
                         <div class="card-footer text-center">
-                            {% if platform.isSupported() %}
-                                <span><a href="{{ path("platform", {platform: platform.getCode()}) }}" class="btn btn-primary">View</a></span>
-                                <span class="btn-group">
-                                    <a href="{{ path('new', {platform: platform.getCode()}) }}"
-                                       class="btn-primary btn">New Module</a>
-                                    <a class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </a>
-                                    {% if platform.getVersions()|length > 0 %}
-                                    <span class="dropdown-menu">
-                                        {% for version in platform.getVersions() %}
-                                            <a class="dropdown-item"
-                                               href="{{ path('new', {platform: platform.getCode(), version: version.getCode()}) }}">
-                                                v {{ version.getLabel() }}
-                                            </a>
-                                        {% endfor %}
-                                    </span>
-                                    {% endif %}
-                                </span>
-                            {% else %}
-                                This platform will be supported sooner or later.
-                            {% endif %}
+                            <nav class="navbar navbar-expand">
+                                <div class="collapse navbar-collapse">
+                                    <ul class="navbar-nav">
+                                        {% if platform.isSupported() %}
+                                        <li class="nav-item"><span><a href="{{ path("platform", {platform: platform.getCode()}) }}" class="btn btn-primary">View</a></span></li>
+                                        <li class="nav-item"><span><a href="{{ path("settings", {platform: platform.getCode()}) }}" class="btn btn-primary">Settings</a></span></li>
+                                        <li class="nav-item">
+                                            <span class="btn-group">
+                                                <a href="{{ path('new', {platform: platform.getCode()}) }}"
+                                                   class="btn-primary btn">New Module</a>
+                                                <a class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </a>
+                                                {% if platform.getVersions()|length > 0 %}
+                                                    <span class="dropdown-menu">
+                                                    {% for version in platform.getVersions() %}
+                                                        <a class="dropdown-item"
+                                                           href="{{ path('new', {platform: platform.getCode(), version: version.getCode()}) }}">
+                                                            v {{ version.getLabel() }}
+                                                        </a>
+                                                    {% endfor %}
+                                                </span>
+                                                {% endif %}
+                                            </span>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </nav>
+{#                            {% if platform.isSupported() %}#}
+{#                                <span><a href="{{ path("platform", {platform: platform.getCode()}) }}" class="btn btn-primary">View</a></span>#}
+{#                                <span><a href="{{ path("settings", {platform: platform.getCode()}) }}" class="btn btn-primary">Settings</a></span>#}
+{#                                <span class="btn-group">#}
+{#                                    <a href="{{ path('new', {platform: platform.getCode()}) }}"#}
+{#                                       class="btn-primary btn">New Module</a>#}
+{#                                    <a class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                                        <span class="sr-only">Toggle Dropdown</span>#}
+{#                                    </a>#}
+{#                                    {% if platform.getVersions()|length > 0 %}#}
+{#                                    <span class="dropdown-menu">#}
+{#                                        {% for version in platform.getVersions() %}#}
+{#                                            <a class="dropdown-item"#}
+{#                                               href="{{ path('new', {platform: platform.getCode(), version: version.getCode()}) }}">#}
+{#                                                v {{ version.getLabel() }}#}
+{#                                            </a>#}
+{#                                        {% endfor %}#}
+{#                                    </span>#}
+{#                                    {% endif %}#}
+{#                                </span>#}
+{#                            {% else %}#}
+{#                                This platform will be supported sooner or later.#}
+{#                            {% endif %}#}
                         </div>
                     </div>
                 {% endfor %}

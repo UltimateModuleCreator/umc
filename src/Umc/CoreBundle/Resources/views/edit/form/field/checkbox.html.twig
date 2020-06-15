@@ -3,12 +3,12 @@
         <label
             class="form-check-label"
             data-bind="attr: {for: uuid('{{ element.name }}')}"
-            {% if element.title %} title="{{ element.title }}" {% endif %}
+            {% if element.title is defined %} title="{{ element.title }}" {% endif %}
         >{{ element.label }}
             <input type="checkbox"
                     name="{{ element.name }}"
                     {% if element.required is defined and element.required %} required="required" {% endif %}
-                    {% if element.title %} title="{{ element.title }}" {% endif %}
+                    {% if element.title is defined %} title="{{ element.title }}" {% endif %}
                    data-bind="checked: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') } {% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"
                    class="toggle-check-input form-check-input"
                    value="1"

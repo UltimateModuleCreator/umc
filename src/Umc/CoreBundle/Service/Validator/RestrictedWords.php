@@ -20,12 +20,12 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Service\Validator;
 
-class DefaultValidator
+class RestrictedWords implements ValidatorInterface
 {
     /**
      * @var string[]
      */
-    private $reservedKeywords = [
+    private $reserved= [
         '__halt_compiler', 'abstract', 'and', 'array',
         'as', 'break', 'callable', 'case',
         'catch', 'class', 'clone', 'const',
@@ -43,4 +43,47 @@ class DefaultValidator
         'switch', 'throw', 'trait', 'try',
         'unset', 'use', 'var', 'while', 'xor', 'void'
     ];
+    /**
+     * @var string
+     */
+    private $getter;
+    /**
+     * @var array
+     */
+    private $restricted;
+    /**
+     * @var string
+     */
+    private $errorMessage;
+
+    /**
+     * RestrictedWords constructor.
+     * @param string $getter
+     * @param array $restricted
+     * @param string $errorMessage
+     */
+    public function __construct(string $getter, array $restricted, string $errorMessage)
+    {
+        $this->getter = $getter;
+        $this->restricted = $restricted;
+        $this->errorMessage = $errorMessage;
+    }
+
+    /**
+     * @param object $object
+     * @return string[]
+     */
+    public function validate($object): array
+    {
+        $errors = [];
+        $getter = $this->getter;
+        $value = $object->$getter();
+        if (in_array($value, $this->restricted)) {
+            $errors[] = sprintf($this->errorMessage, $value);
+        }
+        if (in_array($value, $this->reserved)) {
+            $errors[] = "{$value} is a reserved PHP word and cannot be used";
+        }
+        return $errors;
+    }
 }

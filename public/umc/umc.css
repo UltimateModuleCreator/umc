@@ -24,12 +24,6 @@ body {
     font-weight: 400;
     line-height: 1.471
 }
-.container {
-    /*max-width: 100%;*/
-    /*width: 100%;*/
-    /*padding: 0;*/
-}
-
 a {
     color: #5A738E;
     text-decoration: none
@@ -77,6 +71,10 @@ a:focus {
     font-size: 40px;
 }
 /* [-] Body loader */
+
+.logo {
+    margin-top: 10px;
+}
 
 .top-nav {
     display: block;

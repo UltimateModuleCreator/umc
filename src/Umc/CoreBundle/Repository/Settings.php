@@ -102,6 +102,18 @@ class Settings
     }
 
     /**
+     * @param string $file
+     * @throws MissingSettingsFileException
+     */
+    private function delete(string $file): void
+    {
+        if (!$this->filesystem->exists($file)) {
+            throw new MissingSettingsFileException();
+        }
+        $this->filesystem->remove($file);
+    }
+
+    /**
      * @param Platform $platform
      * @param array $config
      */
@@ -120,6 +132,18 @@ class Settings
             return $this->load($this->getPlatformRoot($platform) . '/' . self::FILENAME);
         } catch (MissingSettingsFileException $e) {
             return [];
+        }
+    }
+
+    /**
+     * @param Platform $platform
+     */
+    public function deletePlatformConfig(Platform $platform)
+    {
+        try {
+            $this->delete($this->getPlatformRoot($platform) . '/' . self::FILENAME);
+        } catch (MissingSettingsFileException $e) {
+            //do nothing
         }
     }
 
@@ -148,5 +172,17 @@ class Settings
     public function saveVersionConfig(Platform\Version $version, array $config): void
     {
         $this->save($this->getVersionRoot($version) . '/' . self::FILENAME, $config);
+    }
+
+    /**
+     * @param Platform\Version $version
+     */
+    public function deleteVersionConfig(Platform\Version $version): void
+    {
+        try {
+            $this->delete($this->getVersionRoot($version) . '/' . self::FILENAME);
+        } catch (MissingSettingsFileException $e) {
+            //do nothing
+        }
     }
 }

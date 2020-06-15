@@ -155,5 +155,8 @@
             <tag name="source.config.modifier" priority="10" />
             <argument key="$key" type="string">enabled</argument>
         </service>
+        <service id="default.validator.pool" class="App\Umc\CoreBundle\Service\Validator\Pool" public="true">
+            <argument key="$validators" type="collection" />
+        </service>
     </services>
 </container>

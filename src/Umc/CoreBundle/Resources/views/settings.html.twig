@@ -7,7 +7,10 @@
     <form id="settings" action="{{ saveUrl }}" method="post">
         <div class="card">
             <div class="card-header">
-                <h3>{{ title }}</h3>
+                <div class="row">
+                    <div class="col-9"><h3>{{ title }}</h3></div>
+                    <div class="col-3">{% include '@UmcCore/edit/form/field/checkbox.html.twig' with {element: restore} %}</div>
+                </div>
             </div>
             <div class="card-body">
                 {% for key, form in config %}
@@ -17,7 +20,7 @@
                             <h2>{{ form.settings_label }}</h2>
                         </div>
                         <div class="card-body">
-                            {% include '@UmcCore/settings/form.html.twig' with {form: form, formKey:key} %}
+                            {% include '@UmcCore/settings/form.html.twig' with {form: form, formKey:key } %}
                         </div>
                     </div>
                     {% endif %}
@@ -34,13 +37,7 @@
     <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
 {#    <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>#}
     <script type="text/javascript" src="{{ asset('umc/settings.js') }}"> </script>
-{#    <script type="text/javascript">#}
-{#        $.fn.select2.defaults.set( "theme", "bootstrap" );#}
-{#    </script>#}
     <script type="text/javascript">
         ko.applyBindings(new UMC.Settings({{ values|json_encode|raw }}, {{ fields|json_encode|raw }}));
-        // jQuery(document).ready(function ($) {
-        //     $('[data-pretty-select=true]').select2({ width: '100%' });
-        // });
     </script>
 {% endblock %}

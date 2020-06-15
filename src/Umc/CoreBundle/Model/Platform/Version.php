@@ -116,6 +116,17 @@ class Version
         return $config[0];
     }
 
+    public function getValidatorPoolServiceId()
+    {
+        $config = $this->getConfig('validator_pool');
+        if (!isset($config[0])) {
+            throw new ConfigException(
+                "Missing Validator pool for platform {$this->getPlatform()->getName()}: {$this->getLabel()}"
+            );
+        }
+        return $config[0];
+    }
+
     /**
      * @param bool $withPlatform
      * @return array

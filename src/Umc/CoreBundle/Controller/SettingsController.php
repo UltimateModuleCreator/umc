@@ -73,13 +73,29 @@ class SettingsController extends AbstractController
             foreach ($config as $type => $settings) {
                 $fields[$type] = array_keys($settings['fields']);
             }
+            $fields['restore'] = ['restore'];
             $title = "Default Settings for {$platformInstance->getName()}";
             if ($version !== null) {
                 $title .= " version {$versionInstance->getLabel()}";
             }
-            $values = ($version === null)
-                ? $this->repository->loadPlatformConfig($platformInstance)
-                : $this->repository->loadVersionConfig($versionInstance);
+            $restore = [
+                'label' => ($version !== null)
+                    ? 'Use platform default settings'
+                    : "Use factory settings",
+                'name' => 'restore.restore'
+            ];
+            if ($version !== null) {
+                try {
+                    $values = $this->repository->loadVersionConfig($versionInstance, false);
+                    $values['restore']['restore'] = false;
+                } catch (Settings\MissingSettingsFileException $e) {
+                    $values = $this->repository->loadPlatformConfig($platformInstance);
+                    $values['restore']['restore'] = true;
+                }
+            } else {
+                $values = $this->repository->loadPlatformConfig($platformInstance);
+                $values['restore']['restore'] = ($values === []);
+            }
             return $this->render(
                 '@UmcCore/settings.html.twig',
                 [
@@ -89,7 +105,8 @@ class SettingsController extends AbstractController
                     'fields' => $fields,
                     'saveUrl' => $this->generateUrl('save-settings', ['platform' => $platform, 'version' => $version]),
                     'values' => $values,
-                    'title' => $title
+                    'title' => $title,
+                    'restore' => $restore
                 ]
             );
         } catch (\Exception $e) {

@@ -23,6 +23,7 @@ use App\Umc\CoreBundle\Model\Module\Factory\Locator;
 use App\Umc\CoreBundle\Model\Platform\Pool;
 use App\Umc\CoreBundle\Repository\Module;
 use App\Umc\CoreBundle\Service\Builder;
+use App\Umc\CoreBundle\Service\Validator\ValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -79,6 +80,9 @@ class SaveController extends AbstractController
             $response['success'] = true;
             $response['message'] = "You have created the module " . $module->getExtensionName();
             $response['module'] = $module->getExtensionName();
+        } catch (ValidationException $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
         } catch (\Exception $e) {
             $response['success'] = false;
             $response['message'] = $e->getMessage() . '<pre>' . $e->getTraceAsString() . '</pre>';
