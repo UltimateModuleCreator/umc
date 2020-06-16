@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -78,12 +77,12 @@ class AttributeTest extends TestCase
         $this->dynamicFactory->expects($this->once())->method('create')->willReturn($dynamic);
         $this->optionFactory->expects($this->once())->method('create')->willReturn($option);
         $result = $this->getInstance([
-            '_options' => [[]],
+            '_option' => [[]],
             '_dynamic' => [[]]
         ])->toArray();
         $this->assertArrayHasKey('code', $result);
         $this->assertArrayHasKey('label', $result);
-        $this->assertArrayHasKey('_options', $result);
+        $this->assertArrayHasKey('_option', $result);
         $this->assertArrayHasKey('_dynamic', $result);
     }
 
@@ -242,7 +241,7 @@ class AttributeTest extends TestCase
         $type->expects($this->once())->method('hasFlag')->with('manual_options')->willReturn(true);
         $this->typeFactory->method('create')->willReturn($type);
         $attribute = $this->getInstance([
-            '_options' => [[]]
+            '_option' => [[]]
         ]);
         $this->assertEquals([$option], $attribute->getOptions());
     }
@@ -259,7 +258,7 @@ class AttributeTest extends TestCase
         $type->expects($this->once())->method('hasFlag')->with('manual_options')->willReturn(false);
         $this->typeFactory->method('create')->willReturn($type);
         $attribute = $this->getInstance([
-            '_options' => [[]]
+            '_option' => [[]]
         ]);
         $this->assertEquals([], $attribute->getOptions());
     }
@@ -410,7 +409,7 @@ class AttributeTest extends TestCase
         $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
         $typeInstance->method('hasFlag')->with('manual_options')->willReturn(true);
         $this->typeFactory->expects($this->once())->method('create')->willReturn($typeInstance);
-        $instance = $this->getInstance(['_options' => [[], [], []]]);
+        $instance = $this->getInstance(['_option' => [[], [], []]]);
         $this->assertFalse($instance->areOptionsNumerical());
         //call twice to test memoizing
         $this->assertFalse($instance->areOptionsNumerical());

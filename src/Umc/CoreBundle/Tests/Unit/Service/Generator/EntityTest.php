@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -23,6 +22,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Service\Generator;
 
 use App\Umc\CoreBundle\Model\Entity as EntityModel;
 use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Service\Generator\ContentProcessor;
 use App\Umc\CoreBundle\Service\Generator\Entity;
 use App\Umc\CoreBundle\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,6 +40,10 @@ class EntityTest extends TestCase
      */
     private $module;
     /**
+     * @var ContentProcessor
+     */
+    private $processor;
+    /**
      * @var Entity
      */
     private $generator;
@@ -51,9 +55,10 @@ class EntityTest extends TestCase
     {
         $this->twig = $this->createMock(Environment::class);
         $this->module = $this->createMock(Module::class);
+        $this->processor = $this->createMock(ContentProcessor::class);
         $stringUtil = $this->createMock(StringUtil::class);
         $stringUtil->method('camel')->willReturnArgument(0);
-        $this->generator = new Entity($this->twig, $stringUtil);
+        $this->generator = new Entity($this->twig, $stringUtil, $this->processor);
     }
 
     /**
@@ -63,6 +68,7 @@ class EntityTest extends TestCase
      */
     public function testGenerateContent()
     {
+        $this->processor->method('process')->willReturnArgument(0);
         $this->twig->expects($this->exactly(2))->method('render')->willReturn('content');
         $this->module->expects($this->once())->method('getEntities')->willReturn(
             [
@@ -95,6 +101,7 @@ class EntityTest extends TestCase
      */
     public function testGenerateContentWithEmptyContent()
     {
+        $this->processor->method('process')->willReturnArgument(0);
         $this->twig->expects($this->exactly(2))->method('render')->willReturnOnConsecutiveCalls('content', '  ');
         $expected = [
             'path/FirstEntity' => 'content',

@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -209,7 +208,7 @@ class DynamicTest extends TestCase
         );
         $this->assertEquals(
             2,
-            count($this->getInstance(['_options' => [['option1'], ['option2']]])->getOptions())
+            count($this->getInstance(['_option' => [['option1'], ['option2']]])->getOptions())
         );
     }
 
@@ -229,7 +228,7 @@ class DynamicTest extends TestCase
         ];
         $this->assertEquals(
             [],
-            $this->getInstance(['_options' => $options])->getOptions()
+            $this->getInstance(['_option' => $options])->getOptions()
         );
     }
 
@@ -252,7 +251,7 @@ class DynamicTest extends TestCase
             ->willReturnOnConsecutiveCalls($option1, $option2);
         $this->assertEquals(
             'string',
-            $this->getInstance(['_options' => $options])->getOptionType()
+            $this->getInstance(['_option' => $options])->getOptionType()
         );
     }
 
@@ -275,7 +274,7 @@ class DynamicTest extends TestCase
             ->willReturnOnConsecutiveCalls($option1, $option2);
         $this->assertEquals(
             'number',
-            $this->getInstance(['_options' => $options])->getOptionType()
+            $this->getInstance(['_option' => $options])->getOptionType()
         );
     }
 
@@ -288,11 +287,11 @@ class DynamicTest extends TestCase
         $option = $this->createMock(Dynamic\Option::class);
         $option->expects($this->once())->method('toArray');
         $this->optionFactory->expects($this->once())->method('create')->willReturn($option);
-        $result = $this->getInstance(['_options' => [['option1']]])->toArray();
+        $result = $this->getInstance(['_option' => [['option1']]])->toArray();
         $this->assertArrayHasKey('code', $result);
         $this->assertArrayHasKey('label', $result);
         $this->assertArrayHasKey('show_in_list', $result);
-        $this->assertArrayHasKey('_options', $result);
+        $this->assertArrayHasKey('_option', $result);
     }
 
     /**

@@ -67,6 +67,7 @@ class ContentProcessor
      */
     private function sortLines(string $content): string
     {
+        preg_match_all(self::SORT_PATTERN, $content, $sorts, PREG_SET_ORDER);
         if (preg_match_all(self::SORT_PATTERN, $content, $sorts, PREG_SET_ORDER)) {
             foreach ($sorts as $sort) {
                 $content = str_replace($sort[0], $this->sortBlock($sort[1]), $content);

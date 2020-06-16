@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -22,6 +21,7 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Tests\Unit\Service\Generator;
 
 use App\Umc\CoreBundle\Model\Module as ModuleModel;
+use App\Umc\CoreBundle\Service\Generator\ContentProcessor;
 use App\Umc\CoreBundle\Service\Generator\Module;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +38,10 @@ class ModuleTest extends TestCase
      */
     private $module;
     /**
+     * @var ContentProcessor | MockObject
+     */
+    private $processor;
+    /**
      * @var Module
      */
     private $generator;
@@ -49,7 +53,8 @@ class ModuleTest extends TestCase
     {
         $this->twig = $this->createMock(Environment::class);
         $this->module = $this->createMock(ModuleModel::class);
-        $this->generator = new Module($this->twig);
+        $this->processor = $this->createMock(ContentProcessor::class);
+        $this->generator = new Module($this->twig, $this->processor);
     }
 
     /**
@@ -59,6 +64,7 @@ class ModuleTest extends TestCase
     public function testGenerateContent()
     {
         $this->twig->expects($this->once())->method('render')->willReturn('content');
+        $this->processor->method('process')->willReturnArgument(0);
         $expected = ['destination' => 'content'];
         $this->assertEquals(
             $expected,
@@ -76,6 +82,7 @@ class ModuleTest extends TestCase
     public function testGenerateContentWithEmptyContent()
     {
         $this->twig->expects($this->once())->method('render')->willReturn('  ');
+        $this->processor->method('process')->willReturnArgument(0);
         $this->assertEquals(
             [],
             $this->generator->generateContent(

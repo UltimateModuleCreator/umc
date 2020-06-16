@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -171,6 +170,31 @@ class VersionTest extends TestCase
         $version->setPlatform($this->platform);
         $this->expectException(Platform\ConfigException::class);
         $version->getGeneratorPoolServiceId();
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::getValidatorPoolServiceId
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::setPlatform
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::__construct
+     */
+    public function testGetValidatorPoolServiceId()
+    {
+        $version = new Version('code', ['config' => ['validator_pool' => 'pool']]);
+        $version->setPlatform($this->platform);
+        $this->assertEquals('pool', $version->getValidatorPoolServiceId());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::getValidatorPoolServiceId
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::setPlatform
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::__construct
+     */
+    public function testGetValidatorPoolServiceIdWithMissingPool()
+    {
+        $version = new Version('code', ['config' => []]);
+        $version->setPlatform($this->platform);
+        $this->expectException(Platform\ConfigException::class);
+        $version->getValidatorPoolServiceId();
     }
 
     /**

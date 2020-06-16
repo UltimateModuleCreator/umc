@@ -27,7 +27,7 @@ use Symfony\Component\Finder\Finder;
 class FinderFactoryTest extends TestCase
 {
     /**
-     * @covers \App\Util\FinderFactory::create()
+     * @covers \App\Umc\CoreBundle\Service\FileFinderFactory::create()
      */
     public function testCreate()
     {

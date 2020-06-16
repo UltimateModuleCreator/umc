@@ -201,4 +201,24 @@ class PlatformTest extends TestCase
         $version->method('getCode')->willReturn($code);
         return $version;
     }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Platform::getUnsopportedMessage
+     * @covers \App\Umc\CoreBundle\Model\Platform::__construct
+     */
+    public function testGetUnsoportedMessage()
+    {
+        $platform = new Platform('code', ['unsupported_message' => 'not supported message'], []);
+        $this->assertEquals('not supported message', $platform->getUnsopportedMessage());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Platform::getUnsopportedMessage
+     * @covers \App\Umc\CoreBundle\Model\Platform::__construct
+     */
+    public function testGetUnsoportedMessageDefault()
+    {
+        $platform = new Platform('code', ['name' => 'Name'], []);
+        $this->assertEquals('Name is not supported yet', $platform->getUnsopportedMessage());
+    }
 }
