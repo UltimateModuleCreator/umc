@@ -177,4 +177,14 @@ class Platform
     {
         return count($this->getVersions()) > 0;
     }
+
+    /**
+     * @return string
+     */
+    public function getUnsopportedMessage()
+    {
+        return isset($this->data['unsupported_message'])
+            ? (string)$this->data['unsupported_message']
+            : $this->getName() . ' is not supported yet';
+    }
 }

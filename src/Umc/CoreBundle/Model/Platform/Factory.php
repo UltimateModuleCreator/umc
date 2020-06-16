@@ -31,6 +31,6 @@ class Factory
      */
     public function create(array $data, array $versions): Platform
     {
-        return new Platform($data['code']?? '', $data, $versions);
+        return new Platform($data['code'] ?? '', $data, $versions);
     }
 }

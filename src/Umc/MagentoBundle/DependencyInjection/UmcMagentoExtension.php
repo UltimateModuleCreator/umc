@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -40,10 +39,10 @@ class UmcMagentoExtension extends Extension
     {
         $loader = new XmlFileLoader(
             $container,
-            new FileLocator((__DIR__.'/../Resources/config'))
+            new FileLocator((__DIR__ . '/../Resources/config'))
         );
         $loader->load('services.xml');
-        $provider = new Provider(new FileLoader(), __DIR__.'/../Resources/config/extensible_parameters.yml');
+        $provider = new Provider(new FileLoader(), __DIR__ . '/../Resources/config/extensible_parameters.yml');
         $merger = new ParamMerger();
         $container->getParameterBag()->add(
             $merger->mergeParams($container->getParameterBag(), $provider->getConfig())

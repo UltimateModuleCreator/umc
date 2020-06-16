@@ -1,49 +1,5 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters:
-  form_config_path: '%kernel.project_dir%/config/form'
-  module_list_path: '%kernel.project_dir%/var/umc'
-  defaults_path: '%module_list_path%/defaults/'
-  defaults_file: 'defaults.yml'
-
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
-
-    App\Service\Form\Loader:
-      arguments:
-        $fileMap:
-          module: '%form_config_path%/module.yml'
-          entity: '%form_config_path%/entity.yml'
-          attribute: '%form_config_path%/attribute.yml'
-          option: '%form_config_path%/option.yml'
-          serialized: '%form_config_path%/serialized.yml'
-
-    App\Service\Builder:
-      arguments:
-        $basePath: '%kernel.project_dir%/var/umc/'
-        $configFilePath: '%module_list_path%/'
-    App\Service\Writer:
-      autowire: false
-    App\Service\Archiver:
-      autowire: false
-
-    App\Service\Generator:
-      arguments:
-        $contentGenerators:
-          module: '@App\Service\Generator\ModuleGenerator'
-          entity: '@App\Service\Generator\EntityGenerator'
-
-    App\Util\CodingStandardsFactory:
-      arguments:
-        $standards: [PSR1, PSR2, PSR12, '%kernel.project_dir%/vendor/magento/magento-coding-standard/Magento2']
-        $phpcsPath: '%kernel.project_dir%/vendor/bin/phpcs'
-
+        autowire: true
+        autoconfigure: true
+        public: false

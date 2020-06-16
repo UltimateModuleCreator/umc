@@ -36,11 +36,6 @@
             "App\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
-    },
     "replace": {
         "paragonie/random_compat": "*",
         "symfony/polyfill-ctype": "*",
@@ -68,6 +63,7 @@
         "symfony": {
             "allow-contrib": false,
             "require": "5.*"
-        }
+        },
+        "public-dir": "."
     }
 }

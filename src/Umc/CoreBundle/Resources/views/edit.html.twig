@@ -1,4 +1,9 @@
 {% extends "@UmcCore/base.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/umccore/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/umccore/select2/select2-bootstrap.css') }}" />
+{% endblock %}
 {% block additional_fixed_top %}
     {{ parent() }}
     <button type="button" data-role="save" class="btn btn-danger btn">Save Module</button>
@@ -16,14 +21,14 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('ko/ko.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('select2/select2.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/ko/ko.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/select2/select2.js') }}"> </script>
     <script type="text/javascript">
         $.fn.select2.defaults.set( "theme", "bootstrap" );
     </script>
-    <script type="text/javascript" src="{{ asset('jquery/form-validator.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('umc/umc.js') }}"> </script>
-    <script type="text/javascript" src="{{ asset('umc/edit.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/umc.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/edit.js') }}"> </script>
     <script type="text/javascript">
         if (typeof UMC === "undefined") {
             UMC = {}

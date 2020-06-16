@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UMC
  *
@@ -39,6 +40,7 @@ class Config implements ConfigurationInterface
                 ->scalarNode('url')->end()
                 ->scalarNode('image')->end()
                 ->integerNode('sort_order')->defaultValue(1000)->end()
+                ->scalarNode('unsupported_message')->end()
                 ->arrayNode('config')
                     ->children()
                         ->arrayNode('form')

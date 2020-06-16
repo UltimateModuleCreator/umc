@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -49,13 +48,13 @@ class FactoryTest extends TestCase
     {
         $typeFactory = $this->createMock(TypeFactory::class);
         $optionFactory = $this->createMock(OptionFactory::class);
-        $serializedFactory = $this->createMock(DynamicFactory::class);
+        $dynamicFactory = $this->createMock(DynamicFactory::class);
         $stringUtil = $this->createMock(StringUtil::class);
         $this->entity = $this->createMock(Entity::class);
         $this->factory = new Factory(
             $typeFactory,
             $optionFactory,
-            $serializedFactory,
+            $dynamicFactory,
             $stringUtil
         );
     }

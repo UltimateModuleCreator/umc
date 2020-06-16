@@ -25,7 +25,7 @@ class RestrictedWords implements ValidatorInterface
     /**
      * @var string[]
      */
-    private $reserved= [
+    private $reserved = [
         '__halt_compiler', 'abstract', 'and', 'array',
         'as', 'break', 'callable', 'case',
         'catch', 'class', 'clone', 'const',

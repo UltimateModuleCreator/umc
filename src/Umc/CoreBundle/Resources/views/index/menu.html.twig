@@ -1,0 +1,11 @@
+<div class="dropdown">
+    <a href="{{ path(item.link, {platform: platform.getCode()}) }}" class="fa fa-2x fa-{{ item.icon }} dropdown-toggle" title="{{ item.title }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+    <div class="dropdown-menu" aria-labelledby="menu-edit-{{ platform.getCode() }}">
+        {% if item.all is defined and item.all %}
+            <a class="dropdown-item" href="{{ path(item.link, {platform: platform.getCode()}) }}">{{ item.all }}</a>
+        {% endif %}
+        {% for version in platform.getVersions() %}
+            <a class="dropdown-item" href="{{ path(item.link, {platform: platform.getCode(), version:version.getCode()}) }}">Version {{ version.getLabel() }}</a>
+        {% endfor %}
+    </div>
+</div>

@@ -26,12 +26,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ParamMerger
 {
-    const VALUE = 'value';
-    const FLAGS = 'flags';
-    const SORT_FLAG = 'sort';
-    const FILTER_FLAG = 'filter';
-    const EXTEND_FLAG = 'extends';
-    const NOT = '!';
+    public const VALUE = 'value';
+    public const FLAGS = 'flags';
+    public const SORT_FLAG = 'sort';
+    public const FILTER_FLAG = 'filter';
+    public const EXTEND_FLAG = 'extends';
+    public const NOT = '!';
     /**
      * @param ParameterBagInterface $parameterBag
      * @param $params

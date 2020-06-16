@@ -33,7 +33,7 @@ class ProductAttributeSet extends BaseType
      */
     public function getSourceModel(): string
     {
-        $dynamic= $this->getDynamic();
+        $dynamic = $this->getDynamic();
         /** @var Attribute $attribute */
         $attribute = $dynamic->getAttribute();
         /** @var Entity $entity */
@@ -48,6 +48,4 @@ class ProductAttributeSet extends BaseType
         ];
         return implode('\\', $parts);
     }
-
-
 }

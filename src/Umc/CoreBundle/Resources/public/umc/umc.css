@@ -44,6 +44,9 @@ a:active,
 .btn.active.focus {
     outline: 0
 }
+.btn-link {
+    color: #73879C;
+}
 a:hover,
 a:focus {
     color: #00aeef;
@@ -71,10 +74,6 @@ a:focus {
     font-size: 40px;
 }
 /* [-] Body loader */
-
-.logo {
-    margin-top: 10px;
-}
 
 .top-nav {
     display: block;

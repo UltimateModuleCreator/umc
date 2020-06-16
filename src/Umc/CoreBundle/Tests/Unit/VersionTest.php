@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace App\Umc\CoreBundle\Test\Unit;
+namespace App\Umc\CoreBundle\Tests\Unit;
 
 use App\Umc\CoreBundle\Version;
 use PHPUnit\Framework\TestCase;

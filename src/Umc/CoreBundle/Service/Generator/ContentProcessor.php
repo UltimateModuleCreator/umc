@@ -22,9 +22,9 @@ namespace App\Umc\CoreBundle\Service\Generator;
 
 class ContentProcessor
 {
-    const SORT_START_MARKUP = '##sort##';
-    const SORT_END_MARKUP = '##/sort##';
-    const SORT_PATTERN = '/##sort##(.*?)##\\/sort##/si';
+    public const SORT_START_MARKUP = '##sort##';
+    public const SORT_END_MARKUP = '##/sort##';
+    public const SORT_PATTERN = '/##sort##(.*?)##\\/sort##/si';
     /**
      * @param string $content
      * @return string

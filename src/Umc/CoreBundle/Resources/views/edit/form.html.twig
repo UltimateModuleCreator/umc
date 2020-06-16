@@ -71,27 +71,27 @@
                         <h4>{{ child.tabLabel }} for <span data-bind="text: panelTitle"></span></h4>
                     </div>
                     <div class="col-3">
-                        <nav class="navbar float-right">
+                        <nav class="float-right">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a title="{{ child.addButton.label }}" href="#" class="nav-link">
+                                    <button title="{{ child.addButton.label }}" href="#" class="nav-link btn btn-link">
                                         <i data-bind="click: function (data, event) {addChild(UMC.defaults.{{ child.formKey }} || {}, '{{ child.code }}')}" class="fa fa-2x fa-plus"></i>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li class="nav-item">
-                                    <a title="Collapse All {{ child.tabLabel }}" href="#" class="nav-link">
+                                    <button title="Collapse All {{ child.tabLabel }}" href="#" class="nav-link btn btn-link">
                                         <i class="fa fa-2x fa-bars" data-bind="click: collapseAllChildren('{{ child.code }}')"></i>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li class="nav-item">
-                                    <a title="Expand All {{ child.tabLabel }}" href="#" class="nav-link">
+                                    <button title="Expand All {{ child.tabLabel }}" href="#" class="nav-link btn btn-link">
                                         <i class="fa fa-2x fa-stream" data-bind="click: expandAllChildren('{{ child.code }}')"></i>
-                                    </a>
+                                    </button>
                                 </li>
                                 <li class="nav-item">
-                                    <a title="Collapse {{ child.tabLabel }} Section" href="#" class="nav-link">
+                                    <button title="Collapse {{ child.tabLabel }} Section" href="#" class="nav-link btn btn-link">
                                         <i data-bind="click: toggleChildContainer('{{ child.code }}'), attr: {class: visibleChildrenContainerClass.{{ child.code }}}"></i>
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </nav>
@@ -112,17 +112,17 @@
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                    <nav class="navbar float-right">
+                                    <nav class="float-right">
                                         <ul class="nav nav-pills">
                                             <li class="nav-item"">
-                                                <a data-bind="click: togglePanel" class="nav-link" href="#">
+                                                <button data-bind="click: togglePanel" class="nav-link btn btn-link" href="#">
                                                     <i data-bind="class: collapseClass"></i>
-                                                </a>
+                                                </button>
                                             </li>
                                             <li class="nav-item">
-                                                <a data-bind="click: function (data, event) {$parent.removeChild(data, '{{ child.code }}')}" class="nav-link" href="#">
+                                                <button data-bind="click: function (data, event) {$parent.removeChild(data, '{{ child.code }}')}" class="nav-link btn btn-link" href="#">
                                                     <i class="fa fa-2x fa-trash"></i>
-                                                </a>
+                                                </button>
                                             </li>
                                         </ul>
                                     </nav>

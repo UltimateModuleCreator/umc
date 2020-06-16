@@ -4,12 +4,9 @@
         <meta charset="UTF-8">
         <title>{% block title %}Ultimate Module Creator{% endblock %}</title>
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}" />
-            <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.css') }}" />
-            <link rel="stylesheet" href="{{ asset('select2/select2.css') }}" />
-            <link rel="stylesheet" href="{{ asset('select2/select2-bootstrap.css') }}" />
-{#            <link rel="stylesheet" href="{{ asset('gentelella/css/custom.css') }}" />#}
-            <link rel="stylesheet" href="{{ asset('umc/umc.css') }}" />
+            <link rel="stylesheet" href="{{ asset('bundles/umccore/bootstrap/css/bootstrap.css') }}" />
+            <link rel="stylesheet" href="{{ asset('bundles/umccore/font-awesome/css/font-awesome.css') }}" />
+            <link rel="stylesheet" href="{{ asset('bundles/umccore/umc/umc.css') }}" />
         {% endblock %}
     </head>
     <body>
@@ -20,36 +17,9 @@
         <div class="navbar sticky-top bg-light full-width">
             {% block main_menu %}
             <div class="float-left">
-                <div class="float-left logo">
+                <a href="{{ path('index') }}">
                     <i class="fa fa-2x fa-puzzle-piece" title="Ultimate Module Creator v{{ appVersion() }}"></i>
-                </div>
-                {% set menuItems = get_main_menu() %}
-                <nav class="navbar navbar-expand float-left">
-                    <div class="collapse navbar-collapse">
-                        {% if menuItems|length > 0 %}
-                        <ul class="navbar-nav">
-                            {% for id,item in menuItems %}
-                                {% if item.children is defined %}
-                                    {% set children = item.children %}
-                                {% else %}
-                                    {% set children = [] %}
-                                {% endif %}
-                                <li class="nav-item {% if children|length > 0 %}dropdown{% endif %}">
-                                    <a class="nav-link {% if children|length > 0 %}dropdown-toggle{% endif %}" href="{{item.url}}" id="menu_{{ id }}"{% if children|length > 0 %} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.label }}</a>
-                                    {% if children|length > 0 %}
-                                    <div class="dropdown-menu" aria-labelledby="menu_{{ id }}">
-                                        {% for childId, child in children %}
-                                            <a class="dropdown-item" href="{{child.url}}">{{ child.label }}</a>
-                                        {% endfor %}
-                                    </div>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </nav>
-                {% endif %}
-
+                </a>
             </div>
             <div class="float-right">
                 {% block additional_fixed_top %}{% endblock %}
@@ -74,13 +44,10 @@
         </div>
         {% block javascripts %}
         <!-- jQuery -->
-        <script type="text/javascript" src="{{ asset('jquery/jquery.js') }}"> </script>
-        <script type="text/javascript" src="{{ asset('jquery-ui/jquery-ui.js') }}"> </script>
-        <script type="text/javascript">
-            $.widget.bridge('uitooltip', $.ui.tooltip);
-        </script>
-        <script type="text/javascript" src="{{ asset('bootstrap/js/popper.js') }}"> </script>
-        <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/jquery.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/jquery-ui/jquery-ui.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/popper.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/bootstrap.js') }}"> </script>
         {% endblock %}
     </body>
 </html>

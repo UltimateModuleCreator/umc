@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -37,7 +36,7 @@ class UmcSyliusExtension extends Extension
     {
         $loader = new XmlFileLoader(
             $container,
-            new FileLocator((__DIR__.'/../Resources/config'))
+            new FileLocator((__DIR__ . '/../Resources/config'))
         );
         $loader->load('services.xml');
     }

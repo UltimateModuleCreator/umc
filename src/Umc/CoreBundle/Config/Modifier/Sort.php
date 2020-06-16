@@ -24,7 +24,7 @@ use App\Umc\CoreBundle\Util\Sorter;
 
 class Sort implements ModifierInterface
 {
-    const SORT_ROOT = '/';
+    public const SORT_ROOT = '/';
     /**
      * @var Sorter
      */

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * UMC
@@ -16,6 +15,8 @@ declare(strict_types=1);
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
+declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Controller;
 

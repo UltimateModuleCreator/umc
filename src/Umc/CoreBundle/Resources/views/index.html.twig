@@ -1,91 +1,41 @@
 {% extends "@UmcCore/base.html.twig" %}
 {% block body %}
     <div class="card">
-        <div class="card-header"><h1>Choose your platform</h1></div>
+        <div class="card-header"><h1>Installed platforms</h1></div>
         <div class="card-body">
-            <div class="card-columns">
-                {% for platform in platforms %}
-                    <div class="card p-0 {% if not platform.isSupported() %}not-{% endif %}supported">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h3>{{ platform.getName() }}</h3>
-                                </div>
-                                {% if platform.getUrl() %}
-                                    <div class="col-3">
-                                        <ul class="nav float-right panel_toolbox">
-                                            <li>
-                                                <a href="{{ platform.getUrl() }}" target="_blank" title="Visit Page">
-                                                    <i class="fa fa-2x fa-link"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+            <table class="table table-bordered table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">Module</th>
+                            <th scope="col">Create Module</th>
+                            <th scope="col">View Modules</th>
+                            <th scope="col">Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for platform in platforms %}
+                            <tr>
+                                <td>
+                                    <img src="{{ asset(platform.getImage()) }}" alt="{{ platform.getName() }}" width="50" height="50" />
+                                    {{ platform.name }}
+                                </td>
+                                {% if platform.isSupported() %}
+                                    <td class="text-center">
+                                        {% include '@UmcCore/index/menu.html.twig' with {platform: platform, item: {title: "Create Module", link: "new", icon: 'edit', all: "Latest supported (" ~ platform.getLatestVersion().getLabel() ~ ")"}} %}
+                                    </td>
+                                    <td>
+                                        {% include '@UmcCore/index/menu.html.twig' with {platform: platform, item: {title: "View Modules", link: "list", icon: 'list', 'all': "All versions"}} %}
+                                    </td>
+                                    <td>
+                                        {% include '@UmcCore/index/menu.html.twig' with {platform: platform, item: {title: "Settings", link: "settings", icon: 'cogs', all: platform.getName() ~ " default settings"}} %}
+                                    </td>
+                                {% else %}
+                                    <td colspan="3" class="text-center align-middle">{{ platform.getUnsopportedMessage() }}</td>
                                 {% endif %}
-                            </div>
-                        </div>
-                        {% if platform.getImage() %}
-                            <div class="card-img-top text-center">
-                                <img src="{{ asset(platform.getImage()) }}" alt="{{ platform.getName() }}" />
-                            </div>
-                        {% endif %}
-                        <div class="card-footer text-center">
-                            <nav class="navbar navbar-expand">
-                                <div class="collapse navbar-collapse">
-                                    <ul class="navbar-nav">
-                                        {% if platform.isSupported() %}
-                                        <li class="nav-item"><span><a href="{{ path("platform", {platform: platform.getCode()}) }}" class="btn btn-primary">View</a></span></li>
-                                        <li class="nav-item"><span><a href="{{ path("settings", {platform: platform.getCode()}) }}" class="btn btn-primary">Settings</a></span></li>
-                                        <li class="nav-item">
-                                            <span class="btn-group">
-                                                <a href="{{ path('new', {platform: platform.getCode()}) }}"
-                                                   class="btn-primary btn">New Module</a>
-                                                <a class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="sr-only">Toggle Dropdown</span>
-                                                </a>
-                                                {% if platform.getVersions()|length > 0 %}
-                                                    <span class="dropdown-menu">
-                                                    {% for version in platform.getVersions() %}
-                                                        <a class="dropdown-item"
-                                                           href="{{ path('new', {platform: platform.getCode(), version: version.getCode()}) }}">
-                                                            v {{ version.getLabel() }}
-                                                        </a>
-                                                    {% endfor %}
-                                                </span>
-                                                {% endif %}
-                                            </span>
-                                        </li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </nav>
-{#                            {% if platform.isSupported() %}#}
-{#                                <span><a href="{{ path("platform", {platform: platform.getCode()}) }}" class="btn btn-primary">View</a></span>#}
-{#                                <span><a href="{{ path("settings", {platform: platform.getCode()}) }}" class="btn btn-primary">Settings</a></span>#}
-{#                                <span class="btn-group">#}
-{#                                    <a href="{{ path('new', {platform: platform.getCode()}) }}"#}
-{#                                       class="btn-primary btn">New Module</a>#}
-{#                                    <a class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#                                        <span class="sr-only">Toggle Dropdown</span>#}
-{#                                    </a>#}
-{#                                    {% if platform.getVersions()|length > 0 %}#}
-{#                                    <span class="dropdown-menu">#}
-{#                                        {% for version in platform.getVersions() %}#}
-{#                                            <a class="dropdown-item"#}
-{#                                               href="{{ path('new', {platform: platform.getCode(), version: version.getCode()}) }}">#}
-{#                                                v {{ version.getLabel() }}#}
-{#                                            </a>#}
-{#                                        {% endfor %}#}
-{#                                    </span>#}
-{#                                    {% endif %}#}
-{#                                </span>#}
-{#                            {% else %}#}
-{#                                This platform will be supported sooner or later.#}
-{#                            {% endif %}#}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
         </div>
     </div>
 {% endblock %}
