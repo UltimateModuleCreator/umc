@@ -91,6 +91,10 @@ class PlatformAwareFactory
         return $this->create($files);
     }
 
+    /**
+     * @param Platform $platform
+     * @return Loader
+     */
     public function createByPlatform(Platform $platform): Loader
     {
         $files = $platform->getConfig($this->configKey);

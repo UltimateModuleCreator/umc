@@ -20,9 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Controller;
 
-use App\Umc\CoreBundle\Model\Module\Factory\Locator;
 use App\Umc\CoreBundle\Model\Platform\Pool;
-use App\Umc\CoreBundle\Repository\Module;
 use App\Umc\CoreBundle\Service\Builder;
 use App\Umc\CoreBundle\Service\Validator\ValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,10 +39,6 @@ class SaveController extends AbstractController
      */
     private $platformPool;
     /**
-     * @var Module
-     */
-    private $repository;
-    /**
      * @var Builder
      */
     private $builder;
@@ -53,14 +47,12 @@ class SaveController extends AbstractController
      * SaveController constructor.
      * @param RequestStack $requestStack
      * @param Pool $platformPool
-     * @param Module $repository
      * @param Builder $builder
      */
-    public function __construct(RequestStack $requestStack, Pool $platformPool, Module $repository, Builder $builder)
+    public function __construct(RequestStack $requestStack, Pool $platformPool, Builder $builder)
     {
         $this->requestStack = $requestStack;
         $this->platformPool = $platformPool;
-        $this->repository = $repository;
         $this->builder = $builder;
     }
 

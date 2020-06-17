@@ -31,6 +31,7 @@
                 <directory suffix=".php">./src/*/*/DependencyInjection</directory>
                 <file>./src/Umc/CoreBundle/Model/Platform/Config.php</file>
                 <file>./src/Umc/CoreBundle/Config/Form/Config.php</file>
+                <file>./src/Umc/CoreBundle/Config/Source/Config.php</file>
             </exclude>
         </whitelist>
     </filter>

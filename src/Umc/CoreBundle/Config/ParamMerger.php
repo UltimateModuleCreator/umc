@@ -32,6 +32,21 @@ class ParamMerger
     public const FILTER_FLAG = 'filter';
     public const EXTEND_FLAG = 'extends';
     public const NOT = '!';
+
+    /**
+     * @var Sorter
+     */
+    private $sorter;
+
+    /**
+     * ParamMerger constructor.
+     * @param Sorter $sorter
+     */
+    public function __construct(Sorter $sorter)
+    {
+        $this->sorter = $sorter;
+    }
+
     /**
      * @param ParameterBagInterface $parameterBag
      * @param $params
@@ -75,7 +90,7 @@ class ParamMerger
             }
             if (isset($flags[self::SORT_FLAG])) {
                 $field = $flags[self::SORT_FLAG];
-                $parameter = $sorter->sort($parameter, $field);
+                $parameter = $this->sorter->sort($parameter, $field);
             }
             $parameters[$key] = $parameter;
         }

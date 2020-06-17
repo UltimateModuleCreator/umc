@@ -18,9 +18,20 @@
 
 declare(strict_types=1);
 
-namespace App\Umc\CoreBundle\Config\Modifier\Expand;
+namespace App\Umc\CoreBundle\Tests\Unit\Config;
 
-class MissingExpandException extends \InvalidArgumentException
+use App\Umc\CoreBundle\Config\ProcessorFactory;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Processor;
+
+class ProcessorFactoryTest extends TestCase
 {
-
+    /**
+     * @covers \App\Umc\CoreBundle\Config\ProcessorFactory::create
+     */
+    public function testCreate()
+    {
+        $factory = new ProcessorFactory();
+        $this->assertInstanceOf(Processor::class, $factory->create());
+    }
 }

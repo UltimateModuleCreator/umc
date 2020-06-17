@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\DependencyInjection;
 use App\Umc\CoreBundle\Config\FileLoader;
 use App\Umc\CoreBundle\Config\ParamMerger;
 use App\Umc\CoreBundle\Config\Provider;
+use App\Umc\CoreBundle\Util\Sorter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -44,7 +45,7 @@ class UmcCoreExtension extends Extension
         );
         $loader->load('services.xml');
         $provider = new Provider(new FileLoader(), __DIR__ . '/../Resources/config/extensible_parameters.yml');
-        $merger = new ParamMerger();
+        $merger = new ParamMerger(new Sorter());
         $container->getParameterBag()->add(
             $merger->mergeParams($container->getParameterBag(), $provider->getConfig())
         );

@@ -137,7 +137,7 @@ class EditController extends AbstractController
         foreach ($config as $type => $settings) {
             $koConfig[$type]['panel'] = $settings['panel'] ?? [];
             $koConfig[$type]['fields'] = array_keys($settings['fields'] ?? []);
-            $koConfig[$type]['children'] = $settings['children'];
+            $koConfig[$type]['children'] = $settings['children'] ?? [];
         }
         return $koConfig;
     }
