@@ -71,7 +71,7 @@ class SettingsController extends AbstractController
                 : $this->formLoaderFactory->createByVersion($versionInstance)->getConfig();
             $fields = [];
             foreach ($config as $type => $settings) {
-                $fields[$type] = array_keys($settings['fields']);
+                $fields[$type] = array_keys($settings['fields'] ?? []);
             }
             $fields['restore'] = ['restore'];
             $title = "Default Settings for {$platformInstance->getName()}";
@@ -81,7 +81,7 @@ class SettingsController extends AbstractController
             $restore = [
                 'label' => ($version !== null)
                     ? 'Use platform default settings'
-                    : "Use factory settings",
+                    : "Delete platform settings",
                 'name' => 'restore.restore'
             ];
             if ($version !== null) {
