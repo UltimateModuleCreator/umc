@@ -293,6 +293,159 @@ class AttributeTest extends TestCase
     }
 
     /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::getNote
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testGetNote()
+    {
+        $this->assertEquals('note', $this->getInstance(['note' => 'note'])->getNote());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::getTooltip
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testGetTooltip()
+    {
+        $this->assertEquals('tooltip', $this->getInstance(['tooltip' => 'tooltip'])->getTooltip());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::isAdminGrid
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testIsAdminGrid()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->with('can_show_in_grid')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance(['admin_grid' => true])->isAdminGrid());
+        $this->assertFalse($this->getInstance(['admin_grid' => false])->isAdminGrid());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::isAdminGrid
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testIsAdminGridNotAllowed()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->with('can_show_in_grid')->willReturn(false);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertFalse($this->getInstance(['admin_grid' => true])->isAdminGrid());
+        $this->assertFalse($this->getInstance(['admin_grid' => false])->isAdminGrid());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::getIndexDeleteType
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testGetIndexDeleteType()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->with('can_be_required')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertEquals('CASCADE', $this->getInstance(['required' => true])->getIndexDeleteType());
+        $this->assertEquals('SET NULL', $this->getInstance(['required' => false])->getIndexDeleteType());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::isAdminGridFilter
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testIsAdminGridFilter()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->willReturnMap([
+            ['can_filter_in_grid', true],
+            ['can_show_in_grid', true],
+        ]);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertTrue($this->getInstance(['admin_grid' => true, 'admin_grid_filter' => true])->isAdminGridFilter());
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_filter' => false])->isAdminGridFilter()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_filter' => true])->isAdminGridFilter()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_filter' => false])->isAdminGridFilter()
+        );
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::isAdminGridFilter
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testIsAdminGridFilterNotAllowed()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->willReturnMap([
+            ['can_filter_in_grid', false],
+            ['can_show_in_grid', true],
+        ]);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_filter' => true])->isAdminGridFilter()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_filter' => false])->isAdminGridFilter()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_filter' => true])->isAdminGridFilter()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_filter' => false])->isAdminGridFilter()
+        );
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::isAdminGridHidden
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testIsAdminGridHidden()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->with('can_show_in_grid')->willReturn(true);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertTrue(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_hidden' => true])->isAdminGridHidden()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_hidden' => false])->isAdminGridHidden()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_hidden' => true])->isAdminGridHidden()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_hidden' => false])->isAdminGridHidden()
+        );
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Attribute::isAdminGridHidden
+     * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
+     */
+    public function testIsAdminGridHiddenNotAllowedInGrid()
+    {
+        $typeInstance = $this->createMock(Attribute\Type\BaseType::class);
+        $typeInstance->method('hasFlag')->with('can_show_in_grid')->willReturn(false);
+        $this->typeFactory->method('create')->willReturn($typeInstance);
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_hidden' => true])->isAdminGridHidden()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => true, 'admin_grid_hidden' => false])->isAdminGridHidden()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_hidden' => true])->isAdminGridHidden()
+        );
+        $this->assertFalse(
+            $this->getInstance(['admin_grid' => false, 'admin_grid_hidden' => false])->isAdminGridHidden()
+        );
+    }
+
+    /**
      * @covers \App\Umc\CoreBundle\Model\Attribute::isShowInList
      * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
      */
@@ -396,7 +549,7 @@ class AttributeTest extends TestCase
      * @covers \App\Umc\CoreBundle\Model\Attribute::areOptionsNumerical
      * @covers \App\Umc\CoreBundle\Model\Attribute::__construct
      */
-    public function testGetOptionType()
+    public function testAreOptionsNumerical()
     {
         $option1 = $this->createMock(Attribute\Option::class);
         $option1->expects($this->once())->method('getValue')->willReturn(10);

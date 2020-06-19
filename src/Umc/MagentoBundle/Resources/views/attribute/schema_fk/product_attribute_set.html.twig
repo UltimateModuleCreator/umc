@@ -1,2 +1,2 @@
         <constraint xsi:type="foreign" referenceId="{{ entity.getMainTableName()|upper }}_{{ attribute.getCode()|upper }}_EAV_ATTRIBUTE_SET_ATTRIBUTE_ID"
-            table="{{ entity.getMainTableName()|upper }}" column="{{ attribute.getCode() }}" referenceTable="eav_attribute_set" referenceColumn="attribute_set_id" onDelete="{{ type.getIndexDeleteType() }}"/>
+            table="{{ entity.getMainTableName()|upper }}" column="{{ attribute.getCode() }}" referenceTable="eav_attribute_set" referenceColumn="attribute_set_id" onDelete="{{ attribute.getIndexDeleteType() }}"/>

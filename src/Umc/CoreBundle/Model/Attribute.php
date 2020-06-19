@@ -88,6 +88,22 @@ class Attribute
      */
     protected $defaultValue;
     /**
+     * @var bool
+     */
+    protected $adminGridHidden;
+    /**
+     * @var bool
+     */
+    protected $adminGridFilter;
+    /**
+     * @var string
+     */
+    protected $note;
+    /**
+     * @var string
+     */
+    protected $tooltip;
+    /**
      * @var Option[]
      */
     protected $options;
@@ -103,10 +119,6 @@ class Attribute
      * @var Attribute\Dynamic[]
      */
     protected $dynamicWithOptions;
-    /**
-     * @var string;
-     */
-    protected $optionType;
     /**
      * @var bool
      */
@@ -151,6 +163,10 @@ class Attribute
         $this->showInList = (bool)($data['show_in_list'] ?? false);
         $this->showInView = (bool)($data['show_in_view'] ?? false);
         $this->defaultValue = (string)($data['default_value'] ?? '');
+        $this->adminGridHidden = (bool)($data['admin_grid_hidden'] ?? false);
+        $this->adminGridFilter = (bool)($data['admin_grid_filter'] ?? false);
+        $this->note = (string)($data['note'] ?? '');
+        $this->tooltip = (string)($data['tooltip'] ?? '');
         $this->options = array_map(
             function ($option) {
                 return $this->optionFactory->create($this, $option);
@@ -246,6 +262,56 @@ class Attribute
     }
 
     /**
+     * @return bool
+     */
+    public function isAdminGrid(): bool
+    {
+        return $this->adminGrid && $this->getTypeInstance()->hasFlag('can_show_in_grid');
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndexDeleteType()
+    {
+        return $this->isRequired() ? 'CASCADE' : 'SET NULL';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminGridHidden(): bool
+    {
+        return $this->isAdminGrid() && $this->adminGridHidden;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminGridFilter(): bool
+    {
+        $canFilterInGrid = $this->getTypeInstance()->hasFlag('can_filter_in_grid');
+        return $this->isAdminGrid() && $this->adminGridFilter && $canFilterInGrid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNote(): string
+    {
+        return $this->note;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooltip(): string
+    {
+        return $this->tooltip;
+    }
+
+
+    /**
      * @return Option[]
      */
     public function getOptions(): array
@@ -303,7 +369,7 @@ class Attribute
      */
     public function isManualOptions(): bool
     {
-        return $this->getTypeInstance()->hasFlag('manual_options');
+        return (bool)$this->getTypeInstance()->hasFlag('manual_options');
     }
 
     /**
@@ -379,6 +445,10 @@ class Attribute
             'show_in_list' => $this->showInList,
             'show_in_view' => $this->showInView,
             'default_value' => $this->defaultValue,
+            'admin_grid_hidden' => $this->adminGridHidden,
+            'admin_grid_filter' => $this->adminGridFilter,
+            'note' => $this->note,
+            'tooltip' => $this->tooltip,
             '_option' => array_map(
                 function (Option $option) {
                     return $option->toArray();

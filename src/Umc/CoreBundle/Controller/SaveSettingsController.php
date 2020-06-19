@@ -66,17 +66,16 @@ class SaveSettingsController extends AbstractController
         $response = [];
         try {
             $platformInstance = $this->pool->getPlatform($platform);
-            $versionInstance = $platformInstance->getVersion($version);
             $data = $this->requestStack->getCurrentRequest()->get('settings');
             $isDelete = (bool)($data['restore']['restore'] ?? false);
             if ($version === null) {
-                $this->repository->savePlatformConfig($platformInstance, $data);
                 if (!$isDelete) {
                     $this->repository->savePlatformConfig($platformInstance, $data);
                 } else {
                     $this->repository->deletePlatformConfig($platformInstance);
                 }
             } else {
+                $versionInstance = $platformInstance->getVersion($version);
                 if (!$isDelete) {
                     $this->repository->saveVersionConfig($versionInstance, $data);
                 } else {

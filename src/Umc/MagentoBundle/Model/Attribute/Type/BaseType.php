@@ -38,14 +38,6 @@ class BaseType extends \App\Umc\CoreBundle\Model\Attribute\Type\BaseType
     /**
      * @return string
      */
-    public function getIndexDeleteType(): string
-    {
-        return $this->getAttribute()->isRequired() ? 'CASCADE' : 'SET NULL';
-    }
-
-    /**
-     * @return string
-     */
     public function getAttributeColumnSettingsStringXml(): string
     {
         $attributes = $this->getSchemaAttributes();

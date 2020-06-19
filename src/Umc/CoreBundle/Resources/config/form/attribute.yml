@@ -124,7 +124,6 @@ attribute:
       additionalDataBind: 'enable: $parent.data.frontend'
       tab: frontend
       sort_order: 130
-
     -
       name: default_value
       type: textarea
@@ -134,4 +133,37 @@ attribute:
       additionalDataBind: 'enable: data.type !== "image" && data.type !== "file" && data.type !== "dynamic" && data.type !== "select" && data.type !== "multiselect"'
       tab: misc
       sort_order: 140
-
+    -
+      name: admin_grid_hidden
+      type: checkbox
+      has_default: true
+      label: Hidden by default
+      title: "This will hide the column by default"
+      additionalDataBind: "enable: (data.type() !== 'file' && data.type() !== 'wysiwyg' && data.type() !== 'dynamic') && data.admin_grid()"
+      tab: admin
+      sort_order: 70
+    -
+      name: admin_grid_filter
+      type: checkbox
+      has_default: true
+      label: Filterable in admin grid
+      title: If this is set to yes, your field will be filtrable in the admin grid
+      additionalDataBind: 'enable: data.type() !== "image" && data.type() !== "product_attribute_multiselect" && data.type() !== "multiselect" && data.type() !== "file" && data.type() !== "wysiwyg" && data.type() !== "dynamic" && data.admin_grid()'
+      tab: admin
+      sort_order: 90
+    -
+      name: note
+      type: text
+      required: false
+      label: Note
+      title: This will be added as a comment under the field in the admin add/edit form.
+      tab: misc
+      sort_order: 150
+    -
+      name: tooltip
+      type: text
+      required: false
+      label: Tooltip
+      title: This will be added as a tooltip in the admin add / edit form
+      tab: misc
+      sort_order: 160

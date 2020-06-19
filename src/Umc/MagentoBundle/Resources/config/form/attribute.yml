@@ -13,24 +13,6 @@ attribute:
       tab: admin
       sort_order: 55
     -
-      name: admin_grid_hidden
-      type: checkbox
-      has_default: true
-      label: Hidden by default
-      title: "This will hide the column by default"
-      additionalDataBind: "enable: (data.type() !== 'file' && data.type() !== 'wysiwyg' && data.type() !== 'dynamic') && data.admin_grid()"
-      tab: admin
-      sort_order: 70
-    -
-      name: admin_grid_filter
-      type: checkbox
-      has_default: true
-      label: Filterable in admin grid
-      title: If this is set to yes, your field will be filtrable in the admin grid
-      additionalDataBind: 'enable: data.type() !== "image" && data.type() !== "product_attribute_multiselect" && data.type() !== "multiselect" && data.type() !== "file" && data.type() !== "wysiwyg" && data.type() !== "dynamic" && data.admin_grid()'
-      tab: admin
-      sort_order: 90
-    -
       name: expanded
       type: checkbox
       has_default: true
@@ -39,19 +21,4 @@ attribute:
       additionalDataBind: "enable: data.type() === 'dynamic'"
       tab: admin
       sort_order: 100
-    -
-      name: note
-      type: text
-      required: false
-      label: Note
-      title: This will be added as a comment under the field in the admin add/edit form.
-      tab: misc
-      sort_order: 150
-    -
-      name: tooltip
-      type: text
-      required: false
-      label: Tooltip
-      title: This will be added as a tooltip in the admin add / edit form
-      tab: misc
-      sort_order: 160
+
