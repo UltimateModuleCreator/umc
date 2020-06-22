@@ -358,6 +358,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/text.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/text.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     product_attribute:
@@ -379,6 +380,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
     product_attribute_multiselect:
@@ -407,6 +409,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/multiple.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute.html.twig"
     product_attribute_set:
@@ -428,6 +431,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute_set.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/integer.html.twig"
         schema_fk: "@UmcMagento/attribute/schema_fk/product_attribute_set.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
@@ -456,6 +460,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/product_attribute_set.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/multiple.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/product_attribute_set.html.twig"
     country:
@@ -477,6 +482,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/country.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/country.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/country.html.twig"
     country_multiselect:
@@ -504,6 +510,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/country.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/country_multiple.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/country.html.twig"
     date:
@@ -529,6 +536,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/date.html.twig"
         form: "@UmcMagento/attribute/form/date.html.twig"
         frontend: "@UmcMagento/attribute/frontend/date.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/date.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/date.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/date.html.twig"
     decimal:
@@ -549,6 +557,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/text.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/decimal.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/text.html.twig"
         serrialized_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     dropdown:
@@ -569,6 +578,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/option.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/option.html.twig"
     file:
@@ -588,6 +598,7 @@ magento_attribute_type:
         model: "@UmcMagento/attribute/model/default.html.twig"
         form: "@UmcMagento/attribute/form/file.html.twig"
         frontend: "@UmcMagento/attribute/frontend/file.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
     image:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
@@ -607,6 +618,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/image.html.twig"
         form: "@UmcMagento/attribute/form/file.html.twig"
         frontend: "@UmcMagento/attribute/frontend/image.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
     integer:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: int
@@ -626,6 +638,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/text.html.twig"
         form: "@UmcMagento/attribute/form/text.html.twig"
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/integer.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/text.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
     multiselect:
@@ -653,6 +666,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/select.html.twig"
         frontend: "@UmcMagento/attribute/frontend/option.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/multiple.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/select.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/option.html.twig"
     textarea:
@@ -675,6 +689,7 @@ magento_attribute_type:
         frontend: "@UmcMagento/attribute/frontend/text.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/textarea.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/text.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
     wysiwyg:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       type_hint: string
@@ -689,6 +704,7 @@ magento_attribute_type:
         model: "@UmcMagento/attribute/model/default.html.twig"
         form: "@UmcMagento/attribute/form/wysiwyg.html.twig"
         frontend: "@UmcMagento/attribute/frontend/editor.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/default.html.twig"
     yesno:
       class: 'App\Umc\MagentoBundle\Model\Attribute\Type\BaseType'
       source_model: Magento\Config\Model\Config\Source\Yesno
@@ -708,6 +724,7 @@ magento_attribute_type:
         grid: "@UmcMagento/attribute/grid/select.html.twig"
         form: "@UmcMagento/attribute/form/yesno.html.twig"
         frontend: "@UmcMagento/attribute/frontend/yesno.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/yesno.html.twig"
         dynamic_form: "@UmcMagento/attribute/form/dynamic/yesno.html.twig"
         dynamic_frontend: "@UmcMagento/attribute/frontend/dynamic/yesno.html.twig"
     dynamic:
@@ -726,6 +743,7 @@ magento_attribute_type:
         model: "@UmcMagento/attribute/model/dynamic.html.twig"
         form: "@UmcMagento/attribute/form/dynamic.html.twig"
         frontend: "@UmcMagento/attribute/frontend/dynamic.html.twig"
+        unit_test: "@UmcMagento/attribute/unit_test/dynamic.html.twig"
 magento_dynamic_rows_type:
   flags:
     extends: magento_attribute_type

@@ -1,0 +1,175 @@
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+{% if entity.hasAttributesWithType('dynamic') %}
+use Magento\Framework\Serialize\Serializer\Json;
+{% endif %}
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
+{
+    /**
+     * @var Context | MockObject
+     */
+    private $context;
+    /**
+     * @var Registry | MockObject
+     */
+    private $registry;
+{% if entity.hasAttributesWithType('dynamic') %}
+    /**
+     * @var Json | MockObject
+     */
+    private $json;
+{% endif %}
+    /**
+     * @var AbstractResource | MockObject
+     */
+    private $resource;
+    /**
+     * @var AbstractDb | MockObject
+     */
+    private $resourceCollection;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}
+     */
+    private ${{ entity.getNameSingular()|camel }};
+
+    /**
+     * setup tests
+     */
+    protected function setUp()
+    {
+        $this->context = $this->createMock(Context::class);
+        $this->registry = $this->createMock(Registry::class);
+{% if entity.hasAttributesWithType('dynamic') %}
+        $this->json = $this->createMock(Json::class);
+{% endif %}
+        $this->resource = $this->createMock(\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $this->resourceCollection = $this->createMock(AbstractDb::class);
+        $this->{{ entity.getNameSingular()|camel }} = new {{ entity.getNameSingular()|camel|ucfirst }}(
+            $this->context,
+            $this->registry,
+{% if entity.hasAttributesWithType('dynamic') %}
+            $this->json,
+{% endif %}
+            $this->resource,
+            $this->resourceCollection,
+            []
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::get{{ entity.getNameSingular()|camel|ucfirst }}Id
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::set{{ entity.getNameSingular()|camel|ucfirst }}Id
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Id()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->set{{ entity.getNameSingular()|camel|ucfirst }}Id(1);
+        $this->assertEquals(1, $this->{{ entity.getNameSingular()|camel }}->get{{ entity.getNameSingular()|camel|ucfirst }}Id());
+    }
+
+{% for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderTemplate('unit_test')|raw }}
+{% endfor %}
+{% if entity.isStore() %}
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::setStoreId
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getStoreId
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSetStoreId()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->setStoreId([0, 1]);
+        $this->assertEquals([0, 1], $this->{{ entity.getNameSingular()|camel }}->getStoreId());
+    }
+
+{% endif %}
+{% if entity.isFrontend() %}
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::setMetaTitle
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getMetaTitle
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSetMetaTitle()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->setMetaTitle('meta_title');
+        $this->assertEquals('meta_title', $this->{{ entity.getNameSingular()|camel }}->getMetaTitle());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::setMetaKeywords
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getMetaKeywords
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSetMetaKeywords()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->setMetaKeywords('meta_keywords');
+        $this->assertEquals('meta_keywords', $this->{{ entity.getNameSingular()|camel }}->getMetaKeywords());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getMetaDescription
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::setMetaDescription
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSetMetaDescription()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->setMetaDescription('meta_description');
+        $this->assertEquals('meta_description', $this->{{ entity.getNameSingular()|camel }}->getMetaDescription());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getIsActive
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::setIsActive
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSetIsActive()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->setIsActive(1);
+        $this->assertEquals(1, $this->{{ entity.getNameSingular()|camel }}->getIsActive());
+    }
+
+{% endif %}
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getIdentities
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testGetIdentities()
+    {
+        $this->assertEquals(['easylyfe_testing_{{ entity.getNameSingular()|camel }}_'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
+        $this->{{ entity.getNameSingular()|camel }}->setId(1);
+        $this->assertEquals(['easylyfe_testing_{{ entity.getNameSingular()|camel }}_1'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
+    }
+}

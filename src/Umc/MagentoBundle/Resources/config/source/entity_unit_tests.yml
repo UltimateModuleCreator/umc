@@ -34,3 +34,11 @@
   source: "@UmcMagento/source/Test/Unit/ViewModel/_Entity_/UrlTest.php"
   label: "Entity frontend url view model unit test"
   scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/Search/_Entity_Test.php"
+  label: "Entity admin search model unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/_Entity_Test.php"
+  label: "Entity model unit test"
+  scope: entity

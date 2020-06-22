@@ -1,0 +1,40 @@
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::get{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::set{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function test{{ attribute.getCode()|camel|ucfirst }}WithString()
+    {
+        $this->json->expects($this->never())->method('serialize');
+        $this->{{ entity.getNameSingular()|camel }}->set{{ attribute.getCode()|camel|ucfirst }}('{{ attribute.getCode()|snake }}');
+        $this->assertEquals('{{ attribute.getCode()|snake }}', $this->{{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::get{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::set{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSet{{ attribute.getCode()|camel|ucfirst }}WithArray()
+    {
+        $this->json->expects($this->once())->method('serialize')->willReturn('{{ attribute.getCode()|snake }}');
+        $this->json->expects($this->once())->method('unserialize')->willReturn(['{{ attribute.getCode()|snake }}']);
+        $this->{{ entity.getNameSingular()|camel }}->set{{ attribute.getCode()|camel|ucfirst }}(['{{ attribute.getCode()|snake }}']);
+        $this->assertEquals(['{{ attribute.getCode()|snake }}'], $this->{{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}(true));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::get{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::set{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSet{{ attribute.getCode()|camel|ucfirst }}WithException()
+    {
+        $this->json->expects($this->once())->method('unserialize')
+            ->willThrowException($this->createMock(\InvalidArgumentException::class));
+        $this->{{ entity.getNameSingular()|camel }}->set{{ attribute.getCode()|camel|ucfirst }}('{{ attribute.getCode()|snake }}');
+        $this->assertEquals([], $this->{{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}(true));
+    }

@@ -37,7 +37,7 @@ attribute_type:
       label: Date
       input_type: Date
       can_be_dynamic: true
-      flag:
+      flags:
         can_show_in_grid: true
         can_be_required: true
     decimal:

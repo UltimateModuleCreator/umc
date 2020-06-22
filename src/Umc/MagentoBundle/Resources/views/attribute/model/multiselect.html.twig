@@ -5,7 +5,7 @@
     public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}})
     {
         if (is_array(${{ attribute.getCode()|camel}})) {
-            $selectTwo = implode(',', ${{ attribute.getCode()|camel}});
+            ${{ attribute.getCode()|camel}} = implode(',', ${{ attribute.getCode()|camel}});
         }
         return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
     }

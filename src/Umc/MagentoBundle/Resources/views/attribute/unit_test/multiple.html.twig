@@ -1,0 +1,14 @@
+{% if setterValue is not defined %}{% set setterValue = "['" ~ attribute.getCode() ~ "1', '"~ attribute.getCode() ~"2']"%}{% endif %}{% if getterValue is not defined %}{% set getterValue = "'" ~ attribute.getCode() ~ "1,"~ attribute.getCode() ~"2'"%}{% endif %}    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::set{{ attribute.getCode()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::get{{ attribute.getCode()|camel|ucfirst }}
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSet{{ attribute.getCode()|camel|ucfirst }}()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->set{{ attribute.getCode()|camel|ucfirst }}({{ setterValue|raw }});
+        $this->assertEquals({{ getterValue|raw }}, $this->{{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}());
+        $this->assertEquals({{ setterValue|raw }}, $this->{{ entity.getNameSingular()|camel }}->get{{ attribute.getCode()|camel|ucfirst }}(true));
+    }

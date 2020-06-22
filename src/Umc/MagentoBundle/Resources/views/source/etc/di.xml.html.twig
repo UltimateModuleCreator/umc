@@ -19,7 +19,7 @@
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
         <arguments>
             <argument name="searchModules" xsi:type="array">
-{% for entity in module.hasEntitiesWithFlag('search') %}
+{% for entity in module.getEntitiesWithFlag('search') %}
                 <item name="{{ module.getNamespace()|snake }}_{{module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" xsi:type="array">
                     <item name="class" xsi:type="string">{{ entity.getSearchModel() }}</item>
                     <item name="acl" xsi:type="string">{{ entity.getAclName() }}</item>

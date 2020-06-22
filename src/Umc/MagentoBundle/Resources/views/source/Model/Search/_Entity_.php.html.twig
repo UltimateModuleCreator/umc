@@ -6,7 +6,7 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Search;
 
 {{ sortStart() }}
 use Magento\Framework\DataObject;
-use Magento\Backend\Helper\Data;
+use Magento\Framework\UrlInterface;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
 {{ sortEnd() }}
 
@@ -16,11 +16,9 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel
 class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
 {
     /**
-     * Adminhtml data
-     *
-     * @var Data
+     * @var UrlInterface
      */
-    private $adminhtmlData;
+    private $url;
 
     /**
      * @var CollectionFactory
@@ -29,14 +27,17 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
 
     /**
      * @param CollectionFactory $collectionFactory
-     * @param Data $adminhtmlData
+     * @param UrlInterface $adminhtmlData
+     * @param array $data
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        Data $adminhtmlData
+        UrlInterface $url,
+        array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->adminhtmlData = $adminhtmlData;
+        $this->url = $url;
+        parent::__construct($data);
     }
 
     /**
@@ -53,17 +54,16 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
         }
 
         $query = $this->getQuery();
-        $collection = $this->collectionFactory->create()
-            ->addFieldToFilter('{{ entity.getNameAttribute().getCode() }}', ['like' => '%' . $query . '%'])
-            ->setCurPage($this->getStart())
-            ->setPageSize($this->getLimit())
-            ->load();
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('{{ entity.getNameAttribute().getCode() }}', ['like' => '%' . $query . '%']);
+        $collection->setCurPage($this->getStart());
+        $collection->setPageSize($this->getLimit());
         $result[] = [
             'id' => '{{ entity.getNameSingular()|snake }}0',
             'type' => '',
             'name' => __('"%1" in {{ entity.getLabelSingular() }}', $query),
             'description' => '',
-            'url' => $this->adminhtmlData->getUrl(
+            'url' => $this->url->getUrl(
                 '{{ entity.getAdminRoute('index') }}',
                 ['_query' => "search=" . $query]
             ),
@@ -74,7 +74,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends DataObject
                 'type' => __('{{ entity.getLabelSingular() }}'),
                 'name' => __('{{ entity.getLabelSingular() }} %1', $item->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}()),
                 'description' => __('{{ entity.getLabelSingular() }} %1', $item->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}()),
-                'url' => $this->adminhtmlData->getUrl(
+                'url' => $this->url->getUrl(
                     '{{ entity.getAdminRoute('edit') }}',
                     ['{{ entity.getPk() }}' => $item->getId()]
                 ),

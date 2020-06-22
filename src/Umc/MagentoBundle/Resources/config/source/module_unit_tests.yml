@@ -89,6 +89,9 @@
   source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/DynamicRowsTest.php"
   label: "Multiple select form data modifier unit test"
 -
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/MultiselectTest.php"
+  label: "Null form data modifier unit test"
+-
   source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/NullModifierTest.php"
   label: "Null form data modifier unit test"
 -

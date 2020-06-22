@@ -4,7 +4,7 @@
 {{ indent }}    [
 {{ indent }}        'type' => 'image',
 {{ indent }}        'resize' => [200],
-{{ indent }}        'path' => 'sample/something/image'
+{{ indent }}        'path' => '{{ entity.getUploadFolder('image') }}'
 {{ indent }}    ]
 {{ indent }}); ?>
 {{ indent }}<img src="<?= $block->escapeUrl($src); ?>" alt="" />

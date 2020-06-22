@@ -152,6 +152,26 @@ class ViewTest extends TestCase
 
     /**
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::execute
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::getNoRouteResult
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testExecuteDisabled()
+    {
+        $this->request->method('getParam')->willReturn(1);
+{% if entity.isStore %}
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(false, [0]));
+{% else %}
+        $this->{{ entity.getNameSingular()|camel }}Repository->method('get')->willReturn($this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(false));
+{% endif %}
+        $forward = $this->createMock(Forward::class);
+        $this->resultFactory->method('create')->willReturn($forward);
+        $forward->expects($this->once())->method('forward');
+        $this->scopeConfig->expects($this->never())->method('isSetFlag');
+        $this->assertEquals($forward, $this->view->execute());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::execute
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
      */
     public function testExecuteNoBreadcrumbs()
