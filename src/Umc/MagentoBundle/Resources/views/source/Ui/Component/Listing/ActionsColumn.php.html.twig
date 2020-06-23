@@ -63,9 +63,9 @@ class ActionsColumn extends Column
                 ],
                 'delete' => [
                     'href' => $this->urlBuilder->getUrl($this->uiConfig->getDeleteUrlPath(), $params),
-                    'label' => __('Delete'),
+                    'label' => __('Delete')->render(),
                     'confirm' => [
-                        'title' => __('Delete "${ $.$data.%1 }"', $this->uiConfig->getNameAttribute())->render(),
+                        'title' => __('Delete %1', $item[$this->uiConfig->getNameAttribute()] ?? '')->render(),
                         'message' => $this->uiConfig->getDeleteMessage()
                     ],
                     'post' => true

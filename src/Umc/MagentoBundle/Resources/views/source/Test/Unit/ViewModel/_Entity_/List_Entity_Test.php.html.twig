@@ -46,7 +46,7 @@ class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(){{ extraVars.setUpReturnType }}
     {
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);

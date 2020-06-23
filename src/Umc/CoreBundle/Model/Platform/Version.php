@@ -116,7 +116,11 @@ class Version
         return $config[0];
     }
 
-    public function getValidatorPoolServiceId()
+    /**
+     * @return string
+     * @throws ConfigException
+     */
+    public function getValidatorPoolServiceId(): string
     {
         $config = $this->getConfig('validator_pool');
         if (!isset($config[0])) {
@@ -131,9 +135,18 @@ class Version
      * @param bool $withPlatform
      * @return array
      */
-    public function getCodingStandards($withPlatform = true)
+    public function getCodingStandards($withPlatform = true):array
     {
         return $this->getConfig('coding_standards', $withPlatform);
+    }
+
+    /**
+     * @param bool $withPlatform
+     * @return array
+     */
+    public function getExtraVars($withPlatform = true): array
+    {
+        return $this->getConfig('extra_vars', $withPlatform);
     }
 
     /**

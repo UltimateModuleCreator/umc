@@ -209,6 +209,17 @@ class VersionTest extends TestCase
     }
 
     /**
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::getExtraVars
+     * @covers \App\Umc\CoreBundle\Model\Platform\Version::__construct
+     */
+    public function testGetExtraVars()
+    {
+        $version = new Version('code', ['config' => ['extra_vars' => ['vars']]]);
+        $version->setPlatform($this->platform);
+        $this->assertEquals(['vars'], $version->getExtraVars());
+    }
+
+    /**
      * @covers \App\Umc\CoreBundle\Model\Platform\Version::getPlatform
      * @covers \App\Umc\CoreBundle\Model\Platform\Version::setPlatform
      * @covers \App\Umc\CoreBundle\Model\Platform\Version::__construct

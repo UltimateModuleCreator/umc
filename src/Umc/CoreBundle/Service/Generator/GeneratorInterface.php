@@ -27,7 +27,8 @@ interface GeneratorInterface
     /**
      * @param Module $module
      * @param array $fileConfig
+     * @param array $vars
      * @return array
      */
-    public function generateContent(Module $module, array $fileConfig): array;
+    public function generateContent(Module $module, array $fileConfig, array $vars = []): array;
 }

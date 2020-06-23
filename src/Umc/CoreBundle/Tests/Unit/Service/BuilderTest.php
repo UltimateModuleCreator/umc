@@ -141,6 +141,7 @@ class BuilderTest extends TestCase
         $this->configLoaderFactory->method('createByVersion')->willReturn($configLoader);
         $configLoader->method('getConfig')->willReturn([
             ['scope' => 'module'],
+            ['scope' => 'module', 'disabled' => true],
             ['scope' => 'entity'],
         ]);
         $this->executor->method('run')->willReturn(['file1', 'file2']);

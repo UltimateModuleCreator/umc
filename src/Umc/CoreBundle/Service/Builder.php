@@ -112,10 +112,14 @@ class Builder
         }
         $loader = $this->configLoaderFactory->createByVersion($version);
         $generatorPool = $this->generatorPoolLocator->getGeneratorPool($version);
+        $extraVars = $version->getExtraVars(true);
         $files = [];
         foreach ($loader->getConfig() as $value) {
-             $newFiles = $generatorPool->getGenerator($value['scope'])->generateContent($module, $value);
-             $files = array_merge($files, $newFiles);
+            if (isset($value['disabled']) && $value['disabled']) {
+                continue;
+            }
+            $newFiles = $generatorPool->getGenerator($value['scope'])->generateContent($module, $value, $extraVars);
+            $files = array_merge($files, $newFiles);
         }
         $repoRoot = $this->repository->getRoot($version);
         $root = $repoRoot . '/' . $module->getExtensionName();

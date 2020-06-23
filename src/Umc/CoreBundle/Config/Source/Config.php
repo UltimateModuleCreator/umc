@@ -38,6 +38,7 @@ class Config implements ConfigurationInterface
                         ->scalarNode('source')->end()
                         ->scalarNode('label')->end()
                         ->scalarNode('destination')->end()
+                        ->scalarNode('disabled')->defaultValue(false)->end()
                         ->enumNode('scope')->values(['module', 'entity', 'attribute'])->defaultValue('module')->end()
                     ->end()
                     ->beforeNormalization()

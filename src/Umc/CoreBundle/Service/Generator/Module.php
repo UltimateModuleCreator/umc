@@ -50,20 +50,24 @@ class Module implements GeneratorInterface
     /**
      * @param \App\Umc\CoreBundle\Model\Module $module
      * @param array $fileConfig
+     * @param array $vars
      * @return array
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function generateContent(\App\Umc\CoreBundle\Model\Module $module, array $fileConfig): array
-    {
+    public function generateContent(
+        \App\Umc\CoreBundle\Model\Module $module,
+        array $fileConfig,
+        array $vars = []
+    ): array {
         if (!isset($fileConfig['source'])) {
             throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
         }
         if (!isset($fileConfig['destination'])) {
             throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
         }
-        $content = $this->twig->render($fileConfig['source'], ['module' => $module]);
+        $content = $this->twig->render($fileConfig['source'], ['module' => $module, 'extraVars' => $vars]);
         if (!trim($content)) {
             return [];
         }

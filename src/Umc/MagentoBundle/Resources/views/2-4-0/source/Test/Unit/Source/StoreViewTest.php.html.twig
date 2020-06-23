@@ -40,6 +40,8 @@ class StoreViewTest extends TestCase
             $this->systemStore,
             $this->escaper
         );
+        $this->escaper->method('escapeJs')->willReturnArgument(0);
+        $this->escaper->method('escapeHtml')->willReturnArgument(0);
     }
 
     /**
@@ -66,27 +68,22 @@ class StoreViewTest extends TestCase
             ],
             [
                 'label' => 'website1',
-                '__disableTmpl' => 1,
                 'value' => [
                     [
                         'label' => '    group1',
-                        '__disableTmpl' => 1,
                         'value' => [
                             [
                                 'label' => '        storeview1',
                                 'value' => 1,
-                                '__disableTmpl' => 1
                             ]
                         ]
                     ],
                     [
                         'label' => '    group2',
-                        '__disableTmpl' => 1,
                         'value' => [
                             [
                                 'label' => '        storeview2',
                                 'value' => 2,
-                                '__disableTmpl' => 1
                             ]
                         ]
                     ]

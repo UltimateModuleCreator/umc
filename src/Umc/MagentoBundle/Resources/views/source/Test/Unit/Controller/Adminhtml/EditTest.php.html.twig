@@ -65,7 +65,7 @@ class EditTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(){{ extraVars.setUpReturnType }}
     {
         $this->context = $this->createMock(Context::class);
         $this->entityUiManager = $this->createMock(EntityUiManagerInterface::class);
@@ -99,8 +99,8 @@ class EditTest extends TestCase
         $this->uiConfig->expects($this->once())->method('getListPageTitle')->willReturn('PageTitle');
         $this->resultPage->expects($this->once())->method('setActiveMenu')->with('SelectedMenu');
         $this->pageTitle->expects($this->exactly(2))->method('prepend')->withConsecutive(
-            $this->equalTo('PageTitle'),
-            $this->equalTo('name')
+            [$this->equalTo('PageTitle')],
+            [$this->equalTo('name')]
         );
         $this->entity->method('getId')->willReturn(1);
         $this->entity->method('getData')->willReturn('name');
@@ -119,8 +119,8 @@ class EditTest extends TestCase
         $this->resultPage->expects($this->once())->method('setActiveMenu')->with('SelectedMenu');
         $this->uiConfig->expects($this->once())->method('getNewLabel')->willReturn('new');
         $this->pageTitle->expects($this->exactly(2))->method('prepend')->withConsecutive(
-            $this->equalTo('PageTitle'),
-            $this->equalTo('new')
+            [$this->equalTo('PageTitle')],
+            [$this->equalTo('new')]
         );
         $this->entity->method('getId')->willReturn(null);
         $this->entity->expects($this->never())->method('getData');

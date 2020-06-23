@@ -58,12 +58,13 @@ class Entity implements GeneratorInterface
     /**
      * @param Module $module
      * @param array $fileConfig
+     * @param array $vars
      * @return array
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function generateContent(Module $module, array $fileConfig): array
+    public function generateContent(Module $module, array $fileConfig, array $vars = []): array
     {
         if (!isset($fileConfig['source'])) {
             throw new \InvalidArgumentException("Missing source for file config " . print_r($fileConfig, true));
@@ -74,7 +75,10 @@ class Entity implements GeneratorInterface
         $result = [];
         foreach ($module->getEntities() as $entity) {
             $destination = $this->processDestination($fileConfig['destination'], $entity);
-            $content = $this->twig->render($fileConfig['source'], ['entity' => $entity, 'module' => $module]);
+            $content = $this->twig->render(
+                $fileConfig['source'],
+                ['entity' => $entity, 'module' => $module, 'extraVars' => $vars]
+            );
             if (trim($content)) {
                 $result[$destination] = $this->processor->process($content);
             }

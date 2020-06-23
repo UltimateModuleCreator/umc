@@ -48,7 +48,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(){{ extraVars.setUpReturnType }}
     {
         $this->context = $this->createMock(Context::class);
         $this->registry = $this->createMock(Registry::class);

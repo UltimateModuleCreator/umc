@@ -27,8 +27,23 @@ magento:
       - PSR2
       - PSR12
       - "%kernel.project_dir%/vendor/magento/magento-coding-standard/Magento2"
+    extra_vars:
+      setUpReturnType: ''
   versions:
     -
-      label: 2.3.4+
+      label: 2.4
+      code: 2-4-0
+      sort_weight: 20
+      config:
+        source:
+          - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/module.yml'
+          - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/module_unit_tests.yml'
+          - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/entity.yml'
+          - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/entity_unit_tests.yml'
+          - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/source/2-4-0.yml'
+        extra_vars:
+          setUpReturnType: ': void'
+    -
+      label: 2.3 ( >= 2.3.4)
       code: 2-3-4
       sort_weight: 10

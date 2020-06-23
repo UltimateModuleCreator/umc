@@ -49,7 +49,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}ListRepoTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp()
+    protected function setUp(){{ extraVars.setUpReturnType }}
     {
         $this->searchResultsFactory = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory::class);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
