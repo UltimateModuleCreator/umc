@@ -1,0 +1,231 @@
+{% extends "@UmcCore/base.html.twig" %}
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h3>UMC Help</h3>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse">
+                <ul class="nav nav-pills">
+                    <li>
+                        <a class="nav-link" href="#description">Description</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#requirements">Requirements</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#installation">Installation</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#how-to-use">How To Use</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#defaults">Setting defaults</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#faq">FAQs</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#coding-standards">Coding Standards</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#release-notes">Release Notes</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#contribute">Contributing to the UMC</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="card-body">
+            <div class="card" id="description">
+                <div class="card-header">
+                    <h3>Description</h3>
+                </div>
+                <div class="card-body">
+                    <div>Ultimate module creator (UMC) is a standalone application for creating CRUD modules / bundles /  for different CMS</div>
+                    <div>You can use the UI to create your entities just like you would use PhpMyAdmin to create tables.</div>
+                    <div>When you are done, you can download immediately the module from the popup that appears or you can find your module in var/umc/{platform}/{version} folder.</div>
+                    <div>This application is intended for developers. It should not be used in production.</div>
+                    <div>Also, the modules you create with it should be tested before moved to production.</div>
+                    <div><strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/5" target="_blank">donating</a></strong></div>
+                </div>
+            </div>
+            <div class="card" id="requirements">
+                <div class="card-header">
+                    <h3>Requirements</h3>
+                </div>
+                <div class="card-body">
+                    <div>PHP version 7.1.3 or higher. Some PHP extensions may be needed. See composer.json for more details.</div>
+                </div>
+            </div>
+            <div class="card" id="installation">
+                <div class="card-header">
+                    <h3>Installation</h3>
+                </div>
+                <div class="card-body">
+                    <div>If you are reading this, them probably you already installed it. But anyway....</div>
+                    <ul>
+                        <li>create a folder on your server.</li>
+                        <li>navigate to that folder</li>
+                        <li>clone this repo: <code>https://github.com/UltimateModuleCreator/umc.git .</code> (notice the dot at the end)</li>
+                        <li>run <code>composer install</code></li>
+                        <li>go to that folder in your browser.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card" id="how-to-use">
+                <div class="card-header">
+                    <h3>How to use</h3>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>From the top left menu, select "All Platforms." and you should see he list of supported platforms.</li>
+                        <li>From the "Create Module" column for your desired platform, select the desired version</li>
+                        <li>Fill in the form as you want. Each field has a tooltip explaining what it is used for.</li>
+                        <li>Add as many entities and attributes / fields as you need.</li>
+                        <li>See also the <a href="#faq">FAQ</a> section if something is unclear.</li>
+                        <li>You can also select one of the modules you previously created and edit it.</li>
+                        <li>After you are done, you can find a zip file with your extension in <code>var/umc/{platform}/{version}</code> folder.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card" id="defaults">
+                <div class="card-header">
+                    <h3>Setting defaults</h3>
+                </div>
+                <div class="card-body">
+                    <div>In case you don't like to fill over and over again the same values in the same fields, you can set default values that will prefil your module creation from automatically.</div>
+                    <ul>
+                        <li>From the top left menu, select "All Platforms." and you should see he list of supported platforms.</li>
+                        <li>From the "Settings" column for your desired platform, select the desired version, or the platform defaults.</li>
+                        <li>Fill in default values for available fields.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card" id="faq">
+                <div class="card-header">
+                    <h3>FAQs</h3>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>
+                            <strong>If I edit a module, and copy the files in my platform instance over the previous version, does it work?</strong><br />
+                            Possibly, but most probably not. If you changed the structure of the entities you may need to uninstall manually the module and install it again.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card" id="coding-standards">
+                <div class="card-header">
+                    <h3>Coding Standards</h3>
+                </div>
+                <div class="card-body">
+                    The generated extensions follow the PSR1, PSR2, PSR12 coding standards, but...<br/>
+                    Due to the values filled in the form, you can easily break one of the rules. Special the max 120 chars per line.  <br />
+                    This is not prevented by the UMC, but you will find in the archive that is generated with the module 3 (or 4) files. All of them are located in the `_phpcs` folder. (these files are not useful for the proper functioning of the module you create)<br/>
+                    These files contain the report after running php code sniffer on the generated code with the PSR1, PSR2, PSR12 and the magento coding standards. (for magento only) <br />
+                    If you have your own coding standards you can add them the <code>platform.yml</code> file of the desired platform under the <code>config/coding_standards</code> section.
+                </div>
+            </div>
+            <div class="card" id="release-notes">
+                <div class="card-header">
+                    <h3>Release notes</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Type</th>
+                            <th>Info</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3"><strong>4.0.0-alpha: TBD</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Feature</td>
+                                <td>Support for multiple platforms.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>UI</td>
+                                <td>Changed UI. Not claiming it's better, just different.</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><strong>3.0.0-beta1: Ian 14 2019</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Improvement</td>
+                                <td>Support for Magento 2.3</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Feature</td>
+                                <td>Create frontend files for generated entities</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Improvement</td>
+                                <td>Various UI improvements</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Bug fix</td>
+                                <td>Fixed: wrong ACL generated when adding the entity menu as sumbenu of catalog.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5</th>
+                                <td>Refactoring</td>
+                                <td>Moved away from magic getters. </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><strong>3.0.0-alpha2: Dec 12th 2018</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Improvement</td>
+                                <td>Fancy UI provided by <a href="https://colorlib.com">Colorlib</a> Gentelella - Bootstrap Admin Template</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Feature</td>
+                                <td>Entities can be related to stores (many to many)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Bug Fix</td>
+                                <td>ACL resources matches admin menu structure.</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><strong>3.0.0-alpha1: Nov 26th 2018</strong></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Basic</td>
+                                <td>MVP. Creating simple modules with only admin support.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card" id="contribute">
+                <div class="card-header">
+                    <h3>Contributing to the UMC</h3>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>If you find a bug, report it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a></li>
+                        <li>you have a cool idea for improving it but you don't want to implement it, post it <a href="https://github.com/UltimateModuleCreator/umc/issues">here</a>. There are no guarantees that it will get implemeted though.</li>
+                        <li>you have a cool idea for improving it and you can implement it, feel free to make a PR. But before doing so, make sure that the new code you create it is covered with unit tests and the existing unit tests still pass.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

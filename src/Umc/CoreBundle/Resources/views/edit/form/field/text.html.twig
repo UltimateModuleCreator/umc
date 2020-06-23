@@ -5,12 +5,21 @@
     >
         {{ element.label }}
     </label>
-    <input
-        type="text"
-        name="{{ element.name }}"
-        {% include '@UmcCore/edit/form/elements/validation.html.twig' with {element: element} %}
-        data-bind="value: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') }{% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"
-        class="form-control"
-        {% if element.title %} title="{{ element.title }}" {% endif %}
-    />
+    <div class="input-group mb-2">
+        <input
+            type="text"
+            name="{{ element.name }}"
+            {% include '@UmcCore/edit/form/elements/validation.html.twig' with {element: element} %}
+            data-bind="value: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') }{% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"
+            class="form-control"
+            {% if element.title %} title="{{ element.title }}" {% endif %}
+        />
+        {% if element.title is defined %}
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fa fa-question-circle" data-bind="umcinfo: {title: '{{ element.label }}', 'content':'{{ element.title }}'}"></span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 </div>

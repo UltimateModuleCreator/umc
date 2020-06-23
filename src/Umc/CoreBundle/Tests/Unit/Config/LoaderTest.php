@@ -68,7 +68,7 @@ class LoaderTest extends TestCase
     public function testGetConfig()
     {
         $class = $this->createMock(ConfigurationInterface::class);
-        $loader= new Loader(
+        $loader = new Loader(
             $this->parameterBag,
             $this->modifier,
             $this->processorFactory,
@@ -93,7 +93,7 @@ class LoaderTest extends TestCase
     public function testGetConfigWrongClass()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $loader= new Loader(
+        $loader = new Loader(
             $this->parameterBag,
             $this->modifier,
             $this->processorFactory,

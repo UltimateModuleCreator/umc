@@ -15,6 +15,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  *
  */
+
 declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Tests\Unit\Service;
@@ -31,8 +32,7 @@ use App\Umc\CoreBundle\Service\Generator\Pool\Locator;
 use App\Umc\CoreBundle\Service\Validator\Locator as ValidatorLocator;
 use App\Umc\CoreBundle\Service\Validator\Pool;
 use App\Umc\CoreBundle\Service\Validator\ValidationException;
-use App\Umc\CoreBundle\Service\Validator\ValidatorInterface;
-use App\Umc\MagentoBundle\Model\Module\Factory;
+use App\Umc\CoreBundle\Model\Module\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;

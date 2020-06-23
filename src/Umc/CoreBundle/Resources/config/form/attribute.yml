@@ -55,7 +55,7 @@ attribute:
       dataValidation: custom
       dataValidationRegexp: "^[a-z_]+"
       dataValidationErrorMsg: "Attribute code must consist only of letters and underscore"
-      title: "This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter. There are some naming restriction. For example the code cannot be: 'data', 'child'"
+      title: This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter. There are some naming restriction. For example the code cannot be \'data\', \'child\'
       tab: name
       sort_order: 10
     -
@@ -74,7 +74,7 @@ attribute:
       label: Attribute Type
       dataValidation: validate_required
       options: '%attribute_type%'
-      additionalDataBind: "select2: {width: '100%'}"
+      additionalDataBind: "select2: {}"
       title: This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.
       tab: name
       sort_order: 30
@@ -83,7 +83,7 @@ attribute:
       type: checkbox
       has_default: false
       label: Acts as name
-      title: Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.
+      title: Each entity must have an attribute to behave as \'Name\'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.
       additionalDataBind: "click: function (value) {return $parent.radioChange(value, '_attributes', 'is_name')}, enable:data.type() === 'text'"
       tab: name
       sort_order: 40
@@ -101,7 +101,7 @@ attribute:
       type: checkbox
       has_default: true
       label: Show in admin grid
-      title: "This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as 'Name' will be included by default in the grid."
+      title: This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as \'Name\' will be included by default in the grid.
       additionalDataBind: "enable: data.type() !== 'file' && data.type() !== 'wysiwyg' && data.type() !== 'dynamic'"
       tab: admin
       sort_order: 60
@@ -129,7 +129,7 @@ attribute:
       type: textarea
       required: false
       label: Default value (one per line for multiselects)
-      title: Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.For the moment the default values don't work for all the form elements defined via ui components V2.2.
+      title: Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.For the moment the default values don\'t work for all the form elements defined via ui components V2.2.
       additionalDataBind: 'enable: data.type !== "image" && data.type !== "file" && data.type !== "dynamic" && data.type !== "select" && data.type !== "multiselect"'
       tab: misc
       sort_order: 140

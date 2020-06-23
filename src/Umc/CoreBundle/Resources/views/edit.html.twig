@@ -29,12 +29,14 @@
     <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/form-validator.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('bundles/umccore/umc/umc.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('bundles/umccore/umc/edit.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/info.js') }}"> </script>
     <script type="text/javascript">
         if (typeof UMC === "undefined") {
             UMC = {}
         }
         UMC.config = {{ koConfig|json_encode|raw }};
         UMC.defaults = {{ defaults|json_encode|raw }};
-        $('#umc').umcedit({data: {{ data|json_encode|raw }}});
+        let umcForm = $('#umc');
+        umcForm.umcedit({data: {{ data|json_encode|raw }}});
     </script>
 {% endblock %}

@@ -167,7 +167,7 @@ ko.bindingHandlers.select2 = {
         });
 
         let allBindings = allBindingsAccessor(),
-            select2 = ko.utils.unwrapObservable(allBindings.select2);
+            select2 = Object.assign({"width": "calc(100% - 42px)"}, ko.utils.unwrapObservable(allBindings.select2));
 
         $(el).select2(select2);
     },

@@ -326,7 +326,7 @@ class Entity
             $this->isSearch() && $this->flags[] = 'search';
             $this->isFrontend() && $this->flags[] = 'frontend';
             $this->isStore() && $this->flags[] = 'store';
-            $this->isFooterLinks() && $this->flags[] = 'footer_link';
+            $this->isFooterLinks() && $this->flags[] = 'footer_links';
             $this->isTopMenu() && $this->flags[] = 'top_menu';
             $this->initAttributeCacheData();
             $this->flags = array_merge(

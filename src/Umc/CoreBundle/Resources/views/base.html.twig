@@ -11,15 +11,23 @@
     </head>
     <body>
         <div id="body-loader" class="loading" style="display: none">
-            <span class="loading-icon fa fa-2x fa-hammer">Building your module....Wait for it....</span>
+            <span class="loading-icon">Working on it. Hold my <span class="fa fa-2x fa-beer"></span> </span>
         </div>
         {% block fixed_top %}
         <div class="navbar sticky-top bg-light full-width">
             {% block main_menu %}
-            <div class="float-left">
-                <a href="{{ path('index') }}">
-                    <i class="fa fa-2x fa-puzzle-piece" title="Ultimate Module Creator v{{ appVersion() }}"></i>
+            <div class="dropdown float-left">
+                <a class="btn" data-toggle="dropdown">
+                    <span class="fa fa-bars"></span>
                 </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('index')}}">All Platforms</a>
+                    <a class="dropdown-item" href="{{ path('help')}}">Help</a>
+                </div>
+            </div>
+            <div class="float-left">
+                <i class="fa fa-2x fa-puzzle-piece" title="Ultimate Module Creator v{{ appVersion() }}"></i>
+                <span>UMC v{{ appVersion() }}</span>
             </div>
             <div class="float-right">
                 {% block additional_fixed_top %}{% endblock %}

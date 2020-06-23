@@ -79,6 +79,7 @@ $.widget('umc.umcedit', {
                             textResponse = response.responseText;
                         }
                         let modal = $(self.options.modal);
+                        modal.find('.modal-title').html('');
                         modal.find('.modal-body').html(textResponse);
                         modal.modal('show');
                     }

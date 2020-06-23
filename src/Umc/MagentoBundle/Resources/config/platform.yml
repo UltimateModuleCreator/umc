@@ -31,8 +31,4 @@ magento:
     -
       label: 2.3.4+
       code: 2-3-4
-      sort_weight: 20
-    -
-      label: 2.2.x
-      code: 2-3-x
       sort_weight: 10

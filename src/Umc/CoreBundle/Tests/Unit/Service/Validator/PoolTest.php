@@ -24,7 +24,7 @@ use App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Service\Validator\Pool;
 use App\Umc\CoreBundle\Service\Validator\ValidatorInterface;
-use App\Umc\MagentoBundle\Model\Entity;
+use App\Umc\CoreBundle\Model\Entity;
 use PHPUnit\Framework\TestCase;
 
 class PoolTest extends TestCase

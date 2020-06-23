@@ -35,6 +35,7 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/umccore/ko/ko.js') }}"> </script>
     <script type="text/javascript" src="{{ asset('bundles/umccore/umc/settings.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/info.js') }}"> </script>
     <script type="text/javascript">
         ko.applyBindings(new UMC.Settings({{ values|json_encode|raw }}, {{ fields|json_encode|raw }}));
     </script>

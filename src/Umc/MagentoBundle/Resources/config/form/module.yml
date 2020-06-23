@@ -5,14 +5,14 @@ module:
       type: checkbox
       label: I have Umc_Crud module installed
       required: false
-      title: Umc_Crud description goes here
+      title: Umc_Crud is a Magento module that reduces the boilerplate when creating a CRUD module. More details <a target="_blank" href="https://github.com/UltimateModuleCreator/umc-crud/">here</a>.
       has_default: true
       sort_order: 1000
       tab: base
     -
       name: menu_parent
       options: '%magento_admin_menu%'
-      additionalDataBind: "select2: {width: '100%'}"
+      additionalDataBind: "select2: {}"
     -
       name: config_tab
       type: text

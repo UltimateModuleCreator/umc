@@ -1,5 +1,8 @@
 <div class="form-group"{% if element.containerAttributes is defined %} {{ element.containerAttributes|raw }}{% endif %}>
     <div class="form-check">
+        {% if element.title is defined %}
+        <span class="fa fa-question-circle" data-bind="umcinfo: {title: '{{ element.label }}', 'content':'{{ element.title }}'}"></span>
+        {% endif %}
         <label
             class="form-check-label"
             data-bind="attr: {for: uuid('{{ element.name }}')}"
@@ -13,7 +16,7 @@
                    class="toggle-check-input form-check-input"
                    value="1"
             />
-            <br />
+            <br/>
             <span class="toggle-check-text"></span>
         </label>
     </div>

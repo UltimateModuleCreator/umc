@@ -110,7 +110,6 @@ attribute_type:
         full_text: true
     yesno:
       label: Yes/No
-      source_model: Magento\Config\Model\Config\Source\Yesno
       input_type: Checkbox (toggle)
       can_be_dynamic: true
       flags:

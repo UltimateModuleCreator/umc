@@ -23,8 +23,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Service\Validator;
 
 use App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Service\Validator\EntityName;
-use App\Umc\MagentoBundle\Model\Entity;
-use PHPUnit\Framework\MockObject\MockObject;
+use App\Umc\CoreBundle\Model\Entity;
 use PHPUnit\Framework\TestCase;
 
 class EntityNameTest extends TestCase

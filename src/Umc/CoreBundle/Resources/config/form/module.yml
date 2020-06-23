@@ -55,7 +55,7 @@ module:
       has_default: true
       label: License
       required: false
-      title: The text you put here will be added at the top of (almost) each file in the module you create. Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year. If you don't want any License text on your files just leave this field empty.
+      title: The text you put here will be added at the top of (almost) each file in the module you create. Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year. If you don\'t want any License text on your files just leave this field empty.
       tab: base
       sort_order: 30
     -
@@ -72,7 +72,6 @@ module:
       has_default: true
       label: Admin parent menu ID
       required: false
-#      additionalDataBind: 'select2: {}'
       title: This is the parent menu id of the module menu. Leave empty to add in top menu.
       options: '%admin_menu%'
       sort_order: 50

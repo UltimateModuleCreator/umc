@@ -14,13 +14,14 @@
  *
  */
 
-jQuery('document').ready(function ($) {
-    function hackTheHeight()
-    {
-        $('.main_container').css('min-height', $(window).height());
+ko.bindingHandlers.umcinfo = {
+    init: function (el, valueAccessor, allBindingsAccessor, viewModel) {
+        let allBindings = allBindingsAccessor().umcinfo || {};
+        $(el).on('click', function () {
+            let modal = $('[role=dialog]:first');
+            modal.find('.modal-title').html(allBindings.title || '')
+            modal.find('.modal-body').html(allBindings.content || '')
+            modal.modal('show');
+        });
     }
-    $(window).resize(function ($) {
-        hackTheHeight();
-    })
-    hackTheHeight();
-});
+}

@@ -5,11 +5,20 @@
     >
         {{ element.label }}
     </label>
-    <textarea
-            name="{{ element.name }}"
-            {% if element.required is defined and element.required %} required="required" {% endif %}
-            data-bind="value: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') }{% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"
-            class="form-control"
-            {% if element.title %} title="{{ element.title }}" {% endif %}
-    ></textarea>
+    <div class="input-group mb-2">
+        <textarea
+                name="{{ element.name }}"
+                {% if element.required is defined and element.required %} required="required" {% endif %}
+                data-bind="value: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') }{% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"
+                class="form-control"
+                {% if element.title %} title="{{ element.title }}" {% endif %}
+        ></textarea>
+        {% if element.title is defined %}
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fa fa-question-circle" data-bind="umcinfo: {title: '{{ element.label }}', 'content':'{{ element.title|escape }}'}"></span>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>
