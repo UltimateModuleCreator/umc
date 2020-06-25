@@ -1,7 +1,0 @@
--
-  source: "@UmcMagento/source/Test/Unit/Source/StoreViewTest.php"
-  disabled: true
--
-  source: "@UmcMagento/2-4-0/source/Test/Unit/Source/StoreViewTest.php"
-  destination: Test/Unit/Source/StoreViewTest.php
-  label: "Options source model unit test"

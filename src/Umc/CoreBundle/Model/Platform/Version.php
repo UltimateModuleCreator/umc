@@ -135,7 +135,7 @@ class Version
      * @param bool $withPlatform
      * @return array
      */
-    public function getCodingStandards($withPlatform = true):array
+    public function getCodingStandards($withPlatform = true): array
     {
         return $this->getConfig('coding_standards', $withPlatform);
     }

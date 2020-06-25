@@ -31,7 +31,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
         $this->url = $this->createMock(UrlInterface::class);

@@ -23,10 +23,10 @@
 {% endfor %}
         </index>
 {% for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderTemplate('schema_fk')|raw }}{% endfor %}
+{% endif %}
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="{{ entity.getPk() }}"/>
         </constraint>
-{% endif %}
     </table>
 {% if entity.isStore() %}
     <table name="{{ entity.getStoreTableName() }}" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Store Link Table">

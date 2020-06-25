@@ -42,6 +42,7 @@
                 <argument key="module" type="service" id="magento.module.composite.validator" />
                 <argument key="entity" type="service" id="magento.entity.composite.validator" />
                 <argument key="attribute" type="service" id="magento.attribute.composite.validator" />
+                <argument key="dynamic" type="service" id="magento.dynamic.composite.validator" />
             </argument>
         </service>
         <service id="magento.module.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
@@ -53,6 +54,20 @@
                 <argument key="magento">Magento</argument>
             </argument>
             <argument key="$errorMessage">Namespace cannot be %s. Please be creative</argument>
+            <tag name="magento.module.validator" />
+        </service>
+        <service id="magento.module.entities.validator" class="App\Umc\CoreBundle\Service\Validator\Children">
+            <argument key="$getter" type="string">getEntities</argument>
+            <argument key="$nameGetter" type="string">getExtensionName</argument>
+            <argument key="$errorMessage">Module "%%s" must have at least one entity</argument>
+            <tag name="magento.module.validator" />
+        </service>
+
+        <service id="magento.module.entities.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getEntities</argument>
+            <argument key="$nameGetter" type="string">getExtensionName</argument>
+            <argument key="$errorMessage">Module "%%s" has multiple entities with the Name Singular "%%s"</argument>
+            <argument key="$childUniqueGetter">getNameSingular</argument>
             <tag name="magento.module.validator" />
         </service>
 
@@ -80,6 +95,20 @@
         <service id="App\Umc\CoreBundle\Service\Validator\EntityName" class="App\Umc\CoreBundle\Service\Validator\EntityName">
             <tag name="magento.entity.validator" />
         </service>
+        <service id="magento.entity.attributes.validator" class="App\Umc\CoreBundle\Service\Validator\Children">
+            <argument key="$getter" type="string">getAttributes</argument>
+            <argument key="$nameGetter" type="string">getLabelSingular</argument>
+            <argument key="$errorMessage">Entity "%%s" must have at least one attribute</argument>
+            <tag name="magento.entity.validator" />
+        </service>
+
+        <service id="magento.entity.attributes.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getAttributes</argument>
+            <argument key="$nameGetter" type="string">getLabelSingular</argument>
+            <argument key="$errorMessage">Entity "%%s" has multiple attributes with the Code "%%s"</argument>
+            <argument key="$childUniqueGetter">getCode</argument>
+            <tag name="magento.entity.validator" />
+        </service>
 
         <service id="magento.attribute.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
             <argument key="$validators" type="tagged_iterator" tag="magento.attribute.validator" />
@@ -94,6 +123,16 @@
                 <argument key="data">data</argument>
             </argument>
             <argument key="$errorMessage">Attribute code cannot be '%s'. It conflicts with the magento method names</argument>
+            <tag name="magento.attribute.validator" />
+        </service>
+        <service id="magento.dynamic.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.dynamic.validator" />
+        </service>
+        <service id="magento.attribute.dynamic.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getDynamic</argument>
+            <argument key="$nameGetter" type="string">getLabel</argument>
+            <argument key="$errorMessage">Attribute "%%s" has multiple dynamic fields with the Code "%%s"</argument>
+            <argument key="$childUniqueGetter">getCode</argument>
             <tag name="magento.attribute.validator" />
         </service>
         <!--[-] validators -->

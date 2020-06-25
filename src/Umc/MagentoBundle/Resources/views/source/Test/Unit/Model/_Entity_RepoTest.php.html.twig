@@ -37,7 +37,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}RepoTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->factory = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}InterfaceFactory::class);
         $this->resource = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}::class);

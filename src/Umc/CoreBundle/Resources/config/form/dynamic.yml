@@ -38,7 +38,7 @@ dynamic:
     -
       name: code
       type: text
-      label: Attribute Code
+      label: Field Code
       dataValidation: custom
       dataValidationRegexp: "^[a-z_]+"
       dataValidationErrorMsg: "Attribute code must consist only of letters and underscore"

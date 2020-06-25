@@ -6,8 +6,10 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Vie
 
 {{ sortStart() }}
 use Magento\Framework\View\Element\BlockFactory;
+{% if entity.isStore() %}
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+{% endif %}
 use Magento\Theme\Block\Html\Pager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,10 +20,12 @@ use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity
 
 class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
 {
+{% if entity.isStore() %}
     /**
      * @var StoreManagerInterface | MockObject
      */
     private $storeManager;
+{% endif %}
     /**
      * @var CollectionFactory | MockObject
      */
@@ -46,16 +50,20 @@ class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
+{% if entity.isStore() %}
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager->method('getStore')->willReturn($this->createMock(StoreInterface::class));
+{% endif %}
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
         $this->blockFactory = $this->createMock(BlockFactory::class);
         $this->collection = $this->createMock(Collection::class);
         $this->pager = $this->createMock(Pager::class);
-        $this->storeManager->method('getStore')->willReturn($this->createMock(StoreInterface::class));
         $this->list{{ entity.getNameSingular()|camel|ucfirst }} = new List{{ entity.getNameSingular()|camel|ucfirst }}(
+{% if entity.isStore() %}
             $this->storeManager,
+{% endif %}
             $this->collectionFactory,
             $this->blockFactory
         );
@@ -69,7 +77,9 @@ class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Collection()
     {
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->collection);
+{% if entity.isStore() %}
         $this->collection->expects($this->once())->method('addStoreFilter');
+{% endif %}
         $this->collection->expects($this->once())->method('addFieldToFilter');
         $this->blockFactory->expects($this->once())->method('createBlock')->willReturn($this->pager);
         $this->assertEquals($this->collection, $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection());

@@ -30,7 +30,7 @@ class UrlTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->{{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);

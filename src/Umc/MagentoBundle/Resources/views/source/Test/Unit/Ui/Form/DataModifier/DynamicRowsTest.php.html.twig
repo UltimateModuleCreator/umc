@@ -30,7 +30,7 @@ class DynamicRowsTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->serializer = $this->createMock(Json::class);
         $this->model = $this->createMock(AbstractModel::class);

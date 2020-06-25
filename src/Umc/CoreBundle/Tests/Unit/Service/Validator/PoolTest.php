@@ -25,6 +25,7 @@ use App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Service\Validator\Pool;
 use App\Umc\CoreBundle\Service\Validator\ValidatorInterface;
 use App\Umc\CoreBundle\Model\Entity;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PoolTest extends TestCase
@@ -33,6 +34,7 @@ class PoolTest extends TestCase
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validate
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateEntity
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateAttribute
+     * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateDynamic
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::__construct
      */
     public function testValidate()
@@ -40,22 +42,26 @@ class PoolTest extends TestCase
         $moduleValidator = $this->getValidatorMock(['module error']);
         $entityValidator = $this->getValidatorMock(['entity error']);
         $attributeValidator = $this->getValidatorMock(['attribute error']);
+        $dynamicValidator = $this->getValidatorMock(['dynamic error']);
         $module = $this->createMock(Module::class);
         $entity = $this->createMock(Entity::class);
         $attribute1 = $this->createMock(Attribute::class);
         $attribute2 = $this->createMock(Attribute::class);
+        $attribute1->method('getDynamic')->willReturn([$this->createMock(Attribute\Dynamic::class)]);
         $entity->method('getAttributes')->willReturn([$attribute1, $attribute2]);
         $module->method('getEntities')->willReturn([$entity]);
         $expected = [
             'module error',
             'entity error',
             'attribute error',
+            'dynamic error',
             'attribute error',
         ];
         $pool = new Pool([
             'module' => $moduleValidator,
             'entity' => $entityValidator,
-            'attribute' => $attributeValidator
+            'attribute' => $attributeValidator,
+            'dynamic' => $dynamicValidator
         ]);
         $this->assertEquals($expected, $pool->validate($module));
     }
@@ -71,7 +77,7 @@ class PoolTest extends TestCase
 
     /**
      * @param array $errors
-     * @return ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return ValidatorInterface|MockObject
      */
     private function getValidatorMock(array $errors)
     {

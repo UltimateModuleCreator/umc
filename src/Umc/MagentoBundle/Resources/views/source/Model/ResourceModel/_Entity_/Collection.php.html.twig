@@ -11,6 +11,13 @@ use {{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\Res
 class Collection extends {{ entity.getParentCollectionModel() }}
 {
     /**
+     * @var string
+     * phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore,PSR12.Classes.PropertyDeclaration.Underscore
+     */
+    protected $_idFieldName = '{{ entity.getPk() }}';
+    //phpcs: enable
+
+    /**
      * Define resource model
      *
      * @return void

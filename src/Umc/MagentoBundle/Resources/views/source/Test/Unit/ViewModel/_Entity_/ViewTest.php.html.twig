@@ -32,7 +32,7 @@ class ViewTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->request = $this->createMock(RequestInterface::class);
         $this->{{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);

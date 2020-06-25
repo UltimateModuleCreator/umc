@@ -89,7 +89,24 @@ class Pool
     {
         /** @var ValidatorInterface $validator */
         $validator = $this->validators['attribute'] ?? '';
-        return $validator ? $validator->validate($attribute) : [];
-        //TODO: support validation for dynamic fields and options if needed at one point
+        $errors = $validator ? $validator->validate($attribute) : [];
+        return array_reduce(
+            $attribute->getDynamic(),
+            function ($err, Attribute\Dynamic $dynamic) {
+                return array_merge($err, $this->validateDynamic($dynamic));
+            },
+            $errors
+        );
+    }
+
+    /**
+     * @param Attribute\Dynamic $dynamic
+     * @return array
+     */
+    private function validateDynamic(Attribute\Dynamic $dynamic): array
+    {
+        /** @var ValidatorInterface $validator */
+        $validator = $this->validators['dynamic'] ?? '';
+        return $validator ? $validator->validate($dynamic) : [];
     }
 }

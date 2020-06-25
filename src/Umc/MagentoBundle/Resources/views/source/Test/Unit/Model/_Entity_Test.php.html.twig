@@ -48,7 +48,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
         $this->registry = $this->createMock(Registry::class);
@@ -168,8 +168,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
      */
     public function testGetIdentities()
     {
-        $this->assertEquals(['easylyfe_testing_{{ entity.getNameSingular()|camel }}_'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
+        $this->assertEquals(['{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|camel }}_'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
         $this->{{ entity.getNameSingular()|camel }}->setId(1);
-        $this->assertEquals(['easylyfe_testing_{{ entity.getNameSingular()|camel }}_1'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
+        $this->assertEquals(['{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|camel }}_1'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
     }
 }

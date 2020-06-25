@@ -59,7 +59,7 @@ class ImageTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->adapterFactory = $this->createMock(AdapterFactory::class);
         $this->fileInfoFactory = $this->createMock(FileInfoFactory::class);

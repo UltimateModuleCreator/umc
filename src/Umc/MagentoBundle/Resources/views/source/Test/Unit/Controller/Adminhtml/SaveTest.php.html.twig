@@ -76,7 +76,7 @@ class SaveTest extends TestCase
     /**
      * setup tests
      */
-    protected function setUp(){{ extraVars.setUpReturnType }}
+    protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
