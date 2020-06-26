@@ -24,7 +24,7 @@ namespace App\Umc\CoreBundle;
 class Version
 {
     public const VERSION = '4.0.0';
-    public const BUILD = 'alpha1';
+    public const BUILD = '';
 
     /**
      * @return string

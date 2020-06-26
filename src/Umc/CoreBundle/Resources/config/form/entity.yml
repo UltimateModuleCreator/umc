@@ -33,16 +33,20 @@ entity:
       name: name_singular
       type: text
       label: Name Singular
-      dataValidation: validate_required
-      title: Each entity must have a label used for buttons, links, messages. This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form \'Post\'
+      dataValidation: validate_custom validate_required
+      dataValidationRegexp: "^[a-z][a-zA-Z_]+"
+      dataValidationErrorMsg: "Name singular should contain only letters and underscore. Start with a lowercase letter"
+      title: UMC generates the code in a \'human readable\' form. It\'s easier to figure out what the code is about when the variables and methods have a propper name.For example it\'s easier to read foreach ($posts as $_post){...} or $post->getTags() than foreach ($list as $item){...} or $entity->getRelated(\'tags\');The value you fill in here will be used for variable names, file names and table names.
       tab: name
       sort_order: 10
     -
       name: name_plural
       type: text
       label: Name Plural
-      dataValidation: validate_required
-      title: This is the plural value of the entity code. For example \'posts\'.
+      dataValidation: validate_custom validate_required
+      dataValidationRegexp: "^[a-z][a-zA-Z_]+"
+      dataValidationErrorMsg: "Name singular should contain only letters and underscore. Start with a lowercase letter"
+      title: This is the plural value of the entity name. For example \'posts\'.
       tab: name
       sort_order: 20
     -
@@ -50,7 +54,7 @@ entity:
       type: text
       label: Label Singular
       dataValidation: validate_required
-      title: UMC generates the code in a \'human readable\' form. It\'s easier to figure out what the code is about when the variables and methods have a propper name.For example it\'s easier to read foreach ($posts as $_post){...} or $post->getTags() than foreach ($list as $item){...} or $entity->getRelated(\'tags\');The value you fill in here will be used for variable names, file names and table names.
+      title: Each entity must have a label used for buttons, links, messages. This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form \'Post\'
       tab: name
       sort_order: 30
     -
