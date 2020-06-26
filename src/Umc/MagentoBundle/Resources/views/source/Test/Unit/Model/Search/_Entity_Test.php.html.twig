@@ -1,0 +1,71 @@
+{% if (entity.isSearch()) %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName }}\Test\Unit\Model\Search;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection;
+use {{ module.getNamespace() }}\{{ module.getModuleName }}\Model\Search\{{ entity.getNameSingular()|camel|ucfirst }};
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
+{
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+    /**
+     * @var UrlInterface
+     */
+    private $url;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}
+     */
+    private ${{ entity.getNameSingular()|camel }};
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->url = $this->createMock(UrlInterface::class);
+        $this->{{ entity.getNameSingular()|camel }} = new {{ entity.getNameSingular()|camel|ucfirst }}($this->collectionFactory, $this->url, []);
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName }}\Model\Search\{{ entity.getNameSingular()|camel|ucfirst }}::load
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName }}\Model\Search\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testLoadNotValid()
+    {
+        $this->collectionFactory->expects($this->never())->method('create');
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}->load());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName }}\Model\Search\{{ entity.getNameSingular()|camel|ucfirst }}::load
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName }}\Model\Search\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testLoad()
+    {
+        $om = new ObjectManager($this);
+        $collection = $om->getCollectionMock(
+            Collection::class,
+            [
+                $this->createMock(\{{ module.getNamespace() }}\{{ module.getModuleName }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::class),
+                $this->createMock(\{{ module.getNamespace() }}\{{ module.getModuleName }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::class)
+            ]
+        );
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $this->url->expects($this->exactly(3))->method('getUrl');
+        $this->{{ entity.getNameSingular()|camel }}->addData(['start' => 1, 'limit' => 1, 'query' => 'q']);
+        $this->assertEquals($this->{{ entity.getNameSingular()|camel }}, $this->{{ entity.getNameSingular()|camel }}->load());
+    }
+}
+{% endif %}

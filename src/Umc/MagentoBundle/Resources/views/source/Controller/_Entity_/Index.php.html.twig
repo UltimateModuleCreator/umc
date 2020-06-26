@@ -1,0 +1,93 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+{{ sortEnd() }}
+
+class Index extends Action
+{
+{% if entity.isSeo() %}
+    /**
+     * @var string
+     */
+    public const META_DESCRIPTION_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_description';
+    /**
+     * @var string
+     */
+    public const META_KEYWORDS_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_keywords';
+    /**
+     * @var string
+     */
+    public const META_TITLE_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/meta_title';
+{% endif %}
+    /**
+     * @var string
+     */
+    public const BREADCRUMBS_CONFIG_PATH = '{{ module.getModuleName()|snake }}/{{ entity.getNameSingular()|snake }}/breadcrumbs';
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        Context $context,
+        ScopeConfigInterface $scopeConfig
+    ) {
+        parent::__construct($context);
+        $this->scopeConfig = $scopeConfig;
+    }
+    /**
+     * @return \Magento\Framework\View\Result\Page
+     */
+    public function execute()
+    {
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+{% if entity.isSeo() %}
+        $resultPage->getConfig()->getTitle()->set(
+            $this->scopeConfig->getValue(self::META_TITLE_CONFIG_PATH, ScopeInterface::SCOPE_STORE)
+        );
+        $resultPage->getConfig()->setDescription(
+            $this->scopeConfig->getValue(self::META_DESCRIPTION_CONFIG_PATH, ScopeInterface::SCOPE_STORE)
+        );
+        $resultPage->getConfig()->setKeywords(
+            $this->scopeConfig->getValue(self::META_KEYWORDS_CONFIG_PATH, ScopeInterface::SCOPE_STORE)
+        );
+{% else %}
+        $resultPage->getConfig()->getTitle()->set(__('{{ entity.getLabelPlural() }}'));
+{% endif %}
+        if ($this->scopeConfig->isSetFlag(self::BREADCRUMBS_CONFIG_PATH, ScopeInterface::SCOPE_STORE)) {
+            /** @var \Magento\Theme\Block\Html\Breadcrumbs $breadcrumbsBlock */
+            $breadcrumbsBlock = $resultPage->getLayout()->getBlock('breadcrumbs');
+            if ($breadcrumbsBlock) {
+                $breadcrumbsBlock->addCrumb(
+                    'home',
+                    [
+                        'label' => __('Home'),
+                        'link'  => $this->_url->getUrl('')
+                    ]
+                );
+                $breadcrumbsBlock->addCrumb(
+                    '{{ entity.getNamePlural() }}',
+                    [
+                        'label' => __('{{ entity.getLabelPlural() }}'),
+                    ]
+                );
+            }
+        }
+        return $resultPage;
+    }
+}
+{% endif %}

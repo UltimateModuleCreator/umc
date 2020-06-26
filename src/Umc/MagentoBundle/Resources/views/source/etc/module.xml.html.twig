@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>{{ formatLicense(module, 'xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="{{ module.getNamespace() }}_{{module.getModuleName() }}">
+        <sequence>
+{% for dep in module.getModuleDependencies() %}
+            <module name="{{ dep }}"/>
+{% endfor %}
+        </sequence>
+    </module>
+</config>

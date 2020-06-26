@@ -1,0 +1,43 @@
+{% extends "@UmcCore/base.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/umccore/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/umccore/select2/select2-bootstrap.css') }}" />
+{% endblock %}
+{% block additional_fixed_top %}
+    {{ parent() }}
+    <button type="button" data-role="save" class="btn btn-danger btn">Save Module</button>
+{% endblock %}
+{% block body %}
+<form id="umc" method="post" action="{{ path('save', {platform: platform.getCode(), version: version.getCode()}) }}">
+    <div class="card">
+        <div class="card-header"><h1>{{ title }} for {{ platform.getName() }} - v{{ version.getLabel() }}</h1></div>
+        <div class="card-body">
+            {% include formConfig.module.template with {form: formConfig.module, formKey:'module'} %}
+        </div>
+    </div>
+</form>
+{% include '@UmcCore/modal.html.twig' with {id: "response-modal"} %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/umccore/ko/ko.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/select2/select2.js') }}"> </script>
+    <script type="text/javascript">
+        $.fn.select2.defaults.set( "theme", "bootstrap" );
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/form-validator.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/umc.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/jquery.ajax-progress.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/edit.js') }}"> </script>
+    <script type="text/javascript" src="{{ asset('bundles/umccore/umc/info.js') }}"> </script>
+    <script type="text/javascript">
+        if (typeof UMC === "undefined") {
+            UMC = {}
+        }
+        UMC.config = {{ koConfig|json_encode|raw }};
+        UMC.defaults = {{ defaults|json_encode|raw }};
+        let umcForm = $('#umc');
+        umcForm.umcedit({data: {{ data|json_encode|raw }}});
+    </script>
+{% endblock %}

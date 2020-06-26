@@ -19,13 +19,20 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests/</directory>
+            <directory>./src/*/*/Tests/Unit/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>./src/</directory>
+            <exclude>
+                <directory suffix=".php">./src/*/*/Tests</directory>
+                <directory suffix=".php">./src/*/*/DependencyInjection</directory>
+                <file>./src/Umc/CoreBundle/Model/Platform/Config.php</file>
+                <file>./src/Umc/CoreBundle/Config/Form/Config.php</file>
+                <file>./src/Umc/CoreBundle/Config/Source/Config.php</file>
+            </exclude>
         </whitelist>
     </filter>
 

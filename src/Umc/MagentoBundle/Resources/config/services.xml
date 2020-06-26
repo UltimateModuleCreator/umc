@@ -1,0 +1,140 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" autowire="true" autoconfigure="true" />
+        <prototype namespace="App\Umc\MagentoBundle\" resource="../../*" exclude="../../{DependencyInjection,Test}" />
+        <!-- service configuration -->
+        <service id="magento.platform.pool.provider" class="App\Umc\CoreBundle\Config\Provider">
+            <argument key="$file" type="string">%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/platform.yml</argument>
+            <tag name="platform.pool.provider" />
+        </service>
+        <service id="magento.module.factory" class="App\Umc\MagentoBundle\Model\Module\Factory" public="true">
+            <argument key="$moduleClassName" type="string">\App\Umc\MagentoBundle\Model\Module</argument>
+            <argument key="$entityFactory" type="service" id="magento.entity.factory" />
+            <argument key="$menuConfig" type="string">%magento_admin_menu%</argument>
+        </service>
+        <service id="magento.entity.factory" class="App\Umc\CoreBundle\Model\Entity\Factory">
+            <argument key="$className">\App\Umc\MagentoBundle\Model\Entity</argument>
+            <argument key="$attributeFactory" type="service" id="magento.attribute.factory" />
+        </service>
+        <service id="magento.attribute.factory" class="App\Umc\CoreBundle\Model\Attribute\Factory">
+            <argument key="$className">\App\Umc\MagentoBundle\Model\Attribute</argument>
+            <argument key="$typeFactory" type="service" id="magento.attribute.type.factory" />
+            <argument key="$dynamicFactory" type="service" id="magento.attribute.dynamic.factory" />
+        </service>
+        <service id="magento.attribute.dynamic.factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Factory">
+            <argument key="$typeFactory" type="service" id="magento.attribute.dynamic.type.factory" />
+            <argument key="$className">\App\Umc\MagentoBundle\Model\Attribute\Dynamic</argument>
+        </service>
+        <service id="magento.attribute.dynamic.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory">
+            <argument key="$typeMap" type="string">%magento_dynamic_rows_type%</argument>
+            <argument key="$defaultType">\App\Umc\MagentoBundle\Model\Attribute\Dynamic\Type\BaseType</argument>
+        </service>
+        <service id="magento.attribute.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
+            <argument key="$typeMap" type="string">%magento_attribute_type%</argument>
+        </service>
+        <!--[+] validators -->
+        <service id="magento.validator.pool" class="App\Umc\CoreBundle\Service\Validator\Pool" public="true">
+            <argument key="$validators" type="collection">
+                <argument key="module" type="service" id="magento.module.composite.validator" />
+                <argument key="entity" type="service" id="magento.entity.composite.validator" />
+                <argument key="attribute" type="service" id="magento.attribute.composite.validator" />
+                <argument key="dynamic" type="service" id="magento.dynamic.composite.validator" />
+            </argument>
+        </service>
+        <service id="magento.module.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.module.validator" />
+        </service>
+        <service id="magento.module.namespace.validator" class="App\Umc\CoreBundle\Service\Validator\RestrictedWords">
+            <argument key="$getter" type="string">getNamespace</argument>
+            <argument key="$restricted" type="collection">
+                <argument key="magento">Magento</argument>
+            </argument>
+            <argument key="$errorMessage">Namespace cannot be %s. Please be creative</argument>
+            <tag name="magento.module.validator" />
+        </service>
+        <service id="magento.module.entities.validator" class="App\Umc\CoreBundle\Service\Validator\Children">
+            <argument key="$getter" type="string">getEntities</argument>
+            <argument key="$nameGetter" type="string">getExtensionName</argument>
+            <argument key="$errorMessage">Module "%%s" must have at least one entity</argument>
+            <tag name="magento.module.validator" />
+        </service>
+
+        <service id="magento.module.entities.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getEntities</argument>
+            <argument key="$nameGetter" type="string">getExtensionName</argument>
+            <argument key="$errorMessage">Module "%%s" has multiple entities with the Name Singular "%%s"</argument>
+            <argument key="$childUniqueGetter">getNameSingular</argument>
+            <tag name="magento.module.validator" />
+        </service>
+
+        <service id="magento.entity.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.entity.validator" />
+        </service>
+        <service id="magento.entity.name_singular.validator" class="App\Umc\CoreBundle\Service\Validator\RestrictedWords">
+            <argument key="$getter" type="string">getNameSingular</argument>
+            <argument key="$restricted" type="collection">
+                <argument key="resource">resource</argument>
+                <argument key="result">result</argument>
+                <argument key="setup">setup</argument>
+                <argument key="attribute">attribute</argument>
+                <argument key="options">options</argument>
+                <argument key="system">system</argument>
+                <argument key="data">data</argument>
+                <argument key="collection">collection</argument>
+                <argument key="adminhtml">adminhtml</argument>
+                <argument key="url">url</argument>
+                <argument key="config">config</argument>
+            </argument>
+            <argument key="$errorMessage">Entity Name singular cannot be %s. It conflicts with the magento folder structure</argument>
+            <tag name="magento.entity.validator" />
+        </service>
+        <service id="App\Umc\CoreBundle\Service\Validator\EntityName" class="App\Umc\CoreBundle\Service\Validator\EntityName">
+            <tag name="magento.entity.validator" />
+        </service>
+        <service id="magento.entity.attributes.validator" class="App\Umc\CoreBundle\Service\Validator\Children">
+            <argument key="$getter" type="string">getAttributes</argument>
+            <argument key="$nameGetter" type="string">getLabelSingular</argument>
+            <argument key="$errorMessage">Entity "%%s" must have at least one attribute</argument>
+            <tag name="magento.entity.validator" />
+        </service>
+
+        <service id="magento.entity.attributes.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getAttributes</argument>
+            <argument key="$nameGetter" type="string">getLabelSingular</argument>
+            <argument key="$errorMessage">Entity "%%s" has multiple attributes with the Code "%%s"</argument>
+            <argument key="$childUniqueGetter">getCode</argument>
+            <tag name="magento.entity.validator" />
+        </service>
+
+        <service id="magento.attribute.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.attribute.validator" />
+        </service>
+        <service id="magento.attribute.code.validator" class="App\Umc\CoreBundle\Service\Validator\RestrictedWords">
+            <argument key="$getter" type="string">getCode</argument>
+            <argument key="$restricted" type="collection">
+                <argument key="namespace">namespace</argument>
+                <argument key="result">result</argument>
+                <argument key="created_at">created_at</argument>
+                <argument key="updated_at">updated_at</argument>
+                <argument key="data">data</argument>
+            </argument>
+            <argument key="$errorMessage">Attribute code cannot be '%s'. It conflicts with the magento method names</argument>
+            <tag name="magento.attribute.validator" />
+        </service>
+        <service id="magento.dynamic.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.dynamic.validator" />
+        </service>
+        <service id="magento.attribute.dynamic.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getDynamic</argument>
+            <argument key="$nameGetter" type="string">getLabel</argument>
+            <argument key="$errorMessage">Attribute "%%s" has multiple dynamic fields with the Code "%%s"</argument>
+            <argument key="$childUniqueGetter">getCode</argument>
+            <tag name="magento.attribute.validator" />
+        </service>
+        <!--[-] validators -->
+    </services>
+</container>

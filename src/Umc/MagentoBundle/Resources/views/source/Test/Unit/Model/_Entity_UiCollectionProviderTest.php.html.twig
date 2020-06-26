@@ -1,0 +1,28 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use {{ entity.getModel('UiCollectionProvider') }};
+use {{ entity.getCollectionModel() }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}UiCollectionProviderTest extends TestCase
+{
+    /**
+     * @covers \{{ entity.getModel('UiCollectionProvider') }}
+     */
+    public function testGetCollection()
+    {
+        $factory = $this->createMock(CollectionFactory::class);
+        $collection = $this->createMock(Collection::class);
+        $factory->expects($this->once())->method('create')->willReturn($collection);
+        $provider = new {{ entity.getNameSingular()|camel }}UiCollectionProvider($factory);
+        $this->assertEquals($collection, $provider->getCollection());
+    }
+}
+{% endif %}

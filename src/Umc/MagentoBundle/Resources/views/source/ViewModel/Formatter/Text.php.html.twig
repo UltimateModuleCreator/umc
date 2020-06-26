@@ -1,0 +1,35 @@
+{% if not module.isUmcCrud() and module.isFrontend() and module.hasEntitiesWithFlag('attribute_processor_frontend_text') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
+
+use Magento\Framework\Escaper;
+
+class Text implements FormatterInterface
+{
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * Text constructor.
+     * @param Escaper $escaper
+     */
+    public function __construct(Escaper $escaper)
+    {
+        $this->escaper = $escaper;
+    }
+
+    /**
+     * @param $value
+     * @param array $arguments
+     * @return string
+     */
+    public function formatHtml($value, $arguments = []): string
+    {
+        return $this->escaper->escapeHtml($value);
+    }
+}
+{% endif %}

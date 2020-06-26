@@ -1,0 +1,14 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui;
+
+interface CollectionProviderInterface
+{
+    /**
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\AbstractCollection
+     */
+    public function getCollection();
+}
+{% endif %}

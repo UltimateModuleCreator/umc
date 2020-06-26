@@ -1,0 +1,41 @@
+        <field name="{{ attribute.getCode() }}" formElement="select" component="Magento_Ui/js/form/element/ui-select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{  attribute.getEntity().getNameSingular()|snake }}</item>
+{% if attribute.getDefaultValue() %}
+                    <item name="default" xsi:type="string">{{ attribute.getDefaultValue() }}</item>
+{% endif %}
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="chipsEnabled" xsi:type="boolean">true</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">{% if attribute.hasFlag('multiple') %}true{% else %}false{% endif %}</item>
+                </item>
+            </argument>
+            <settings>
+                <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
+                <dataType>text</dataType>
+                <label translate="true">{{ attribute.getLabel() }}</label>
+                <dataScope>{{ attribute.getCode() }}</dataScope>
+{% if attribute.isRequired() %}
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+{% endif %}
+                <componentType>field</componentType>
+{% if attribute.getNote() %}
+                <notice>{{ attribute.getNote() }}</notice>
+{% endif %}
+{% if attribute.getTooltip() %}
+                <tooltip>
+                    <description>{{ attribute.getTooltip() }}</description>
+                </tooltip>
+{% endif %}
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="{{ type.getSourceModel() }}"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>

@@ -1,0 +1,8 @@
+{{ indent }}<strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}:')); ?></strong>
+{{ indent }}<?= $formatter->formatHtml(
+{{ indent }}    ${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}(),
+{{ indent }}    [
+{{ indent }}        'type' => 'options',
+{{ indent }}        'source' => \Magento\Directory\Model\Config\Source\Country::class
+{{ indent }}    ]
+{{ indent }}); ?>

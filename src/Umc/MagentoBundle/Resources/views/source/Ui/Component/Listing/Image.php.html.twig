@@ -1,0 +1,115 @@
+{% if not module.isUmcCrud() and  module.hasEntitiesWithFlag('attribute_type_image') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Component\Listing;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiConfig;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
+{{ sortEnd() }}
+
+class Image extends Column
+{
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+    /**
+     * @var EntityUiConfig
+     */
+    private $uiConfig;
+    /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param StoreManagerInterface $storeManager
+     * @param array $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        StoreManagerInterface $storeManager,
+        EntityUiConfig $uiConfig,
+        FileInfo $fileInfo,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->storeManager = $storeManager;
+        $this->uiConfig = $uiConfig;
+        $this->fileInfo = $fileInfo;
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+    }
+
+    /**
+     * @param array $dataSource
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function prepareDataSource(array $dataSource)
+    {
+        if (isset($dataSource['data']['items'])) {
+            $fieldName = $this->getData('name');
+            foreach ($dataSource['data']['items'] as & $item) {
+                $url = $this->getUrl($item[$fieldName] ?? '');
+                $item[$fieldName . '_src'] = $url;
+                $item[$fieldName . '_alt'] = $this->getAlt($item) ?: '';
+                $item[$fieldName . '_orig_src'] = $url;
+                $item[$fieldName . '_link'] = $this->getEditUrl($item);
+            }
+        }
+        return $dataSource;
+    }
+
+    /**
+     * @param $value
+     * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getUrl($value)
+    {
+        if (!$value) {
+            return '';
+        }
+        if ($this->fileInfo->isBeginsWithMediaDirectoryPath($value)) {
+            return $value;
+        }
+        $store = $this->storeManager->getStore();
+        $mediaBaseUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+        return $mediaBaseUrl . ltrim($this->fileInfo->getBaseFilePath(), '/') . '/' . ltrim($value, '/');
+    }
+
+    /**
+     * @param $item
+     * @return string
+     */
+    private function getEditUrl($item)
+    {
+        $base = $this->uiConfig->getEditUrlPath();
+        $idParam = $this->uiConfig->getRequestParamName();
+        $params = [$idParam => $item[$idParam] ?? null];
+        return $this->context->getUrl($base, $params);
+    }
+
+    /**
+     * @param array $row
+     *
+     * @return null|string
+     */
+    private function getAlt($row)
+    {
+        $altField = $this->uiConfig->getNameAttribute();
+        return $altField && isset($row[$altField]) ? $row[$altField] : null;
+    }
+}
+{% endif %}

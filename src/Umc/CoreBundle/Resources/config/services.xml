@@ -1,0 +1,162 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="false" autowire="true" autoconfigure="true" />
+        <prototype namespace="App\Umc\CoreBundle\" resource="../../*" exclude="../../{DependencyInjection,Tests}" />
+        <!-- TODO: remove this when all is split into bundles -->
+        <prototype namespace="App\" resource="../../../../*" exclude="{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Controller,Model,Service,Twig}" />
+        <!-- service configuration -->
+        <service id="App\Umc\CoreBundle\Repository\Settings" class="App\Umc\CoreBundle\Repository\Settings">
+            <argument key="$root" type="string">%kernel.project_dir%/var/umc/_settings</argument>
+        </service>
+        <service id="parameter.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Parameter">
+            <tag name="platform_pool.config_loader.modifier" priority="1" />
+            <tag name="form.config.modifier" priority="1000" />
+            <tag name="settings.config.modifier" priority="1000" />
+        </service>
+        <service id="App\Umc\CoreBundle\Service\Cs\Executor" class="App\Umc\CoreBundle\Service\Cs\Executor">
+            <argument key="$phpcsPath" type="string">%kernel.project_dir%/vendor/bin/phpcs</argument>
+        </service>
+        <service id="App\Umc\CoreBundle\Repository\Module" class="App\Umc\CoreBundle\Repository\Module">
+            <argument key="$root" type="string">%kernel.project_dir%/var/umc</argument>
+        </service>
+        <!--[+] platform pool configuration-->
+        <service id="App\Umc\CoreBundle\Model\Platform\Pool" class="App\Umc\CoreBundle\Model\Platform\Pool">
+            <argument key="$configLoader" type="service" id="platform_pool.config_loader" />
+        </service>
+        <service id="platform_pool.config_loader" class="App\Umc\CoreBundle\Config\Loader">
+            <argument key="$configClassName" type="string">\App\Umc\CoreBundle\Model\Platform\Config</argument>
+            <argument key="$modifier" type="service" id="platform_pool.config_loader.modifier.composite" />
+            <argument key="$providers" type="tagged_iterator" tag="platform.pool.provider" />
+        </service>
+        <service id="platform_pool.config_loader.modifier.composite" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="platform_pool.config_loader.modifier" />
+        </service>
+        <service id="platform_pool.config_loader.modifier.sorter" class="App\Umc\CoreBundle\Config\Modifier\Sort">
+            <tag name="platform_pool.config_loader.modifier" />
+            <argument key="$fields" type="collection">
+                <argument key="/" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+            </argument>
+        </service>
+
+        <service id="App\Umc\CoreBundle\Service\License\Pool" class="App\Umc\CoreBundle\Service\License\Pool">
+            <argument key="$processors" type="tagged_iterator" tag="licence.processor" />
+        </service>
+        <service id="license.processor.php" class="App\Umc\CoreBundle\Service\License\Processor">
+            <argument key="$prefix" type="string"><![CDATA[
+
+]]></argument>
+            <argument key="$suffix" type="string"><![CDATA[
+]]></argument>
+            <argument key="$code" type="string">php</argument>
+            <argument key="$default" type="string"><![CDATA[
+]]></argument>
+            <tag name="licence.processor" />
+        </service>
+
+        <service id="license.processor.xml" class="App\Umc\CoreBundle\Service\License\Processor">
+            <argument key="$prefix" type="string"><![CDATA[
+<!--
+]]></argument>
+            <argument key="$suffix" type="string"><![CDATA[-->
+]]></argument>
+            <argument key="$code" type="string">xml</argument>
+            <tag name="licence.processor" />
+        </service>
+
+        <!--[+] controller composition -->
+        <!--[+] Edit controller -->
+        <service id="App\Umc\CoreBundle\Controller\EditController" class="App\Umc\CoreBundle\Controller\EditController">
+            <argument key="$formLoaderFactory" type="service" id="form.config.loader.factory" />
+            <argument key="$uiModifier" type="service" id="App\Umc\CoreBundle\Config\Form\Modifier\Tab" />
+        </service>
+        <service id="form.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory">
+            <argument key="$modifier" type="service" id="form.config.modifier" />
+            <argument key="$configKey" type="string">form</argument>
+            <argument key="$className" type="string">App\Umc\CoreBundle\Config\Form\Config</argument>
+        </service>
+        <service id="form.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="form.config.modifier" />
+        </service>
+        <service id="form.config.modifier.remove" class="App\Umc\CoreBundle\Config\Modifier\Remove">
+            <tag name="form.config.modifier" priority="10" />
+            <tag name="settings.config.modifier" priority="10" />
+            <argument key="$key" type="string">enabled</argument>
+        </service>
+        <service id="form.config.modifier.sort" class="App\Umc\CoreBundle\Config\Modifier\Sort">
+            <tag name="form.config.modifier" priority="20" />
+            <argument key="$fields" type="collection">
+                <argument key="tabs" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+                <argument key="fields" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+            </argument>
+        </service>
+        <!--[-] Edit controller -->
+        <!--[+] Settings controller -->
+        <service id="App\Umc\CoreBundle\Controller\SettingsController" class="App\Umc\CoreBundle\Controller\SettingsController">
+            <argument key="$formLoaderFactory" type="service" id="settings.config.loader.factory" />
+        </service>
+        <service id="settings.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory">
+            <argument key="$modifier" type="service" id="settings.config.modifier" />
+            <argument key="$configKey" type="string">form</argument>
+            <argument key="$className" type="string">App\Umc\CoreBundle\Config\Form\Config</argument>
+        </service>
+        <service id="settings.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="settings.config.modifier" />
+        </service>
+        <service id="settings.config.modifier.remove.fields" class="App\Umc\CoreBundle\Config\Modifier\Remove">
+            <tag name="settings.config.modifier" priority="10" />
+            <argument key="$key" type="string">has_default</argument>
+        </service>
+        <service id="settings.config.modifier.sort" class="App\Umc\CoreBundle\Config\Modifier\Sort">
+            <tag name="settings.config.modifier" priority="20" />
+            <argument key="$fields" type="collection">
+                <argument key="fields" type="collection">
+                    <argument key="key" type="string">sort_order</argument>
+                </argument>
+            </argument>
+        </service>
+        <!--[-] Edit controller -->
+        <!--[-] controller composition -->
+        <service id="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Dynamic\Type\Factory">
+            <argument key="$typeMap" type="string">%attribute_type%</argument>
+        </service>
+        <service id="App\Umc\CoreBundle\Model\Attribute\Type\Factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
+            <argument key="$typeMap" type="string">%attribute_type%</argument>
+        </service>
+        <service id="default.generator.pool" class="App\Umc\CoreBundle\Service\Generator\Pool" public="true">
+            <argument key="$generators" type="collection">
+                <argument key="module" type="service" id="default.generator.module" />
+                <argument key="entity" type="service" id="default.generator.entity" />
+            </argument>
+        </service>
+        <service id="default.generator.module" class="App\Umc\CoreBundle\Service\Generator\Module" />
+        <service id="default.generator.entity" class="App\Umc\CoreBundle\Service\Generator\Entity" />
+
+        <service id="App\Umc\CoreBundle\Service\Builder" class="App\Umc\CoreBundle\Service\Builder">
+            <argument key="$configLoaderFactory" type="service" id="source.config.loader.factory" />
+        </service>
+        <service id="source.config.loader.factory" class="App\Umc\CoreBundle\Config\Loader\PlatformAwareFactory">
+            <argument key="$modifier" type="service" id="form.config.modifier" />
+            <argument key="$configKey" type="string">source</argument>
+            <argument key="$className" type="string">App\Umc\CoreBundle\Config\Source\Config</argument>
+        </service>
+        <service id="source.config.modifier" class="App\Umc\CoreBundle\Config\Modifier\Composite">
+            <argument key="$modifiers" type="tagged_iterator" tag="source.config.modifier" />
+        </service>
+        <service id="source.config.modifier.remove" class="App\Umc\CoreBundle\Config\Modifier\Remove">
+            <tag name="source.config.modifier" priority="10" />
+            <argument key="$key" type="string">enabled</argument>
+        </service>
+        <service id="default.validator.pool" class="App\Umc\CoreBundle\Service\Validator\Pool" public="true">
+            <argument key="$validators" type="collection" />
+        </service>
+    </services>
+</container>

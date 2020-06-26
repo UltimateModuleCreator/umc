@@ -1,0 +1,43 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_save_multiselect') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor;
+
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+
+class Multiselect implements SaveDataProcessorInterface
+{
+    /**
+     * @var array
+     */
+    private $fields;
+
+    /**
+     * Mutiselect constructor.
+     * @param array $fields
+     */
+    public function __construct(array $fields)
+    {
+        $this->fields = $fields;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(array $data): array
+    {
+        foreach ($this->fields as $field) {
+            if (!array_key_exists($field, $data)) {
+                continue;
+            }
+            $value = $data[$field] ?? [];
+            if (is_array($value)) {
+                $data[$field] = implode(',', $value);
+            }
+        }
+        return $data;
+    }
+}
+{% endif %}

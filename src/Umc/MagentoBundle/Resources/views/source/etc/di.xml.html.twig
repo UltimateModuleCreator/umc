@@ -1,0 +1,148 @@
+<?xml version="1.0"?>{{ formatLicense(module, 'xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+{% for entity in module.getEntities() %}
+{% include '@UmcMagento/entity/di/preference.html.twig' with {module: module, entity:entity} %}
+{% endfor %}
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+{% for entity in module.getEntities() %}
+                <item name="{{ module.getNamespace() }}\{{module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">{{ entity.getMainTableName() }}</item>
+                    <item name="identifierField" xsi:type="string">{{ entity.getPk() }}</item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% if module.hasEntitiesWithFlag('search') %}
+    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
+        <arguments>
+            <argument name="searchModules" xsi:type="array">
+{% for entity in module.getEntitiesWithFlag('search') %}
+                <item name="{{ module.getNamespace()|snake }}_{{module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}" xsi:type="array">
+                    <item name="class" xsi:type="string">{{ entity.getSearchModel() }}</item>
+                    <item name="acl" xsi:type="string">{{ entity.getAclName() }}</item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+    <!-- configure resource models -->
+{% for entity in module.getEntities() %}
+    <type name="{{ entity.getResourceModel() }}">
+        <arguments>
+{% if entity.isStore() %}
+            <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+{% endif %}
+            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
+        </arguments>
+    </type>
+{% endfor %}
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+{% for entity in module.getEntities() %}
+                <item name="{{module.getModuleName()|camel|lower }}_{{ entity.getNameSingular()|camel|lower }}_listing_data_source" xsi:type="string">{{ module.getNamespace() }}{{module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% for entity in module.getEntities() %}
+{% include '@UmcMagento/entity/di/collection.html.twig' with {module: module, entity:entity} %}
+{% endfor %}
+{% for entity in module.getEntitiesWithFlag('store') %}
+{% include '@UmcMagento/entity/di/store-link.html.twig' with {module: module, entity:entity} %}
+{% endfor %}
+{% if module.hasEntitiesWithFlag('store') %}
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+{% for entity in module.getEntitiesWithFlag('store') %}
+{% include '@UmcMagento/entity/di/store-handlers.html.twig' with {module: module, entity:entity} %}
+{% endfor %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+{% for entity in module.getEntitiesWithFlag('attribute_type_image') %}
+    <virtualType name="{{ entity.getUploadInfoModel('Image') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\FileInfo">
+        <arguments>
+            <argument name="filePath" xsi:type="string">{{ entity.getUploadFolder('image') }}</argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% for entity in module.getEntitiesWithFlag('attribute_type_file') %}
+    <virtualType name="{{ entity.getUploadInfoModel('File') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\FileInfo">
+        <arguments>
+            <argument name="filePath" xsi:type="string">{{ entity.getUploadFolder('file') }}</argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% for entity in module.getEntities() %}
+{% for attribute in entity.getAttributesWithFlag('manual_options') %}
+    <virtualType name="{{ attribute.getOptionSourceVirtualType() }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+{% for option in attribute.getOptions() %}
+                <item name="{{ option.getValue() }}" xsi:type="array">
+                    <item name="value" xsi:type="{{ attribute.getOptionType() }}">{{ option.getValue() }}</item>
+                    <item name="label" xsi:type="string" translatable="true">{{ option.getLabel() }}</item>
+                </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% for attribute in entity.getAttributesWithType('dynamic') %}
+{% for dynamic in attribute.getDynamicWithOptions() %}
+    <virtualType name="{{ dynamic.getOptionSourceVirtualType() }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+{% for option in dynamic.getOptions() %}
+                    <item name="{{ option.getValue() }}" xsi:type="array">
+                        <item name="value" xsi:type="{{ dynamic.getOptionType() }}">{{ option.getValue() }}</item>
+                        <item name="label" xsi:type="string" translatable="true">{{ option.getLabel() }}</item>
+                    </item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('frontend') and module.hasEntitiesWithFlag('attribute_processor_frontend_editor') %}
+    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Widget\Model\Template\Filter</argument>
+        </arguments>
+    </type>
+{% endif %}
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('frontend') %}
+    <type name="{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter">
+        <arguments>
+            <argument name="formatterMap" xsi:type="array">
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_date') %}
+                <item name="date" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Date</item>
+{% endif %}
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_text') %}
+                <item name="text" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Text</item>
+{% endif %}
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_editor') %}
+                <item name="editor" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg</item>
+{% endif %}
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_options') %}
+                <item name="options" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Options</item>
+{% endif %}
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_image') %}
+                <item name="image" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Image</item>
+{% endif %}
+{% if module.hasEntitiesWithFlag('attribute_processor_frontend_file') %}
+                <item name="file" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File</item>
+{% endif %}
+            </argument>
+        </arguments>
+    </type>
+{% endif %}
+</config>

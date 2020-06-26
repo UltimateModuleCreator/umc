@@ -1,0 +1,210 @@
+-
+  source: "@UmcMagento/source/registration.php"
+  label: "Module registration file"
+-
+  source: "@UmcMagento/source/README.md"
+  label: "Module readme file"
+-
+  source: "@UmcMagento/source/composer.json"
+  label: "Module composer file"
+-
+  source: "@UmcMagento/source/etc/module.xml"
+  label: "Module declaration file"
+-
+  source: "@UmcMagento/source/etc/acl.xml"
+  label: "ACL file"
+-
+  source: "@UmcMagento/source/etc/config.xml"
+  label: "Config file"
+-
+  source: "@UmcMagento/source/etc/di.xml"
+  label: "DI file"
+-
+  source: "@UmcMagento/source/etc/adminhtml/di.xml"
+  label: "Admin DI file"
+-
+  source: "@UmcMagento/source/etc/adminhtml/routes.xml"
+  label: "Admin menu routes file"
+-
+  source: "@UmcMagento/source/etc/adminhtml/menu.xml"
+  label: "Admin menu file"
+-
+  source: "@UmcMagento/source/etc/adminhtml/system.xml"
+  label: "Admin system config definition file"
+-
+  source: "@UmcMagento/source/Block/Adminhtml/Button/Back.php"
+  label: "Admin grids back button"
+-
+  source: "@UmcMagento/source/Block/Adminhtml/Button/Reset.php"
+  label: "Admin form reset button"
+-
+  source: "@UmcMagento/source/Block/Adminhtml/Button/Save.php"
+  label: "Admin form save button"
+-
+  source: "@UmcMagento/source/Block/Adminhtml/Button/Delete.php"
+  label: "Admin form delete button"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/Delete.php"
+  label: "Admin Delete Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/Edit.php"
+  label: "Admin Edit Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/Index.php"
+  label: "Admin Index Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/InlineEdit.php"
+  label: "Admin Inline Edit Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/MassDelete.php"
+  label: "Admin Mass Delete Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/NewAction.php"
+  label: "Admin New Action Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/Save.php"
+  label: "Admin Save Controller"
+-
+  source: "@UmcMagento/source/Controller/Adminhtml/Upload.php"
+  label: "Admin Upload Controller"
+-
+  source: "@UmcMagento/source/Model/Uploader.php"
+  label: "File and image uploader base class"
+-
+  source: "@UmcMagento/source/Model/FileInfo.php"
+  label: "File info model"
+-
+  source: "@UmcMagento/source/Model/FileChecker.php"
+  label: "Check for name collisions in uploaded files"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/StoreAwareAbstractModel.php"
+  label: "Resource model for store related entities"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/Store.php"
+  label: "Resource model for store relation management"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/AbstractModel.php"
+  label: "Abstract Resource model"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/Collection/AbstractCollection.php"
+  label: "Abstract Resource collection"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/Collection/StoreAwareAbstractCollection.php"
+  label: "Abstract Resource collection for entities conntected to stores"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/Relation/Store/ReadHandler.php"
+  label: "Store related data read handler"
+-
+  source: "@UmcMagento/source/Model/ResourceModel/Relation/Store/SaveHandler.php"
+  label: "Store related data save handler"
+-
+  source: "@UmcMagento/source/Source/StoreView.php"
+  label: "Store view source model"
+-
+  source: "@UmcMagento/source/Source/Catalog/ProductAttribute.php"
+  label: "Attribute source model"
+-
+  source: "@UmcMagento/source/Source/Catalog/ProductAttributeSet.php"
+  label: "Attribute set source model"
+-
+  source: "@UmcMagento/source/Source/Options.php"
+  label: "Manual Options Source Model"
+-
+  source: "@UmcMagento/source/Ui/CollectionProviderInterface.php"
+  label: "UI Collection provider interface"
+-
+  source: "@UmcMagento/source/Ui/EntityUiConfig.php"
+  label: "Entity Ui config"
+-
+  source: "@UmcMagento/source/Ui/EntityUiManagerInterface.php"
+  label: "Entity Ui management interface"
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessorInterface.php"
+  label: Save data processor interface
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessor/Upload.php"
+  label: Upload Save data processor
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessor/NullProcessor.php"
+  label: Null save data processor
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessor/Multiselect.php"
+  label: Null save data processor
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessor/DynamicRows.php"
+  label: Dynamic Rows save data processor
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessor/Date.php"
+  label: Date save data processor
+-
+  source: "@UmcMagento/source/Ui/SaveDataProcessor/CompositeProcessor.php"
+  label: Date save data processor
+-
+  source: "@UmcMagento/source/Ui/Form/DataProvider.php"
+  label: Admin Form Data provider
+-
+  source: "@UmcMagento/source/Ui/Form/DataModifierInterface.php"
+  label: Admin Form Data modifier interface
+-
+  source: "@UmcMagento/source/Ui/Form/DataModifier/Upload.php"
+  label: Admin Form Data Upload modifier
+-
+  source: "@UmcMagento/source/Ui/Form/DataModifier/NullModifier.php"
+  label: Admin Form Data Null modifier
+-
+  source: "@UmcMagento/source/Ui/Form/DataModifier/Multiselect.php"
+  label: Admin Form Data Multiselect modifier
+-
+  source: "@UmcMagento/source/Ui/Form/DataModifier/DynamicRows.php"
+  label: Admin Form Data DynamicRows modifier
+-
+  source: "@UmcMagento/source/Ui/Form/DataModifier/CompositeDataModifier.php"
+  label: Admin Form Data composite modifier
+-
+  source: "@UmcMagento/source/Ui/Component/Listing/Image.php"
+  label: Grid Image column
+-
+  source: "@UmcMagento/source/Ui/Component/Listing/ActionsColumn.php"
+  label: Grid Actions column
+-
+  source: "@UmcMagento/source/etc/db_schema.xml"
+  label: Table schema definitions
+-
+  source: "@UmcMagento/source/view/adminhtml/web/template/preview.html"
+  label: Image / File preview admin template
+-
+  source: "@UmcMagento/source/etc/frontend/routes.xml"
+  label: "Frontend routes file"
+-
+  source: "@UmcMagento/source/etc/frontend/di.xml"
+  label: "Frontend di file"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter.php"
+  label: "Frontend value formatter view model"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/Date.php"
+  label: "Frontend value formatter view model for date fields"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/File.php"
+  label: "Frontend value formatter view model for file fields"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/FormatterInterface.php"
+  label: "Frontend value formatter interface"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/Image.php"
+  label: "Frontend value formatter view model for image fields"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/Options.php"
+  label: "Frontend value formatter view model for dropdown and multi-select fields"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/Text.php"
+  label: "Frontend value formatter view model for text fields"
+-
+  source: "@UmcMagento/source/ViewModel/Formatter/Wysiwyg.php"
+  label: "Frontend value formatter view model for editor fields"
+-
+  source: "@UmcMagento/source/Plugin/Theme/Block/Html/TopmenuPlugin.php"
+  label: "Frontend Top menu block plugin"
+-
+  source: "@UmcMagento/source/view/frontend/layout/default.xml"
+  label: "Default layout handle"

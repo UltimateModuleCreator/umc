@@ -1,0 +1,59 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_save') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\SaveDataProcessor;
+
+{{ sortStart() }}
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+{{ sortEnd() }}
+
+class CompositeProcessorTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor::modifyData
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor::__construct
+     */
+    public function testModifyData()
+    {
+        $processor1 = $this->createMock(SaveDataProcessorInterface::class);
+        $processor1->method('modifyData')->willReturnCallback(
+            function (array $data) {
+                $data['element1'] = ($data['element1'] ?? '') . '_processed1';
+                return $data;
+            }
+        );
+        $processor2 = $this->createMock(SaveDataProcessorInterface::class);
+        $processor2->method('modifyData')->willReturnCallback(
+            function (array $data) {
+                $data['element1'] = ($data['element1'] ?? '') . '_processed2';
+                $data['element2'] = ($data['element2'] ?? '') . '_processed2';
+                return $data;
+            }
+        );
+        $compositeProcessor = new CompositeProcessor([$processor1, $processor2]);
+        $data = [
+            'element1' => 'value1',
+            'element2' => 'value2',
+            'element3' => 'value3'
+        ];
+        $expected = [
+            'element1' => 'value1_processed1_processed2',
+            'element2' => 'value2_processed2',
+            'element3' => 'value3'
+        ];
+        $this->assertEquals($expected, $compositeProcessor->modifyData($data));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\CompositeProcessor::__construct
+     */
+    public function testGetConstructor()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new CompositeProcessor(['string value']);
+    }
+}
+{% endif %}

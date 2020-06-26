@@ -11,21 +11,32 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class Kernel extends BaseKernel
 {
-    // @codeCoverageIgnoreStart
     use MicroKernelTrait;
 
-    const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+    public const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
+    /**
+     * @return string
+     * @codeCoverageIgnore
+     */
     public function getCacheDir()
     {
         return $this->getProjectDir() . '/var/cache/' . $this->environment;
     }
 
+    /**
+     * @return string
+     * @codeCoverageIgnore
+     */
     public function getLogDir()
     {
         return $this->getProjectDir() . '/var/log';
     }
 
+    /**
+     * @return \Generator|iterable|\Symfony\Component\HttpKernel\Bundle\BundleInterface[]
+     * @codeCoverageIgnore
+     */
     public function registerBundles()
     {
         $contents = require $this->getProjectDir() . '/config/bundles.php';
@@ -36,6 +47,12 @@ class Kernel extends BaseKernel
         }
     }
 
+    /**
+     * @param ContainerBuilder $container
+     * @param LoaderInterface $loader
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
         $container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
@@ -51,6 +68,11 @@ class Kernel extends BaseKernel
         $loader->load($confDir . '/{services}_' . $this->environment . self::CONFIG_EXTS, 'glob');
     }
 
+    /**
+     * @param RouteCollectionBuilder $routes
+     * @throws \Symfony\Component\Config\Exception\LoaderLoadException
+     * @codeCoverageIgnore
+     */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         $confDir = $this->getProjectDir() . '/config';
@@ -59,5 +81,4 @@ class Kernel extends BaseKernel
         $routes->import($confDir . '/{routes}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, '/', 'glob');
     }
-    // @codeCoverageIgnoreEnd
 }

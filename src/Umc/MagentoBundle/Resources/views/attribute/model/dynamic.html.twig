@@ -1,0 +1,31 @@
+    /**
+     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}})
+    {
+        if (is_array(${{ attribute.getCode()|camel}})) {
+            ${{ attribute.getCode()|camel}} = $this->json->serialize(${{ attribute.getCode()|camel}});
+        }
+        return $this->setData(self::{{ attribute.getCode()|upper}}, ${{ attribute.getCode()|camel}});
+    }
+
+    /**
+     * @param bool $asArray
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}
+     */
+    public function get{{ attribute.getCode()|camel|ucfirst }}($asArray = false)
+    {
+        ${{ attribute.getCode()|camel}} = $this->getData(self::{{ attribute.getCode()|upper}});
+        if (!$asArray) {
+            return ${{ attribute.getCode()|camel}};
+        }
+        if (is_string(${{ attribute.getCode()|camel}})) {
+            try {
+                ${{ attribute.getCode()|camel}} = $this->json->unserialize(${{ attribute.getCode()|camel}});
+            } catch (\InvalidArgumentException $e) {
+                ${{ attribute.getCode()|camel}} = [];
+            }
+        }
+        return ${{ attribute.getCode()|camel}};
+    }

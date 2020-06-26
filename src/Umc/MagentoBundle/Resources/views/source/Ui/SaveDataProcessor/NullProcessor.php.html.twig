@@ -1,0 +1,20 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor;
+
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+
+class NullProcessor implements SaveDataProcessorInterface
+{
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(array $data): array
+    {
+        return $data;
+    }
+}
+{% endif %}

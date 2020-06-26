@@ -1,0 +1,18 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form;
+
+use Magento\Framework\Model\AbstractModel;
+
+interface DataModifierInterface
+{
+    /**
+     * @param AbstractModel $model
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(AbstractModel $model, array $data): array;
+}
+{% endif %}

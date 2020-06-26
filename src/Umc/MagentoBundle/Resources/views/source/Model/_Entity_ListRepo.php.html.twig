@@ -1,0 +1,108 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SortOrder;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}ListRepo implements {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory
+     */
+    private $searchResultFactory;
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory $searchResultFactory
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory $searchResultFactory,
+        CollectionFactory $collectionFactory
+    ) {
+        $this->searchResultFactory = $searchResultFactory;
+        $this->collectionFactory = $collectionFactory;
+    }
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    {
+        /** @var {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory $searchResult */
+        $searchResult = $this->searchResultFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+
+        /** @var Collection $collection */
+        $collection = $this->collectionFactory->create();
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->addFilterGroupToCollection($group, $collection);
+        }
+        $sortOrders = $searchCriteria->getSortOrders();
+        if ($sortOrders) {
+            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+                $field = $sortOrder->getField();
+                $direction = $sortOrder->getDirection();
+                $collection->addOrder(
+                    $field,
+                    ($direction === SortOrder::SORT_ASC) ? SortOrder::SORT_ASC : SortOrder::SORT_DESC
+                );
+            }
+        }
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
+        $searchResult->setTotalCount($collection->getSize());
+        $searchResult->setItems($collection->getItems());
+        return $searchResult;
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param FilterGroup $filterGroup
+     * @param Collection $collection
+     * @return $this
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    private function addFilterGroupToCollection(
+        FilterGroup $filterGroup,
+        Collection $collection
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+{% if entity.isStore() %}
+            if ($filter->getField() === 'store') {
+                $collection->addStoreFilter($filter->getValue(), true);
+            } else {
+                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+                $fields[] = $filter->getField();
+                $conditions[] = [$condition => $filter->getValue()];
+            }
+{% else %}
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $fields[] = $filter->getField();
+            $conditions[] = [$condition => $filter->getValue()];
+{% endif %}
+        }
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
+        return $this;
+    }
+}
+{% endif %}

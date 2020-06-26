@@ -1,0 +1,28 @@
+<?xml version="1.0"?>{{ formatLicense(module, 'xml')|raw }}
+{% set aclParents = module.getAclMenuParents() %}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+{% for index, parent in aclParents %}
+            {% for i in range(0, index) %}    {% endfor %}<resource id="{{ parent }}">
+{% endfor %}
+            {% for i in range(0, aclParents|length) %}    {% endfor %}<resource id="{{ module.getAclName() }}" title="{{ module.getMenuText() }}" sortOrder="{{ module.getSortOrder() }}">
+{% for entity in module.getEntities() %}
+                {% for i in range(0, aclParents|length) %}    {% endfor %}<resource id="{{ entity.getAclName() }}" title="{{ entity.getLabelPlural() }}"/>
+{% endfor %}
+            {% for i in range(0, aclParents|length) %}    {% endfor %}</resource>
+{% for index, parent in aclParents %}
+            {% for i in range(0, aclParents|length - index - 1) %}    {% endfor %}</resource>
+{% endfor %}
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="{{ module.getAclName() }}_config" title="{{ module.getConfigTab() }} Section" />
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

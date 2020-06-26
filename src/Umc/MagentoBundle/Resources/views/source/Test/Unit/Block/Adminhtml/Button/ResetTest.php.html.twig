@@ -1,0 +1,25 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Block\Adminhtml\Button;
+
+{{ sortStart() }}
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace }}\{{ module.getModuleName }}\Block\Adminhtml\Button\Reset;
+{{ sortEnd() }}
+
+class ResetTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace }}\{{ module.getModuleName }}\Block\Adminhtml\Button\Reset::getButtonData
+     */
+    public function testGetButtonData()
+    {
+        $reset = new Reset();
+        $result = $reset->getButtonData();
+        $this->assertEquals(__('Reset'), $result['label']);
+        $this->assertEquals("location.reload();", $result['on_click']);
+    }
+}
+{% endif %}

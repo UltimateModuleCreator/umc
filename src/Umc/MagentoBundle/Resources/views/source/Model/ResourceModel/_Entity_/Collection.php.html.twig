@@ -1,0 +1,39 @@
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use {{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Model\ResourceModel\Collection\{{ entity.getParentCollectionModel() }};
+
+/**
+ * @api
+ */
+class Collection extends {{ entity.getParentCollectionModel() }}
+{
+    /**
+     * @var string
+     * phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore,PSR12.Classes.PropertyDeclaration.Underscore
+     */
+    protected $_idFieldName = '{{ entity.getPk() }}';
+    //phpcs: enable
+
+    /**
+     * Define resource model
+     *
+     * @return void
+     * @codeCoverageIgnore
+     * //phpcs:disable PSR2.Methods.MethodDeclaration.Underscore,PSR12.Methods.MethodDeclaration.Underscore
+     */
+    protected function _construct()
+    {
+        $this->_init(
+            \{{ entity.getModel() }}::class,
+            \{{ entity.getResourceModel() }}::class
+        );
+{% if entity.isStore() %}
+        $this->_map['fields']['store_id'] = 'store_table.store_id';
+        $this->_map['fields']['{{ entity.getPk() }}'] = 'main_table.{{ entity.getPk() }}';
+{% endif %}
+        //phpcs: enable
+    }
+}

@@ -1,0 +1,24 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier;
+
+{{ sortStart() }}
+use Magento\Framework\Model\AbstractModel;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifierInterface;
+{{ sortEnd() }}
+
+class NullModifier implements DataModifierInterface
+{
+    /**
+     * @param AbstractModel $model
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(AbstractModel $model, array $data): array
+    {
+        return $data;
+    }
+}
+{% endif %}

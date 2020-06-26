@@ -1,0 +1,218 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_upload') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileChecker;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader;
+{{ sortEnd() }}
+
+class UploaderTest extends TestCase
+{
+    /**
+     * @var Database | MockObject
+     */
+    private $coreFileStorageDatabase;
+    /**
+     * @var Filesystem | MockObject
+     */
+    private $filesystem;
+    /**
+     * @var UploaderFactory | MockObject
+     */
+    private $uploaderFactory;
+    /**
+     * @var StoreManagerInterface | MockObject
+     */
+    private $storeManager;
+    /**
+     * @var LoggerInterface | MockObject
+     */
+    private $logger;
+    /**
+     * @var Uploader
+     */
+    private $uploader;
+    /**
+     * @var Store | MockObject
+     */
+    private $store;
+    /**
+     * @var Filesystem\Directory\WriteInterface | MockObject
+     */
+    private $mediaDirectory;
+    /**
+     * @var FileChecker | MockObject
+     */
+    private $fileChecker;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->coreFileStorageDatabase = $this->createMock(Database::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->uploaderFactory = $this->createMock(UploaderFactory::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->store = $this->createMock(Store::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
+        $this->mediaDirectory = $this->createMock(Filesystem\Directory\WriteInterface::class);
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->mediaDirectory);
+        $this->fileChecker = $this->createMock(FileChecker::class);
+        $this->uploader = new Uploader(
+            $this->coreFileStorageDatabase,
+            $this->filesystem,
+            $this->uploaderFactory,
+            $this->storeManager,
+            $this->logger,
+            $this->fileChecker,
+            'base_tmp_path',
+            'base_path',
+            ['ext1', 'ext2']
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::getBaseTmpPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testGetBaseTmpPath()
+    {
+        $this->assertEquals('base_tmp_path', $this->uploader->getBaseTmpPath());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::getBasePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testGetBasePath()
+    {
+        $this->assertEquals('base_path', $this->uploader->getBasePath());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::getAllowedExtensions
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testGetAllowedExtensions()
+    {
+        $this->assertEquals(['ext1', 'ext2'], $this->uploader->getAllowedExtensions());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::getFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testGetFilePath()
+    {
+        $this->assertEquals('path/name', $this->uploader->getFilePath('path/', '/name'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::moveFileFromTmp
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testMoveFileFromTmp()
+    {
+        $this->coreFileStorageDatabase->expects($this->once())->method('copyFile');
+        $this->mediaDirectory->expects($this->once())->method('renameFile');
+        $this->fileChecker->expects($this->once())->method('getNewFilename')->willReturn('name');
+        $this->assertEquals('name', $this->uploader->moveFileFromTmp('name'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::moveFileFromTmp
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testMoveFileFromTmpWithException()
+    {
+        $this->coreFileStorageDatabase->expects($this->once())->method('copyFile');
+        $this->mediaDirectory->expects($this->once())->method('renameFile')->willThrowException(new \Exception());
+        $this->fileChecker->expects($this->once())->method('getNewFilename')->willReturn('name');
+        $this->expectException(LocalizedException::class);
+        $this->assertEquals('name', $this->uploader->moveFileFromTmp('name'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::getBaseUrl
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testGetBaseUrl()
+    {
+        $this->store->method('getBaseUrl')->willReturn('base_url/');
+        $this->assertEquals('base_url/', $this->uploader->getBaseUrl());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::saveFileToTmpDir
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testSaveFileToTmpDir()
+    {
+        $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
+        $this->uploaderFactory->method('create')->willReturn($uploader);
+        $this->store->method('getBaseUrl')->willReturn('base_url/');
+        $uploader->method('save')->willReturn([
+            'tmp_name' => 'tmp_name',
+            'path' => 'path',
+            'file' => 'file'
+        ]);
+        $this->coreFileStorageDatabase->expects($this->once())->method('saveFile');
+        $expected = [
+            'tmp_name' => 'tmp_name',
+            'path' => 'path',
+            'file' => 'file',
+            'url' => 'base_url/base_tmp_path/file'
+        ];
+        $this->assertEquals($expected, $this->uploader->saveFileToTmpDir('fileId'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::saveFileToTmpDir
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testSaveFileToTmpDirNoResult()
+    {
+        $this->expectException(LocalizedException::class);
+        $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
+        $this->uploaderFactory->method('create')->willReturn($uploader);
+        $this->store->method('getBaseUrl')->willReturn('base_url/');
+        $uploader->method('save')->willReturn([
+            'tmp_name' => 'tmp_name',
+            'path' => 'path',
+            'file' => 'file'
+        ]);
+        $this->coreFileStorageDatabase->expects($this->once())->method('saveFile')
+            ->willThrowException(new \Exception());
+        $this->uploader->saveFileToTmpDir('fileId');
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::saveFileToTmpDir
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\Uploader::__construct
+     */
+    public function testSaveFileToTmpStorageSaveError()
+    {
+        $this->expectException(LocalizedException::class);
+        $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
+        $this->uploaderFactory->method('create')->willReturn($uploader);
+        $this->store->method('getBaseUrl')->willReturn('base_url/');
+        $uploader->method('save')->willReturn(null);
+        $this->coreFileStorageDatabase->expects($this->never())->method('saveFile');
+        $this->uploader->saveFileToTmpDir('fileId');
+    }
+}
+{% endif %}

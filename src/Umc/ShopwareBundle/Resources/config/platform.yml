@@ -1,0 +1,12 @@
+shopware:
+  code: shopware
+  name: Shopware 6
+  url: 'https://shopware.com/'
+  image: 'bundles/umcshopware/logo/shopware.png'
+  sort_order: 20
+  unsupported_message: Shopware 6 might be supported later.
+  config:
+    form:
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/module.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/entity.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/attribute.yml'

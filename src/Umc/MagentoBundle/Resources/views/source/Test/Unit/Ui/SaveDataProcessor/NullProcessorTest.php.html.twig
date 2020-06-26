@@ -1,0 +1,23 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\SaveDataProcessor;
+
+{{ sortStart() }}
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\NullProcessor;
+{{ sortEnd() }}
+
+class NullProcessorTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\NullProcessor
+     */
+    public function testModifyData()
+    {
+        $data = ['dummy'];
+        $this->assertEquals($data, (new NullProcessor())->modifyData($data));
+    }
+}
+{% endif %}

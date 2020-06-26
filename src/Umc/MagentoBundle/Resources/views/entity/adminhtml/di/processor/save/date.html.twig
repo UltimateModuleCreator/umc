@@ -1,0 +1,9 @@
+    <virtualType name="{{ entity.getVirtualType('SaveDateProcessor') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\SaveDataProcessor\Date">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+{% for attribute in attributes %}
+                <item name="{{ attribute.getCode() }}" xsi:type="string">{{ attribute.getCode() }}</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>

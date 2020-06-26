@@ -1,0 +1,68 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\EntityUiManagerInterface;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}UiManager implements EntityUiManagerInterface
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     */
+    private $repository;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Factory
+     */
+    public $factory;
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface $repository
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Factory $factory
+     */
+    public function __construct(
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface $repository,
+        {{ entity.getNameSingular()|camel|ucfirst }}Factory $factory
+    ) {
+        $this->repository = $repository;
+        $this->factory = $factory;
+    }
+
+    /**
+     * @param int|null $id
+     * @return \Magento\Framework\Model\AbstractModel | {{ entity.getNameSingular()|camel|ucfirst }} | {{ entity.getNameSingular()|camel|ucfirst }}Interface;
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function get(?int $id)
+    {
+        return ($id)
+            ? $this->repository->get($id)
+            : $this->factory->create();
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel ${{ entity.getNameSingular()|camel }}
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function save(\Magento\Framework\Model\AbstractModel ${{ entity.getNameSingular()|camel }})
+    {
+        $this->repository->save(${{ entity.getNameSingular()|camel }});
+    }
+
+    /**
+     * @param int $id
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function delete(int $id)
+    {
+        $this->repository->deleteById($id);
+    }
+}
+{% endif %}

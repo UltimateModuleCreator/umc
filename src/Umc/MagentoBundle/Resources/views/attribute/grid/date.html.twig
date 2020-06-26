@@ -1,0 +1,20 @@
+        <column name="{{ attribute.getCode() }}" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <editor>
+{% if (attribute.isRequired()) %}
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+{% endif %}
+                    <editorType>date</editorType>
+                </editor>
+                <dataType>date</dataType>
+                <timezone>false</timezone>
+                <dateFormat>MMM d, y</dateFormat>
+                <label translate="true">{{ attribute.getLabel() }}</label>
+{% if attribute.isAdminGridHidden() %}
+                <visible>false</visible>
+{% endif %}
+            </settings>
+        </column>

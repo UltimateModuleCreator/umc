@@ -1,0 +1,29 @@
+        <field name="{{ attribute.getCode() }}" formElement="wysiwyg">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="formElement" xsi:type="string">wysiwyg</item>
+                    <item name="source" xsi:type="string">{{ attribute.getEntity().getNameSingular()|snake }}</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="wysiwyg" xsi:type="boolean">true</item>
+                    <item name="rows" xsi:type="number">8</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">{{ attribute.getLabel() }}</label>
+                <dataScope>{{ attribute.getCode() }}</dataScope>
+{% if attribute.isRequired() %}
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+{% endif %}
+{% if attribute.getNote() %}
+                <notice>{{ attribute.getNote() }}</notice>
+{% endif %}
+{% if attribute.getTooltip() %}
+                <tooltip>
+                    <description>{{ attribute.getTooltip() }}</description>
+                </tooltip>
+{% endif %}
+            </settings>
+        </field>

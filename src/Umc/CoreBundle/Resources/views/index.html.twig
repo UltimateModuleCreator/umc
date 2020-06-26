@@ -1,0 +1,41 @@
+{% extends "@UmcCore/base.html.twig" %}
+{% block body %}
+    <div class="card">
+        <div class="card-header"><h1>Installed platforms</h1></div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">Module</th>
+                            <th scope="col">Create Module</th>
+                            <th scope="col">View Modules</th>
+                            <th scope="col">Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for platform in platforms %}
+                            <tr>
+                                <td>
+                                    <img src="{{ asset(platform.getImage()) }}" alt="{{ platform.getName() }}" width="50" height="50" />
+                                    {{ platform.name }}
+                                </td>
+                                {% if platform.isSupported() %}
+                                    <td class="text-center">
+                                        {% include '@UmcCore/index/menu.html.twig' with {platform: platform, item: {title: "Create Module", link: "new", icon: 'edit', all: "Latest supported (" ~ platform.getLatestVersion().getLabel() ~ ")"}} %}
+                                    </td>
+                                    <td>
+                                        {% include '@UmcCore/index/menu.html.twig' with {platform: platform, item: {title: "View Modules", link: "list", icon: 'list', 'all': "All versions"}} %}
+                                    </td>
+                                    <td>
+                                        {% include '@UmcCore/index/menu.html.twig' with {platform: platform, item: {title: "Settings", link: "settings", icon: 'cogs', all: platform.getName() ~ " default settings"}} %}
+                                    </td>
+                                {% else %}
+                                    <td colspan="3" class="text-center align-middle">{{ platform.getUnsopportedMessage() }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock %}

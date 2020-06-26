@@ -1,0 +1,105 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\View\Element\BlockFactory;
+{% if entity.isStore() %}
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+{% endif %}
+use Magento\Theme\Block\Html\Pager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }};
+{{ sortEnd() }}
+
+class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
+{
+{% if entity.isStore() %}
+    /**
+     * @var StoreManagerInterface | MockObject
+     */
+    private $storeManager;
+{% endif %}
+    /**
+     * @var CollectionFactory | MockObject
+     */
+    private $collectionFactory;
+    /**
+     * @var BlockFactory | MockObject
+     */
+    private $blockFactory;
+    /**
+     * @var Collection
+     */
+    private $collection;
+    /**
+     * @var List{{ entity.getNameSingular()|camel|ucfirst }}
+     */
+    private $list{{ entity.getNameSingular()|camel|ucfirst }};
+    /**
+     * @var Pager | MockObject
+     */
+    private $pager;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+{% if entity.isStore() %}
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager->method('getStore')->willReturn($this->createMock(StoreInterface::class));
+{% endif %}
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->blockFactory = $this->createMock(BlockFactory::class);
+        $this->collection = $this->createMock(Collection::class);
+        $this->pager = $this->createMock(Pager::class);
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }} = new List{{ entity.getNameSingular()|camel|ucfirst }}(
+{% if entity.isStore() %}
+            $this->storeManager,
+{% endif %}
+            $this->collectionFactory,
+            $this->blockFactory
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getCollection
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::processCollection
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Collection()
+    {
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->collection);
+{% if entity.isStore() %}
+        $this->collection->expects($this->once())->method('addStoreFilter');
+{% endif %}
+        $this->collection->expects($this->once())->method('addFieldToFilter');
+        $this->blockFactory->expects($this->once())->method('createBlock')->willReturn($this->pager);
+        $this->assertEquals($this->collection, $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection());
+        //call twice to test memoizing
+        $this->assertEquals($this->collection, $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getPagerHtml
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::processCollection
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGetPagerHtml()
+    {
+        $this->pager->method('toHtml')->willReturn('pager_html');
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->collection);
+        $this->blockFactory->expects($this->once())->method('createBlock')->willReturn($this->pager);
+        $this->assertEquals('pager_html', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml());
+        //call twice to test memoizing
+        $this->assertEquals('pager_html', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml());
+    }
+}
+{% endif %}

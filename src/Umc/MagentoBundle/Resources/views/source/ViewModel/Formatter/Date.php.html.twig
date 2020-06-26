@@ -1,0 +1,57 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('frontend') and module.hasEntitiesWithFlag('attribute_processor_frontend_date') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter;
+
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+
+class Date implements FormatterInterface
+{
+    /**
+     * formatting arguments
+     */
+    public const FORMAT = 'format';
+    public const SHOW_TIME = 'show_time';
+    public const TIMEZONE = 'timezone';
+
+    /**
+     * default date format
+     * @var string
+     */
+    public const DEFAULT_FORMAT = \IntlDateFormatter::LONG;
+    /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * Date constructor.
+     * @param TimezoneInterface $localeDate
+     */
+    public function __construct(TimezoneInterface $localeDate)
+    {
+        $this->localeDate = $localeDate;
+    }
+
+    /**
+     * @param $value
+     * @param array $arguments
+     * @return string
+     */
+    public function formatHtml($value, $arguments = []): string
+    {
+        $format = $arguments[self::FORMAT] ?? self::DEFAULT_FORMAT;
+        $showTime = $arguments[self::SHOW_TIME] ?? false;
+        $timezone = $arguments[self::TIMEZONE] ?? null;
+        $value = $value instanceof \DateTimeInterface ? $value : new \DateTime($value);
+        return $this->localeDate->formatDateTime(
+            $value,
+            $format,
+            $showTime ? $format : \IntlDateFormatter::NONE,
+            null,
+            $timezone
+        );
+    }
+}
+{% endif %}

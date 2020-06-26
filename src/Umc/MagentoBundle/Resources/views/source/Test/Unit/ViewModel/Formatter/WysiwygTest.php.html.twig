@@ -1,0 +1,43 @@
+{% if not module.isUmcCrud() and module.isFrontend() and module.hasEntitiesWithFlag('attribute_processor_frontend_editor') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\Formatter;
+
+{{ sortStart() }}
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg;
+{{ sortEnd() }}
+
+class WysiwygTest extends TestCase
+{
+    /**
+     * @var \Zend_Filter_Interface | MockObject
+     */
+    private $filter;
+    /**
+     * @var Wysiwyg
+     */
+    private $wysiwyg;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->filter = $this->createMock(\Zend_Filter_Interface::class);
+        $this->wysiwyg = new Wysiwyg($this->filter);
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg::formatHtml
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\Wysiwyg::__construct
+     */
+    public function testFormatHtml()
+    {
+        $this->filter->expects($this->once())->method('filter')->willReturn('filtered');
+        $this->assertEquals('filtered', $this->wysiwyg->formatHtml('value'));
+    }
+}
+{% endif %}

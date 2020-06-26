@@ -1,0 +1,32 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace }}\{{ module.getModuleName }}\Test\Unit\Controller\Adminhtml;
+
+{{ sortStart() }}
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\ResultFactory;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\NewAction;
+{{ sortEnd() }}
+
+class NewActionTest extends TestCase
+{
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml\NewAction::execute
+     */
+    public function testExecute()
+    {
+        $context = $this->createMock(Context::class);
+        $resultFactory = $this->createMock(ResultFactory::class);
+        $forward = $this->createMock(Forward::class);
+        $context->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
+        $resultFactory->expects($this->once())->method('create')->willReturn($forward);
+        $newAction = new NewAction($context);
+        $forward->expects($this->once())->method('forward')->with('edit');
+        $this->assertEquals($forward, $newAction->execute());
+    }
+}
+{% endif %}

@@ -1,0 +1,10 @@
+{{ indent }}<strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}:')); ?></strong>
+{{ indent }}<?php $src = $formatter->formatHtml(
+{{ indent }}    ${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}(),
+{{ indent }}    [
+{{ indent }}        'type' => 'image',
+{{ indent }}        'resize' => [200],
+{{ indent }}        'path' => '{{ entity.getUploadFolder('image') }}'
+{{ indent }}    ]
+{{ indent }}); ?>
+{{ indent }}<img src="<?= $block->escapeUrl($src); ?>" alt="" />

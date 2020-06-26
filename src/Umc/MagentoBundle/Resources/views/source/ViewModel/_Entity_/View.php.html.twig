@@ -1,0 +1,61 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+use {{ entity.getInterface() }};
+use {{ entity.getRepoInterface() }};
+{{ sortEnd() }}
+
+class View implements ArgumentInterface
+{
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     */
+    private ${{ entity.getNameSingular()|camel}}Repository;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Interface|bool
+     */
+    private ${{ entity.getNameSingular()|camel}};
+
+    /**
+     * View constructor.
+     * @param RequestInterface $request
+     * @param {{ entity.getNameSingular()|camel|ucfirst}}RepositoryInterface ${{ entity.getNameSingular()|camel}}Repository
+     */
+    public function __construct(RequestInterface $request, {{ entity.getNameSingular()|camel|ucfirst}}RepositoryInterface ${{ entity.getNameSingular()|camel}}Repository)
+    {
+        $this->request = $request;
+        $this->{{ entity.getNameSingular()|camel}}Repository = ${{ entity.getNameSingular()|camel}}Repository;
+    }
+
+    /**
+     * @return bool|{{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        if ($this->{{ entity.getNameSingular()|camel}} === null) {
+            $id = (int)$this->request->getParam('id');
+            if ($id) {
+                try {
+                    $this->{{ entity.getNameSingular()|camel}} = $this->{{ entity.getNameSingular()|camel}}Repository->get($id);
+                } catch (NoSuchEntityException $e) {
+                    $this->{{ entity.getNameSingular()|camel}} = false;
+                }
+            } else {
+                $this->{{ entity.getNameSingular()|camel}} = false;
+            }
+        }
+        return $this->{{ entity.getNameSingular()|camel}};
+    }
+}
+{% endif %}

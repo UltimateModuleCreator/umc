@@ -1,0 +1,21 @@
+    <div class="card"
+         data-bind="attr: {id: uuid('nav-{{ formKey }}}'), 'area-labelledby': uuid('nav-{{ formKey }}')}">
+        <div class="card-body">
+            {% set index = 0 %}
+            {% for name, field in form.fields %}
+                {% if index is divisible by (4) %}
+                    {% if index != 0 %}
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                {% endif %}
+                <div class="col-3">
+                    {% set fieldName = formKey ~ '.' ~ field.name %}
+                    {% set field = field|merge({'name': fieldName, 'additionalDataBind': 'disable: data.restore.restore', 'containerAttributes': ''}) %}
+                    {% include field.template with {element: field} %}
+                </div>
+                {% set index = index + 1 %}
+            {% endfor %}
+            </div>
+        </div>
+    </div>

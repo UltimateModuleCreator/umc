@@ -1,0 +1,15 @@
+{% if entity.isFrontend() %}
+<?xml version="1.0"?>{{ formatLicense(module, 'xml')|raw }}
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block name="{{ entity.getNameSingular()|hyphen }}-view" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ entity.getNameSingular()|snake }}/view.phtml">
+                <arguments>
+                    <argument name="{{ entity.getNameSingular()|camel }}View" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View</argument>
+                    <argument name="formatter" xsi:type="object">{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
+{% endif %}

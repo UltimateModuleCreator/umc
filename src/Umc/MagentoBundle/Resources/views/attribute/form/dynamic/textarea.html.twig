@@ -1,0 +1,28 @@
+        {{ indent }}<field name="{{ field.getCode() }}" formElement="textarea">
+            {{ indent }}<argument name="data" xsi:type="array">
+                {{ indent }}<item name="config" xsi:type="array">
+                    {{ indent }}<item name="source" xsi:type="string">{{ attribute.getCode() }}</item>
+{% if field.getDefaultValue() %}
+                    {{ indent }}<item name="default" xsi:type="string">{{ field.getDefaultValue() }}</item>
+{% endif %}
+                {{ indent }}</item>
+            {{ indent }}</argument>
+            {{ indent }}<settings>
+                {{ indent }}<dataType>text</dataType>
+                {{ indent }}<label translate="true">{{ field.getLabel() }}</label>
+                {{ indent }}<dataScope>{{ field.getCode() }}</dataScope>
+{% if field.isRequired() %}
+                {{ indent }}<validation>
+                    {{ indent }}<rule name="required-entry" xsi:type="boolean">true</rule>
+                {{ indent }}</validation>
+{% endif %}
+{% if field.getNote() %}
+                {{ indent }}<notice>{{ attribute.getNote() }}</notice>
+{% endif %}
+{% if field.getTooltip() %}
+                {{ indent }}<tooltip>
+                    {{ indent }}<description>{{ field.getTooltip() }}</description>
+                {{ indent }}</tooltip>
+{% endif %}
+            </settings>
+        </field>

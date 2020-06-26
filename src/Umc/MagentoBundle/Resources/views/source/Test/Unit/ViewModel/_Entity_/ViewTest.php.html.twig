@@ -1,0 +1,87 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View;
+{{ sortEnd() }}
+
+class ViewTest extends TestCase
+{
+    /**
+     * @var RequestInterface | MockObject
+     */
+    private $request;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface | MockObject
+     */
+    private ${{ entity.getNameSingular()|camel }}Repository;
+    /**
+     * @var View
+     */
+    private $view;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->{{ entity.getNameSingular()|camel }}Repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);
+        $this->view = new View(
+            $this->request,
+            $this->{{ entity.getNameSingular()|camel }}Repository
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        $this->request->expects($this->once())->method('getParam')->willReturn(1);
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+        $this->{{ entity.getNameSingular()|camel }}Repository->expects($this->once())->method('get')->willReturn(${{ entity.getNameSingular()|camel }});
+        $this->assertEquals(${{ entity.getNameSingular()|camel }}, $this->view->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertEquals(${{ entity.getNameSingular()|camel }}, $this->view->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}WithException()
+    {
+        $this->request->expects($this->once())->method('getParam')->willReturn(1);
+        $this->{{ entity.getNameSingular()|camel }}Repository->expects($this->once())->method('get')->willThrowException(
+            $this->createMock(NoSuchEntityException::class)
+        );
+        $this->assertFalse($this->view->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertFalse($this->view->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\View::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}NoId()
+    {
+        $this->request->expects($this->once())->method('getParam')->willReturn(null);
+        $this->{{ entity.getNameSingular()|camel }}Repository->expects($this->never())->method('get');
+        $this->assertFalse($this->view->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertFalse($this->view->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+}
+{% endif %}

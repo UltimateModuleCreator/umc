@@ -1,0 +1,26 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Controller\Adminhtml;
+
+{{ sortStart() }}
+use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\ResultFactory;
+{{ sortEnd() }}
+
+class NewAction extends Action
+{
+    /**
+     * @return Forward
+     */
+    public function execute()
+    {
+        /** @var Forward $forward */
+        $forward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+        $forward->forward('edit');
+        return $forward;
+    }
+}
+{% endif %}

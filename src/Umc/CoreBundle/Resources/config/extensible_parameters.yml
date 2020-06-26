@@ -1,0 +1,163 @@
+admin_menu:
+  value:
+    '':
+      label: '--Top Level--'
+attribute_type:
+  flags:
+    sort: label
+    filter: disabled
+  value:
+    text:
+      label: Text
+      input_type: Text Input
+      can_be_dynamic: true
+      flags:
+        can_be_name: true
+        can_be_required: true
+        can_show_in_grid: true
+        full_text: true
+    country:
+      label: Country
+      input_type: Select
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+        full_text: true
+    country_multiselect:
+      label: Country Multiselect
+      input_type: Multiselect
+      can_be_dynamic: true
+      flags:
+        multiple: true
+        can_show_in_grid: true
+        can_be_required: true
+        full_text: true
+    date:
+      label: Date
+      input_type: Date
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+    decimal:
+      label: Decimal
+      input_type: Text Input
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+    dropdown:
+      label: Dropdown
+      class: App\Model\Attribute\Type\Dropdown
+      input_type: Select
+      can_be_dynamic: true
+      flags:
+        manual_options: true
+        can_show_in_grid: true
+        can_be_required: true
+      dynamic_flags:
+        manual_options: true
+    file:
+      label: File
+      can_be_dynamic: false
+      input_type: File
+      flags:
+        upload: true
+        full_text: true
+    image:
+      label: Image
+      input_type: File
+      can_be_dynamic: false
+      flags:
+        can_show_in_grid: true
+        upload: true
+        full_text: true
+    integer:
+      label: Integer
+      input_type: Text Input
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+    multiselect:
+      label: Multiselect
+      input_type: Multiselect
+      can_be_dynamic: true
+      flags:
+        manual_options: true
+        multiple: true
+        can_show_in_grid: true
+        can_be_required: true
+      dynamic_flags:
+        manual_options: true
+        multiple: true
+    textarea:
+      label: Textarea (no editor)
+      can_be_name: false
+      input_type: Textarea
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+        full_text: true
+    wysiwyg:
+      label: Wysiwyg
+      input_type: Textarea
+      can_be_dynamic: false
+      flags:
+        can_be_required: true
+        full_text: true
+    yesno:
+      label: Yes/No
+      input_type: Checkbox (toggle)
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+    product_attribute:
+      label: Product Attribute
+      input_type: Select
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+        product_attribute: true
+      dynamic_flags:
+        product_attribute: true
+    product_attribute_set:
+      label: Product Attribute Set
+      input_type: Select
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+        product_attribute_set: true
+      dynamic_flags:
+        product_attribute_set: true
+    product_attribute_multiselect:
+      label: Product Attribute Multiselect
+      input_type: Multiselect
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+        multiple: true
+        product_attribute: true
+      dynamic_flags:
+        product_attribute: true
+    product_attribute_set_multiselect:
+      label: Product Attribute Set Multiselect
+      input_type: Multiselect
+      can_be_dynamic: true
+      flags:
+        can_show_in_grid: true
+        can_be_required: true
+        product_attribute_set: true
+        multiple: true
+      dynamic_flags:
+        product_attribute_set: true
+    dynamic:
+      label: Dynamic rows
+      input_type: Dynamic Rows
+      can_be_dynamic: false

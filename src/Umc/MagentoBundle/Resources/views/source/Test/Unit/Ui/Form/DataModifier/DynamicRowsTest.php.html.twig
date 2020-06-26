@@ -1,0 +1,87 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_provider_dynamic_rows') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\Form\DataModifier;
+
+{{ sortStart() }}
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\DynamicRows;
+{{ sortEnd() }}
+
+class DynamicRowsTest extends TestCase
+{
+    /**
+     * @var Json | MockObject
+     */
+    private $serializer;
+    /**
+     * @var AbstractModel | MockObject
+     */
+    private $model;
+    /**
+     * @var DynamicRows
+     */
+    private $dynamicRows;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->serializer = $this->createMock(Json::class);
+        $this->model = $this->createMock(AbstractModel::class);
+        $this->dynamicRows = new DynamicRows(
+            $this->serializer,
+            ['field1', 'field2', 'field3']
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\DynamicRows::modifyData
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\DynamicRows::__construct
+     */
+    public function testModifyData()
+    {
+        $data = [
+            'field1' => 'value1',
+            'field2' => ['value2'],
+            'dummy' => 'dummy'
+        ];
+        $this->serializer->expects($this->once())->method('unserialize')->willReturnCallback(
+            function ($item) {
+                return [$item];
+            }
+        );
+        $expected = [
+            'field1' => ['value1'],
+            'field2' => ['value2'],
+            'dummy' => 'dummy'
+        ];
+        $this->assertEquals($expected, $this->dynamicRows->modifyData($this->model, $data));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\DynamicRows::modifyData
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\Form\DataModifier\DynamicRows::__construct
+     */
+    public function testModifyDataWithUnserializeError()
+    {
+        $data = [
+            'field1' => 'value1',
+            'field2' => ['value2'],
+            'dummy' => 'dummy'
+        ];
+        $this->serializer->expects($this->once())->method('unserialize')->willThrowException(new \Exception());
+        $expected = [
+            'field1' => [],
+            'field2' => ['value2'],
+            'dummy' => 'dummy'
+        ];
+        $this->assertEquals($expected, $this->dynamicRows->modifyData($this->model, $data));
+    }
+}
+{% endif %}

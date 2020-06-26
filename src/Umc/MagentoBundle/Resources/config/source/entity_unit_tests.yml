@@ -1,0 +1,44 @@
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/_Entity_/ViewTest.php"
+  label: "Entity view controller unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/_Entity_/IndexTest.php"
+  label: "Entity index controller unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/_Entity_UiManagerTest.php"
+  label: "Entity Admin Ui Manager unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/_Entity_UiCollectionProviderTest.php"
+  label: "Entity Admin Ui Collection Provider unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/_Entity_RepoTest.php"
+  label: "Entity Repository unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/_Entity_ListRepoTest.php"
+  label: "Entity List Repository unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/_Entity_/ViewTest.php"
+  label: "Entity frontend view model unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/_Entity_/List_Entity_Test.php"
+  label: "Entity frontend list view model unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/_Entity_/UrlTest.php"
+  label: "Entity frontend url view model unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/Search/_Entity_Test.php"
+  label: "Entity admin search model unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Model/_Entity_Test.php"
+  label: "Entity model unit test"
+  scope: entity

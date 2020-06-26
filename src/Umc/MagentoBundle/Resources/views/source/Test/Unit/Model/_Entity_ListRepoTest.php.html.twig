@@ -1,0 +1,138 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory;
+use {{ entity.getModel() }};
+use {{ entity.getModel('ListRepo') }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\CollectionFactory;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}ListRepoTest extends TestCase
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory | MockObject
+     */
+    private $searchResultsFactory;
+    /**
+     * @var CollectionFactory | MockObject
+     */
+    private $collectionFactory;
+    /**
+     * @var SearchCriteriaInterface | MockObject
+     */
+    private $searchCriteria;
+    /**
+     * @var FilterGroup | MockObject
+     */
+    private $filterGroup;
+    /**
+     * @var Collection | MockObject
+     */
+    private $collection;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}ListRepo
+     */
+    private ${{ entity.getNameSingular()|camel }}ListRepo;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->searchResultsFactory = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterfaceFactory::class);
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $this->filterGroup = $this->createMock(FilterGroup::class);
+        $this->collection = $this->createMock(Collection::class);
+        $this->{{ entity.getNameSingular()|camel }}ListRepo = new {{ entity.getNameSingular()|camel|ucfirst }}ListRepo(
+            $this->searchResultsFactory,
+            $this->collectionFactory
+        );
+    }
+
+    /**
+     * @covers \{{ entity.getModel('ListRepo') }}::getList
+     * @covers \{{ entity.getModel('ListRepo') }}::addFilterGroupToCollection
+     * @covers \{{ entity.getModel('ListRepo') }}::__construct
+     */
+    public function testGetList()
+    {
+        /** @var SearchCriteriaInterface | MockObject $searchCriteria */
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $searchResults = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface::class);
+        $searchResults->expects($this->once())->method('setSearchCriteria');
+        $this->searchResultsFactory->method('create')->willReturn($searchResults);
+
+        $searchCriteria->method('getFilterGroups')->willReturn($this->getGroupFiltersMock());
+        $searchCriteria->method('getSortOrders')->willReturn($this->getSortOrdersMock());
+
+        $collection = $this->createMock(Collection::class);
+        $collection->method('getItems')->willReturn([
+            $this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(),
+            $this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock(),
+        ]);
+{% if entity.isStore() %}
+        $collection->expects($this->once())->method('addStoreFilter');
+{% endif %}
+        $collection->expects($this->once())->method('addFieldToFilter');
+        $collection->expects($this->exactly(2))->method('addOrder');
+        $this->collectionFactory->method('create')->willReturn($collection);
+
+        $searchResults->expects($this->once())->method('setTotalCount');
+        $searchResults->expects($this->once())->method('setItems')->willReturnSelf();
+
+        $this->assertEquals($searchResults, $this->{{ entity.getNameSingular()|camel }}ListRepo->getList($searchCriteria));
+    }
+
+    /**
+     * @return array
+     */
+    private function getGroupFiltersMock(): array
+    {
+        $filterGroup = $this->createMock(FilterGroup::class);
+        $filter1 = $this->createMock(Filter::class);
+        $filter2 = $this->createMock(Filter::class);
+{% if entity.isStore %}
+        $filter2->method('getField')->willReturn('store');
+{% endif %}
+        $filterGroup->method('getFilters')->willReturn([
+            $filter1,
+            $filter2
+        ]);
+        return [$filterGroup];
+    }
+
+    /**
+     * @return array
+     */
+    private function getSortOrdersMock(): array
+    {
+        return [
+            $this->createMock(SortOrder::class),
+            $this->createMock(SortOrder::class)
+        ];
+    }
+
+    /**
+     * @return MockObject
+     */
+    private function get{{ entity.getNameSingular()|camel|ucfirst }}Mock(): MockObject
+    {
+        $mock = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}::class);
+        $mock->method('getData')->willReturn([]);
+        return $mock;
+    }
+}
+{% endif %}

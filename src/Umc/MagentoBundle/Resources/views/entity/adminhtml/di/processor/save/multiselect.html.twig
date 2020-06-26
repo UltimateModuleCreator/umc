@@ -1,0 +1,9 @@
+    <virtualType name="{{ entity.getVirtualType('SaveMultiselectProcessor') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\SaveDataProcessor\Multiselect">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+{% for attribute in attributes %}
+                <item name="{{ attribute.getCode() }}" xsi:type="string">{{ attribute.getCode() }}</item>
+{% endfor %}
+            </argument>
+        </arguments>
+    </virtualType>

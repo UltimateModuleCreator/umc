@@ -1,0 +1,15 @@
+{% if not module.isUmcCrud() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui;
+
+interface SaveDataProcessorInterface
+{
+    /**
+     * @param array $aata
+     * @return array
+     */
+    public function modifyData(array $data): array;
+}
+{% endif %}

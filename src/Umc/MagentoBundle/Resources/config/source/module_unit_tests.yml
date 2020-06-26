@@ -1,0 +1,149 @@
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/BackTest.php"
+  label: "Admin back button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/DeleteTest.php"
+  label: "Admin delete button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/ResetTest.php"
+  label: "Admin reset button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Block/Adminhtml/Button/SaveTest.php"
+  label: "Admin save button unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/DeleteTest.php"
+  label: "Admin delete controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/EditTest.php"
+  label: "Admin edit controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/IndexTest.php"
+  label: "Admin index controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/InlineEditTest.php"
+  label: "Admin inline edit controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/MassDeleteTest.php"
+  label: "Admin mass delete controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/NewActionTest.php"
+  label: "Admin new action controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/SaveTest.php"
+  label: "Admin save controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Controller/Adminhtml/UploadTest.php"
+  label: "Admin upload controller unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/Collection/AbstractCollectionTest.php"
+  label: "Abstract collection unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/Collection/StoreAwareAbstractCollectionTest.php"
+  label: "Store Aware Abstract collection unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/StoreTest.php"
+  label: "Store relation test model"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/AbstractModelTest.php"
+  label: "Abstract model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/StoreAwareAbstractModelTest.php"
+  label: "Store related abstract model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/Relation/Store/ReadHandlerTest.php"
+  label: "Store relation reader unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/ResourceModel/Relation/Store/SaveHandlerTest.php"
+  label: "Store relation reader unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/FileCheckerTest.php"
+  label: "File checked unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/FileInfoTest.php"
+  label: "File info unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Model/UploaderTest.php"
+  label: "Uploader model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Source/Catalog/ProductAttributeTest.php"
+  label: "Product attribute source model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Source/Catalog/ProductAttributeSetTest.php"
+  label: "Product attribute set source model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Source/OptionsTest.php"
+  label: "Options source model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Source/StoreViewTest.php"
+  label: "Options source model unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Component/Listing/ActionsColumnTest.php"
+  label: "Actions column unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Component/Listing/ImageTest.php"
+  label: "Grid Image column renderer unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/CompositeDataModifierTest.php"
+  label: "Dynamic Rows form data modifier unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/DynamicRowsTest.php"
+  label: "Multiple select form data modifier unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/MultiselectTest.php"
+  label: "Null form data modifier unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/NullModifierTest.php"
+  label: "Null form data modifier unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataModifier/UploadTest.php"
+  label: "Upload form data modifier unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/Form/DataProviderTest.php"
+  label: "Form data provider unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/SaveDataProcessor/CompositeProcessorTest.php"
+  label: "Save data composite processor unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/SaveDataProcessor/DateTest.php"
+  label: "Save data date processor unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/SaveDataProcessor/DynamicRowsTest.php"
+  label: "Save data dynamic rows processor unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/SaveDataProcessor/MultiselectTest.php"
+  label: "Save data multiselect processor unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/SaveDataProcessor/NullProcessorTest.php"
+  label: "Save data null processor unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/SaveDataProcessor/UploadTest.php"
+  label: "Save data upload processor unit test"
+-
+  source: "@UmcMagento/source/Test/Unit/Ui/EntityUiConfigTest.php"
+  label: "Entity Ui config unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/FormatterTest.php"
+  label: "Frontend value formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/WysiwygTest.php"
+  label: "Frontend wysiwyg formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/TextTest.php"
+  label: "Frontend text formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/OptionsTest.php"
+  label: "Frontend dropdown and multiselect formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/ImageTest.php"
+  label: "Frontend image formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/FileTest.php"
+  label: "Frontend file formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/ViewModel/Formatter/DateTest.php"
+  label: "Frontend date formatter unit tests"
+-
+  source: "@UmcMagento/source/Test/Unit/Plugin/Theme/Block/Html/TopmenuPluginTest.php"
+  label: "Plugin for the top menu elements"
+
+

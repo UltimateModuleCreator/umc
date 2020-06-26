@@ -1,0 +1,7 @@
+    <!--[+] configure the grid actions column  for "{{ entity.getNameSingular() }}" entity-->
+    <virtualType name="{{ entity.getVirtualType('GridActions') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\Component\Listing\ActionsColumn">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+        </arguments>
+    </virtualType>
+    <!--[-] configure the grid actions column  for "{{ entity.getNameSingular() }}" entity-->

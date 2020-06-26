@@ -1,0 +1,169 @@
+attribute:
+  settings_label: "Attribute Default Settings"
+  panel:
+    fields:
+      -
+        field: label
+    default: New Attribute
+  children:
+    -
+      code: _dynamic
+      className: Dynamic
+      tabLabel: Dynamic Rows
+      formKey: dynamic
+      sortable: sortableListDynamic
+      visible: "data.type() === 'dynamic'"
+      addButton:
+        label: Add Dynamic field
+        split:
+          field: type
+          values: '%magento_dynamic_rows_type%'
+    -
+      code: _option
+      className: Option
+      tabLabel: Options
+      formKey: option
+      sortable: sortableListOptions
+      visible: "data.type() === 'dropdown' || data.type() === 'multiselect'"
+      addButton:
+        label: Add Option
+  tabs:
+    -
+      label: Name settings
+      code: name
+      sort_order: 10
+      cols: 4
+    -
+      label: Admin
+      code: admin
+      sort_order: 20
+      cols: 6
+    -
+      label: Frontend
+      code: frontend
+      sort_order: 30
+    -
+      label: Misc
+      code: misc
+      sort_order: 40
+
+  fields:
+    -
+      name: code
+      type: text
+      label: Attribute Code
+      dataValidation: custom
+      dataValidationRegexp: "^[a-z_]+"
+      dataValidationErrorMsg: "Attribute code must consist only of letters and underscore"
+      title: This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter. There are some naming restriction. For example the code cannot be \'data\', \'child\'
+      tab: name
+      sort_order: 10
+    -
+      name: label
+      type: text
+      label: Label
+      dataValidation: validate_required
+      title: This is the attribute label that will be visible in the back-end in the add/edit form and in some cases in frontend.
+      tab: name
+      sort_order: 20
+
+    -
+      name: type
+      type: choice
+      has_default: true
+      label: Attribute Type
+      dataValidation: validate_required
+      options: '%attribute_type%'
+      additionalDataBind: "select2: {}"
+      title: This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.
+      tab: name
+      sort_order: 30
+    -
+      name: is_name
+      type: checkbox
+      has_default: false
+      label: Acts as name
+      title: Each entity must have an attribute to behave as \'Name\'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.
+      additionalDataBind: "click: function (value) {return $parent.radioChange(value, '_attributes', 'is_name')}, enable:data.type() === 'text'"
+      tab: name
+      sort_order: 40
+    -
+      name: required
+      type: checkbox
+      has_default: true
+      label: Required
+      title: This sets the attribute as required in the admin add/edit form
+      additionalDataBind: 'enable: data.type() !== "image" && data.type() !== "file"'
+      tab: admin
+      sort_order: 50
+    -
+      name: admin_grid
+      type: checkbox
+      has_default: true
+      label: Show in admin grid
+      title: This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as \'Name\' will be included by default in the grid.
+      additionalDataBind: "enable: data.type() !== 'file' && data.type() !== 'wysiwyg' && data.type() !== 'dynamic'"
+      tab: admin
+      sort_order: 60
+
+    -
+      name: show_in_list
+      type: checkbox
+      has_default: true
+      label: Show in frontend list page
+      title: "This allows you to display the attribute in the entity list page on frontend"
+      additionalDataBind: 'enable: $parent.data.frontend'
+      tab: frontend
+      sort_order: 120
+    -
+      name: show_in_view
+      type: checkbox
+      has_default: true
+      label: Show in frontend view page
+      title: "This allows you to display the attribute in the entity view page on frontend"
+      additionalDataBind: 'enable: $parent.data.frontend'
+      tab: frontend
+      sort_order: 130
+    -
+      name: default_value
+      type: textarea
+      required: false
+      label: Default value (one per line for multiselects)
+      title: Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.For the moment the default values don\'t work for all the form elements defined via ui components V2.2.
+      additionalDataBind: 'enable: data.type !== "image" && data.type !== "file" && data.type !== "dynamic" && data.type !== "select" && data.type !== "multiselect"'
+      tab: misc
+      sort_order: 140
+    -
+      name: admin_grid_hidden
+      type: checkbox
+      has_default: true
+      label: Hidden by default
+      title: "This will hide the column by default"
+      additionalDataBind: "enable: (data.type() !== 'file' && data.type() !== 'wysiwyg' && data.type() !== 'dynamic') && data.admin_grid()"
+      tab: admin
+      sort_order: 70
+    -
+      name: admin_grid_filter
+      type: checkbox
+      has_default: true
+      label: Filterable in admin grid
+      title: If this is set to yes, your field will be filtrable in the admin grid
+      additionalDataBind: 'enable: data.type() !== "image" && data.type() !== "product_attribute_multiselect" && data.type() !== "multiselect" && data.type() !== "file" && data.type() !== "wysiwyg" && data.type() !== "dynamic" && data.admin_grid()'
+      tab: admin
+      sort_order: 90
+    -
+      name: note
+      type: text
+      required: false
+      label: Note
+      title: This will be added as a comment under the field in the admin add/edit form.
+      tab: misc
+      sort_order: 150
+    -
+      name: tooltip
+      type: text
+      required: false
+      label: Tooltip
+      title: This will be added as a tooltip in the admin add / edit form
+      tab: misc
+      sort_order: 160

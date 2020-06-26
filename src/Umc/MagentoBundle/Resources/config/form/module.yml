@@ -1,0 +1,32 @@
+module:
+  fields:
+    -
+      name: umc_crud
+      type: checkbox
+      label: I have Umc_Crud module installed
+      required: false
+      title: Umc_Crud is a Magento module that reduces the boilerplate when creating a CRUD module. More details <a target="_blank" href="https://github.com/UltimateModuleCreator/umc-crud/">here</a>.
+      has_default: true
+      sort_order: 1000
+      tab: base
+    -
+      name: menu_parent
+      options: '%magento_admin_menu%'
+      additionalDataBind: "select2: {}"
+    -
+      name: config_tab
+      type: text
+      label: Store -> Config tab name.
+      required: false
+      title: If at least one entity has frontend files then a section in Stores->Configuration will be created. Fill in the tab name here. Leave empty to use the namespace.
+      tab: admin
+      sort_order: 120
+    -
+      name: config_tab_position
+      type: text
+      label: Stores -> Configuration tab position
+      required: false
+      dataValidation: validate_number
+      title: If at least one entity has frontend files then a section in System->Configuration will be created. Fill in the tab position. The higher the number the lower it will appear in the list.
+      tab: admin
+      sort_order: 130

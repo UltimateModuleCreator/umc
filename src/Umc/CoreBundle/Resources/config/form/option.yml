@@ -1,0 +1,46 @@
+option:
+  code: option
+  settings_label: "Option Default Settings"
+  panel:
+    fields:
+      -
+        field: label
+    default: New Option
+  children: []
+  tabs:
+    -
+      label: Settings
+      code: base
+      sort_order: 10
+      cols: 4
+  fields:
+    -
+      name: value
+      type: text
+      label: Option value
+      title: "Value saved in the db"
+      dataValidation: validate_required
+      tab: base
+      sort_order: 10
+    -
+      name: label
+      type: text
+      label: Label
+      title: Value displayed in frontend and in the dropdown
+      dataValidation: validate_required
+      tab: base
+    -
+      name: default_radio
+      type: checkbox
+      label: "Default"
+      title: "Default"
+      containerAttributes: "data-bind=\"visible: $parent.data.type() === 'dropdown'\""
+      additionalDataBind: "click: function (value) {return $parent.radioChange(value, '_option', 'default_radio')}"
+      tab: base
+    -
+      name: default_checkbox
+      type: checkbox
+      label: "Default"
+      title: "Default"
+      containerAttributes: "data-bind=\"visible: $parent.data.type() === 'multiselect'\""
+      tab: base

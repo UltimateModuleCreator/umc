@@ -1,0 +1,160 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_upload') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Model;
+
+{{ sortStart() }}
+use Magento\Framework\File\Mime;
+use Magento\Framework\Filesystem;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+{{ sortEnd() }}
+
+class FileInfoTest extends TestCase
+{
+    /**
+     * @var Filesystem | MockObject
+     */
+    private $filesystem;
+    /**
+     * @var Mime | MockObject
+     */
+    private $mime;
+    /**
+     * @var StoreManagerInterface | MockObject
+     */
+    private $storeManager;
+    /**
+     * @var Store | MockObject
+     */
+    private $store;
+    /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+    /**
+     * @var Filesystem\Directory\WriteInterface | MockObject
+     */
+    private $mediaDirectory;
+    /**
+     * @var Filesystem\Directory\ReadInterface | MockObject
+     */
+    private $readDirectory;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->mime = $this->createMock(Mime::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(Store::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
+        $this->store->method('getBaseUrl')->willReturn('base_url/');
+        $this->mediaDirectory = $this->createMock(Filesystem\Directory\WriteInterface::class);
+        $this->readDirectory = $this->createMock(Filesystem\Directory\ReadInterface::class);
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->mediaDirectory);
+        $this->filesystem->method('getDirectoryRead')->willReturn($this->readDirectory);
+        $this->fileInfo = new FileInfo(
+            $this->filesystem,
+            $this->mime,
+            $this->storeManager,
+            'base/path'
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getBaseFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::__construct
+     */
+    public function testGetBaseFilePath()
+    {
+        $this->assertEquals('/base/path', $this->fileInfo->getBaseFilePath());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMimeType
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getPubDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getBaseDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectoryPathRelativeToBaseDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::removeStorePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::isBeginsWithMediaDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::__construct
+     */
+    public function testGetMimeType()
+    {
+        $this->readDirectory->method('getAbsolutePath')->willReturn('absolute/path');
+        $this->readDirectory->method('getRelativePath')->willReturn('relative');
+        $this->mediaDirectory->method('getAbsolutePath')->willReturn('media/absolute/path');
+        $this->mime->method('getMimeType')->willReturn('mime');
+        $this->assertEquals('mime', $this->fileInfo->getMimeType('some/file.png'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getStat
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getPubDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getBaseDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectoryPathRelativeToBaseDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::removeStorePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::isBeginsWithMediaDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::__construct
+     */
+    public function testGetStat()
+    {
+        $this->readDirectory->method('getAbsolutePath')->willReturn('absolute/path');
+        $this->readDirectory->method('getRelativePath')->willReturn('relative');
+        $this->mediaDirectory->method('getAbsolutePath')->willReturn('media/absolute/path');
+        $this->mediaDirectory->method('stat')->willReturn(['stat']);
+        $this->assertEquals(['stat'], $this->fileInfo->getStat('some/file.png'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::isExist
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getPubDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getBaseDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectoryPathRelativeToBaseDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::removeStorePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::isBeginsWithMediaDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::__construct
+     */
+    public function testIsExist()
+    {
+        $this->readDirectory->method('getAbsolutePath')->willReturn('absolute/path');
+        $this->readDirectory->method('getRelativePath')->willReturn('relative');
+        $this->mediaDirectory->method('getAbsolutePath')->willReturn('media/absolute/path');
+        $this->mediaDirectory->method('isExist')->willReturn(true);
+        $this->assertTrue($this->fileInfo->isExist('some/file.png'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getAbsoluteFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getFilePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getPubDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getBaseDirectory
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::getMediaDirectoryPathRelativeToBaseDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::removeStorePath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::isBeginsWithMediaDirectoryPath
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo::__construct
+     */
+    public function testGetAbsoluteFilePath()
+    {
+        $this->readDirectory->method('getAbsolutePath')->willReturn('absolute/path');
+        $this->readDirectory->method('getRelativePath')->willReturn('relative');
+        $this->mediaDirectory->method('getAbsolutePath')->willReturn('media/absolute/path');
+        $this->mediaDirectory->method('isExist')->willReturn(true);
+        $this->assertEquals('media/absolute/path', $this->fileInfo->getAbsoluteFilePath('some/file.png'));
+    }
+}
+{% endif %}

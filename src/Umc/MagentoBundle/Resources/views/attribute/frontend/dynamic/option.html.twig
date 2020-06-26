@@ -1,0 +1,7 @@
+{{ indent }}<?= $formatter->formatHtml(
+{{ indent }}    $item['{{ field.getCode() }}'],
+{{ indent }}    [
+{{ indent }}        'type' => 'options',
+{{ indent }}        'source' => '{{ field.getOptionSourceVirtualType() }}'
+{{ indent }}    ]
+{{ indent }}); ?>

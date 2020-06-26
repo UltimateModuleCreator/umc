@@ -1,0 +1,99 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_save_dynamic_rows') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Ui\SaveDataProcessor;
+
+{{ sortStart() }}
+use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\DynamicRows;
+{{ sortEnd() }}
+
+class DynamicRowsTest extends TestCase
+{
+    /**
+     * @var Json | MockObject
+     */
+    private $serializer;
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->serializer = $this->createMock(Json::class);
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\DynamicRows::modifyData
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\DynamicRows::__construct
+     */
+    public function testModifyData()
+    {
+        $dynamicRows = new DynamicRows(
+            $this->serializer,
+            ['field1', 'field2', 'field3'],
+            false
+        );
+        $data = [
+            'field1' => [1, 2, 3],
+            'field2' => 'string',
+            'field4' => ['not_processed']
+        ];
+        $this->serializer->expects($this->once())->method('serialize')->willReturnCallback(
+            function (array $item) {
+                $item['serialized'] = 1;
+                return $item;
+            }
+        );
+        $expected = [
+            'field1' => [
+                0 => 1,
+                1 => 2,
+                2 => 3,
+                'serialized' => 1
+            ],
+            'field2' => 'string',
+            'field4' => ['not_processed']
+        ];
+        $this->assertEquals($expected, $dynamicRows->modifyData($data));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\DynamicRows::modifyData
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor\DynamicRows::__construct
+     */
+    public function testModifyDataStrictMode()
+    {
+        $dynamicRows = new DynamicRows(
+            $this->serializer,
+            ['field1', 'field2', 'field3'],
+            true
+        );
+        $data = [
+            'field1' => [1, 2, 3],
+            'field2' => 'string',
+            'field4' => ['not_processed']
+        ];
+        $this->serializer->expects($this->exactly(2))->method('serialize')->willReturnCallback(
+            function (array $item) {
+                $item['serialized'] = 1;
+                return $item;
+            }
+        );
+        $expected = [
+            'field1' => [
+                0 => 1,
+                1 => 2,
+                2 => 3,
+                'serialized' => 1
+            ],
+            'field2' => 'string',
+            'field3' => ['serialized' => 1],
+            'field4' => ['not_processed']
+        ];
+        $this->assertEquals($expected, $dynamicRows->modifyData($data));
+    }
+}
+{% endif %}

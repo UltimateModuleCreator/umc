@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Ultimate Module Creator{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/umccore/bootstrap/css/bootstrap.css') }}" />
+            <link rel="stylesheet" href="{{ asset('bundles/umccore/font-awesome/css/font-awesome.css') }}" />
+            <link rel="stylesheet" href="{{ asset('bundles/umccore/umc/umc.css') }}" />
+        {% endblock %}
+    </head>
+    <body>
+        <div id="body-loader" class="loading" style="display: none">
+            <span class="loading-icon">Working on it. Hold my <span class="fa fa-2x fa-beer"></span> </span>
+        </div>
+        {% block fixed_top %}
+        <div class="navbar sticky-top bg-light full-width">
+            {% block main_menu %}
+            <div class="dropdown float-left">
+                <a class="btn" data-toggle="dropdown">
+                    <span class="fa fa-bars"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('index')}}">All Platforms</a>
+                    <a class="dropdown-item" href="{{ path('help')}}">Help</a>
+                </div>
+            </div>
+            <div class="float-left">
+                <i class="fa fa-2x fa-puzzle-piece" title="Ultimate Module Creator v{{ appVersion() }}"></i>
+                <span>UMC v{{ appVersion() }}</span>
+            </div>
+            <div class="float-right">
+                {% block additional_fixed_top %}{% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        <div class="container-fluid">
+            <div class="main_container">
+                {% block flash_messages %}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% endblock %}
+                {% block body %}{% endblock %}
+                <div class="clear"></div>
+            </div>
+        </div>
+        {% block javascripts %}
+        <!-- jQuery -->
+        <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/jquery.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/jquery-ui/jquery-ui.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/popper.js') }}"> </script>
+        <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/bootstrap.js') }}"> </script>
+        {% endblock %}
+    </body>
+</html>

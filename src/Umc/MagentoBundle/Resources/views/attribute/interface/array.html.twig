@@ -1,0 +1,11 @@
+    /**
+     * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function set{{ attribute.getCode()|camel|ucfirst }}(${{ attribute.getCode()|camel}});
+
+    /**
+     * @param bool $asArray
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}
+     */
+    public function get{{ attribute.getCode()|camel|ucfirst }}($asArray = false);

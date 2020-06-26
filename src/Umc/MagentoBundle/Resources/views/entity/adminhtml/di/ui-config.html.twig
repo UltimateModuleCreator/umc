@@ -1,0 +1,41 @@
+    <!--[+] define the ui config for "{{ entity.getNameSingular() }}" entity -->
+    <virtualType name="{{ entity.getVirtualType('UiConfig') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Ui\EntityUiConfig">
+        <arguments>
+            <argument name="interface" xsi:type="string">\{{ entity.getInterface() }}</argument>
+            <argument name="data" xsi:type="array">
+                <item name="name_attribute" xsi:type="string">{{ entity.getNameAttribute().getCode() }}</item><!-- this is the attribute / field name that represents your entity -->
+                <item name="labels" xsi:type="array">
+                    <item name="new" xsi:type="string" translatable="true">Add New {{ entity.getLabelSingular() }}</item>
+                    <item name="back" xsi:type="string" translatable="true">Back to list</item>
+                    <item name="save" xsi:type="string" translatable="true">Save {{ entity.getLabelSingular() }}</item>
+                    <item name="delete" xsi:type="string" translatable="true">Delete {{ entity.getLabelSingular() }}</item>
+                    <item name="delete_message" xsi:type="string" translatable="true">Are you sure you want to delete {{ entity.getLabelSingular() }}?</item>
+                </item>
+                <item name="save" xsi:type="array">
+                    <!-- uncomment lines below to remove the "Save and close" and "Save and duplicate" buttons -->
+                    <!--<item name="allow_close" xsi:type="boolean">false</item>-->
+                    <!--<item name="allow_duplicate" xsi:type="boolean">false</item>-->
+                </item>
+                <item name="list" xsi:type="array">
+                    <item name="page_title" xsi:type="string" translatable="true">{{ entity.getLabelPlural() }}</item>
+                </item>
+                <item name="messages" xsi:type="array">
+                    <item name="delete" xsi:type="array">
+                        <item name="success" xsi:type="string" translatable="true">{{ entity.getLabelSingular() }} successfully deleted</item>
+                        <item name="missing_entity" xsi:type="string" translatable="true">Couldn't find {{ entity.getLabelSingular() }} to delete</item>
+                        <item name="error" xsi:type="string" translatable="true">There was a problem deleting the {{ entity.getLabelSingular() }}</item>
+                    </item>
+                    <item name="save" xsi:type="array">
+                        <item name="success" xsi:type="string" translatable="true">{{ entity.getLabelSingular() }} successfully saved</item>
+                        <item name="error" xsi:type="string" translatable="true">There was a problem saving the {{ entity.getLabelSingular() }}</item>
+                        <item name="duplicate" xsi:type="string" translatable="true">{{ entity.getLabelSingular() }} duplicated successfully</item>
+                    </item>
+                    <item name="mass_delete" xsi:type="array">
+                        <item name="success" xsi:type="string" translatable="true">%1 {{ entity.getLabelPlural() }} were successfully deleted</item>
+                        <item name="error" xsi:type="string" translatable="true">There was a problem deleting the {{ entity.getLabelSingular() }}</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!--[-] define the ui config for "{{ entity.getNameSingular() }}" entity -->

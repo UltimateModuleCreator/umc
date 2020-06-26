@@ -1,0 +1,106 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\BlockFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Block\Html\Pager;
+use {{ entity.getInterface() }};
+use {{ entity.getCollectionModel()}};
+use {{ entity.getCollectionModel()}}Factory;
+{{ sortEnd() }}
+
+class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterface
+{
+{% if entity.isStore() %}
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+{% endif %}
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+    /**
+     * @var BlockFactory
+     */
+    private $blockFactory;
+    /**
+     * @var Collection
+     */
+    private ${{ entity.getNameSingular()|camel }}Collection;
+    /**
+     * @var Pager
+     */
+    private $pager;
+
+    /**
+     * List{{ entity.getNameSingular()|camel|ucfirst }} constructor.
+{% if entity.isStore() %}
+     * @param StoreManagerInterface $storeManager
+{% endif %}
+     * @param CollectionFactory $collectionFactory
+     * @param BlockFactory $blockFactory
+     */
+    public function __construct(
+{% if entity.isStore() %}
+        StoreManagerInterface $storeManager,
+{% endif %}
+        CollectionFactory $collectionFactory,
+        BlockFactory $blockFactory
+    ) {
+{% if entity.isStore() %}
+        $this->storeManager = $storeManager;
+{% endif %}
+        $this->collectionFactory = $collectionFactory;
+        $this->blockFactory = $blockFactory;
+    }
+
+    /**
+     * @return Collection
+     * @throws NoSuchEntityException
+     */
+    public function getCollection()
+    {
+        $this->processCollection();
+        return $this->{{ entity.getNameSingular()|camel }}Collection;
+    }
+
+    /**
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    public function getPagerHtml()
+    {
+        $this->processCollection();
+        return $this->pager->toHtml();
+    }
+
+    /**
+     * prepare collection and pager
+{% if entity.isStore() %}
+     * @throws NoSuchEntityException
+{% endif %}
+     */
+    private function processCollection()
+    {
+        if ($this->{{ entity.getNameSingular()|camel }}Collection === null) {
+            $this->{{ entity.getNameSingular()|camel }}Collection = $this->collectionFactory->create();
+            $this->{{ entity.getNameSingular()|camel }}Collection->addFieldToFilter({{ entity.getNameSingular()|camel|ucfirst }}Interface::IS_ACTIVE, 1);
+{% if entity.isStore() %}
+            $this->{{ entity.getNameSingular()|camel }}Collection->addStoreFilter($this->storeManager->getStore()->getId());
+{% endif %}
+            $this->{{ entity.getNameSingular()|camel }}Collection->setOrder({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameAttribute().getCode()|upper }}, SortOrder::SORT_ASC);
+            $this->pager = $this->blockFactory->createBlock(Pager::class);
+            $this->pager->setCollection($this->{{ entity.getNameSingular()|camel }}Collection);
+        }
+    }
+}
+{% endif %}

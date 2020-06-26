@@ -1,0 +1,64 @@
+{% if not module.isUmcCrud() and module.hasEntitiesWithFlag('attribute_processor_save_date') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessor;
+
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Ui\SaveDataProcessorInterface;
+
+class Date implements SaveDataProcessorInterface
+{
+    /**
+     * @var array
+     */
+    private $fields;
+    /**
+     * @var \Zend_Filter_InputFactory
+     */
+    private $filterFactory;
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     */
+    private $dateFilter;
+
+    /**
+     * Date constructor.
+     * @param array $fields
+     * @param \Zend_Filter_InputFactory $filterFactory
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     */
+    public function __construct(
+        array $fields,
+        \Zend_Filter_InputFactory $filterFactory,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+    ) {
+        $this->fields = $fields;
+        $this->filterFactory = $filterFactory;
+        $this->dateFilter = $dateFilter;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function modifyData(array $data): array
+    {
+        $filterRules = [];
+        foreach ($this->fields as $dateField) {
+            if (!array_key_exists($dateField, $data)) {
+                continue;
+            }
+            if (!empty($data[$dateField])) {
+                $filterRules[$dateField] = $this->dateFilter;
+            }
+        }
+        /** @var \Zend_Filter_Input $filter */
+        $filter = $this->filterFactory->create([
+            'filterRules' => $filterRules,
+            'validatorRules' => [],
+            'data' => $data
+        ]);
+        return $filter->getUnescaped();
+    }
+}
+{% endif %}

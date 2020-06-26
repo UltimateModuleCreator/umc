@@ -1,0 +1,57 @@
+{% if entity.isFrontend() %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+use {{ entity.getInterface() }};
+{{ sortEnd() }}
+
+class Url implements ArgumentInterface
+{
+    /**
+     * url builder
+     *
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
+     * @param UrlInterface $urlBuilder
+     */
+    public function __construct(
+        UrlInterface $urlBuilder
+    ) {
+        $this->urlBuilder = $urlBuilder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getListUrl()
+    {
+        return $this->urlBuilder->getUrl('{{ entity.getFrontendRoute('index') }}');
+    }
+
+    /**
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }}
+     * @return string
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Url({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular()|camel }})
+    {
+        return $this->get{{ entity.getNameSingular()|camel|ucfirst }}UrlById((int)${{ entity.getNameSingular()|camel }}->getId());
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}UrlById(int $id)
+    {
+        return $this->urlBuilder->getUrl('{{ entity.getFrontendRoute('view') }}', ['id' => $id]);
+    }
+}
+{% endif %}

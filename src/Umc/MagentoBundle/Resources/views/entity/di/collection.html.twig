@@ -1,0 +1,28 @@
+    <type name="{{ entity.getCollectionModel() }}">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
+            <argument name="model" xsi:type="string">{{ entity.getModel() }}</argument>
+            <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
+            <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
+            <argument name="eventPrefix" xsi:type="string">{{ entity.getEventPrefix()}}_collection</argument>
+            <argument name="eventObject" xsi:type="string">{{ entity.getNameSingular()|snake }}_collection</argument>
+            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
+{% if entity.isStore() %}
+                <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+{% endif %}
+        </arguments>
+    </type>
+    <virtualType name="{{ module.getNamespace() }}{{module.getModuleName() }}{{ entity.getNameSingular()|camel|ucfirst }}GridCollection" type="{{ module.getNamespace() }}\{{module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }}\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">{{ entity.getMainTableName() }}</argument>
+            <argument name="model" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\Document</argument>
+            <argument name="resourceModel" xsi:type="string">{{ entity.getResourceModel() }}</argument>
+            <argument name="idFieldName" xsi:type="string">{{ entity.getPk() }}</argument>
+            <argument name="eventPrefix" xsi:type="string">{{ entity.getEventPrefix() }}_collection</argument>
+            <argument name="eventObject" xsi:type="string">{{ entity.getNameSingular()|snake }}_collection</argument>
+            <argument name="interfaceClass" xsi:type="string">{{ entity.getInterface() }}</argument>
+{% if entity.isStore() %}
+                <argument name="storeTable" xsi:type="string">{{ entity.getStoreTableName() }}</argument>
+{% endif %}
+        </arguments>
+    </virtualType>

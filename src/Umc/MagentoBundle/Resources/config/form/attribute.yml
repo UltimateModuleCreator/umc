@@ -1,0 +1,24 @@
+attribute:
+  fields:
+    -
+      name: type
+      options: '%magento_attribute_type%'
+    -
+      name: full_text
+      type: checkbox
+      has_default: true
+      label: Full text
+      title: This adds the attribute to the full text search index of the entity
+      additionalDataBind: "enable: data.type() === 'text' || data.type() === 'textarea' || data.type() === 'wysiwyg' || data.type() === 'country' || data.type() === 'country_multiselect'"
+      tab: admin
+      sort_order: 55
+    -
+      name: expanded
+      type: checkbox
+      has_default: true
+      label: Display Expanded
+      title: If set yo "Yes" each field in the dynamic rows group will be displayed on a separate line. If set to "No" they will all be on the same line
+      additionalDataBind: "enable: data.type() === 'dynamic'"
+      tab: admin
+      sort_order: 100
+

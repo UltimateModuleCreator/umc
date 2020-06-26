@@ -1,0 +1,21 @@
+<?xml version="1.0"?>{{ formatLicense(module, 'xml')|raw }}
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="{{ module.getAclName() }}"
+             title="{{ module.getMenuText() }}"
+             module="{{ module.getExtensionName() }}"
+             sortOrder="{{ module.getSortOrder() }}"
+             resource="{{ module.getAclName() }}"
+             {% if module.getMenuParent() %}parent="{{ module.getMenuParent() }}"{% endif %} />
+{% for entity in module.getEntities() %}
+        <add id="{{ entity.getAclName() }}"
+             title="{{ entity.getLabelPlural() }}"
+             module="{{ module.getExtensionName() }}"
+             sortOrder="10"
+             action="{{ entity.getAdminRoute('') }}"
+             resource="{{ entity.getAclName() }}"
+             parent="{{ module.getAclName() }}"
+        />
+{% endfor %}
+    </menu>
+</config>

@@ -1,0 +1,18 @@
+    <!--[+] form button configuration for '{{ entity.getNameSingular }}' -->
+    <virtualType name="{{ entity.getVirtualType('ButtonBack') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Block\Adminhtml\Button\Back">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="{{ entity.getVirtualType('ButtonSave') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Block\Adminhtml\Button\Save">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="{{ entity.getVirtualType('ButtonDelete') }}" type="{{ module.getUmcCrudNamespace() }}\{{ module.getUmcModuleName() }}\Block\Adminhtml\Button\Delete">
+        <arguments>
+            <argument name="uiConfig" xsi:type="object">{{ entity.getVirtualType('UiConfig') }}</argument>
+            <argument name="entityUiManager" xsi:type="object">{{ entity.getModel('UiManager') }}</argument>
+        </arguments>
+    </virtualType>
+    <!--[-] form button configuration for '{{ entity.getNameSingular }}' -->

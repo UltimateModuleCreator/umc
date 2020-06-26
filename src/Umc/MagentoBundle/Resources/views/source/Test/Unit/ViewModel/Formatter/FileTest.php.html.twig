@@ -1,0 +1,89 @@
+{% if not module.isUmcCrud() and module.isFrontend() and module.hasEntitiesWithFlag('attribute_processor_frontend_file') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\ViewModel\Formatter;
+
+{{ sortStart() }}
+use Magento\Framework\Filesystem;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfo;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\FileInfoFactory;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File;
+{{ sortEnd() }}
+
+class FileTest extends TestCase
+{
+    /**
+     * @var FileInfoFactory | MockObject
+     */
+    private $fileInfoFactory;
+    /**
+     * @var Filesystem | MockObject
+     */
+    private $filesystem;
+    /**
+     * @var StoreManagerInterface | MockObject
+     */
+    private $storeManager;
+    /**
+     * @var File
+     */
+    private $file;
+    /**
+     * @var FileInfo | MockObject
+     */
+    private $fileInfo;
+    /**
+     * @var Store | MockObject
+     */
+    private $store;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->fileInfoFactory = $this->createMock(FileInfoFactory::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->fileInfo = $this->createMock(FileInfo::class);
+        $this->store = $this->createMock(Store::class);
+        $this->file = new File(
+            $this->fileInfoFactory,
+            $this->filesystem,
+            $this->storeManager
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File::formatHtml
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File::getFileInfo
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File::__construct
+     */
+    public function testFormatHtmlWithWrongPath()
+    {
+        $this->fileInfoFactory->expects($this->once())->method('create')->willReturn($this->fileInfo);
+        $this->fileInfo->method('getFilePath')->willReturn('');
+        $this->storeManager->expects($this->never())->method('getStore');
+        $this->assertEquals('', $this->file->formatHtml('value'));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File::formatHtml
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File::getFileInfo
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\Formatter\File::__construct
+     */
+    public function testFormatHtml()
+    {
+        $this->fileInfoFactory->expects($this->once())->method('create')->willReturn($this->fileInfo);
+        $this->fileInfo->method('getFilePath')->willReturn('/path');
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
+        $this->store->method('getBaseUrl')->willReturn('base/');
+        $this->assertEquals('base/path', $this->file->formatHtml('value'));
+    }
+}
+{% endif %}
