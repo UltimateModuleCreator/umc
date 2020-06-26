@@ -18,7 +18,7 @@
         "version": "5"
     },
     "php": {
-        "version": "7.2"
+        "version": "7.4"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -119,6 +119,9 @@
     "symfony/http-kernel": {
         "version": "v4.1.4"
     },
+    "symfony/mime": {
+        "version": "v5.1.2"
+    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -131,11 +134,17 @@
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.17.0"
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.17.1"
+    },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.17.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.9.0"
+    },
+    "symfony/polyfill-php72": {
+        "version": "v1.17.0"
     },
     "symfony/polyfill-php80": {
         "version": "v1.17.0"
