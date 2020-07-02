@@ -115,12 +115,17 @@
                                     <nav class="float-right">
                                         <ul class="nav nav-pills">
                                             <li class="nav-item"">
-                                                <button data-bind="click: togglePanel" class="nav-link btn btn-link" href="#">
+                                                <button data-bind="click: togglePanel" class="nav-link btn btn-link" href="#" title="Toggle">
                                                     <i data-bind="class: collapseClass"></i>
                                                 </button>
                                             </li>
+                                            <li class="nav-item"">
+                                                <button class="nav-link btn btn-link" href="#" title="Duplicate" data-bind="click: function (data, event) {$parent.addChild(data.toParams(), '{{ child.code }}')}">
+                                                    <i class="fa fa-2x fa-copy"></i>
+                                                </button>
+                                            </li>
                                             <li class="nav-item">
-                                                <button data-bind="click: function (data, event) {$parent.removeChild(data, '{{ child.code }}')}" class="nav-link btn btn-link" href="#">
+                                                <button data-bind="click: function (data, event) {$parent.removeChild(data, '{{ child.code }}')}" class="nav-link btn btn-link" href="#" title="Delete">
                                                     <i class="fa fa-2x fa-trash"></i>
                                                 </button>
                                             </li>

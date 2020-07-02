@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data;
 
-{{ sortStart() }}
 use Magento\Framework\Api\SearchCriteriaInterface;
-use {{ entity.getInterface()}};
-{{ sortEnd() }}
 
 /**
  * @api
@@ -16,14 +13,14 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface
     /**
      * get items
      *
-     * @return {{ entity.getInterface(true)}}[]
+     * @return \{{ entity.getInterface()}}[]
      */
     public function getItems();
 
     /**
      * Set items
      *
-     * @param {{ entity.getInterface(true)}}[] $items
+     * @param \{{ entity.getInterface()}}[] $items
      * @return $this
      */
     public function setItems(array $items);
