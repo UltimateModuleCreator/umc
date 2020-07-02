@@ -208,3 +208,6 @@
 -
   source: "@UmcMagento/source/view/frontend/layout/default.xml"
   label: "Default layout handle"
+-
+  source: "@UmcMagento/source/etc/webapi.xml"
+  label: "Webapi declaration file"

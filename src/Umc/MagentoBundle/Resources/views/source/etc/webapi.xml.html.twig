@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>{{ formatLicense(module, 'xml')|raw }}
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+{% for entity in module.getEntities() %}
+    <!-- {{ entity.getLabelSingular() }} -->
+    <route url="/V1/{{ entity.getNameSingular()|camel }}/:{{ entity.getPk()|camel }}" method="GET">
+        <service class="{{ entity.getRepoInterface() }}" method="get"/>
+        <resources>
+            <resource ref="{{ entity.getAclName() }}"/>
+        </resources>
+    </route>
+    <route url="/V1/{{ entity.getNameSingular()|camel }}/search" method="GET">
+        <service class="{{ entity.getListRepoInterface() }}" method="getList"/>
+        <resources>
+            <resource ref="{{ entity.getAclName() }}"/>
+        </resources>
+    </route>
+    <route url="/V1/{{ entity.getNameSingular()|camel }}" method="POST">
+        <service class="{{ entity.getRepoInterface() }}" method="save"/>
+        <resources>
+            <resource ref="{{ entity.getAclName() }}"/>
+        </resources>
+    </route>
+    <route url="/V1/{{ entity.getNameSingular()|camel }}/:{{ entity.getPk()|camel }}" method="PUT">
+        <service class="{{ entity.getRepoInterface() }}" method="save"/>
+        <resources>
+            <resource ref="{{ entity.getAclName() }}"/>
+        </resources>
+    </route>
+    <route url="/V1/{{ entity.getNameSingular()|camel }}/:{{ entity.getPk()|camel }}" method="DELETE">
+        <service class="{{ entity.getRepoInterface() }}" method="deleteById"/>
+        <resources>
+            <resource ref="{{ entity.getAclName() }}"/>
+        </resources>
+    </route>
+{% endfor %}
+</routes>

@@ -13,7 +13,7 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface
 {
     /**
      * @param SearchCriteriaInterface $searchCriteria
-     * @return {{ entity.getNameSingular()|camel|ucfirst }}SearchResultsInterface
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface
      * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
