@@ -1,5 +1,5 @@
 # UMC
-Magento 2 Ultimate Module Creator
+Ultimate Module Creator
 
 ## Description  
 Ultimate module creator (UMC) is a standalone application for creating CRUD modules / bundles /  for different CMS
@@ -11,6 +11,14 @@ Also, the modules you create with it should be tested before moved to production
 
 ## Requirements  
 PHP version 7.2.5 or higher. Some PHP extensions may be needed. See composer.json for more details. (a docker version may come later)
+
+## Supported platforms
+ - Magento 2.3.4+ 
+ - Magento 2.4.*
+ 
+## Planned platforms
+ - Shopware 6
+ - Sylius
 
 ## Installation   
  - create a folder on your server
