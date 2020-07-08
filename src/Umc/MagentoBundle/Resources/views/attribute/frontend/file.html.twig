@@ -1,4 +1,4 @@
-{{ indent }}<strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')); ?></strong>
+{{ indent }}<strong><?= ${{ extraVars.escaper }}->escapeHtml(__('{{ attribute.getLabel() }}')); ?></strong>
 {{ indent }}<?php $href = $formatter->formatHtml(
 {{ indent }}    ${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}(),
 {{ indent }}    [
@@ -6,8 +6,8 @@
 {{ indent }}        'path' => '{{ entity.getUploadFolder('file') }}'
 {{ indent }}    ]
 {{ indent }}); ?>
-{{ indent }}<a href="<?= $block->escapeUrl($href); ?>" target="_blank">
+{{ indent }}<a href="<?= ${{ extraVars.escaper }}->escapeUrl($href); ?>" target="_blank">
 {{ indent }}    <?php //phpcs:disable Magento2.Functions.DiscouragedFunction?>
-{{ indent }}    <?= $block->escapeHtml(basename(${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}())); ?>
+{{ indent }}    <?= ${{ extraVars.escaper }}->escapeHtml(basename(${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}())); ?>
 {{ indent }}    <?php //phpcs: enable?>
 {{ indent }}</a>

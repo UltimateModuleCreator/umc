@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Model\Module;
 
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
+use App\Umc\CoreBundle\Model\Relation\Factory as RelationFactory;
 use App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Util\StringUtil;
 
@@ -36,6 +37,10 @@ class Factory
      */
     protected $stringUtil;
     /**
+     * @var RelationFactory
+     */
+    protected $relationFactory;
+    /**
      * @var string;
      */
     protected $moduleClassName;
@@ -49,10 +54,12 @@ class Factory
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
+        RelationFactory $relationFactory,
         string $moduleClassName = Module::class
     ) {
         $this->stringUtil = $stringUtil;
         $this->entityFactory = $entityFactory;
+        $this->relationFactory = $relationFactory;
         $this->moduleClassName = $moduleClassName;
     }
 
@@ -63,6 +70,6 @@ class Factory
     public function create(array $data = []): Module
     {
         $className = $this->moduleClassName;
-        return new $className($this->stringUtil, $this->entityFactory, [], $data);
+        return new $className($this->stringUtil, $this->entityFactory, $this->relationFactory, [], $data);
     }
 }

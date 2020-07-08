@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Model;
 
 use App\Umc\CoreBundle\Model\Entity;
 use App\Umc\CoreBundle\Model\Entity\Factory;
+use App\Umc\CoreBundle\Model\Relation\Factory as RelationFactory;
 use App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -38,6 +39,10 @@ class ModuleTest extends TestCase
      * @var Factory | MockObject
      */
     private $entityFactory;
+    /**
+     * @var RelationFactory
+     */
+    private $relationFactory;
 
     /**
      * setup tests
@@ -46,6 +51,7 @@ class ModuleTest extends TestCase
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
         $this->entityFactory = $this->createMock(Factory::class);
+        $this->relationFactory = $this->createMock(RelationFactory::class);
         $this->stringUtil->method('snake')->willReturnArgument(0);
         $this->stringUtil->method('camel')->willReturnArgument(0);
         $this->stringUtil->method('hyphen')->willReturnArgument(0);
@@ -249,6 +255,7 @@ class ModuleTest extends TestCase
         return new Module(
             $this->stringUtil,
             $this->entityFactory,
+            $this->relationFactory,
             $data
         );
     }

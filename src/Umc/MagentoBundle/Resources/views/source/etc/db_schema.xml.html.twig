@@ -2,7 +2,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
 {% for entity in module.getEntities() %}
     <table name="{{ entity.getMainTableName() }}" resource="default" engine="innodb" comment="{{ entity.getLabelSingular()|ucfirst }} Table">
-        <column xsi:type="smallint" name="{{ entity.getPk() }}" padding="6" unsigned="false" nullable="false" identity="true"  comment="{{ entity.getLabelSingular()|ucfirst }} ID"/>
+        <column xsi:type="smallint" name="{{ entity.getPk() }}" padding="6" unsigned="false" nullable="false" identity="true" comment="{{ entity.getLabelSingular()|ucfirst }} ID"/>
 {%  for attribute in entity.getAttributes() %}
         <column xsi:type="{{ attribute.getTypeInstance().getSchemaType() }}" name="{{ attribute.getCode() }}" {{ attribute.getTypeInstance().getAttributeColumnSettingsStringXml()|raw }} comment="{{ entity.getLabelSingular()|ucfirst }} {{ attribute.getLabel() }}"/>
 {% endfor %}
@@ -14,15 +14,29 @@
         <column xsi:type="text" name="meta_keywords" nullable="true" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Keywords"/>
         <column xsi:type="text" name="meta_description" nullable="true" comment="{{ entity.getLabelSingular()|ucfirst }} Meta Description"/>
 {% endif %}
+{% for relation in entity.getParentRelations() %}
+        <column xsi:type="smallint" name="{{ relation.getRelatedEntityPk(entity) }}" padding="6" unsigned="false" nullable="true" comment="{{ relation.getRelatedEntityLabel(entity)|ucfirst }} ID"/>
+{% endfor %}
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="{{ entity.getLabelSingular()|ucfirst }} Created at"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="{{ entity.getLabelSingular()|ucfirst }} Updated At"/>
+{% for relation in entity.getParentRelations() %}
+{% set parent = relation.getRelatedEntity(entity) %}
+        <constraint xsi:type="foreign" referenceId="{{ module.getModuleName()|upper }}_{{ entity.getNameSingular()|snake|upper }}_{{ parent.getNameSingular()|snake|upper }}_{{ entity.getPk()|upper }}_{{ parent.getNameSingular()|snake|upper }}_{{ relation.getRelatedEntityPk(entity)|upper }}" table="{{ entity.getMainTableName() }}"
+                column="{{ relation.getRelatedEntityPk(entity) }}" referenceTable="{{ parent.getMainTableName() }}" referenceColumn="{{ parent.getPk() }}" onDelete="SET NULL"/>
+{% endfor %}
 {% if entity.hasAttributesWithFlag('is_full_text') > 0 %}
         <index referenceId="{{ module.getNamespace()|snake|upper }}_{{ module.getModuleName()|snake|upper }}_{{ entity.getNameSingular()|snake|upper }}_FULLTEXT" indexType="fulltext">
 {% for attribute in entity.getAttributesWithFlag('is_full_text') %}
             <column name="{{ attribute.getCode() }}" />
 {% endfor %}
         </index>
-{% for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderTemplate('schema_fk')|raw }}{% endfor %}
+{% for relation in entity.getParentRelations() %}
+{% set parent = relation.getRelatedEntity(entity) %}
+        <index referenceId="{{ entity.getMainTableName()|upper }}_{{ parent.getNameSingular()|camel|upper }}_{{ relation.getRelatedEntityPk(entity)|upper }}" indexType="btree">
+            <column name="{{ relation.getRelatedEntityPk(entity) }}"/>
+        </index>
+{% endfor %}
+{% for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderTemplate('schema_fk', {extraVars: extraVars })|raw}}{% endfor %}
 {% endif %}
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="{{ entity.getPk() }}"/>

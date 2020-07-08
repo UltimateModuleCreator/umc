@@ -264,14 +264,6 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
     }
 
     /**
-     * @return string
-     */
-    public function getPk(): string
-    {
-        return $this->stringUtil->snake($this->getNameSingular()) . '_id';
-    }
-
-    /**
      * @param $type
      * @param bool $tmp
      * @return string
@@ -413,5 +405,19 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
     public function getParentCollectionModel(): string
     {
         return ($this->isStore()) ? 'StoreAwareAbstractCollection' : 'AbstractCollection';
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceModel(): string
+    {
+        $parts = [
+            $this->module->getNamespace(),
+            $this->module->getModuleName(),
+            'Source',
+            $this->getNameSingular(),
+        ];
+        return $this->stringUtil->glueClassParts($parts);
     }
 }

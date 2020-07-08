@@ -36,12 +36,12 @@ class StoreViewTest extends TestCase
     {
         $this->systemStore = $this->createMock(Store::class);
         $this->escaper = $this->createMock(Escaper::class);
+        $this->escaper->method('escapeJs')->willReturnArgument(0);
+        $this->escaper->method('escapeHtml')->willReturnArgument(0);
         $this->storeView = new StoreView(
             $this->systemStore,
             $this->escaper
         );
-        $escaper->method('escapeJs')->willReturnArgument(0);
-        $escaper->method('escapeHtml')->willReturnArgument(0);
     }
 
     /**

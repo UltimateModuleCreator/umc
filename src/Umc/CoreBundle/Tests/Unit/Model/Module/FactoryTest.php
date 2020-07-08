@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Tests\Unit\Model\Module;
 
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
+use App\Umc\CoreBundle\Model\Relation\Factory as RelationFactory;
 use App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Model\Module\Factory;
 use App\Umc\CoreBundle\Util\StringUtil;
@@ -41,9 +42,11 @@ class FactoryTest extends TestCase
     {
         $stringUtil = $this->createMock(StringUtil::class);
         $entityFactory = $this->createMock(EntityFactory::class);
+        $relationFactory = $this->createMock(RelationFactory::class);
         $this->factory = new Factory(
             $stringUtil,
-            $entityFactory
+            $entityFactory,
+            $relationFactory
         );
     }
 

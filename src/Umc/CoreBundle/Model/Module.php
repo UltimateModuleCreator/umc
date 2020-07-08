@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace App\Umc\CoreBundle\Model;
 
 use App\Umc\CoreBundle\Model\Entity\Factory as EntityFactory;
+use App\Umc\CoreBundle\Model\Relation\Factory as RelationFactory;
 use App\Umc\CoreBundle\Util\StringUtil;
 
 class Module
@@ -30,6 +31,10 @@ class Module
      * @var Entity[]
      */
     protected $entities = [];
+    /**
+     * @var Relation[]
+     */
+    protected $relations = [];
     /**
      * @var StringUtil
      */
@@ -91,11 +96,13 @@ class Module
      * Module constructor.
      * @param StringUtil $stringUtil
      * @param EntityFactory $entityFactory
+     * @param RelationFactory $relationFactory
      * @param array $data
      */
     public function __construct(
         StringUtil $stringUtil,
         EntityFactory $entityFactory,
+        RelationFactory $relationFactory,
         array $data = []
     ) {
         $this->stringUtil = $stringUtil;
@@ -112,6 +119,9 @@ class Module
         $this->configTabPosition = (int)($data['config_tab_position'] ?? '');
         foreach (($data['_entities'] ?? []) as $entity) {
             $this->entities[] = $this->entityFactory->create($this, $entity);
+        }
+        foreach (($data['_relations'] ?? []) as $relation) {
+            $this->relations[] = $relationFactory->create($this, $relation);
         }
     }
 
@@ -218,6 +228,12 @@ class Module
                     return $entity->toArray();
                 },
                 $this->entities
+            ),
+            '_relations' => array_map(
+                function (Relation $relation) {
+                    return $relation->toArray();
+                },
+                $this->relations
             )
         ];
     }
@@ -280,5 +296,16 @@ class Module
     public function hasEntitiesWithFlag($flag): bool
     {
         return count($this->getEntitiesWithFlag($flag)) > 0;
+    }
+
+    /**
+     * @return Relation[]
+     */
+    public function getRelations(): array
+    {
+        if (count($this->getEntities()) < 2) {
+            return [];
+        }
+        return $this->relations;
     }
 }

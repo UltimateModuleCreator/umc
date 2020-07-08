@@ -7,10 +7,13 @@
                 <arguments>
                     <argument name="list{{ entity.getNameSingular()|camel|ucfirst }}" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}</argument>
                     <argument name="formatter" xsi:type="object">{{ module.getUmcCrudNamespace()|camel|ucfirst }}\{{ module.getUmcModuleName()|camel|ucfirst }}\ViewModel\Formatter</argument>
-    {% if entity.isFrontend() %}
+{% if entity.isFrontend() %}
                     <argument name="{{ entity.getNameSingular()|camel }}Url" xsi:type="object">{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url</argument>
-    {% endif %}
+{% endif %}
                 </arguments>
+{% for parent in entity.getParentEntities() %}
+                <block class="{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ parent.getNameSingular()|camel|ucfirst }}\Name" name="{{ parent.getNameSingular()|snake }}_name" template="{{ module.getNamespace() }}_{{ module.getModuleName() }}::{{ parent.getNameSingular()|snake }}/name.phtml" as="{{ parent.getNameSingular()|snake }}_name" />
+{% endfor %}
             </block>
         </referenceContainer>
     </body>

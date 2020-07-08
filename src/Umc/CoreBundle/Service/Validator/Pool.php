@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\Service\Validator;
 use App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Model\Entity;
 use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Model\Relation;
 
 class Pool
 {
@@ -54,10 +55,17 @@ class Pool
         /** @var ValidatorInterface $moduleValidator */
         $moduleValidator = $this->validators['module'] ?? '';
         $errors = $moduleValidator ? $moduleValidator->validate($module) : [];
-        return array_reduce(
+        $errors = array_reduce(
             $module->getEntities(),
             function ($err, Entity $entity) {
                 return array_merge($err, $this->validateEntity($entity));
+            },
+            $errors
+        );
+        return array_reduce(
+            $module->getRelations(),
+            function ($err, Relation $relation) {
+                return array_merge($err, $this->validateRelation($relation));
             },
             $errors
         );
@@ -79,6 +87,17 @@ class Pool
             },
             $errors
         );
+    }
+
+    /**
+     * @param Relation $relation
+     * @return array
+     */
+    private function validateRelation(Relation $relation): array
+    {
+        /** @var ValidatorInterface $relationValidator */
+        $relationValidator = $this->validators['relation'] ?? '';
+        return $relationValidator ? $relationValidator->validate($relation) : [];
     }
 
     /**

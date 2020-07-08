@@ -1,0 +1,22 @@
+{% if entity.isFrontend() or entity.getChildEntities()|length > 0 %}
+<?php{{ formatLicense(module, 'php')|raw }}
+/** @var \{{ module.getNamespace() }}\{{ module.getModuleName }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name $block */ ?>
+{{ extraVars.escaperDeclaration|raw }}
+<?php ${{ entity.getNameSingular()|camel }} = $block->get{{ entity.getNameSingular()|camel|ucfirst }}();?>
+<?php if (${{ entity.getNameSingular()|camel }}): ?>
+    <div class="{{ entity.getNameSingular()|hyphen }}">
+        <strong><?= ${{ extraVars.escaper }}->escapeHtml(__($block->getLabel())); ?></strong>
+{% if entity.isFrontend() %}
+        <?php if (!$block->getData('no_url')): ?>
+            <a href="<?= ${{ extraVars.escaper }}->escapeUrl($block->get{{ entity.getNameSingular()|camel|ucfirst }}Url());?>">
+                <?= ${{ extraVars.escaper }}->escapeHtml(__(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}())); ?>
+            </a>
+        <?php else: ?>
+            <?= ${{ extraVars.escaper }}->escapeHtml(__(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}())); ?>
+        <?php endif;?>
+{% else %}
+            <?= ${{ extraVars.escaper }}->escapeHtml(__(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}())); ?>
+{% endif %}
+    </div>
+<?php endif;
+{% endif %}

@@ -90,9 +90,9 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
      *
      * @return array
      */
-    public function get{{ entity.getNameSingular()|camel|ucfirst }}Id()
+    public function get{{ entity.getPk()|camel|ucfirst }}()
     {
-        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID);
+        return $this->getData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getPk()|snake|upper }});
     }
 
     /**
@@ -101,13 +101,32 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
      * @param  int ${{ entity.getPk()|camel }}
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
-    public function set{{ entity.getNameSingular()|camel|ucfirst }}Id(${{ entity.getNameSingular()|camel }}Id)
+    public function set{{ entity.getPk()|camel|ucfirst }}(${{ entity.getPk()|camel }})
     {
-        return $this->setData({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameSingular()|snake|upper }}_ID, ${{ entity.getNameSingular()|camel }}Id);
+        return $this->setData(self::{{ entity.getPk()|snake|upper }}, ${{ entity.getPk()|camel }});
+    }
+{% for relation in entity.getParentRelations() %}
+
+    /**
+     * @param int ${{ relation.getRelatedEntityPk(entity)|camel }}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function set{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}(${{ relation.getRelatedEntityPk(entity)|camel }})
+    {
+        return $this->setData(self::{{ relation.getRelatedEntityPk(entity)|upper }}, ${{ relation.getRelatedEntityPk(entity)|camel }});
     }
 
+    /**
+     * @return int
+     */
+    public function get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}()
+    {
+        return $this->getData(self::{{ relation.getRelatedEntityPk(entity)|upper }});
+    }
+{% endfor %}
+
 {% for attribute in entity.getAttributes() %}
-{{ attribute.getTypeInstance().renderTemplate('model')|raw }}
+{{ attribute.getTypeInstance().renderTemplate('model', {extraVars: extraVars})|raw }}
 {% endfor %}
 {% if entity.isStore() %}
     /**

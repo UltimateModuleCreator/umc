@@ -1,2 +1,2 @@
-{{ indent }}<strong><?= $block->escapeHtml(__('{{ attribute.getLabel() }}')); ?></strong>
+{{ indent }}<strong><?= ${{ extraVars.escaper }}->escapeHtml(__('{{ attribute.getLabel() }}')); ?></strong>
 {{ indent }}<?= $formatter->formatHtml(${{entity.getNameSingular()|camel}}->get{{ attribute.getCode()|camel|ucfirst }}(), ['type' => 'editor']); ?>

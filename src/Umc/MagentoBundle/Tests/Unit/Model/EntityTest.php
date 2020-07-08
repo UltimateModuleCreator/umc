@@ -566,6 +566,20 @@ class EntityTest extends TestCase
     }
 
     /**
+     * @covers \App\Umc\MagentoBundle\Model\Entity::getSourceModel
+     * @covers \App\Umc\MagentoBundle\Model\Entity::__construct
+     */
+    public function testGetSourceModel()
+    {
+        $instance = $this->getInstance(['name_singular' => 'name']);
+        $this->module->method('getNamespace')->willReturn('Ns');
+        $this->module->method('getModuleName')->willReturn('Md');
+        $this->stringUtil->method('glueClassParts')->with(['Ns', 'Md', 'Source', 'name'])
+            ->willReturn('model');
+        $this->assertEquals('model', $instance->getSourceModel());
+    }
+
+    /**
      * @param $data
      * @return Entity
      */

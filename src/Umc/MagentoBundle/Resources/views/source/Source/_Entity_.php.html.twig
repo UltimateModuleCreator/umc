@@ -1,0 +1,67 @@
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source;
+
+{{ sortStart() }}
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Data\OptionSourceInterface;
+use {{ entity.getInterface()}};
+use {{ entity.getListRepoInterface() }};
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }} implements OptionSourceInterface
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface
+     */
+    private $repository;
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+    /**
+     * @var array
+     */
+    private $options;
+
+    /**
+     * {{ entity.getNameSingular()|camel|ucfirst }} constructor.
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface $repository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     */
+    public function __construct(
+        {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface $repository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
+        $this->repository = $repository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function toOptionArray()
+    {
+        if ($this->options === null) {
+            $this->options = array_map(
+                function ({{ entity.getNameSingular()|camel|ucfirst }}Interface ${{ entity.getNameSingular() }}) {
+                    return [
+                        'label' => ${{ entity.getNameSingular() }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}(),
+                        'value' => ${{ entity.getNameSingular() }}->get{{ entity.getPk()|camel|ucfirst }}()
+                    ];
+                },
+                $this->repository->getList($this->searchCriteriaBuilder->create())->getItems()
+            );
+            uasort(
+                $this->options,
+                function (array $optionA, array $optionB) {
+                    return strcmp($optionA['label'], $optionB['label']);
+                }
+            );
+            $this->options = array_values($this->options);
+        }
+        return $this->options;
+    }
+}

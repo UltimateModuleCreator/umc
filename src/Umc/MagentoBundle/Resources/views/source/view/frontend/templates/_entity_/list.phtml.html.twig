@@ -10,7 +10,19 @@ $formatter = $block->getData('formatter');
 ${{ entity.getNameSingular()|camel }}Url = $block->getData('{{ entity.getNameSingular()|camel }}Url');
 {% endif %}
 ?>
+{{ extraVars.escaperDeclaration|raw }}
 <?php if ($list{{ entity.getNameSingular()|camel|ucfirst }}): ?>
+    <?php $list{{ entity.getNameSingular()|camel|ucfirst }}->setLabel($block->getData('label') ?? '');?>
+    <?php $list{{ entity.getNameSingular()|camel|ucfirst }}->setPageVarName($block->getData('page_var_name') ?? '');?>
+    <?php $list{{ entity.getNameSingular()|camel|ucfirst }}->setPageFragment($block->getData('page_fragment') ?? '');?>
+    <?php $list{{ entity.getNameSingular()|camel|ucfirst }}->setPageLimitVarName($block->getData('page_limit_var_name') ?? '');?>
+    <?php $list{{ entity.getNameSingular()|camel|ucfirst }}->setFilters($block->getData('filters') ?? []);?>
+    <?php if ($list{{ entity.getNameSingular()|camel|ucfirst }}->getPageFragment()): ?>
+        <div id="<?= ${{ extraVars.escaper }}->escapeHtmlAttr($list{{ entity.getNameSingular()|camel|ucfirst }}->getPageFragment());?>"></div>
+    <?php endif;?>
+    <?php if ($list{{ entity.getNameSingular()|camel|ucfirst }}->getLabel()): ?>
+        <h2><?= ${{ extraVars.escaper }}->escapeHtml($list{{ entity.getNameSingular()|camel|ucfirst }}->getLabel());?></h2>
+    <?php endif;?>
     <?php ${{entity.getNamePlural()|camel}} = $list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection();?>
     <?php if (${{entity.getNamePlural()|camel}}->getSize()): ?>
         <div class="{{entity.getNameSingular()|hyphen}}-toolbar toolbar top"><?= $list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml(); ?></div>
@@ -20,18 +32,31 @@ ${{ entity.getNameSingular()|camel }}Url = $block->getData('{{ entity.getNameSin
                 <div class="{{entity.getNameSingular()|hyphen}}-item">
                     <div class="{{entity.getNameSingular()|hyphen}}-{{ entity.getNameAttribute().getCode()|hyphen }}">
                         <?php if (${{ entity.getNameSingular()|camel }}Url): ?>
-                            <a href="<?= $block->escapeUrl(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameSingular()|camel|ucfirst}}Url(${{ entity.getNameSingular()|camel }})); ?>">
-                                <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
+                            <a href="<?= ${{ extraVars.escaper }}->escapeUrl(${{ entity.getNameSingular()|camel }}Url->get{{entity.getNameSingular()|camel|ucfirst}}Url(${{ entity.getNameSingular()|camel }})); ?>">
+                                <span><?= ${{ extraVars.escaper }}->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
                             </a>
                         <?php else: ?>
-                            <span><?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
+                            <span><?= ${{ extraVars.escaper }}->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{entity.getNameAttribute().getCode()|camel|ucfirst}}()); ?></span>
                         <?php endif;?>
                     </div>
-                    <?php if ($formatter): ?>
-                        <div class="{{entity.getNameSingular()|hyphen}}-details">
+                    <div class="{{entity.getNameSingular()|hyphen}}-details">
+{% for parent in entity.getParentEntities() %}
+                        <?php /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ parent.getNameSingular()|camel|ucfirst }}\Name ${{ parent.getNameSingular()|camel }}Block */?>
+                        <?php ${{ parent.getNameSingular()|camel }}Block = $block->getChildBlock('{{ parent.getNameSingular()|snake }}_name');?>
+{% endfor %}
+{% for relation in entity.getParentRelations() %}
+{% if relation.getRelatedEntityFrontend(entity) %}
+                        <?php if (${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block): ?>
+                            <?php ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block->setData('{{ relation.getRelatedEntity(entity).getPk() }}', ${{ entity.getNameSingular()|camel }}->get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}());?>
+                            <?php ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block->setData('label', __('{{ relation.getRelatedEntityLabel(entity) }}'));?>
+                            <?= ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block->toHtml();?>
+                        <?php endif;?>
+{% endif %}
+{% endfor %}
+                        <?php if ($formatter): ?>
 {% for attribute in entity.getAttributesWithFlag('show_in_list') %}
                             <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
-{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(32), mode:'list'})|raw }}
+{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(32), mode:'list', extraVars: extraVars})|raw }}
                             </div>
 {% endfor %}
                         </div>
@@ -41,7 +66,7 @@ ${{ entity.getNameSingular()|camel }}Url = $block->getData('{{ entity.getNameSin
         </div>
         <div class="{{entity.getNameSingular()|hyphen}}-toolbar toolbar bottom"><?= $list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml(); ?></div>
     <?php else: ?>
-            <?= $block->escapeHtml(__('There are no {{ entity.getLabelPlural() }} at this moment')); ?>
+            <?= ${{ extraVars.escaper }}->escapeHtml(__('There are no {{ entity.getLabelPlural() }} at this moment')); ?>
     <?php endif ?>
 <?php endif;
 {% endif %}

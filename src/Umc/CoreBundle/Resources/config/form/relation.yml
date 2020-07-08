@@ -1,0 +1,96 @@
+relation:
+  settings_label: "Relation Default Settings"
+  panel:
+    fields:
+      -
+        field: label
+    default: New Relation
+  tabs:
+    -
+      label: Relation Settings
+      code: settings
+      sort_order: 10
+      cols: 3
+  fields:
+    -
+      name: entity_one
+      type: choice
+      required: true
+      label: Entity 1
+      title: First entity in the relation
+      tab: settings
+      sort_order: 10
+      additionalDataBind: "options: $parent.getChildren('_entities'), optionsText: function (item) { console.log(item);return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
+    -
+      name: type
+      type: choice
+      has_default: true
+      label: Relation Type
+      required: true
+      title: This is the type of relation. one to many or many to many
+      options: '%relation_type%'
+      sort_order: 20
+      tab: settings
+    -
+      name: entity_two
+      type: choice
+      label: Entity 2
+      required: true
+      title: Second entity in the relation
+      tab: settings
+      sort_order: 30
+      additionalDataBind: "options: $parent.getChildren('_entities'), optionsText: function (item) { console.log(item);return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
+
+    -
+      name: label
+      type: text
+      label: Internal Label
+      required: true
+      title: This is used to identify what the relation means.
+      tab: settings
+      sort_order: 40
+    -
+      name: entity_one_label
+      type: text
+      required: false
+      label: Entity 1 label on entity 2
+      title: Label displayed in backend and frontend for entity 1 on entity 2 pages. Leave blank to default to the default label of entity 1. Singular form for one to many relation and Plural form for many to many relations
+      tab: settings
+      sort_order: 50
+    -
+      name: entity_two_label
+      type: text
+      required: false
+      label: Entity 2 label on entity 1
+      title: Label displayed in backend and frontend for entity 2 on entity 1 pages. Leave blank to default to the default label of entity 2. Singular form for one to many relation and Plural form for many to many relations
+      tab: settings
+      sort_order: 50
+    -
+      name: code
+      type: text
+      label: Code
+      required: true
+      title: This is needed in case you want to establish 2 relations between the same entities. The code will be added to the db fields, admin ui fileds, .... Leave empty if you have only one relation between the same entities.
+      tab: settings
+      sort_order: 60
+    -
+      name: entity_one_frontend
+      type: checkbox
+      required: false
+      label: Show entity 1 on entity 2 frontend
+      title: A list with entity 2 instances will be displayed in the entity 1 frontend view page. Valid only if entities are displayed in frontend
+      tab: settings
+      sort_order: 60
+    -
+      name: entity_two_frontend
+      type: checkbox
+      required: false
+      label: Show entity 2 on entity 1 frontend
+      title: A list / link with entity 1 instance(s) will be displayed in the entity 1 frontend / list view page. Valid only if entities are displayed in frontend
+      tab: settings
+      sort_order: 70
+
+
+
+
+

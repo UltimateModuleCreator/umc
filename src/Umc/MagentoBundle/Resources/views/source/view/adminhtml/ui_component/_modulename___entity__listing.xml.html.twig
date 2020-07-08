@@ -130,9 +130,22 @@
                 <sorting>asc</sorting>
             </settings>
         </column>
+{% for relation in entity.getParentRelations() %}
+        <column name="{{ relation.getRelatedEntityPk(entity) }}" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+                <dataType>select</dataType>
+                <options class="{{ relation.getRelatedEntity(entity).getSourceModel() }}"/>
+                <label translate="true">{{ relation.getRelatedEntityLabel(entity) }}</label>
+            </settings>
+        </column>
+{% endfor %}
 {% for attribute in entity.getAttributes() %}
 {% if attribute.isAdminGrid() %}
-{{ attribute.getTypeInstance().renderTemplate('grid')|raw }}
+{{ attribute.getTypeInstance().renderTemplate('grid', {extraVars: extraVars})|raw }}
 {% endif %}
 {% endfor %}
 {% if entity.isFrontend() %}
