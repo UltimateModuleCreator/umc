@@ -1,0 +1,12 @@
+attribute:
+  tabs:
+    -
+      code: frontend
+      enabled: false
+  fields:
+    -
+      name: type
+      options: '%sylius_attribute_type%'
+    -
+      name: admin_grid_filter
+      enabled: false

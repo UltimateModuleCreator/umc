@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace App\Umc\CoreBundle\Service\Generator;
 
+use App\Umc\CoreBundle\Util\StringUtil;
 use Twig\Environment as Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -35,16 +36,22 @@ class Module implements GeneratorInterface
      * @var ContentProcessor
      */
     private $processor;
+    /**
+     * @var StringUtil
+     */
+    private $stringUtil;
 
     /**
      * Module constructor.
      * @param Twig $twig
      * @param ContentProcessor $processor
+     * @param StringUtil $stringUtil
      */
-    public function __construct(Twig $twig, ContentProcessor $processor)
+    public function __construct(Twig $twig, ContentProcessor $processor, StringUtil $stringUtil)
     {
         $this->twig = $twig;
         $this->processor = $processor;
+        $this->stringUtil = $stringUtil;
     }
 
     /**
@@ -71,8 +78,25 @@ class Module implements GeneratorInterface
         if (!trim($content)) {
             return [];
         }
+        $destination = $this->processDestination($fileConfig['destination'], $module);
         return [
-            $fileConfig['destination'] => $this->processor->process($content)
+            $destination => $this->processor->process($content)
         ];
+    }
+
+    /**
+     * @param $destination
+     * @param \App\Umc\CoreBundle\Model\Module $module
+     * @return string|string[]
+     */
+    private function processDestination($destination, \App\Umc\CoreBundle\Model\Module $module)
+    {
+        $replace = [
+            '_namespace_' =>  $this->stringUtil->snake($module->getNamespace()),
+            '_modulename_' => $this->stringUtil->snake($module->getModuleName()),
+            '_Namespace_' => $module->getNamespace(),
+            '_ModuleName_' => $module->getModuleName()
+        ];
+        return str_replace(array_keys($replace), array_values($replace), $destination);
     }
 }

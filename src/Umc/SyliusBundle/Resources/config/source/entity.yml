@@ -1,0 +1,4 @@
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Resources/config/doctrine/_Entity_.orm.xml"
+  label: "Entity Doctrine declaration file"
+  scope: entity

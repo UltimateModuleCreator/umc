@@ -1,0 +1,27 @@
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Menu;
+
+use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
+
+class AdminMenuListener
+{
+    public function addAdminMenuItems(MenuBuilderEvent $event): void
+    {
+        $menu = $event->getMenu();
+{% if module.getMenuParent() %}
+        $parent = $menu->getChild('{{ module.getMenuParent() }}');
+{% else %}
+        $parent = $menu
+            ->addChild('{{ module.getModuleName()|hyphen }}')
+            ->setLabel('{{ module.getMenuText() }}');
+{% endif %}
+{% for entity in module.getEntities() %}
+        $parent
+            ->addChild('{{ entity.getNameSingular()|hyphen }}')
+            ->setLabel('{{ entity.getLabelPlural() }}')
+            ->setLabelAttribute('icon', 'newspaper');
+{% endfor %}
+    }
+}

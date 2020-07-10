@@ -70,6 +70,6 @@ class Factory
     public function create(array $data = []): Module
     {
         $className = $this->moduleClassName;
-        return new $className($this->stringUtil, $this->entityFactory, $this->relationFactory, [], $data);
+        return new $className($this->stringUtil, $this->entityFactory, $this->relationFactory, $data);
     }
 }

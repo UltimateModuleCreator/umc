@@ -1,0 +1,6 @@
+services:
+  {{ module.getModuleName()|snake}}.listener.admin.menu_builder:
+    class: {{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Menu\AdminMenuListener
+    tags:
+      - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+

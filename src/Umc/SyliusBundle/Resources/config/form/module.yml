@@ -1,0 +1,39 @@
+module:
+  code: module
+  settings_label: "Bundle Default Settings"
+  panel:
+    default: New Bundle
+    fields:
+      -
+        field: namespace
+      -
+        field: module_name
+  children:
+    -
+      code: _relations
+      enabled: false
+
+  fields:
+    -
+      name: module_name
+      label: Bundle Name
+      title: "Module name must be alphanumerical and start with a capital letter"
+    -
+      name: menu_parent
+      options: '%sylius_admin_menu%'
+      additionalDataBind: "select2: {}"
+      sort_order: 35
+      tab: base
+    -
+      name: front_key
+      enabled: false
+    -
+      name: frontend
+      enabled: false
+    -
+      name: menu_text
+      additionalDataBind: "enable: data.menu_parent() === ''"
+      tab: base
+    -
+     name: sort_order
+     enabled: false

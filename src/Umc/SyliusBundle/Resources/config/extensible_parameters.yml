@@ -1,0 +1,52 @@
+sylius_admin_menu:
+  flags:
+    extends: admin_menu
+  value:
+    'catalog':
+      label: 'Catalog'
+    'sales':
+      label: 'Sales'
+    'customers':
+      label: 'Customers'
+    'marketing':
+      label: 'Marketing'
+    'configuration':
+      label: 'Configuration'
+sylius_attribute_type:
+  flags:
+    extends: attribute_type
+    sort: label
+    filter: disabled
+  value:
+    text:
+      schema_type: string
+      templates: []
+    product_attribute:
+      disabled: true
+    product_attribute_multiselect:
+      disabled: true
+    product_attribute_set:
+      disabled: true
+    product_attribute_set_multiselect:
+      disabled: true
+    country:
+      disabled: true
+    country_multiselect:
+      disabled: true
+    date: []
+    decimal: []
+    dropdown:
+      disabled: true
+    file:
+      disabled: true
+    image:
+      disabled: true
+    integer: []
+    multiselect:
+      disabled: true
+    textarea: []
+    wysiwyg:
+      disabled: true
+    yesno: []
+    dynamic:
+      disabled: true

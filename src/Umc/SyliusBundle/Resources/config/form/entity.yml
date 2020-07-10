@@ -1,0 +1,11 @@
+entity:
+  children:
+    -
+      code: _attributes
+      addButton:
+        split:
+          values: '%sylius_attribute_type%'
+  tabs:
+    -
+      code: frontend
+      enabled: false

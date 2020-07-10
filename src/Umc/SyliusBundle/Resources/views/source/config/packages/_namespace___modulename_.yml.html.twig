@@ -1,0 +1,6 @@
+imports:
+    - { resource: "@{{ module.getNamespace() }}{{ module.getModuleName() }}Bundle/Resources/config/{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.yml" }
+    - { resource: "@{{ module.getNamespace() }}{{ module.getModuleName() }}Bundle/Resources/config/services.yml" }
+{% for entity in module.getEntities() %}
+    - { resource: "@{{ module.getNamespace() }}{{ module.getModuleName() }}Bundle/Resources/config/grid/{{ entity.getNameSingular()|snake }}.yml" }
+{% endfor %}

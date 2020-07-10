@@ -8,5 +8,6 @@
             <argument key="$file" type="string">%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/platform.yml</argument>
             <tag name="platform.pool.provider" />
         </service>
+        <service id="sylius.module.factory" class="App\Umc\CoreBundle\Model\Module\Factory" public="true" />
     </services>
 </container>
