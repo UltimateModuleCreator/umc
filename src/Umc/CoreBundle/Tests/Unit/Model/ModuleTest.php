@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Model;
 
 use App\Umc\CoreBundle\Model\Entity;
 use App\Umc\CoreBundle\Model\Entity\Factory;
+use App\Umc\CoreBundle\Model\Relation;
 use App\Umc\CoreBundle\Model\Relation\Factory as RelationFactory;
 use App\Umc\CoreBundle\Model\Module;
 use App\Umc\CoreBundle\Util\StringUtil;
@@ -71,6 +72,44 @@ class ModuleTest extends TestCase
             $this->createMock(Entity::class)
         );
         $this->assertEquals(2, count($this->getInstance($data)->getEntities()));
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Module::getRelations
+     * @covers \App\Umc\CoreBundle\Model\Module::__construct
+     */
+    public function testGetRelations()
+    {
+        $data = [
+            '_entities' => [[], []],
+            '_relations' => [[], []]
+        ];
+        $this->entityFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createMock(Entity::class)
+        );
+        $this->entityFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createMock(Entity::class)
+        );
+        $this->assertEquals(2, count($this->getInstance($data)->getRelations()));
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Module::getRelations
+     * @covers \App\Umc\CoreBundle\Model\Module::__construct
+     */
+    public function testGetRelationsWithOneEntity()
+    {
+        $data = [
+            '_entities' => [[]],
+            '_relations' => [[], []]
+        ];
+        $this->entityFactory->expects($this->once())->method('create')->willReturn(
+            $this->createMock(Entity::class)
+        );
+        $this->entityFactory->expects($this->once())->method('create')->willReturn(
+            $this->createMock(Entity::class)
+        );
+        $this->assertEquals(0, count($this->getInstance($data)->getRelations()));
     }
 
     /**
@@ -171,12 +210,16 @@ class ModuleTest extends TestCase
     public function testToArray()
     {
         $entity = $this->createMock(Entity::class);
+        $relation = $this->createMock(Relation::class);
         $entity->expects($this->once())->method('toArray');
+        $relation->expects($this->once())->method('toArray');
         $this->entityFactory->expects($this->once())->method('create')->willReturn($entity);
-        $result = $this->getInstance(['_entities' => [[]]])->toArray();
+        $this->relationFactory->expects($this->once())->method('create')->willReturn($relation);
+        $result = $this->getInstance(['_entities' => [[]], '_relations' => [[]]])->toArray();
         $this->assertArrayHasKey('namespace', $result);
         $this->assertArrayHasKey('module_name', $result);
         $this->assertArrayHasKey('_entities', $result);
+        $this->assertArrayHasKey('_relations', $result);
     }
 
     /**

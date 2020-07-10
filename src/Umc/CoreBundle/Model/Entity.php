@@ -512,6 +512,6 @@ class Entity
     public function getSiblingEntities(): array
     {
         $this->parseRelations();
-        return $this->parentEntities;
+        return $this->siblingEntities;
     }
 }

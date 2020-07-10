@@ -22,6 +22,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Service\Validator;
 
 use App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Model\Relation;
 use App\Umc\CoreBundle\Service\Validator\Pool;
 use App\Umc\CoreBundle\Service\Validator\ValidatorInterface;
 use App\Umc\CoreBundle\Model\Entity;
@@ -35,6 +36,7 @@ class PoolTest extends TestCase
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateEntity
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateAttribute
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateDynamic
+     * @covers \App\Umc\CoreBundle\Service\Validator\Pool::validateRelation
      * @covers \App\Umc\CoreBundle\Service\Validator\Pool::__construct
      */
     public function testValidate()
@@ -43,6 +45,7 @@ class PoolTest extends TestCase
         $entityValidator = $this->getValidatorMock(['entity error']);
         $attributeValidator = $this->getValidatorMock(['attribute error']);
         $dynamicValidator = $this->getValidatorMock(['dynamic error']);
+        $relationValidator = $this->getValidatorMock(['relation error']);
         $module = $this->createMock(Module::class);
         $entity = $this->createMock(Entity::class);
         $attribute1 = $this->createMock(Attribute::class);
@@ -50,6 +53,7 @@ class PoolTest extends TestCase
         $attribute1->method('getDynamic')->willReturn([$this->createMock(Attribute\Dynamic::class)]);
         $entity->method('getAttributes')->willReturn([$attribute1, $attribute2]);
         $module->method('getEntities')->willReturn([$entity]);
+        $module->method('getRelations')->willReturn([$this->createMock(Relation::class)]);
         $expected = [
             'module error',
             'entity error',

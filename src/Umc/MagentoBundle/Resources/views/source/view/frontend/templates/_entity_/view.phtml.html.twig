@@ -48,7 +48,7 @@ $formatter = $block->getData('formatter');
             'page_var_name' => 'p{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}',
             'page_fragment' => '{{ relation.getRelatedEntityPk(entity)|camel }}',
             'page_limit_var_name' => 'l{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}',
-            'filters' => [['field' => '{{ relation.getRelatedEntity(entity).getPk() }}',  'condition' => ${{ entity.getNameSingular()|camel }}->get{{ entity.getPk()|camel|ucfirst }}()]]
+            'filters' => [['field' => '{{ relation.getRelatedEntityPk(relation.getRelatedEntity(entity)) }}',  'condition' => ${{ entity.getNameSingular()|camel }}->get{{ entity.getPk()|camel|ucfirst }}()]]
         ]);?>
         <?= ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}ListBlock->toHtml(); ?>
     <?php endif;?>

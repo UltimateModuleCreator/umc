@@ -33,9 +33,9 @@ class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterf
      */
     private $blockFactory;
     /**
-     * @var Collections[]
+     * @var Collection[]
      */
-    private ${{ entity.getNameSingular()|camel }}Collection;
+    private ${{ entity.getNamePlural()|camel }}Collection;
     /**
      * @var Pager[]
      */

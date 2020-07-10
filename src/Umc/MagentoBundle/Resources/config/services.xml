@@ -101,6 +101,15 @@
             <argument key="$errorMessage">Entity Name singular cannot be %s. It conflicts with the magento folder structure</argument>
             <tag name="magento.entity.validator" />
         </service>
+        <service id="magento.entity.singular.plural.validator" class="App\Umc\CoreBundle\Service\Validator\NotSame">
+            <argument key="$getters" type="collection">
+                <argument key="0">getNameSingular</argument>
+                <argument key="1">getNamePlural</argument>
+            </argument>
+            <argument key="$errorMessage" type="string">Name singular and plural should be different for entity %%s</argument>
+            <argument key="$nameGetter">getLabelSingular</argument>
+            <tag name="magento.entity.validator" />
+        </service>
         <service id="App\Umc\CoreBundle\Service\Validator\EntityName" class="App\Umc\CoreBundle\Service\Validator\EntityName">
             <tag name="magento.entity.validator" />
         </service>

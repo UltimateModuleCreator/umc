@@ -94,8 +94,8 @@ class Relation
         $this->entityTwo = (string)($data['entity_two'] ?? '');
         $this->type = (string)($data['type'] ?? '');
         $this->code = (string)($data['code'] ?? '');
-        $this->entityOneLabel = (string)($data['entity_one_label']);
-        $this->entityTwoLabel = (string)($data['entity_two_label']);
+        $this->entityOneLabel = (string)($data['entity_one_label'] ?? '');
+        $this->entityTwoLabel = (string)($data['entity_two_label'] ?? '');
         $this->entityOneFrontend = (bool)($data['entity_one_frontend'] ?? false);
         $this->entityTwoFrontend = (bool)($data['entity_two_frontend'] ?? false);
     }
@@ -156,7 +156,7 @@ class Relation
      * @param string $code
      * @return Entity
      */
-    private function getEntity(string $code): Entity
+    public function getEntity(string $code): Entity
     {
         foreach ($this->module->getEntities() as $entity) {
             if ($entity->getNameSingular() === $code) {
