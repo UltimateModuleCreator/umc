@@ -98,6 +98,30 @@ class Entity
      * @var array
      */
     protected $attributesByFlagPrefix = [];
+    /**
+     * @var Entity[]
+     */
+    private $parentEntities;
+    /**
+     * @var Relation[]
+     */
+    private $parentRelations;
+    /**
+     * @var Entity[]
+     */
+    private $childEntities;
+    /**
+     * @var Relation[]
+     */
+    private $childRelations;
+    /**
+     * @var Entity[]
+     */
+    private $siblingEntities;
+    /**
+     * @var Relation[]
+     */
+    private $siblingRelations;
 
     /**
      * Entity constructor.
@@ -268,6 +292,14 @@ class Entity
     }
 
     /**
+     * @return string
+     */
+    public function getPk(): string
+    {
+        return $this->stringUtil->snake($this->getNameSingular()) . '_id';
+    }
+
+    /**
      * @return void
      */
     private function initAttributeCacheData(): void
@@ -388,5 +420,98 @@ class Entity
             }
         }
         return $this->attributesByFlagPrefix[$prefix];
+    }
+
+    /**
+     * @return Relation[]
+     */
+    public function getParentRelations()
+    {
+        $this->parseRelations();
+        return $this->parentRelations;
+    }
+
+    /**
+     * @return Relation[]
+     */
+    public function getChildRelations(): array
+    {
+        $this->parseRelations();
+        return $this->childRelations;
+    }
+
+    /**
+     * @return Relation[]
+     */
+    public function getSiblingRelations(): array
+    {
+        $this->parseRelations();
+        return $this->siblingRelations;
+    }
+
+    /**
+     * loop through all relations abd map out the related entities
+     */
+    private function parseRelations()
+    {
+        if ($this->parentRelations === null) {
+            $this->parentRelations = [];
+            $this->parentEntities = [];
+            $this->childEntities = [];
+            $this->childRelations = [];
+            $this->siblingEntities = [];
+            $this->siblingRelations = [];
+            foreach ($this->getModule()->getRelations() as $relation) {
+                if ($relation->getEntityOneInstance() === $this) {
+                    if ($relation->getType() === Relation::TYPE_ONE_TO_MANY) {
+                        $this->childRelations[] = $relation;
+                        $childEntity = $relation->getRelatedEntity($this);
+                        $this->childEntities[$childEntity->getNameSingular()] = $childEntity;
+                    } elseif ($relation->getType() === Relation::TYPE_MANY_TO_MANY) {
+                        $siblingEntity = $relation->getRelatedEntity($this);
+                        $this->siblingRelations[] = $relation;
+                        $this->siblingEntities[$siblingEntity->getNameSingular()] = $siblingEntity;
+                    }
+                }
+                if ($relation->getEntityTwoInstance() === $this) {
+                    if ($relation->getType() === Relation::TYPE_ONE_TO_MANY) {
+                        $this->parentRelations[] = $relation;
+                        $parentEntity = $relation->getRelatedEntity($this);
+                        $this->parentEntities[$parentEntity->getNameSingular()] = $parentEntity;
+                    } elseif ($relation->getType() === Relation::TYPE_MANY_TO_MANY) {
+                        $siblingEntity = $relation->getRelatedEntity($this);
+                        $this->siblingRelations[] = $relation;
+                        $this->siblingEntities[$siblingEntity->getNameSingular()] = $siblingEntity;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getParentEntities(): array
+    {
+        $this->parseRelations();
+        return $this->parentEntities;
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getChildEntities(): array
+    {
+        $this->parseRelations();
+        return $this->childEntities;
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getSiblingEntities(): array
+    {
+        $this->parseRelations();
+        return $this->siblingEntities;
     }
 }

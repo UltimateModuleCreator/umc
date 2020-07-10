@@ -25,6 +25,9 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
     public const STATUS_ENABLED = 1;
     public const STATUS_DISABLED = 0;
 {% endif %}
+{% for relation in entity.getParentRelations() %}
+    public const {{ relation.getRelatedEntityPk(entity)|upper }} = '{{ relation.getRelatedEntityPk(entity) }}';
+{% endfor %}
 
     /**
      * @param int $id
@@ -46,10 +49,22 @@ interface {{ entity.getNameSingular()|camel|ucfirst }}Interface
     /**
      * @return int
      */
-    public function get{{ entity.getNameSingular()|camel|ucfirst }}Id();
+    public function get{{ entity.getPk()|camel|ucfirst }}();
+{% for relation in entity.getParentRelations() %}
 
+    /**
+     * @param int ${{ relation.getRelatedEntityPk(entity)|camel }}
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function set{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}(${{ relation.getRelatedEntityPk(entity)|camel }});
+
+    /**
+     * @return int
+     */
+    public function get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}();
+{% endfor %}
 {% for attribute in entity.getAttributes() %}
-{{ attribute.getTypeInstance().renderTemplate('interface')|raw }}
+{{ attribute.getTypeInstance().renderTemplate('interface', {extraVars: extraVars})|raw }}
 {% endfor %}
 {% if entity.isStore() %}
     /**

@@ -1,0 +1,119 @@
+{% if entity.isFrontend() or entity.getChildEntities()|length > 0 %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }};
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+{% if entity.isFrontend() %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+{% endif %}
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
+use Magento\Widget\Block\BlockInterface;
+{{ sortEnd() }}
+
+class Name extends Template implements BlockInterface
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface
+     */
+    private $repository;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    private ${{ entity.getNamePlural()|camel }} = [];
+{% if entity.isFrontend %}
+    /**
+     * @var Url
+     */
+    private $url;
+{% endif %}
+
+    /**
+     * Link constructor.
+     * @param Template\Context $context
+{% if entity.isFrontend() %}
+     * @param Url $url
+{% endif %}
+     * @param {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface $repository
+     * @param array $data
+     */
+    public function __construct(
+        Template\Context $context,
+{% if entity.isFrontend() %}
+        Url $url,
+{% endif %}
+        {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface $repository,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->repository = $repository;
+{% if entity.isFrontend() %}
+        $this->url = $url;
+{% endif %}
+    }
+
+    /**
+     * @return bool|{{ entity.getNameSingular()|camel|ucfirst }}Interface
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        ${{ entity.getPk()|camel }} = (int)$this->getData('{{ entity.getPk() }}');
+        if (!array_key_exists(${{ entity.getPk()|camel }}, $this->{{ entity.getNamePlural()|camel }})) {
+            try {
+                ${{ entity.getNameSingular()|camel }} = $this->repository->get(${{ entity.getPk()|camel }});
+{% if entity.isFrontend() %}
+                if (!${{ entity.getNameSingular()|camel }}->getIsActive()) {
+                    $this->{{ entity.getNamePlural()|camel }}[${{ entity.getNameSingular()|camel }}Id] = false;
+                    return false;
+                }
+{% endif %}
+{% if entity.isStore() %}
+                $storeIds = [0, $this->_storeManager->getStore()->getId()];
+                if (count(array_intersect(${{ entity.getNameSingular()|camel }}->getStoreId(), $storeIds)) === 0) {
+                    $this->{{ entity.getNamePlural()|camel }}[${{ entity.getNameSingular()|camel }}Id] = false;
+                    return false;
+                }
+{% endif %}
+                $this->{{ entity.getNamePlural()|camel }}[${{ entity.getPk()|camel }}] = ${{ entity.getNameSingular()|camel }};
+                return ${{ entity.getNameSingular()|camel }};
+            } catch (NoSuchEntityException $e) {
+                $this->{{ entity.getNamePlural()|camel }}[${{ entity.getPk()|camel }}] = false;
+                return false;
+            }
+        }
+        return $this->{{ entity.getNamePlural()|camel }}[${{ entity.getPk()|camel }}];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $info = parent::getCacheKeyInfo();
+        $info[] = $this->getData('{{ entity.getPk() }}');
+        return $info;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->getData('label');
+    }
+{% if entity.isFrontend() %}
+    /**
+     * @return string
+     */
+    public function get{{ entity.getNameSingular()|camel|ucfirst }}Url()
+    {
+        ${{ entity.getNameSingular()|camel }} = $this->get{{ entity.getNameSingular()|camel|ucfirst }}();
+        return ${{ entity.getNameSingular()|camel }} ? $this->url->get{{ entity.getNameSingular()|camel|ucfirst }}Url(${{ entity.getNameSingular()|camel }}) : '';
+    }
+{% endif %}
+}
+{% endif %}

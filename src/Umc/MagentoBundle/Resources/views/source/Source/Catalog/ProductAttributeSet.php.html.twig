@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\Catalog;
 
 {{ sortStart() }}
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Catalog\Api\AttributeSetRepositoryInterface;
 {{ sortEnd() }}
 
-class ProductAttributeSet implements ArrayInterface
+class ProductAttributeSet implements OptionSourceInterface
 {
     /**
      * @var AttributeSetRepositoryInterface

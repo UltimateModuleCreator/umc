@@ -17,6 +17,16 @@ module:
       sortable: sortableListEntities
       addButton:
         label: Add Entity
+    -
+      code: _relations
+      className: Relation
+      tabLabel: Entity Relations
+      formKey: relation
+      sortable: sortableListRelations
+      visible: "children._entities().length > 1"
+      addButton:
+        label: Add Entity Relation
+
   tabs:
     -
       label: Settings

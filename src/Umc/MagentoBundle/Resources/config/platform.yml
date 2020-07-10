@@ -8,6 +8,7 @@ magento:
     form:
       - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/module.yml'
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/form/module.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/relation.yml'
       - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/entity.yml'
       - '%kernel.project_dir%/src/Umc/MagentoBundle/Resources/config/form/entity.yml'
       - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/attribute.yml'
@@ -27,12 +28,18 @@ magento:
       - PSR2
       - PSR12
       - "%kernel.project_dir%/vendor/magento/magento-coding-standard/Magento2"
-    extra_vars: []
+    extra_vars:
+      escaper: block
+      escaperDeclaration: ''
   versions:
     -
       label: 2.4
       code: 2-4-0
       sort_weight: 20
+      config:
+        extra_vars:
+          escaper: escaper
+          escaperDeclaration: '<?php /** @var \Magento\Framework\Escaper $escaper */ ?>'
     -
       label: 2.3 ( >= 2.3.4)
       code: 2-3-4

@@ -33,13 +33,33 @@ class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterf
      */
     private $blockFactory;
     /**
-     * @var Collection
+     * @var Collection[]
      */
-    private ${{ entity.getNameSingular()|camel }}Collection;
+    private ${{ entity.getNamePlural()|camel }}Collection;
     /**
-     * @var Pager
+     * @var Pager[]
      */
-    private $pager;
+    private $pagers = [];
+    /**
+     * @var string
+     */
+    private $label = '';
+    /**
+     * @var array
+     */
+    private $filters = [];
+    /**
+     * @var string
+     */
+    private $pageVarName = '';
+    /**
+     * @var string
+     */
+    private $pageLimitVarName = '';
+    /**
+     * @var string
+     */
+    private $pageFragment = '';
 
     /**
      * List{{ entity.getNameSingular()|camel|ucfirst }} constructor.
@@ -64,13 +84,141 @@ class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterf
     }
 
     /**
+     * prepare collection and pager
+{% if entity.isStore() %}
+     * @throws NoSuchEntityException
+{% endif %}
+     */
+    private function processCollection()
+    {
+        $hash = $this->getHash();
+        if (!isset($this->{{ entity.getNameSingular()|camel }}Collections[$hash])) {
+            $collection = $this->collectionFactory->create();
+            $collection->addFieldToFilter({{ entity.getNameSingular()|camel|ucfirst }}Interface::IS_ACTIVE, 1);
+            foreach ($this->filters as $filter) {
+                if (isset($filter['field']) && isset($filter['condition'])) {
+                    $collection->addFieldToFilter($filter['field'], $filter['condition']);
+                }
+            }
+{% if entity.isStore() %}
+            $collection->addStoreFilter($this->storeManager->getStore()->getId());
+{% endif %}
+            $collection->setOrder({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameAttribute().getCode()|upper }}, SortOrder::SORT_ASC);
+            /** @var Pager $pager */
+            $pager = $this->blockFactory->createBlock(Pager::class);
+            $this->pageFragment && $pager->setFragment($this->pageFragment);
+            $this->pageVarName && $pager->setPageVarName($this->pageVarName);
+            $this->pageLimitVarName && $pager->setLimitVarName($this->pageLimitVarName);
+            $this->{{ entity.getNameSingular()|camel }}Collections[$hash] = $collection;
+            $pager->setCollection($this->{{ entity.getNameSingular()|camel }}Collections[$hash]);
+            $this->pagers[$hash] = $pager;
+        }
+    }
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageVarName(): string
+    {
+        return $this->pageVarName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageLimitVarName(): string
+    {
+        return $this->pageLimitVarName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageFragment(): string
+    {
+        return $this->pageFragment;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel(string $label): void
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * @param array $filters
+     */
+    public function setFilters(array $filters): void
+    {
+        $this->filters = $filters;
+    }
+
+    /**
+     * @param string $pageVarName
+     */
+    public function setPageVarName(string $pageVarName): void
+    {
+        $this->pageVarName = $pageVarName;
+    }
+
+    /**
+     * @param string $pageLimitVarName
+     */
+    public function setPageLimitVarName(string $pageLimitVarName): void
+    {
+        $this->pageLimitVarName = $pageLimitVarName;
+    }
+
+    /**
+     * @param string $pageFragment
+     */
+    public function setPageFragment(string $pageFragment): void
+    {
+        $this->pageFragment = $pageFragment;
+    }
+
+    /**
+     * string
+     */
+    private function getHash()
+    {
+        sort($this->filters);
+        $keys = [
+            'label' => $this->label,
+            'filters' => $this->filters,
+            'page_var_name' => $this->pageVarName,
+            'page_limit_var_name' => $this->pageLimitVarName,
+            'page_fragment' => $this->pageFragment
+        ];
+        return hash('md5', json_encode($keys));
+    }
+
+    /**
      * @return Collection
      * @throws NoSuchEntityException
      */
     public function getCollection()
     {
         $this->processCollection();
-        return $this->{{ entity.getNameSingular()|camel }}Collection;
+        $hash = $this->getHash();
+        return $this->{{ entity.getNameSingular()|camel }}Collections[$hash];
     }
 
     /**
@@ -79,28 +227,9 @@ class List{{ entity.getNameSingular()|camel|ucfirst }} implements ArgumentInterf
      */
     public function getPagerHtml()
     {
+        $hash = $this->getHash();
         $this->processCollection();
-        return $this->pager->toHtml();
-    }
-
-    /**
-     * prepare collection and pager
-{% if entity.isStore() %}
-     * @throws NoSuchEntityException
-{% endif %}
-     */
-    private function processCollection()
-    {
-        if ($this->{{ entity.getNameSingular()|camel }}Collection === null) {
-            $this->{{ entity.getNameSingular()|camel }}Collection = $this->collectionFactory->create();
-            $this->{{ entity.getNameSingular()|camel }}Collection->addFieldToFilter({{ entity.getNameSingular()|camel|ucfirst }}Interface::IS_ACTIVE, 1);
-{% if entity.isStore() %}
-            $this->{{ entity.getNameSingular()|camel }}Collection->addStoreFilter($this->storeManager->getStore()->getId());
-{% endif %}
-            $this->{{ entity.getNameSingular()|camel }}Collection->setOrder({{ entity.getNameSingular()|camel|ucfirst }}Interface::{{ entity.getNameAttribute().getCode()|upper }}, SortOrder::SORT_ASC);
-            $this->pager = $this->blockFactory->createBlock(Pager::class);
-            $this->pager->setCollection($this->{{ entity.getNameSingular()|camel }}Collection);
-        }
+        return $this->pagers[$hash]->toHtml();
     }
 }
 {% endif %}

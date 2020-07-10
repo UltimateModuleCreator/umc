@@ -138,3 +138,15 @@
   source: "@UmcMagento/source/view/frontend/templates/_entity_/list.phtml"
   label: "Entity frontend list template"
   scope: entity
+-
+  source: "@UmcMagento/source/Source/_Entity_.php"
+  label: "Entity source model"
+  scope: entity
+-
+  source: "@UmcMagento/source/view/frontend/templates/_entity_/name.phtml"
+  label: "Entity name / link widget template"
+  scope: entity
+-
+  source: "@UmcMagento/source/Block/_Entity_/Name.php"
+  label: "Entity name / link widget block"
+  scope: entity

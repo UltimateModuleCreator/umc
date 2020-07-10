@@ -42,3 +42,11 @@
   source: "@UmcMagento/source/Test/Unit/Model/_Entity_Test.php"
   label: "Entity model unit test"
   scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Source/_Entity_Test.php"
+  label: "Entity source model unit test"
+  scope: entity
+-
+  source: "@UmcMagento/source/Test/Unit/Block/_Entity_/NameTest.php"
+  label: "Entity name frontend block unit test"
+  scope: entity

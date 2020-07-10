@@ -21,21 +21,27 @@ declare(strict_types=1);
 namespace App\Umc\MagentoBundle\Tests\Unit\Model;
 
 use App\Umc\CoreBundle\Model\Entity\Factory;
+use App\Umc\CoreBundle\Model\Relation\Factory as RelationFactory;
 use App\Umc\CoreBundle\Util\StringUtil;
 use App\Umc\MagentoBundle\Model\Entity;
 use App\Umc\MagentoBundle\Model\Module;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ModuleTest extends TestCase
 {
     /**
-     * @var StringUtil
+     * @var StringUtil | MockObject
      */
     private $stringUtil;
     /**
-     * @var Factory
+     * @var Factory | MockObject
      */
     private $entityFactory;
+    /**
+     * @var RelationFactory | MockObject
+     */
+    private $relationFactory;
     /**
      * setup tests
      */
@@ -43,6 +49,7 @@ class ModuleTest extends TestCase
     {
         $this->stringUtil = $this->createMock(StringUtil::class);
         $this->entityFactory = $this->createMock(Factory::class);
+        $this->relationFactory = $this->createMock(RelationFactory::class);
     }
 
     /**
@@ -378,6 +385,7 @@ class ModuleTest extends TestCase
         return new Module(
             $this->stringUtil,
             $this->entityFactory,
+            $this->relationFactory,
             $menuConfig,
             $data
         );

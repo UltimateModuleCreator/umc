@@ -43,6 +43,7 @@
                 <argument key="entity" type="service" id="magento.entity.composite.validator" />
                 <argument key="attribute" type="service" id="magento.attribute.composite.validator" />
                 <argument key="dynamic" type="service" id="magento.dynamic.composite.validator" />
+                <argument key="relation" type="service" id="magento.relation.composite.validator" />
             </argument>
         </service>
         <service id="magento.module.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
@@ -71,6 +72,14 @@
             <tag name="magento.module.validator" />
         </service>
 
+        <service id="magento.module.relations.unique.validator" class="App\Umc\CoreBundle\Service\Validator\UniqueChildren">
+            <argument key="$getter" type="string">getRelations</argument>
+            <argument key="$nameGetter" type="string">getExtensionName</argument>
+            <argument key="$errorMessage">Module "%%s" has multiple Relations with the same combination of fields "Entity 1, Entity 2, Code"</argument>
+            <argument key="$childUniqueGetter">getHash</argument>
+            <tag name="magento.module.validator" />
+        </service>
+
         <service id="magento.entity.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
             <argument key="$validators" type="tagged_iterator" tag="magento.entity.validator" />
         </service>
@@ -90,6 +99,15 @@
                 <argument key="config">config</argument>
             </argument>
             <argument key="$errorMessage">Entity Name singular cannot be %s. It conflicts with the magento folder structure</argument>
+            <tag name="magento.entity.validator" />
+        </service>
+        <service id="magento.entity.singular.plural.validator" class="App\Umc\CoreBundle\Service\Validator\NotSame">
+            <argument key="$getters" type="collection">
+                <argument key="0">getNameSingular</argument>
+                <argument key="1">getNamePlural</argument>
+            </argument>
+            <argument key="$errorMessage" type="string">Name singular and plural should be different for entity %%s</argument>
+            <argument key="$nameGetter">getLabelSingular</argument>
             <tag name="magento.entity.validator" />
         </service>
         <service id="App\Umc\CoreBundle\Service\Validator\EntityName" class="App\Umc\CoreBundle\Service\Validator\EntityName">
@@ -134,6 +152,18 @@
             <argument key="$errorMessage">Attribute "%%s" has multiple dynamic fields with the Code "%%s"</argument>
             <argument key="$childUniqueGetter">getCode</argument>
             <tag name="magento.attribute.validator" />
+        </service>
+        <service id="magento.relation.composite.validator" class="App\Umc\CoreBundle\Service\Validator\CompositeValidator">
+            <argument key="$validators" type="tagged_iterator" tag="magento.relation.validator" />
+        </service>
+        <service id="magento.relation.not.same.entities.validator" class="App\Umc\CoreBundle\Service\Validator\NotSame">
+            <argument key="$getters" type="collection">
+                <argument key="getEntityOne">getEntityOne</argument>
+                <argument key="getEntityTwo">getEntityTwo</argument>
+            </argument>
+            <argument key="$errorMessage">Relation "%%s" is not valid. Relations between and entity and itself is not supported. </argument>
+            <argument key="$nameGetter">getLabel</argument>
+            <tag name="magento.relation.validator" />
         </service>
         <!--[-] validators -->
     </services>

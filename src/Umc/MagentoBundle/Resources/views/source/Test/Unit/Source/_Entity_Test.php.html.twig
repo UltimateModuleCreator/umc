@@ -1,0 +1,81 @@
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Source;
+
+{{ sortStart() }}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\{{ entity.getNameSingular()|camel|ucfirst }};
+use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+{{ sortEnd() }}
+
+class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface | MockObject
+     */
+    private $repository;
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }} | MockObject
+     */
+    private ${{ entity.getNameSingular()|camel }};
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $this->repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface::class);
+        $searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
+        $this->{{ entity.getNameSingular()|camel }} = new {{ entity.getNameSingular()|camel|ucfirst }}($this->repository, $searchCriteriaBuilder);
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\{{ entity.getNameSingular()|camel|ucfirst }}::toOptionArray
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Source\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testToOptionArray()
+    {
+        $searchResults = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface::class);
+        $searchResults->expects($this->once())->method('getItems')->willReturn(
+            [
+                $this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock('{{ entity.getNameSingular()|camel|ucfirst }} Two', 2),
+                $this->get{{ entity.getNameSingular()|camel|ucfirst }}Mock('{{ entity.getNameSingular()|camel|ucfirst }} One', 1)
+            ]
+        );
+        $this->repository->expects($this->once())->method('getList')->willReturn($searchResults);
+        $expected = [
+            [
+                'label' => '{{ entity.getLabelSingular()|camel|ucfirst }} One',
+                'value' => 1
+            ],
+            [
+                'label' => '{{ entity.getLabelSingular()|camel|ucfirst }} Two',
+                'value' => 2
+            ],
+        ];
+        $this->assertEquals($expected, $this->{{ entity.getNameSingular()|camel }}->toOptionArray());
+        //call twice to test memoizing
+        $this->assertEquals($expected, $this->{{ entity.getNameSingular()|camel }}->toOptionArray());
+    }
+
+    /**
+     * @param string ${{ entity.getNameAttribute().getCode()|camel }}
+     * @param int $id
+     * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface|MockObject
+     */
+    private function get{{ entity.getNameSingular()|camel|ucfirst }}Mock(string ${{ entity.getNameAttribute().getCode()|camel }}, int $id)
+    {
+        $mock = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+        $mock->method('get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}')->willReturn(${{ entity.getNameAttribute().getCode()|camel }});
+        $mock->method('get{{ entity.getPk()|camel }}')->willReturn($id);
+        return $mock;
+    }
+}

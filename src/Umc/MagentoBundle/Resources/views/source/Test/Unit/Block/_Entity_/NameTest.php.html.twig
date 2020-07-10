@@ -1,0 +1,214 @@
+{% if entity.isFrontend() or entity.getChildEntities()|length > 0 %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Block\{{ entity.getNameSingular()|camel|ucfirst }};
+
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\{{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}Interface;
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name;
+{% if entity.isFrontend() %}
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\Url;
+{% endif %}
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\View\Element\Template\File\Resolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NameTest extends TestCase
+{
+    /**
+     * @var {{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface | MockObject
+     */
+    private $repository;
+{% if entity.isFrontend() %}
+    /**
+     * @var Url | MockObject
+     */
+    private $url;
+{% endif %}
+    /**
+     * @var StoreInterface | MockObject
+     */
+    private $store;
+    /**
+     * @var Name
+     */
+    private $name;
+
+    /**
+     * setup tests
+     */
+    protected function setUp(): void
+    {
+        $context = $this->createMock(Context::class);
+{% if entity.isFrontend() %}
+        $this->url = $this->createMock(Url::class);
+{% endif %}
+        $this->repository = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}RepositoryInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $context->method('getStoreManager')->willReturn($storeManager);
+        $this->store = $this->createMock(StoreInterface::class);
+        $storeManager->method('getStore')->willReturn($this->store);
+        $appState = $this->createMock(State::class);
+        $context->method('getAppState')->willReturn($appState);
+        $resolver = $this->createMock(Resolver::class);
+        $context->method('getResolver')->willReturn($resolver);
+        $urlBuilder = $this->createMock(UrlInterface::class);
+        $context->method('getUrlBuilder')->willReturn($urlBuilder);
+        $this->name = new Name(
+            $context,
+            $this->url,
+            $this->repository
+        );
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::getLabel
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGetLabel()
+    {
+        $this->assertEquals(null, $this->name->getLabel());
+        $this->name->setData('label', 'label');
+        $this->assertEquals('label', $this->name->getLabel());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::getCacheKeyInfo
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGetCacheKeyInfo()
+    {
+        $this->name->setData('{{ entity.getPk() }}', 1);
+        $this->assertTrue(in_array(1, $this->name->getCacheKeyInfo()));
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        $this->name->setData('{{ entity.getPk() }}', 1);
+        ${{ entity.getNameSingular()|camel }}1 = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+{% if entity.isFrontend() %}
+        ${{ entity.getNameSingular()|camel }}1->method('getIsActive')->willReturn(1);
+{% endif %}
+{% if entity.isStore() %}
+        ${{ entity.getNameSingular()|camel }}1->method('getStoreId')->willReturn([0]);
+{% endif %}
+        ${{ entity.getNameSingular()|camel }}2 = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+{% if entity.isFrontend() %}
+        ${{ entity.getNameSingular()|camel }}2->method('getIsActive')->willReturn(1);
+{% endif %}
+{% if entity.isStore() %}
+        ${{ entity.getNameSingular()|camel }}2->method('getStoreId')->willReturn([1]);
+        $this->store->method('getId')->willReturn(1);
+{% endif %}
+        $this->repository->expects($this->exactly(2))->method('get')->willReturnOnConsecutiveCalls(
+            ${{ entity.getNameSingular()|camel }}1,
+            ${{ entity.getNameSingular()|camel }}2
+        );
+        $this->assertEquals(${{ entity.getNameSingular()|camel }}1, $this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertEquals(${{ entity.getNameSingular()|camel }}1, $this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        $this->name->setData('{{ entity.getPk() }}', 2);
+        $this->assertEquals(${{ entity.getNameSingular()|camel }}2, $this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+{% if entity.isFrontend() %}
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Inactive()
+    {
+        $this->name->setData('{{ entity.getPk() }}', 1);
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+        ${{ entity.getNameSingular()|camel }}->method('getIsActive')->willReturn(0);
+        $this->repository->expects($this->once())->method('get')->willReturn(${{ entity.getNameSingular()|camel }});
+        $this->assertFalse($this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertFalse($this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+{% endif %}
+{% if entity.isStore() %}
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}NoValidStore()
+    {
+        $this->name->setData('{{ entity.getPk() }}', 1);
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+{% if entity.isFrontend() %}
+        ${{ entity.getNameSingular()|camel }}->method('getIsActive')->willReturn(1);
+{% endif %}
+        $this->store->method('getId')->willReturn(1);
+        ${{ entity.getNameSingular()|camel }}->method('getStoreId')->willReturn([2]);
+        $this->repository->expects($this->once())->method('get')->willReturn(${{ entity.getNameSingular()|camel }});
+        $this->assertFalse($this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertFalse($this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+{% endif %}
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}WithException()
+    {
+        $this->name->setData('{{ entity.getPk() }}', 1);
+        $this->repository->expects($this->once())->method('get')->willThrowException(
+            $this->createMock(NoSuchEntityException::class)
+        );
+        $this->assertFalse($this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+        //call twice to test memoizing
+        $this->assertFalse($this->name->get{{ entity.getNameSingular()|camel|ucfirst }}());
+    }
+{% if entity.isFrontend() %}
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}Url
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}UrlWithout{{ entity.getNameSingular()|camel|ucfirst }}()
+    {
+        $this->name->setData('{{ entity.getPk() }}', 1);
+        $this->repository->expects($this->once())->method('get')->willThrowException(
+            $this->createMock(NoSuchEntityException::class)
+        );
+        $this->url->expects($this->never())->method('get{{ entity.getNameSingular()|camel|ucfirst }}Url');
+        $this->assertEquals('', $this->name->get{{ entity.getNameSingular()|camel|ucfirst }}Url());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}Url
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::get{{ entity.getNameSingular()|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ entity.getNameSingular()|camel|ucfirst }}\Name::__construct
+     */
+    public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Url()
+    {
+        $this->name->setData('{{ entity.getNameSingular()|camel }}_id', 1);
+        ${{ entity.getNameSingular()|camel }} = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}Interface::class);
+        ${{ entity.getNameSingular()|camel }}->method('getIsActive')->willReturn(1);
+{% if entity.isStore() %}
+        ${{ entity.getNameSingular()|camel }}->method('getStoreId')->willReturn([0]);
+        $this->store->method('getId')->willReturn(1);
+{% endif %}
+        $this->repository->expects($this->once())->method('get')->willReturn(${{ entity.getNameSingular()|camel }});
+        $this->url->expects($this->once())->method('get{{ entity.getNameSingular()|camel|ucfirst }}Url')->willReturn('url');
+        $this->assertEquals('url', $this->name->get{{ entity.getNameSingular()|camel|ucfirst }}Url());
+    }
+{% endif %}
+}
+{% endif %}

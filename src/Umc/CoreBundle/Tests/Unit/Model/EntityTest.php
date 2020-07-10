@@ -24,6 +24,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Model;
 use App\Umc\CoreBundle\Model\Attribute;
 use App\Umc\CoreBundle\Model\Entity;
 use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Model\Relation;
 use App\Umc\CoreBundle\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -407,6 +408,129 @@ class EntityTest extends TestCase
             'top_menu' => false,
             '_attributes' => [[], []]
         ]);
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Entity::getParentRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::parseRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::__construct
+     */
+    public function testGetParentRelations()
+    {
+        $entity = $this->getInstance([]);
+        $relation = $this->createMock(Relation::class);
+        $relation->expects($this->once())->method('getEntityTwoInstance')->willReturn($entity);
+        $relation->expects($this->once())->method('getType')->willReturn('parent');
+        $this->module->method('getRelations')->willReturn([$relation]);
+        $this->assertEquals([$relation], $entity->getParentRelations());
+        //call twice to test memoizing
+        $this->assertEquals([$relation], $entity->getParentRelations());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Entity::getParentEntities
+     * @covers \App\Umc\CoreBundle\Model\Entity::parseRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::__construct
+     */
+    public function testGetParentEntities()
+    {
+        $entity = $this->getInstance([]);
+        $entityRelated = $this->getInstance(['name_singular' => 'entity2']);
+        $relation1 = $this->createMock(Relation::class);
+        $relation1->expects($this->once())->method('getEntityTwoInstance')->willReturn($entity);
+        $relation1->expects($this->once())->method('getType')->willReturn('parent');
+        $relation1->method('getRelatedEntity')->willReturn($entityRelated);
+        $relation2 = $this->createMock(Relation::class);
+        $relation2->expects($this->once())->method('getEntityTwoInstance')->willReturn($entity);
+        $relation2->expects($this->once())->method('getType')->willReturn('parent');
+        $relation2->method('getRelatedEntity')->willReturn($entityRelated);
+        $this->module->method('getRelations')->willReturn([$relation1, $relation2]);
+        $this->assertEquals(['entity2' => $entityRelated], $entity->getParentEntities());
+        //call twice to test memoizing
+        $this->assertEquals(['entity2' => $entityRelated], $entity->getParentEntities());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Entity::getChildRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::parseRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::__construct
+     */
+    public function testGetChildRelations()
+    {
+        $entity = $this->getInstance([]);
+        $relation = $this->createMock(Relation::class);
+        $relation->expects($this->once())->method('getEntityOneInstance')->willReturn($entity);
+        $relation->expects($this->once())->method('getType')->willReturn('parent');
+        $this->module->method('getRelations')->willReturn([$relation]);
+        $this->assertEquals([$relation], $entity->getChildRelations());
+        //call twice to test memoizing
+        $this->assertEquals([$relation], $entity->getChildRelations());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Entity::getChildEntities
+     * @covers \App\Umc\CoreBundle\Model\Entity::parseRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::__construct
+     */
+    public function testGetChildEntities()
+    {
+        $entity = $this->getInstance([]);
+        $entityRelated = $this->getInstance(['name_singular' => 'entity2']);
+        $relation1 = $this->createMock(Relation::class);
+        $relation1->expects($this->once())->method('getEntityOneInstance')->willReturn($entity);
+        $relation1->expects($this->once())->method('getType')->willReturn('parent');
+        $relation1->method('getRelatedEntity')->willReturn($entityRelated);
+        $relation2 = $this->createMock(Relation::class);
+        $relation2->expects($this->once())->method('getEntityOneInstance')->willReturn($entity);
+        $relation2->expects($this->once())->method('getType')->willReturn('parent');
+        $relation2->method('getRelatedEntity')->willReturn($entityRelated);
+        $this->module->method('getRelations')->willReturn([$relation1, $relation2]);
+        $this->assertEquals(['entity2' => $entityRelated], $entity->getChildEntities());
+        //call twice to test memoizing
+        $this->assertEquals(['entity2' => $entityRelated], $entity->getChildEntities());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Entity::getSiblingRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::parseRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::__construct
+     */
+    public function testGetSiblingRelations()
+    {
+        $entity = $this->getInstance([]);
+        $relation1 = $this->createMock(Relation::class);
+        $relation1->expects($this->once())->method('getEntityOneInstance')->willReturn($entity);
+        $relation1->expects($this->exactly(2))->method('getType')->willReturn('sibling');
+        $relation2 = $this->createMock(Relation::class);
+        $relation2->expects($this->once())->method('getEntityTwoInstance')->willReturn($entity);
+        $relation2->expects($this->exactly(2))->method('getType')->willReturn('sibling');
+        $this->module->method('getRelations')->willReturn([$relation1, $relation2]);
+        $this->assertEquals([$relation1, $relation2], $entity->getSiblingRelations());
+        //call twice to test memoizing
+        $this->assertEquals([$relation1, $relation2], $entity->getSiblingRelations());
+    }
+
+    /**
+     * @covers \App\Umc\CoreBundle\Model\Entity::getSiblingEntities
+     * @covers \App\Umc\CoreBundle\Model\Entity::parseRelations
+     * @covers \App\Umc\CoreBundle\Model\Entity::__construct
+     */
+    public function testGetSiblingEntities()
+    {
+        $entity = $this->getInstance([]);
+        $entityRelated = $this->getInstance(['name_singular' => 'entity2']);
+        $relation1 = $this->createMock(Relation::class);
+        $relation1->expects($this->once())->method('getEntityOneInstance')->willReturn($entity);
+        $relation1->expects($this->exactly(2))->method('getType')->willReturn('sibling');
+        $relation1->method('getRelatedEntity')->willReturn($entityRelated);
+        $relation2 = $this->createMock(Relation::class);
+        $relation2->expects($this->once())->method('getEntityTwoInstance')->willReturn($entity);
+        $relation2->expects($this->exactly(2))->method('getType')->willReturn('sibling');
+        $relation2->method('getRelatedEntity')->willReturn($entityRelated);
+        $this->module->method('getRelations')->willReturn([$relation1, $relation2]);
+        $this->assertEquals(['entity2' => $entityRelated], $entity->getSiblingEntities());
+        //call twice to test memoizing
+        $this->assertEquals(['entity2' => $entityRelated], $entity->getSiblingEntities());
     }
 
     /**

@@ -73,8 +73,35 @@
             </formElements>
         </field>
 {% endif %}
+{% for relation in entity.getParentRelations() %}
+        <field name="{{ relation.getRelatedEntityPk(entity) }}" formElement="select" component="Magento_Ui/js/form/element/ui-select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{ entity.getNameSingular()|snake }}</item>
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="chipsEnabled" xsi:type="boolean">true</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <settings>
+                <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
+                <dataType>text</dataType>
+                <label translate="true">{{ relation.getRelatedEntityLabel(entity) }}</label>
+                <dataScope>{{ relation.getRelatedEntityPk(entity) }}</dataScope>
+                <componentType>field</componentType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="{{ relation.getRelatedEntity(entity).getSourceModel() }}"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+{% endfor %}
 {% for attribute in entity.getAttributes() %}
-{{ attribute.getTypeInstance().renderTemplate('form')|raw }}
+{{ attribute.getTypeInstance().renderTemplate('form', {extraVars: extraVars})|raw }}
 {% endfor %}
 {% if entity.isStore() %}
     <field name="store_id" formElement="multiselect">

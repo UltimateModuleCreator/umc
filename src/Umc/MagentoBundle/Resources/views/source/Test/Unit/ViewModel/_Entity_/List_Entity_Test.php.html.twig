@@ -72,15 +72,26 @@ class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getCollection
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::processCollection
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getHash
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
      */
     public function testGet{{ entity.getNameSingular()|camel|ucfirst }}Collection()
     {
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }}->setFilters([
+            [
+                'field' => 'field',
+                'condition' => 'condition'
+            ],
+            [
+                'field' => 'field'
+            ],
+            []
+        ]);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->collection);
 {% if entity.isStore() %}
         $this->collection->expects($this->once())->method('addStoreFilter');
 {% endif %}
-        $this->collection->expects($this->once())->method('addFieldToFilter');
+        $this->collection->expects($this->exactly(2))->method('addFieldToFilter');
         $this->blockFactory->expects($this->once())->method('createBlock')->willReturn($this->pager);
         $this->assertEquals($this->collection, $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getCollection());
         //call twice to test memoizing
@@ -90,6 +101,7 @@ class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     /**
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getPagerHtml
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::processCollection
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getHash
      * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
      */
     public function testGetPagerHtml()
@@ -100,6 +112,66 @@ class List{{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
         $this->assertEquals('pager_html', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml());
         //call twice to test memoizing
         $this->assertEquals('pager_html', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPagerHtml());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::setLabel
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getLabel
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGetLabel()
+    {
+        $this->assertEquals('', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getLabel());
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }}->setLabel('label');
+        $this->assertEquals('label', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getLabel());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::setPageLimitVarName
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getPageLimitVarName
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGetPageLimitVarName()
+    {
+        $this->assertEquals('', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPageLimitVarName());
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }}->setPageLimitVarName('limit');
+        $this->assertEquals('limit', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPageLimitVarName());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::setPageFragment
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getPageFragment
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGetPageFragment()
+    {
+        $this->assertEquals('', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPageFragment());
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }}->setPageFragment('fragment');
+        $this->assertEquals('fragment', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPageFragment());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::setPageVarName
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getPageVarName
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGetPageVarName()
+    {
+        $this->assertEquals('', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPageVarName());
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }}->setPageVarName('page');
+        $this->assertEquals('page', $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getPageVarName());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::setFilters
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::getFilters
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\ViewModel\{{ entity.getNameSingular()|camel|ucfirst }}\List{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+     */
+    public function testGetFilters()
+    {
+        $this->assertEquals([], $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getFilters());
+        $this->list{{ entity.getNameSingular()|camel|ucfirst }}->setFilters([['filter']]);
+        $this->assertEquals([['filter']], $this->list{{ entity.getNameSingular()|camel|ucfirst }}->getFilters());
     }
 }
 {% endif %}

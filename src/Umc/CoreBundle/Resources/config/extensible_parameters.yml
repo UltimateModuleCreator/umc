@@ -161,3 +161,10 @@ attribute_type:
       label: Dynamic rows
       input_type: Dynamic Rows
       can_be_dynamic: false
+relation_type:
+  flags:
+    sort: label
+    filter: disabled
+  value:
+    parent:
+      label: Is Parent For (one to many)

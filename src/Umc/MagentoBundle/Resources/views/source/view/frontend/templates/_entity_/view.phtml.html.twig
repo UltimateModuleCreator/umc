@@ -6,20 +6,53 @@
 ${{ entity.getNameSingular()|camel }}View = $block->getData('{{ entity.getNameSingular()|camel }}View');
 $formatter = $block->getData('formatter');
 ?>
+{{ extraVars.escaperDeclaration|raw }}
 <?php if (${{ entity.getNameSingular()|camel }}View && $formatter && ${{ entity.getNameSingular()|camel }} = ${{ entity.getNameSingular()|camel }}View->get{{ entity.getNameSingular()|camel|ucfirst }}()): ?>
     <div class="{{ entity.getNameSingular()|hyphen }}-view">
         <div class="{{ entity.getNameSingular()|hyphen }}-{{ entity.getNameAttribute().getCode()|hyphen }}">
-            <?= $block->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());?>
+            <?= ${{ extraVars.escaper }}->escapeHtml(${{ entity.getNameSingular()|camel }}->get{{ entity.getNameAttribute().getCode()|camel|ucfirst }}());?>
         </div>
         <?php if ($formatter): ?>
             <div class="{{entity.getNameSingular()|hyphen}}-details">
+{% for parent in entity.getParentEntities() %}
+                <?php /** @var \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Block\{{ parent.getNameSingular()|camel|ucfirst }}\Name ${{ parent.getNameSingular()|camel }}Block */?>
+                <?php ${{ parent.getNameSingular()|camel }}Block = $block->getChildBlock('{{ parent.getNameSingular()|snake }}_name');?>
+{% endfor %}
+{% for relation in entity.getParentRelations() %}
+{% if relation.getRelatedEntityFrontend(entity) %}
+                <?php if (${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block): ?>
+                    <?php ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block->setData('{{ relation.getRelatedEntity(entity).getPk() }}', ${{ entity.getNameSingular()|camel }}->get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}());?>
+                    <?php ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block->setData('label', __('{{ relation.getRelatedEntityLabel(entity) }}'));?>
+                    <?= ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}Block->toHtml();?>
+                <?php endif;?>
+{% endif %}
+{% endfor %}
 {% for attribute in entity.getAttributesWithFlag('show_in_view') %}
                 <div class="{{ entity.getNameSingular()|hyphen }}-{{ attribute.getCode()|hyphen }}">
-{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(16), mode: 'view'})|raw }}
+{{ attribute.getTypeInstance().renderTemplate('frontend', {indent: " "|repeat(20), mode: 'view', extraVars: extraVars})|raw }}
                 </div>
 {% endfor %}
             </div>
         <?php endif; ?>
     </div>
+{% for child in entity.getChildEntities() %}
+{% if child.isFrontend() %}
+    <?php ${{ child.getNameSingular()|camel }}ListBlock = $block->getChildBlock('{{ child.getNameSingular()|camel }}_list');?>
+{% endif %}
+{% endfor %}
+{% for relation in entity.getChildRelations() %}
+{% if relation.getRelatedEntityFrontend(entity) and relation.getRelatedEntity(entity).isFrontend() %}
+    <?php if (${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}ListBlock): ?>
+        <?php ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}ListBlock->addData([
+            'label' => __('{{ relation.getRelatedEntityLabel(entity) }}'),
+            'page_var_name' => 'p{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}',
+            'page_fragment' => '{{ relation.getRelatedEntityPk(entity)|camel }}',
+            'page_limit_var_name' => 'l{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}',
+            'filters' => [['field' => '{{ relation.getRelatedEntityPk(relation.getRelatedEntity(entity)) }}',  'condition' => ${{ entity.getNameSingular()|camel }}->get{{ entity.getPk()|camel|ucfirst }}()]]
+        ]);?>
+        <?= ${{ relation.getRelatedEntity(entity).getNameSingular()|camel }}ListBlock->toHtml(); ?>
+    <?php endif;?>
+{% endif %}
+{% endfor %}
 <?php endif;
 {% endif %}

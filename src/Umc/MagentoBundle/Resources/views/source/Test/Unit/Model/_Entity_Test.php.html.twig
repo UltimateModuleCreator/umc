@@ -82,8 +82,24 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
         $this->{{ entity.getNameSingular()|camel }}->set{{ entity.getNameSingular()|camel|ucfirst }}Id(1);
         $this->assertEquals(1, $this->{{ entity.getNameSingular()|camel }}->get{{ entity.getNameSingular()|camel|ucfirst }}Id());
     }
+{% for relation in entity.getParentRelations() %}
 
-{% for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderTemplate('unit_test')|raw }}
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::set{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testGet{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}()
+    {
+        $this->{{ entity.getNameSingular()|camel }}->set{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}(1);
+        $this->assertEquals(1, $this->{{ entity.getNameSingular()|camel }}->get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}());
+    }
+{% endfor %}
+
+{% for attribute in entity.getAttributes() %}{{ attribute.getTypeInstance().renderTemplate('unit_test', {extraVars: extraVars })|raw }}
 {% endfor %}
 {% if entity.isStore() %}
     /**
