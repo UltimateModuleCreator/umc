@@ -3,11 +3,6 @@ module:
   settings_label: "Bundle Default Settings"
   panel:
     default: New Bundle
-    fields:
-      -
-        field: namespace
-      -
-        field: module_name
   children:
     -
       code: _relations

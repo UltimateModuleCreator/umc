@@ -11,15 +11,10 @@ sylius_grid:
             fields:
                 id:
                     type: string
-                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.id
+                    label: sylius.ui.id
                     sortable: true
 {% for attribute in entity.getAttributes() %}
-{% if attribute.isAdminGrid() %}
-                {{ attribute.getCode()|snake }}:
-                    type: string
-                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
-                    sortable: true
-{% endif %}
+{% if attribute.isAdminGrid() %}{{ attribute.getTypeInstance.renderTemplate('grid')|raw }}{% endif %}
 {% endfor %}
                 createdAt:
                     type: datetime
@@ -27,7 +22,7 @@ sylius_grid:
                     sortable: true
                 updatedAt:
                     type: datetime
-                    label: sylius.ui.updated_at
+                    label: sylius.ui.updated
                     sortable: true
             filters:
                 id:
@@ -35,9 +30,9 @@ sylius_grid:
                     label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.article.id
 {% for attribute in entity.getAttributes() %}
 {% if attribute.isAdminGridFilter() %}
-                title:
-                    type: string
-                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
+                {{ attribute.getCode()|camel }}:
+                    type: {{ attribute.getTypeInstance().getGridFilterType() }}
+                    label: {{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
                     enabled: true
 {% endif %}
 {% endfor %}
@@ -47,7 +42,7 @@ sylius_grid:
                     enabled: true
                 updatedAt:
                     type: date
-                    label: sylius.ui.updated_at
+                    label: sylius.ui.updated
                     enabled: true
             actions:
                 main:

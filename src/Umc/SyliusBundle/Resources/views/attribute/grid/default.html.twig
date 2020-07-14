@@ -1,0 +1,4 @@
+                {{ attribute.getCode()|camel }}:
+                    type: string
+                    label: {{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
+                    sortable: true

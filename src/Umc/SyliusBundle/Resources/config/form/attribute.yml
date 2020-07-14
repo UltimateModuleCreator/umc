@@ -3,10 +3,37 @@ attribute:
     -
       code: frontend
       enabled: false
+    -
+      code: name
+      label: Attribute Settings
   fields:
     -
       name: type
       options: '%sylius_attribute_type%'
     -
-      name: admin_grid_filter
+      name: admin_grid_hidden
       enabled: false
+    -
+      name: show_in_list
+      enabled: false
+    -
+      name: show_in_view
+      enabled: false
+    -
+      name: default_value
+      enabled: false
+    -
+      name: note
+      enabled: false
+    -
+      name: tooltip
+      enabled: false
+    -
+      name: required
+      tab: name
+    -
+      name: admin_grid
+      tab: name
+    -
+      name: admin_grid_filter
+      tab: name

@@ -1,0 +1,10 @@
+{{ module.getModuleName()|snake }}:
+    ui:
+{% for entity in module.getEntities() %}
+        {{ entity.getNamePlural()|snake }}: "{{ entity.getLabelPlural() }}"
+        new_{{ entity.getNameSingular()|snake }}: "New {{ entity.getLabelSingular() }}"
+        {{ entity.getNameSingular()|snake }}:
+{% for attribute in entity.getAttributes %}
+            {{ attribute.getCode() }}: "{{ attribute.getLabel() }}"
+{% endfor %}
+{% endfor %}

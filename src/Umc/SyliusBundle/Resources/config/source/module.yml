@@ -19,3 +19,6 @@
 -
   source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Menu/AdminMenuListener.php"
   label: Admin menu listener
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Resources/translations/messages.en.yml"
+  label: Translation file

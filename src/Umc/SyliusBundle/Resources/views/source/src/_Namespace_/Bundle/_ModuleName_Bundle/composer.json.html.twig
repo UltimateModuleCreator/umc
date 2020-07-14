@@ -14,9 +14,7 @@
         "php": "^7.2",
         "stof/doctrine-extensions-bundle": "^1.2",
         "symfony/framework-bundle": "^3.4|^4.3",
-        "symfony/intl": "^3.4|^4.3",
-        "sylius/resource-bundle": "^1.6",
-        "sensio/framework-extra-bundle": "^5.0"
+        "symfony/intl": "^3.4|^4.3"
     },
     "require-dev": {
         "doctrine/orm": "^2.5",
@@ -31,10 +29,7 @@
     },
     "config": {
         "bin-dir": "bin"
-    },
-    "autoload": {
-        "psr-4": { "{{ module.getNamespace() }}\\Bundle\\{{ module.getModuleName() }}Bundle\\": "" }
-    },
+    }
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [

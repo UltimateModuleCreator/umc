@@ -9,3 +9,16 @@ entity:
     -
       code: frontend
       enabled: false
+    -
+      code: name
+      label: Entity Settings
+  fields:
+    -
+      name: search
+      enabled: false
+    -
+      name: frontend
+      enabled: false
+    -
+      name: seo
+      enabled: false
