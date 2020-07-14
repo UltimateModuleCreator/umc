@@ -1,7 +1,7 @@
 <?php{{ formatLicense(module, 'php')|raw }}
 declare(strict_types=1);
 
-namespace {{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Menu;
+namespace App\{{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Menu;
 
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
@@ -19,7 +19,7 @@ class AdminMenuListener
 {% endif %}
 {% for entity in module.getEntities() %}
         $parent
-            ->addChild('{{ entity.getNameSingular()|hyphen }}')
+            ->addChild('{{ entity.getNameSingular()|hyphen }}', ['route' => '{{ module.getModuleName()|snake }}_admin_{{ entity.getNameSingular()|snake }}_index'])
             ->setLabel('{{ entity.getLabelPlural() }}')
             ->setLabelAttribute('icon', 'newspaper');
 {% endfor %}

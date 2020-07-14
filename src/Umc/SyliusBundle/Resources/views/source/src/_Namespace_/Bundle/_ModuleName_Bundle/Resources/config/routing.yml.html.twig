@@ -1,0 +1,7 @@
+routes:
+{% for entity in module.getEntities() %}
+  {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_admin:
+    resource: |
+      alias: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.{{ entity.getNameSingular()|snake }}
+    type: sylius.resource
+{% endfor %}

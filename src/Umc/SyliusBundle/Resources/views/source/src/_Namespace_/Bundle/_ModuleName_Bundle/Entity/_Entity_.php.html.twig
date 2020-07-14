@@ -1,0 +1,96 @@
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace App\{{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Entity;
+
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+class {{ entity.getNameSingular()|camel|ucfirst }} implements ResourceInterface
+{
+    /**
+     * @var int
+     */
+    private $id;
+{% for attribute in entity.getAttributes() %}
+    /**
+     * @var {{ attribute.getTypeInstance().getTypeHint() }}|null
+     */
+    private ${{ attribute.getCode()|camel }};
+{% endfor %}
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @return int
+     * @psalm-suppress MissingReturnType
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+{% for attribute in entity.getAttributes() %}
+
+    /**
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}|null
+     */
+    public function get{{ attribute.getCode()|camel|ucfirst }}(): ?{{ attribute.getTypeInstance().getTypeHint() }}
+    {
+        return $this->{{ attribute.getCode()|camel }};
+    }
+
+    /**
+     * @param {{ attribute.getTypeInstance().getTypeHint() }}|null ${{ attribute.getCode()|camel }}
+     */
+    public function set{{ attribute.getCode()|camel|ucfirst }}(?{{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel }}): void
+    {
+        $this->{{ attribute.getCode()|camel }} = ${{ attribute.getCode()|camel }};
+    }
+{% endfor %}
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+}

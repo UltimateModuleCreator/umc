@@ -8,6 +8,17 @@
             <argument key="$file" type="string">%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/platform.yml</argument>
             <tag name="platform.pool.provider" />
         </service>
-        <service id="sylius.module.factory" class="App\Umc\CoreBundle\Model\Module\Factory" public="true" />
+        <service id="sylius.module.factory" class="App\Umc\CoreBundle\Model\Module\Factory" public="true">
+            <argument key="$entityFactory" type="service" id="sylius.entity.factory" />
+        </service>
+        <service id="sylius.entity.factory" class="App\Umc\CoreBundle\Model\Entity\Factory">
+            <argument key="$attributeFactory" type="service" id="sylius.attribute.factory" />
+        </service>
+        <service id="sylius.attribute.factory" class="App\Umc\CoreBundle\Model\Attribute\Factory">
+            <argument key="$typeFactory" type="service" id="sylius.attribute.type.factory" />
+        </service>
+        <service id="sylius.attribute.type.factory" class="App\Umc\CoreBundle\Model\Attribute\Type\Factory">
+            <argument key="$typeMap" type="string">%sylius_attribute_type%</argument>
+        </service>
     </services>
 </container>

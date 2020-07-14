@@ -20,6 +20,7 @@ sylius_attribute_type:
   value:
     text:
       schema_type: string
+      type_hint: string
       templates: []
     product_attribute:
       disabled: true
@@ -33,20 +34,31 @@ sylius_attribute_type:
       disabled: true
     country_multiselect:
       disabled: true
-    date: []
-    decimal: []
+    date:
+      schema_type: datetime
+      type_hint: "\\DateTime"
+    decimal:
+      schema_type: decimal
+      type_hint: "float"
+      schema_attributes: ' precision="10" scale="5"'
     dropdown:
       disabled: true
     file:
       disabled: true
     image:
       disabled: true
-    integer: []
+    integer:
+      schema_type: integer
+      type_hint: int
     multiselect:
       disabled: true
-    textarea: []
+    textarea:
+      schema_type: text
+      type_hint: string
     wysiwyg:
       disabled: true
-    yesno: []
+    yesno:
+      schema_type: boolean
+      type_hint: bool
     dynamic:
       disabled: true

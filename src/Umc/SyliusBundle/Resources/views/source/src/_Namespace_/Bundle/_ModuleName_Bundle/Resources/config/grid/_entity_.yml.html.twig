@@ -1,0 +1,60 @@
+sylius_grid:
+    grids:
+        {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: App\{{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Entity\{{ entity.getNameSingular()|camel|ucfirst }}
+            sorting:
+                id: asc
+            limits: [10, 25, 50, 100]
+            fields:
+                id:
+                    type: string
+                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.id
+                    sortable: true
+{% for attribute in entity.getAttributes() %}
+{% if attribute.isAdminGrid() %}
+                {{ attribute.getCode()|snake }}:
+                    type: string
+                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
+                    sortable: true
+{% endif %}
+{% endfor %}
+                createdAt:
+                    type: datetime
+                    label: sylius.ui.created_at
+                    sortable: true
+                updatedAt:
+                    type: datetime
+                    label: sylius.ui.updated_at
+                    sortable: true
+            filters:
+                id:
+                    type: string
+                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.article.id
+{% for attribute in entity.getAttributes() %}
+{% if attribute.isAdminGridFilter() %}
+                title:
+                    type: string
+                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
+                    enabled: true
+{% endif %}
+{% endfor %}
+                createdAt:
+                    type: date
+                    label: sylius.ui.created_at
+                    enabled: true
+                updatedAt:
+                    type: date
+                    label: sylius.ui.updated_at
+                    enabled: true
+            actions:
+                main:
+                    create:
+                        type: create
+                item:
+                    update:
+                        type: update
+                    delete:
+                        type: delete
