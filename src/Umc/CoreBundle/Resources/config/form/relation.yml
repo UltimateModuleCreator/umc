@@ -20,7 +20,7 @@ relation:
       title: First entity in the relation
       tab: settings
       sort_order: 10
-      additionalDataBind: "options: $parent.getChildren('_entities'), optionsText: function (item) { console.log(item);return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
+      additionalDataBind: "options: $parent.children['_entities'], optionsText: function (item) { console.log(item);return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
     -
       name: type
       type: choice
@@ -39,7 +39,7 @@ relation:
       title: Second entity in the relation
       tab: settings
       sort_order: 30
-      additionalDataBind: "options: $parent.getChildren('_entities'), optionsText: function (item) { console.log(item);return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
+      additionalDataBind: "options: $parent.children['_entities'], optionsText: function (item) { return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
 
     -
       name: label
