@@ -38,6 +38,6 @@
         UMC.config = {{ koConfig|json_encode|raw }};
         UMC.defaults = {{ defaults|json_encode|raw }};
         let umcForm = $('#umc');
-        umcForm.umcedit({data: {{ data|json_encode|raw }}});
+        umcForm.umcedit({data: {{ data|json_encode|raw }}, localStorageKey: "UMC-{{ platform.getCode() }}-{{ version.getCode() }}"});
     </script>
 {% endblock %}
