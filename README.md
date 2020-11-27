@@ -15,10 +15,10 @@ PHP version 7.2.5 or higher. Some PHP extensions may be needed. See composer.jso
 ## Supported platforms
  - Magento 2.3.4+ 
  - Magento 2.4.*
+ - Sylius 1.8+
  
 ## Planned platforms
  - Shopware 6
- - Sylius
 
 ## Installation   
  - create a folder on your server
