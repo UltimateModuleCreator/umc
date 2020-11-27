@@ -1,0 +1,24 @@
+entity:
+  children:
+    -
+      code: _attributes
+      addButton:
+        split:
+          values: '%sylius_attribute_type%'
+  tabs:
+    -
+      code: frontend
+      enabled: false
+    -
+      code: name
+      label: Entity Settings
+  fields:
+    -
+      name: search
+      enabled: false
+    -
+      name: frontend
+      enabled: false
+    -
+      name: seo
+      enabled: false

@@ -1,0 +1,97 @@
+sylius_admin_menu:
+  flags:
+    extends: admin_menu
+  value:
+    'catalog':
+      label: 'Catalog'
+    'sales':
+      label: 'Sales'
+    'customers':
+      label: 'Customers'
+    'marketing':
+      label: 'Marketing'
+    'configuration':
+      label: 'Configuration'
+sylius_attribute_type:
+  flags:
+    extends: attribute_type
+    sort: label
+    filter: disabled
+  value:
+    text:
+      schema_type: string
+      type_hint: string
+      grid_filter_type: string
+      templates:
+        grid: '@UmcSylius/attribute/grid/default.html.twig'
+        model: '@UmcSylius/attribute/model/default.html.twig'
+    date:
+      schema_type: datetime
+      type_hint: "\\DateTime"
+      grid_filter_type: date
+      flags:
+        can_filter_in_grid: true
+      templates:
+        grid: '@UmcSylius/attribute/grid/date.html.twig'
+        model: '@UmcSylius/attribute/model/default.html.twig'
+    decimal:
+      schema_type: decimal
+      grid_filter_type: string
+      type_hint: "float"
+      schema_attributes: ' precision="10" scale="5"'
+      flags:
+        can_filter_in_grid: true
+      templates:
+        grid: '@UmcSylius/attribute/grid/default.html.twig'
+        model: '@UmcSylius/attribute/model/decimal.html.twig'
+    integer:
+      schema_type: integer
+      type_hint: int
+      grid_filter_type: string
+      flags:
+        can_filter_in_grid: true
+      templates:
+        grid: '@UmcSylius/attribute/grid/default.html.twig'
+        model: '@UmcSylius/attribute/model/default.html.twig'
+    textarea:
+      schema_type: text
+      type_hint: string
+      grid_filter_type: string
+      flags:
+        can_filter_in_grid: true
+      templates:
+        grid: '@UmcSylius/attribute/grid/default.html.twig'
+        model: '@UmcSylius/attribute/model/default.html.twig'
+    yesno:
+      schema_type: boolean
+      type_hint: bool
+      grid_filter_type: boolean
+      flags:
+        can_filter_in_grid: true
+      templates:
+        grid: '@UmcSylius/attribute/grid/yesno.html.twig'
+        model: '@UmcSylius/attribute/model/yesno.html.twig'
+    product_attribute:
+      disabled: true
+    product_attribute_multiselect:
+      disabled: true
+    product_attribute_set:
+      disabled: true
+    product_attribute_set_multiselect:
+      disabled: true
+    country:
+      disabled: true
+    country_multiselect:
+      disabled: true
+    dropdown:
+      disabled: true
+    file:
+      disabled: true
+    image:
+      disabled: true
+    multiselect:
+      disabled: true
+    wysiwyg:
+      disabled: true
+    dynamic:
+      disabled: true

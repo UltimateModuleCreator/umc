@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{{ formatLicense(module, 'xml')|raw }}
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+    <entity name="App\{{ module.getNamespace() }}\Bundle\{{ module.getModuleName() }}Bundle\Entity\{{ entity.getNameSingular()|camel|ucfirst}}" table="{{ module.getModuleName()|snake}}_{{ entity.getNameSingular()|snake }}">
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+{% for attribute in entity.getAttributes() %}
+        <field name="{{ attribute.getCode()|camel }}" column="{{ attribute.getCode() }}" type="{{ attribute.getTypeInstance().getSchemaType() }}"{% if not attribute.isRequired()%} nullable="true"{% endif%} {{ attribute.getTypeInstance().getSchemaAttributes()|raw}} />
+{% endfor %}
+        <field name="createdAt" column="created_at" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" column="updated_at" type="datetime" nullable="true">
+            <gedmo:timestampable on="update"/>
+        </field>
+    </entity>
+</doctrine-mapping>

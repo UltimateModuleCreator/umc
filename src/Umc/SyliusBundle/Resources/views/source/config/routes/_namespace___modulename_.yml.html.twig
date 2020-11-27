@@ -1,0 +1,12 @@
+{% for entity in module.getEntities() %}
+{{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}_admin:
+    resource: |
+        alias: {{ module.getModuleName()|snake }}.{{ entity.getNameSingular()|snake }}
+        section: admin
+        templates: "@SyliusAdmin\\Crud"
+        grid: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}_{{ entity.getNameSingular()|snake }}
+        permission: true
+        except: ['show']
+    type: sylius.resource
+    prefix: '/admin'
+{% endfor %}

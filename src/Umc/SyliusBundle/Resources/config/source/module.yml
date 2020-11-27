@@ -1,0 +1,24 @@
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/composer.json"
+  label: "Bundle composer file"
+-
+  source: "@UmcSylius/source/config/packages/_namespace___modulename_.yml"
+  label: "Bundle package file"
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Resources/config/_namespace___modulename_.yml"
+  label: Bundle entities declaration file
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Resources/config/services.yml"
+  label: Bundle services declaration
+-
+  source: "@UmcSylius/source/config/routes/_namespace___modulename_.yml"
+  label: Bundle routes declaration
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/_Namespace__ModuleName_Bundle.php"
+  label: Bundle declaration class
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Menu/AdminMenuListener.php"
+  label: Admin menu listener
+-
+  source: "@UmcSylius/source/src/_Namespace_/Bundle/_ModuleName_Bundle/Resources/translations/messages.en.yml"
+  label: Translation file

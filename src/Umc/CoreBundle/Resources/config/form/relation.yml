@@ -20,7 +20,7 @@ relation:
       title: First entity in the relation
       tab: settings
       sort_order: 10
-      additionalDataBind: "options: $parent.children['_entities'], optionsText: function (item) { console.log(item);return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
+      additionalDataBind: "options: $parent.children['_entities'], optionsText: function (item) { return item.data.label_singular();}, optionsValue: function (item) {return item.data.name_singular()}, optionsCaption: 'Select Entity'"
     -
       name: type
       type: choice
@@ -76,6 +76,7 @@ relation:
     -
       name: entity_one_frontend
       type: checkbox
+      has_default: true
       required: false
       label: Show entity 1 on entity 2 frontend
       title: A list with entity 2 instances will be displayed in the entity 1 frontend view page. Valid only if entities are displayed in frontend
@@ -84,6 +85,7 @@ relation:
     -
       name: entity_two_frontend
       type: checkbox
+      has_default: true
       required: false
       label: Show entity 2 on entity 1 frontend
       title: A list / link with entity 1 instance(s) will be displayed in the entity 1 frontend / list view page. Valid only if entities are displayed in frontend

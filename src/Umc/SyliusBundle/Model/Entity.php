@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * UMC
  *
  * NOTICE OF LICENSE
@@ -19,18 +18,8 @@
 
 declare(strict_types=1);
 
-namespace App\Umc\CoreBundle;
+namespace App\Umc\SyliusBundle\Model;
 
-class Version
+class Entity extends \App\Umc\CoreBundle\Model\Entity
 {
-    public const VERSION = '4.3.0';
-    public const BUILD = '';
-
-    /**
-     * @return string
-     */
-    public static function getVersion(): string
-    {
-        return self::VERSION . ((self::BUILD) ? '-' . self::BUILD : '');
-    }
 }

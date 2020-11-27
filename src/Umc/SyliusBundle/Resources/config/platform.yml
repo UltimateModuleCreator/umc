@@ -5,3 +5,24 @@ sylius:
   image: 'bundles/umcsylius/logo/sylius.png'
   sort_order: 30
   unsupported_message: Sylius might be supported later.
+  config:
+    coding_standards:
+      - PSR1
+      - PSR2
+      - PSR12
+    module_factory: 'sylius.module.factory'
+    form:
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/module.yml'
+      - '%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/form/module.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/entity.yml'
+      - '%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/form/entity.yml'
+      - '%kernel.project_dir%/src/Umc/CoreBundle/Resources/config/form/attribute.yml'
+      - '%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/form/attribute.yml'
+    source:
+      - '%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/source/module.yml'
+      - '%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/source/entity.yml'
+  versions:
+    -
+      label: 1.8+
+      code: 1-8
+      sort_weight: 10

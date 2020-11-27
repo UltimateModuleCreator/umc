@@ -94,6 +94,8 @@ class Entity implements GeneratorInterface
     private function processDestination(string $destination, \App\Umc\CoreBundle\Model\Entity $entity): string
     {
         $replace = [
+            '_Namespace_' => $entity->getModule()->getNamespace(),
+            '_ModuleName_' => $entity->getModule()->getModuleName(),
             '_Entity_' =>  ucfirst($this->stringUtil->camel($entity->getNameSingular())),
             '_entity_' =>  strtolower($this->stringUtil->camel((string)$entity->getNameSingular())),
             '_namespace_' => $this->stringUtil->snake((string)$entity->getModule()->getNamespace()),

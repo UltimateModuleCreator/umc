@@ -90,7 +90,7 @@ $.widget('umc.umcedit', {
         let storageData = localStorage.getItem(this.options.localStorageKey);
         if (moduleData === null && storageData !== null) {
             if (confirm("It looks like you started creating a module. Do you want to resume it?")) {
-                moduleData = JSON.parse(storageData);//TODO: store modules based on platform & version
+                moduleData = JSON.parse(storageData);
             } else {
                 localStorage.removeItem(this.options.localStorageKey);
             }

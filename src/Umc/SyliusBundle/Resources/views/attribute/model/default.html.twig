@@ -1,0 +1,16 @@
+
+    /**
+     * @return {{ attribute.getTypeInstance().getTypeHint() }}|null
+     */
+    public function get{{ attribute.getCode()|camel|ucfirst }}(): ?{{ attribute.getTypeInstance().getTypeHint() }}
+    {
+        return $this->{{ attribute.getCode()|camel }};
+    }
+
+    /**
+     * @param {{ attribute.getTypeInstance().getTypeHint() }}|null ${{ attribute.getCode()|camel }}
+     */
+    public function set{{ attribute.getCode()|camel|ucfirst }}(?{{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel }}): void
+    {
+        $this->{{ attribute.getCode()|camel }} = ${{ attribute.getCode()|camel }};
+    }

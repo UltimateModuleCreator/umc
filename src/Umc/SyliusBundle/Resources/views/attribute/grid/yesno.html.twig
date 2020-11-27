@@ -1,0 +1,5 @@
+                {{ attribute.getCode()|camel }}:
+                    type: twig
+                    label: {{ module.getModuleName()|snake }}.ui.{{ entity.getNameSingular()|snake }}.{{ attribute.getCode()|snake }}
+                    options:
+                        template: "@SyliusUi/Grid/Field/yesNo.html.twig"
