@@ -5,6 +5,9 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Test\Unit\Mod
 
 {{ sortStart() }}
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }};
+use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}ExtensionInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -41,6 +44,14 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
      */
     private $resourceCollection;
     /**
+     * @var ExtensionAttributesFactory | MockObject
+     */
+    private $extensionFactory;
+    /**
+     * @var AttributeValueFactory | MockObject
+     */
+    private $customAttributeFactory;
+    /**
      * @var {{ entity.getNameSingular()|camel|ucfirst }}
      */
     private ${{ entity.getNameSingular()|camel }};
@@ -52,6 +63,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
     {
         $this->context = $this->createMock(Context::class);
         $this->registry = $this->createMock(Registry::class);
+        $this->extensionFactory = $this->createMock(ExtensionAttributesFactory::class);
+        $this->customAttributeFactory = $this->createMock(AttributeValueFactory::class);
 {% if entity.hasAttributesWithType('dynamic') %}
         $this->json = $this->createMock(Json::class);
 {% endif %}
@@ -60,6 +73,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
         $this->{{ entity.getNameSingular()|camel }} = new {{ entity.getNameSingular()|camel|ucfirst }}(
             $this->context,
             $this->registry,
+            $this->extensionFactory,
+            $this->customAttributeFactory,
 {% if entity.hasAttributesWithType('dynamic') %}
             $this->json,
 {% endif %}
@@ -187,5 +202,39 @@ class {{ entity.getNameSingular()|camel|ucfirst }}Test extends TestCase
         $this->assertEquals(['{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|camel }}_'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
         $this->{{ entity.getNameSingular()|camel }}->setId(1);
         $this->assertEquals(['{{ module.getNamespace()|lower }}_{{ module.getModuleName()|lower }}_{{ entity.getNameSingular()|camel }}_1'], $this->{{ entity.getNameSingular()|camel }}->getIdentities());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getExtensionAttributes
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testGetExtensionAttributes()
+    {
+        $extensionAttributes = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}ExtensionInterface::class);
+        $this->extensionFactory->expects($this->once())->method('create')->willReturn($extensionAttributes);
+        $this->assertEquals($extensionAttributes, $this->{{ entity.getNameSingular()|camel }}->getExtensionAttributes());
+        //call twice to test memoizing
+        $this->assertEquals($extensionAttributes, $this->{{ entity.getNameSingular()|camel }}->getExtensionAttributes());
+    }
+
+    /**
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::setExtensionAttributes
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::getExtensionAttributes
+{% if entity.hasAttributesWithType('dynamic') %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::__construct
+{% endif %}
+     * @covers \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\{{ entity.getNameSingular()|camel|ucfirst }}::_construct
+     */
+    public function testSetExtensionAttributes()
+    {
+        $extensionAttributes = $this->createMock({{ entity.getNameSingular()|camel|ucfirst }}ExtensionInterface::class);
+        $this->{{ entity.getNameSingular()|camel }}->setExtensionAttributes($extensionAttributes);
+        $this->extensionFactory->expects($this->never())->method('create');
+        $this->assertEquals($extensionAttributes, $this->{{ entity.getNameSingular()|camel }}->getExtensionAttributes());
+        //call twice to test memoizing
+        $this->assertEquals($extensionAttributes, $this->{{ entity.getNameSingular()|camel }}->getExtensionAttributes());
     }
 }

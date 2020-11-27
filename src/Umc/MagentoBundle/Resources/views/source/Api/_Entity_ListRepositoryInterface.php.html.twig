@@ -3,18 +3,12 @@ declare(strict_types=1);
 
 namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Api;
 
-{{ sortStart() }}
-use {{ entity.getSearchResultsInterface() }};
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\LocalizedException;
-{{ sortEnd() }}
-
 interface {{ entity.getNameSingular()|camel|ucfirst }}ListRepositoryInterface
 {
     /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return {{ entity.getNameSingular()|camel|ucfirst }}SearchResultInterface
-     * @throws LocalizedException
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \{{ entity.getSearchResultsInterface() }}
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }
