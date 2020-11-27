@@ -23,6 +23,6 @@ sylius:
       - '%kernel.project_dir%/src/Umc/SyliusBundle/Resources/config/source/entity.yml'
   versions:
     -
-      label: 1.7+
-      code: 1-7
+      label: 1.8+
+      code: 1-8
       sort_weight: 10

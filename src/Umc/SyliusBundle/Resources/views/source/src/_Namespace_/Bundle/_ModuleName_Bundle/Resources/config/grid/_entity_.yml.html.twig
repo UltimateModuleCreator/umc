@@ -27,7 +27,7 @@ sylius_grid:
             filters:
                 id:
                     type: string
-                    label: {{ module.getNamespace()|snake }}_{{ module.getModuleName()|snake }}.ui.article.id
+                    label: sylius.ui.id
 {% for attribute in entity.getAttributes() %}
 {% if attribute.isAdminGridFilter() %}
                 {{ attribute.getCode()|camel }}:
