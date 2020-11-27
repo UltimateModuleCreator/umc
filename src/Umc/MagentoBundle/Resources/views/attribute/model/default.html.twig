@@ -1,4 +1,6 @@
     /**
+     * Set {{ attribute.getLabel() }}
+     *
      * @param {{ attribute.getTypeInstance().getTypeHint() }} ${{ attribute.getCode()|camel}}
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -8,6 +10,8 @@
     }
 
     /**
+     * Get {{ attribute.getLabel() }}
+     *
      * @return {{ attribute.getTypeInstance().getTypeHint() }}
      */
     public function get{{ attribute.getCode()|camel|ucfirst }}()

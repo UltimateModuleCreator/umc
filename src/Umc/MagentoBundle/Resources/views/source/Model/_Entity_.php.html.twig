@@ -5,8 +5,10 @@ namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model;
 
 {{ sortStart() }}
 use {{ entity.getInterface() }};
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 {% if entity.hasAttributesWithType('dynamic') %}
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -16,7 +18,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use {{ module.getNamespace() }}\{{ module.getModuleName() }}\Model\ResourceModel\{{ entity.getNameSingular()|camel|ucfirst }} as {{ entity.getNameSingular()|camel|ucfirst }}ResourceModel;
 {{ sortEnd() }}
 
-class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel implements {{ entity.getNameSingular()|camel|ucfirst }}Interface
+class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractExtensibleModel implements {{ entity.getNameSingular()|camel|ucfirst }}Interface
 {
     /**
      * Cache tag
@@ -67,6 +69,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
      * {{ entity.getNameSingular()|camel|ucfirst }} constructor.
      * @param Context $context
      * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory,
+     * @param AttributeValueFactory $customAttributeFactory,
      * @param Json $json
      * @param AbstractResource $resource
      * @param AbstractDb|null $resourceCollection
@@ -75,13 +79,23 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     public function __construct(
         Context $context,
         Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         Json $json,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->json = $json;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
 {% endif %}
@@ -96,7 +110,7 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
-     * set {{ entity.getLabelSingular() }} id
+     * Set {{ entity.getLabelSingular() }} id
      *
      * @param  int ${{ entity.getPk()|camel }}
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
@@ -108,6 +122,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
 {% for relation in entity.getParentRelations() %}
 
     /**
+     *  Set {{ relation.getRelatedEntityName(entity)|ucfirst }} Id
+     *
      * @param int ${{ relation.getRelatedEntityPk(entity)|camel }}
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -117,6 +133,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Get {{ relation.getRelatedEntityName(entity)|ucfirst }} Id
+     *
      * @return int
      */
     public function get{{ relation.getRelatedEntityPk(entity)|camel|ucfirst }}()
@@ -130,6 +148,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
 {% endfor %}
 {% if entity.isStore() %}
     /**
+     * Set store ids
+     *
      * @param array $storeId
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -139,6 +159,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Get Store Ids
+     *
      * @return int[]
      */
     public function getStoreId()
@@ -149,6 +171,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
 {% endif %}
 {% if entity.isSeo() %}
     /**
+     * Set Meta title
+     *
      * @param string $metaTitle
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -158,6 +182,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Get Meta title
+     *
      * @return string
      */
     public function getMetaTitle()
@@ -166,6 +192,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Set Meta Description
+     *
      * @param string $metaDescription
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -175,6 +203,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Get Meta Description
+     *
      * @return string
      */
     public function getMetaDescription()
@@ -183,6 +213,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Set Meta Keywords
+     *
      * @param string $metaKeywords
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -192,6 +224,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Get Meta Keywords
+     *
      * @return string
      */
     public function getMetaKeywords()
@@ -202,6 +236,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
 {% endif %}
 {% if entity.isFrontend() %}
     /**
+     * Set Is Active
+     *
      * @param int $isActive
      * @return {{ entity.getNameSingular()|camel|ucfirst }}Interface
      */
@@ -211,6 +247,8 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     }
 
     /**
+     * Set Is Active
+     *
      * @return int
      */
     public function getIsActive()
@@ -227,5 +265,26 @@ class {{ entity.getNameSingular()|camel|ucfirst }} extends AbstractModel impleme
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}ExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param \{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}ExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\{{ module.getNamespace() }}\{{ module.getModuleName() }}\Api\Data\{{ entity.getNameSingular()|camel|ucfirst }}ExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

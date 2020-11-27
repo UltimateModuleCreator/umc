@@ -8,7 +8,7 @@
             <resource ref="{{ entity.getAclName() }}"/>
         </resources>
     </route>
-    <route url="/V1/{{ entity.getNameSingular()|camel }}/search" method="GET">
+    <route url="/V1/{{ entity.getNameSingular()|camel }}" method="GET">
         <service class="{{ entity.getListRepoInterface() }}" method="getList"/>
         <resources>
             <resource ref="{{ entity.getAclName() }}"/>
