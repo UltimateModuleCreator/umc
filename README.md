@@ -9,8 +9,12 @@ This application is intended for developers. It should not be used in production
 Also, the modules you create with it should be tested before moved to production.  
 <strong>You like the work the developer has done and it saved you a lot o time and money, consider <a href="https://www.paypal.me/MariusStrajeru/10">donating</a>. Any amount is welcomed. Just change 10 from the previous URL.</strong>
 
-## Requirements  
-PHP version 7.2.5 or higher. Some PHP extensions may be needed. See composer.json for more details. (a docker version may come later)
+## Requirements without docker 
+PHP version 7.2.5 or higher. Some PHP extensions may be needed. See composer.json for more details.
+
+## Requirements with docker
+ - docker-compose
+ - gnu make (not mandatory but it's easier to install)
 
 ## Supported platforms
  - Magento 2.3.4+ 
@@ -20,16 +24,26 @@ PHP version 7.2.5 or higher. Some PHP extensions may be needed. See composer.jso
 ## Planned platforms
  - Shopware 6
 
-## Installation   
+## Installation without Docker
  - create a folder on your server
  - navigate to that folder
  - clone this repo: `https://github.com/UltimateModuleCreator/umc.git .`
  - run `composer install`
  - copy `.env.dist` to `.env`
+ - run `bin/console assets:install`
  - go to that folder in your browser.
  
+## Installation with Docker (tested only on linux)
+ - create a folder (almost) anywhere you want
+ - navigate to that folder
+ - clone this repo: `https://github.com/UltimateModuleCreator/umc.git .`
+ - copy `.env.dist` to `.env` and change in `.env` the values if you need them changed
+ - run `make install`
+ - call this in the browser `http://umc.me/index.php` (in case you did not change the values in `.env`).
+
+ 
 ## How to use  
- - From the top left menu, select "All Platforms." and you should see he list of supported platforms.
+ - From the top left menu select "Platforms." and you should see he list of supported platforms.
  - From the "Create Module" column for your desired platform, select the desired version
  - Fill in the form as you want. Each field has a tooltip explaining what it is used for.
  - Add as many entities and attributes / fields as you need.

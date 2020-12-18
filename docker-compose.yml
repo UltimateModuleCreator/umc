@@ -1,0 +1,12 @@
+version: "2"
+services:
+  www:
+    container_name: $DOCKER_CONTAINER_NAME
+    image: $DOCKER_IMAGE
+    build: .
+    ports:
+      - "$DOCKER_WEB_PORT:80"
+    volumes:
+      - .:/var/www/html/
+volumes:
+  persistent:
