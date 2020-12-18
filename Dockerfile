@@ -21,9 +21,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	libonig-dev \
 	apt-utils \
 	gnupg \
-	redis-tools \
-	default-mysql-client \
-	git \
 	vim \
 	wget \
 	curl \
