@@ -2,7 +2,7 @@ magento:
   code: magento
   name: Magento 2
   url: 'https://magento.com/'
-  image: 'bundles/umcmagento/logo/magento.jpeg'
+  image: 'bundles/umcmagento/logo/magento.png'
   sort_order: 10
   config:
     form:
