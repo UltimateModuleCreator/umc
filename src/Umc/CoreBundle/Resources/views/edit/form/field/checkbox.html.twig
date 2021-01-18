@@ -1,7 +1,7 @@
 <div class="form-group"{% if element.containerAttributes is defined %} {{ element.containerAttributes|raw }}{% endif %}>
     <div class="form-check">
         {% if element.title is defined %}
-        <span class="fa fa-question-circle" data-bind="umcinfo: {title: '{{ element.label }}', 'content':'{{ element.title }}'}"></span>
+        <span class="fa fa-question-circle umc-help" data-bind="umcinfo: {title: '{{ element.label }}', 'content':'{{ element.title }}'}"></span>
         {% endif %}
         <label
             class="form-check-label"

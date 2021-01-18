@@ -108,6 +108,10 @@ a:focus {
     background-color: #cccccc;
 }
 
+.umc-help {
+    cursor: help;
+}
+
 .toggle-check-input {
     width: 1px;
     height: 1px;
@@ -198,4 +202,62 @@ a:focus {
 
 #umc .card {
     margin-bottom: 5px;
+}
+
+/* dark theme */
+
+body.umc-dark {
+    background: #121212;
+    color: #FFFFFF;
+}
+
+body.umc-dark .card {
+    background: #121212;
+}
+body.umc-dark .table, body.umc-dark a {
+    color:#ffffff;
+    opacity: 0.87;
+}
+
+body.umc-dark .dropdown-menu, body.umc-dark .navbar,  body.umc-dark .nav{
+    background: #121212;
+}
+body.umc-dark .dropdown-item,
+body.umc-dark a:hover,
+body.umc-dark a:focus,
+body.umc-dark .btn-link,
+body.umc-dark .close{
+    color:#ffffff;
+    opacity: 0.87;
+}
+body.umc-dark .btn-link:hover {
+    color:#00A5E3;
+}
+
+body.umc-dark .dropdown-item:hover, body.umc-dark.dropdown-item:focus, body.umc-dark .select2-results__options--highlighted {
+    color: #FFFFFF;
+    text-decoration: none;
+    background-color: #000012;
+    opacity: 1;
+}
+
+body.umc-dark .modal-content, body.umc-dark .loading, body.umc-dark .select2-results__options {
+    background: #121212;
+}
+body.umc-dark .modal-content {
+    border: 1px solid #ffffff;
+}
+
+body.umc-dark .card {
+    border: 1px solid #ffffff;
+}
+
+body.umc-dark .btn-danger {
+    background: #ffa500;
+}
+body.umc-dark .toggle-check-input:disabled ~ .toggle-check-text {
+    opacity: 0.4;
+}
+body.umc-dark .drag-placeholder {
+    background-color: #333333;
 }

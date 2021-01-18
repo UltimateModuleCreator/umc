@@ -15,7 +15,7 @@
             {% if element.title %} title="{{ element.title }}" {% endif %}
         />
         {% if element.title is defined %}
-        <div class="input-group-append">
+        <div class="input-group-append umc-help">
             <div class="input-group-text">
                 <span class="fa fa-question-circle" data-bind="umcinfo: {title: '{{ element.label }}', 'content':'{{ element.title }}'}"></span>
             </div>

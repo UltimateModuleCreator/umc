@@ -14,7 +14,7 @@
             <span class="loading-icon">Working on it. Hold my <span class="fa fa-beer"></span> </span>
         </div>
         {% block fixed_top %}
-        <div class="navbar sticky-top bg-light full-width">
+        <div class="navbar sticky-top full-width">
             {% block main_menu %}
             <div class="dropdown float-left">
                 <a class="btn" data-toggle="dropdown">
@@ -51,12 +51,30 @@
                 <div class="clear"></div>
             </div>
         </div>
+        <div class="form-group">
+            <div class="form-check">
+                <label class="form-check-label"
+                >Dark mode
+                    <input type="checkbox"
+                           id="umc-dark-mode"
+                           name="dark-mode"
+                           class="toggle-check-input form-check-input"
+                           value="1"
+                    />
+                    <span class="toggle-check-text"></span>
+                </label>
+            </div>
+        </div>
         {% block javascripts %}
         <!-- jQuery -->
-        <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/jquery.js') }}"> </script>
-        <script type="text/javascript" src="{{ asset('bundles/umccore/jquery-ui/jquery-ui.js') }}"> </script>
-        <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/popper.js') }}"> </script>
-        <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/bootstrap.js') }}"> </script>
+            <script type="text/javascript" src="{{ asset('bundles/umccore/jquery/jquery.js') }}"> </script>
+            <script type="text/javascript" src="{{ asset('bundles/umccore/jquery-ui/jquery-ui.js') }}"> </script>
+            <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/popper.js') }}"> </script>
+            <script type="text/javascript" src="{{ asset('bundles/umccore/bootstrap/js/bootstrap.js') }}"> </script>
+            <script type="text/javascript" src="{{ asset('bundles/umccore/umc/dark-mode.js') }}"> </script>
+            <script type="text/javascript">
+                $('#umc-dark-mode').dark();
+            </script>
         {% endblock %}
     </body>
 </html>
