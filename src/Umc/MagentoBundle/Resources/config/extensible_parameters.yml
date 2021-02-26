@@ -750,3 +750,21 @@ magento_dynamic_rows_type:
     sort: label
     filter: '!can_be_dynamic'
   value: []
+magento_attribute_scope:
+  value:
+    SCOPE_STORE:
+      label: Store view
+    SCOPE_WEBSITE:
+      label: Website
+    SCOPE_GLOBAL:
+      label: Global
+magento_customer_forms:
+  value:
+    adminhtml_checkout:
+      label: Admin Checkout
+    adminhtml_customer:
+      label: Admin Customer form
+    customer_account_edit:
+      label: Frontend customer edit
+    customer_account_create:
+      label: Frotnend customer accout create

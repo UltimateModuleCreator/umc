@@ -211,3 +211,12 @@
 -
   source: "@UmcMagento/source/etc/webapi.xml"
   label: "Webapi declaration file"
+-
+  source: "@UmcMagento/source/Setup/Patch/Data/AddProductAttributes.php"
+  label: "Entities as product attributes data patch"
+-
+  source: "@UmcMagento/source/Setup/Patch/Data/AddCategoryAttributes.php"
+  label: "Entities as category attributes data patch"
+-
+  source: "@UmcMagento/source/Setup/Patch/Data/AddCustomerAttributes.php"
+  label: "Entities as customer attributes data patch"

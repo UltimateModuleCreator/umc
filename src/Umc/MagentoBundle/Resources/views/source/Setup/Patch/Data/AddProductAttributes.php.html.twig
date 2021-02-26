@@ -1,0 +1,84 @@
+{% if module.hasEntitiesWithFlag('is_product_attribute') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Setup\Patch\Data;
+
+{{ sortStart() }}
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Catalog\Model\Product;
+{% for entity in module.getEntitiesWithFlag('is_product_attribute') %}
+use {{ entity.getSourceModel(true) }};
+{% endfor %}
+{{ sortEnd() }}
+
+class AddProductAttributes implements DataPatchInterface
+{
+    /**
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+
+    /**
+     * AddProductAttributes constructor.
+     * @param EavSetupFactory $eavSetupFactory
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     */
+    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup)
+    {
+        $this->eavSetupFactory = $eavSetupFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * @return $this
+     */
+    public function apply()
+    {
+        /** @var EavSetup $eavSetup */
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+{% for entity in module.getEntitiesWithFlag('is_product_attribute') %}
+        $eavSetup->addAttribute(
+            Product::ENTITY,
+            '{{entity.getProductAttributeCode()}}',
+            [
+                'type' => '{% if entity.getProductAttributeType() is same as("multiselect") %}varchar{% else %}int{% endif %}',
+                'label' => '{{ entity.getProductAttributeLabel }}',
+                'input' => '{% if entity.getProductAttributeType() is same as("multiselect") %}multislect{% else %}select{% endif %}',
+                'source' => {{ entity.getSourceModel(false) }}::class,
+                'required' => false,
+                'global' => \ScopedAttributeInterface::{{ entity.getProductAttributeScope() }},
+{% if entity.getProductAttributeGroup() %}
+                'group' => '{{ entity.getProductAttributeGroup() }}',
+{% endif %}
+                'is_system' => 0
+            ]
+        );
+{% endfor %}
+    }
+}
+{% endif %}

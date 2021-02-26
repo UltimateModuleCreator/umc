@@ -4,6 +4,16 @@ entity:
       label: Admin
       code: admin
       sort_order: 15
+    -
+      label: Catalog
+      code: catalog
+      sort_order: 50
+      cols: 6
+    -
+      label: Customer
+      code: customer
+      sort_order: 60
+      cols: 6
   fields:
     -
       name: store
@@ -31,3 +41,170 @@ entity:
       additionalDataBind: 'enable: data.frontend'
       tab: frontend
       sort_order: 60
+
+    -
+      name: product_attribute
+      type: checkbox
+      has_default: true
+      label: Make entity a product attribute
+      title: A new dropdown / multiselect attribute will be added to the products where the options are the entity instances
+      tab: catalog
+      sort_order: 210
+
+    -
+      name: product_attribute_code
+      type: text
+      has_default: false
+      label: Product attribute code
+      title: Code for the product attribute. Leave empty to use the entity code
+      additionalDataBind: 'enable: data.product_attribute'
+      tab: catalog
+      sort_order: 220
+
+    -
+      name: product_attribute_label
+      type: text
+      has_default: false
+      label: Product attribute label
+      title: Leave empty to use the entity name
+      additionalDataBind: 'enable: data.product_attribute'
+      tab: catalog
+      sort_order: 230
+
+    -
+      name: product_attribute_scope
+      type: choice
+      has_default: true
+      label: Product attribute scope
+      title: The product attribute you create can be global, website or store view scoped
+      options: '%magento_attribute_scope%'
+      additionalDataBind: 'enable: data.product_attribute'
+      tab: catalog
+      sort_order: 240
+
+    -
+      name: product_attribute_type
+      type: choice
+      has_default: true
+      label: Product attribute type
+      title: The product attribute can be select or multiselect
+      options: '%choice_type%'
+      additionalDataBind: 'enable: data.product_attribute'
+      tab: catalog
+      sort_order: 250
+    -
+      name: product_attribute_group
+      type: text
+      has_default: true
+      label: Product attribute group
+      title: The product attribute can be auto assigned to a group for all attribute sets. Leave empty to not assign to any groups.
+      additionalDataBind: 'enable: data.product_attribute'
+      tab: catalog
+      sort_order: 260
+    -
+      name: category_attribute
+      type: checkbox
+      has_default: true
+      label: Make entity a category attribute
+      title: A new dropdown / multiselect attribute will be added to the categories where the options are the entity instances
+      tab: catalog
+      sort_order: 310
+
+    -
+      name: category_attribute_code
+      type: text
+      has_default: false
+      label: Category attribute code
+      title: Code for the product attribute. Leave empty to use the entity code
+      additionalDataBind: 'enable: data.category_attribute'
+      tab: catalog
+      sort_order: 320
+
+    - name: category_attribute_label
+      type: text
+      has_default: false
+      label: Category attribute label
+      title: Leave empty to use the entity name
+      additionalDataBind: 'enable: data.category_attribute'
+      tab: catalog
+      sort_order: 330
+
+    - name: category_attribute_scope
+      type: choice
+      has_default: true
+      label: Category attribute scope
+      title: The category attribute you create can be global, website or store view scoped
+      options: '%magento_attribute_scope%'
+      additionalDataBind: 'enable: data.category_attribute'
+      tab: catalog
+      sort_order: 340
+
+    - name: category_attribute_type
+      type: choice
+      has_default: true
+      label: Category attribute type
+      title: The product attribute can be select or multiselect
+      options: '%choice_type%'
+      additionalDataBind: 'enable: data.category_attribute'
+      tab: catalog
+      sort_order: 350
+    -
+      name: category_attribute_group
+      type: text
+      has_default: true
+      label: Category attribute group
+      title: The category attribute can be auto assigned to a group. Leave empty to not assign to any groups.
+      additionalDataBind: 'enable: data.category_attribute'
+      tab: catalog
+      sort_order: 360
+    -
+      name: customer_attribute
+      type: checkbox
+      has_default: true
+      label: Make entity a customer attribute
+      title: A new dropdown / multiselect attribute will be added to the customers where the options are the entity instances
+      tab: customer
+      sort_order: 410
+
+    -
+      name: customer_attribute_code
+      type: text
+      has_default: false
+      label: Customer attribute code
+      title: Code for the customer attribute. Leave empty to use the entity code
+      additionalDataBind: 'enable: data.customer_attribute'
+      tab: customer
+      sort_order: 420
+
+    -
+      name: customer_attribute_label
+      type: text
+      has_default: false
+      label: Customer attribute label
+      title: Leave empty to use the entity name
+      additionalDataBind: 'enable: data.customer_attribute'
+      tab: customer
+      sort_order: 430
+
+    -
+      name: customer_attribute_type
+      type: choice
+      has_default: true
+      label: Customer attribute type
+      title: The customer attribute can be select or multiselect
+      options: '%choice_type%'
+      additionalDataBind: 'enable: data.customer_attribute'
+      tab: customer
+      sort_order: 540
+
+    - name: customer_attribute_forms
+      type: choice
+      has_default: true
+      label: Customer attribute forms
+      title: Forms to display the customer attribute
+      options: '%magento_customer_forms%'
+      additionalDataBind: 'enable: data.customer_attribute'
+      multiple: true
+      tab: customer
+      sort_order: 550
+

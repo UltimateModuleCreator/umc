@@ -107,6 +107,7 @@ class Config implements ConfigurationInterface
                                 ->scalarNode('name')->end()
                                 ->scalarNode('type')->end()
                                 ->scalarNode('label')->end()
+                                ->booleanNode('multiple')->end()
                                 ->booleanNode('has_default')->defaultValue(false)->end()
                                 ->scalarNode('required')->end()
                                 ->scalarNode('additionalDataBind')->end()

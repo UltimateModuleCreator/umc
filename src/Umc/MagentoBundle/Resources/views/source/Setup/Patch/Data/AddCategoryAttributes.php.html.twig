@@ -1,0 +1,85 @@
+{% if module.hasEntitiesWithFlag('is_category_attribute') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Setup\Patch\Data;
+
+{{ sortStart() }}
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Catalog\Model\Category;
+{% for entity in module.getEntitiesWithFlag('is_category_attribute') %}
+use {{ entity.getSourceModel(true) }};
+{% endfor %}
+{{ sortEnd() }}
+
+class AddCategoryAttributes implements DataPatchInterface
+{
+    /**
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+
+    /**
+     * AddCategoryAttributes constructor.
+     * @param EavSetupFactory $eavSetupFactory
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     */
+    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup)
+    {
+        $this->eavSetupFactory = $eavSetupFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * @return $this
+     */
+    public function apply()
+    {
+        $entityType = \Magento\Catalog\Model\Product::ENTITY;
+        /** @var EavSetup $eavSetup */
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+{% for entity in module.getEntitiesWithFlag('is_category_attribute') %}
+        $eavSetup->addAttribute(
+            Category::ENTITY,
+            '{{entity.getCategoryAttributeCode()}}',
+            [
+                'type' => '{% if entity.getCategoryAttributeType() is same as("multiselect") %}varchar{% else %}int{% endif %}',
+                'label' => '{{ entity.getCategoryAttributeLabel }}',
+                'input' => '{% if entity.getCategoryAttributeType() is same as("multiselect") %}multislect{% else %}select{% endif %}',
+                'source' => {{ entity.getSourceModel(false) }}::class,
+                'required' => false,
+                'global' => \ScopedAttributeInterface::{{ entity.getCategoryAttributeScope() }},
+{% if entity.getCategoryAttributeGroup() %}
+                'group' => '{{ entity.getCategoryAttributeGroup() }}',
+{% endif %}
+                'is_system' => 0
+            ]
+        );
+{% endfor %}
+    }
+}
+{% endif %}

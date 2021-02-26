@@ -168,3 +168,9 @@ relation_type:
   value:
     parent:
       label: Is Parent For (one to many)
+choice_type:
+  value:
+    select:
+      label: Select
+    multiselect:
+      label: Multiselect

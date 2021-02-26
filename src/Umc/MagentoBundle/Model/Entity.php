@@ -20,11 +20,146 @@ declare(strict_types=1);
 
 namespace App\Umc\MagentoBundle\Model;
 
+use App\Umc\CoreBundle\Model\Attribute\Factory as AttributeFactory;
+use App\Umc\CoreBundle\Model\Module;
+use App\Umc\CoreBundle\Util\StringUtil;
+
 /**
  * @method getModule() : Module
  */
 class Entity extends \App\Umc\CoreBundle\Model\Entity
 {
+    /**
+     * @var bool
+     */
+    protected $productAttribute;
+    /**
+     * @var string
+     */
+    protected $productAttributeCode;
+    /**
+     * @var string
+     */
+    protected $productAttributeLabel;
+    /**
+     * @var string
+     */
+    protected $productAttributeScope;
+    /**
+     * @var string
+     */
+    protected $productAttributeType;
+    /**
+     * @var string
+     */
+    protected $productAttributeGroup;
+
+    /**
+     * @var bool
+     */
+    protected $categoryAttribute;
+    /**
+     * @var string
+     */
+    protected $categoryAttributeCode;
+    /**
+     * @var string
+     */
+    protected $categoryAttributeLabel;
+    /**
+     * @var string
+     */
+    protected $categoryAttributeScope;
+    /**
+     * @var string
+     */
+    protected $categoryAttributeType;
+    /**
+     * @var string
+     */
+    protected $categoryAttributeGroup;
+
+    /**
+     * @var bool
+     */
+    protected $customerAttribute;
+    /**
+     * @var string
+     */
+    protected $customerAttributeCode;
+    /**
+     * @var string
+     */
+    protected $customerAttributeLabel;
+    /**
+     * @var string
+     */
+    protected $customerAttributeType;
+    /**
+     * @var array
+     */
+    protected $customerAttributeForms;
+
+    /**
+     * Entity constructor.
+     * @param StringUtil $stringUtil
+     * @param AttributeFactory $attributeFactory
+     * @param Module $module
+     * @param array $data
+     */
+    public function __construct(
+        StringUtil $stringUtil,
+        AttributeFactory $attributeFactory,
+        Module $module,
+        array $data = []
+    ) {
+        parent::__construct($stringUtil, $attributeFactory, $module, $data);
+        $this->productAttribute = (bool)($data['product_attribute'] ?? false);
+        $this->productAttributeCode = (string)($data['product_attribute_code'] ?? '');
+        $this->productAttributeLabel = (string)($data['product_attribute_label'] ?? '');
+        $this->productAttributeScope = (string)($data['product_attribute_scope'] ?? '');
+        $this->productAttributeType = (string)($data['product_attribute_type'] ?? '');
+        $this->productAttributeGroup = (string)($data['product_attribute_group'] ?? '');
+        $this->categoryAttribute = (bool)($data['category_attribute'] ?? false);
+        $this->categoryAttributeCode = (string)($data['category_attribute_code'] ?? '');
+        $this->categoryAttributeLabel = (string)($data['category_attribute_label'] ?? '');
+        $this->categoryAttributeScope = (string)($data['category_attribute_scope'] ?? '');
+        $this->categoryAttributeType = (string)($data['category_attribute_type'] ?? '');
+        $this->categoryAttributeGroup = (string)($data['category_attribute_group'] ?? '');
+        $this->customerAttribute = (bool)($data['customer_attribute'] ?? false);
+        $this->customerAttributeCode = (string)($data['customer_attribute_code'] ?? '');
+        $this->customerAttributeLabel = (string)($data['customer_attribute_label'] ?? '');
+        $this->customerAttributeType = (string)($data['customer_attribute_type'] ?? '');
+        $this->customerAttributeForms = (array)($data['customer_attribute_forms'] ?? []);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        $array['product_attribute'] = $this->productAttribute;
+        $array['product_attribute_code'] = $this->productAttributeCode;
+        $array['product_attribute_label'] = $this->productAttributeLabel;
+        $array['product_attribute_scope'] = $this->productAttributeScope;
+        $array['product_attribute_type'] = $this->productAttributeType;
+        $array['product_attribute_group'] = $this->productAttributeGroup;
+        $array['category_attribute'] = $this->categoryAttribute;
+        $array['category_attribute_code'] = $this->categoryAttributeCode;
+        $array['category_attribute_label'] = $this->categoryAttributeLabel;
+        $array['category_attribute_scope'] = $this->categoryAttributeScope;
+        $array['category_attribute_type'] = $this->categoryAttributeType;
+        $array['category_attribute_group'] = $this->categoryAttributeGroup;
+        $array['customer_attribute'] = $this->customerAttribute;
+        $array['customer_attribute_code'] = $this->customerAttributeCode;
+        $array['customer_attribute_label'] = $this->customerAttributeLabel;
+        $array['customer_attribute_type'] = $this->customerAttributeType;
+        $array['customer_attribute_forms'] = $this->customerAttributeForms;
+        return $array;
+    }
+
+
     /**
      * @return string
      */
@@ -408,9 +543,10 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
     }
 
     /**
+     * @param bool $fullyQualified
      * @return string
      */
-    public function getSourceModel(): string
+    public function getSourceModel(bool $fullyQualified = true): string
     {
         $parts = [
             $this->module->getNamespace(),
@@ -418,6 +554,160 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
             'Source',
             $this->getNameSingular(),
         ];
-        return $this->stringUtil->glueClassParts($parts);
+        return $this->stringUtil->glueClassParts($fullyQualified ? $parts : [$this->getNameSingular()]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductAttribute(): bool
+    {
+        return $this->productAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductAttributeCode(): string
+    {
+        return $this->productAttributeCode ? $this->productAttributeCode : $this->getNameSingular();
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductAttributeLabel(): string
+    {
+        return $this->productAttributeLabel
+            ? $this->productAttributeLabel
+            : ($this->getProductAttributeType() === 'select' ? $this->getLabelSingular() : $this->getLabelPlural());
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductAttributeScope(): string
+    {
+        return $this->productAttributeScope;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductAttributeType(): string
+    {
+        return $this->productAttributeType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductAttributeGroup(): string
+    {
+        return $this->productAttributeGroup;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCategoryAttribute(): bool
+    {
+        return $this->categoryAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryAttributeCode(): string
+    {
+        return $this->categoryAttributeCode ? $this->categoryAttributeCode : $this->getNameSingular();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryAttributeLabel(): string
+    {
+        return $this->categoryAttributeLabel
+            ? $this->categoryAttributeLabel
+            : ($this->getCategoryAttributeType() === 'select' ? $this->getLabelSingular() : $this->getLabelPlural());
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryAttributeScope(): string
+    {
+        return $this->categoryAttributeScope;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryAttributeType(): string
+    {
+        return $this->categoryAttributeType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryAttributeGroup(): string
+    {
+        return $this->categoryAttributeGroup;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getFlags()
+    {
+        $flags = parent::getFlags();
+        $this->isProductAttribute() && $flags[] = 'is_product_attribute';
+        $this->isCategoryAttribute() && $flags[] = 'is_category_attribute';
+        $this->isCustomerAttribute() && $flags[] = 'is_customer_attribute';
+        return $flags;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomerAttribute(): bool
+    {
+        return $this->customerAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerAttributeCode(): string
+    {
+        return $this->customerAttributeCode ? $this->customerAttributeCode : $this->getNameSingular();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerAttributeLabel(): string
+    {
+        return $this->customerAttributeLabel
+            ? $this->customerAttributeLabel
+            : ($this->getCustomerAttributeType() === 'select' ? $this->getLabelSingular() : $this->getLabelPlural());
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerAttributeType(): string
+    {
+        return $this->customerAttributeType;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomerAttributeForms(): array
+    {
+        return $this->customerAttributeForms;
     }
 }

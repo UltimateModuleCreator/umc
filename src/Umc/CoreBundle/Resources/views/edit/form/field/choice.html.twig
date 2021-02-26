@@ -7,6 +7,7 @@
     </label>
     <div class="input-group mb-2">
         <select
+                {% if element.multiple is defined and element.multiple %} multiple="multiple"{% endif %}
                 name="{{ element.name }}"
                 {% if element.required is defined and element.required %} required="required" {% endif %}
                 data-bind="value: data.{{ element.name }}, attr: {id:uuid('{{ element.name }}') }{% if element.additionalDataBind is defined %}, {{ element.additionalDataBind }}{% endif %}"

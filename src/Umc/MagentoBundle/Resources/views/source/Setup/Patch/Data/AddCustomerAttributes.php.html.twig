@@ -1,0 +1,91 @@
+{% if module.hasEntitiesWithFlag('is_customer_attribute') %}
+<?php{{ formatLicense(module, 'php')|raw }}
+declare(strict_types=1);
+
+namespace {{ module.getNamespace() }}\{{ module.getModuleName() }}\Setup\Patch\Data;
+
+{{ sortStart() }}
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Customer\Model\Customer;
+{% for entity in module.getEntitiesWithFlag('is_customer_attribute') %}
+use {{ entity.getSourceModel(true) }};
+{% endfor %}
+{{ sortEnd() }}
+
+class AddCustomerAttributes implements DataPatchInterface
+{
+    /**
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+
+    /**
+     * AddCustomerAttributes constructor.
+     * @param EavSetupFactory $eavSetupFactory
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     */
+    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup)
+    {
+        $this->eavSetupFactory = $eavSetupFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * @return $this
+     */
+    public function apply()
+    {
+        /** @var EavSetup $eavSetup */
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+{% for entity in module.getEntitiesWithFlag('is_customer_attribute') %}
+            $eavSetup->addAttribute(
+                Customer::ENTITY,
+                '{{entity.getCustomerAttributeCode()}}',
+                [
+                    'type' => '{% if entity.getCustomerAttributeType() is same as("multiselect") %}varchar{% else %}int{% endif %}',
+                    'label' => '{{ entity.getCustomerAttributeLabel }}',
+                    'input' => '{% if entity.getCustomerAttributeType() is same as("multiselect") %}multislect{% else %}select{% endif %}',
+                    'source' => {{ entity.getSourceModel(false) }}::class,
+                    'required' => false,
+                    'is_system' => 0
+                ]
+            );
+{% if entity.getCustomerAttributeForms()|length %}
+            ${{entity.getCustomerAttributeCode()|camel}} = $eavSetup->getEavConfig()->getAttribute(
+                Customer::ENTITY,
+                '{{entity.getCustomerAttributeCode()}}'
+            );
+            ${{entity.getCustomerAttributeCode()|camel}}->setData(
+                'used_in_forms',
+                [{{ entity.getCustomerAttributeForms()|join(', ') }}]
+            );
+            ${{entity.getCustomerAttributeCode()|camel}}->save();
+{% endif %}
+{% endfor %}
+    }
+}
+{% endif %}
