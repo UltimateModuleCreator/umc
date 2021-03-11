@@ -3,7 +3,7 @@
   label: "Entity data interface"
   scope: entity
 -
-  source: "@UmcMagento/source/Api/Data/_Entity_SearchResultInterface.php"
+  source: "@UmcMagento/source/Api/Data/_Entity_SearchResultsInterface.php"
   label: "Entity search result interface"
   scope: entity
 -

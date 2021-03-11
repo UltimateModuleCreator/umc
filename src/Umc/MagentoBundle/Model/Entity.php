@@ -260,7 +260,7 @@ class Entity extends \App\Umc\CoreBundle\Model\Entity
             'Data',
             $this->getNameSingular(),
         ];
-        return $this->stringUtil->glueClassParts($parts) . 'SearchResultInterface';
+        return $this->stringUtil->glueClassParts($parts) . 'SearchResultsInterface';
     }
 
     /**
