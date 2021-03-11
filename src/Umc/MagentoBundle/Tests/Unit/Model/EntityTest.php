@@ -333,7 +333,7 @@ class EntityTest extends TestCase
         $this->stringUtil->expects($this->once())->method('glueClassParts')->with($params)
             ->willReturn('interface');
         $this->assertEquals(
-            'interfaceSearchResultInterface',
+            'interfaceSearchResultsInterface',
             $this->getInstance(['name_singular' => 'name'])->getSearchResultsInterface()
         );
     }

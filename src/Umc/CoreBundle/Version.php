@@ -23,7 +23,7 @@ namespace App\Umc\CoreBundle;
 
 class Version
 {
-    public const VERSION = '4.3.5';
+    public const VERSION = '4.3.6';
     public const BUILD = '';
 
     /**

@@ -23,6 +23,7 @@ namespace App\Umc\CoreBundle\Tests\Unit\Service\Generator;
 use App\Umc\CoreBundle\Model\Module as ModuleModel;
 use App\Umc\CoreBundle\Service\Generator\ContentProcessor;
 use App\Umc\CoreBundle\Service\Generator\Module;
+use App\Umc\CoreBundle\Util\StringUtil;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
@@ -45,6 +46,10 @@ class ModuleTest extends TestCase
      * @var Module
      */
     private $generator;
+    /**
+     * @var StringUtil | MockObject
+     */
+    private $stringUtil;
 
     /**
      * setup tests
@@ -54,7 +59,8 @@ class ModuleTest extends TestCase
         $this->twig = $this->createMock(Environment::class);
         $this->module = $this->createMock(ModuleModel::class);
         $this->processor = $this->createMock(ContentProcessor::class);
-        $this->generator = new Module($this->twig, $this->processor);
+        $this->stringUtil = $this->createMock(StringUtil::class);
+        $this->generator = new Module($this->twig, $this->processor, $this->stringUtil);
     }
 
     /**
